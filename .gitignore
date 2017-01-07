@@ -87,3 +87,17 @@ ENV/
 
 # Rope project settings
 .ropeproject
+
+
+# git status
+# git push github:ooblog/TSF1KEV.git master
+# git push github:ooblog/TSF1KEV.git 20170108U045559
+# git log
+# git ls-files
+# git commit -a -m ""
+# git branch
+# git checkout master
+# git checkout 20170108U045559
+# git merge 20170108U045559
+# git branch -d 20170108U045559
+# git push github:ooblog/TSF1KEV.git :20170108U045559
