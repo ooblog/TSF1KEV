@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# -*- coding: utf-8 -*-
+# -*- coding: UTF-8 -*-
 from __future__ import division,print_function,absolute_import,unicode_literals
 import re
 
@@ -19,7 +19,7 @@ def TSF_txt_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_txt.py」単体テスト�
 if __name__=="__main__":
     print("")
     print("--- {0} ---".format(sys.argv[0]))
-    TSF_debug_savefilename="debug/TSF_io_debug.txt"
+    TSF_debug_savefilename="debug/TSF_txt_debug.txt"
     TSF_debug_log=TSF_txt_debug(sys.argv)
     TSF_io_savetext(TSF_debug_savefilename,TSF_debug_log)
     TSF_debug_log=TSF_io_loadtext(TSF_debug_savefilename)

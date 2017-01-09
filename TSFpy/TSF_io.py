@@ -1,5 +1,5 @@
 #! /usr/bin/env python
-# -*- coding: utf-8 -*-
+# -*- coding: UTF-8 -*-
 from __future__ import division,print_function,absolute_import,unicode_literals
 import sys
 import locale
@@ -29,7 +29,7 @@ if sys.platform.startswith("win"):
 if sys.platform.startswith("linux"):
     TSF_libc=ctypes.CDLL("libc.so.6")
 
-def TSF_io_loadtext(TSF_path,TSF_encoding="utf-8"):    #TSF_doc:TSF_pathからTSF_textを読み込む。初期文字コードは「utf-8」なのでいわゆるシフトJISを読み込む場合は「cp932」を指定する。
+def TSF_io_loadtext(TSF_path,TSF_encoding="UTF-8"):    #TSF_doc:TSF_pathからTSF_textを読み込む。初期文字コードは「UTF-8」なのでいわゆるシフトJISを読み込む場合は「cp932」を指定する。
     if os.path.isfile(TSF_path):
         if sys.version_info.major == 2:
             with open(TSF_path,"r") as TSF_io_fileobj:
@@ -63,9 +63,9 @@ def TSF_io_savetext(TSF_path,TSF_text):    #TSF_doc:TSF_pathにTSF_textを保存
         TSF_io_savedir(TSF_path)
         if sys.version_info.major == 2:
             with open(TSF_path,'wb') as TSF_io_fileobj:
-                TSF_io_fileobj.write(TSF_text.encode("utf-8"))
+                TSF_io_fileobj.write(TSF_text.encode("UTF-8"))
         if sys.version_info.major == 3:
-            with open(TSF_path,mode="w",encoding="utf-8",errors="xmlcharrefreplace",newline='\n') as TSF_io_fileobj:
+            with open(TSF_path,mode="w",encoding="UTF-8",errors="xmlcharrefreplace",newline='\n') as TSF_io_fileobj:
                 TSF_io_fileobj.write(TSF_text)
     else:
         os.remove(TSF_text)
@@ -73,7 +73,7 @@ def TSF_io_savetext(TSF_path,TSF_text):    #TSF_doc:TSF_pathにTSF_textを保存
 def TSF_io_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_io.py」単体テスト風デバッグ関数。
     TSF_debug_log=""
     TSF_debug_log=TSF_io_printlog("TSF_Tab-Separated-Forth:",TSF_log=TSF_debug_log)
-    TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["utf-8",":TSF_encoding",":TSF_fin."])),TSF_log=TSF_debug_log)
+    TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["UTF-8",":TSF_encoding",":TSF_fin."])),TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("TSF_argv:",TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(TSF_argv)),TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("TSF_py:",TSF_log=TSF_debug_log)
