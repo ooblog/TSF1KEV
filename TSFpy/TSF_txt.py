@@ -9,7 +9,7 @@ from TSF_io import *
 def TSF_txt_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_txt.py」単体テスト風デバッグ関数。
     TSF_debug_log=""
     TSF_debug_log=TSF_io_printlog("TSF_Tab-Separated-Forth:",TSF_log=TSF_debug_log)
-    TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["utf-8",":TSF_encoding",":TSF_fin."])),TSF_log=TSF_debug_log)
+    TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["UTF-8",":TSF_encoding","0",":TSF_fin."])),TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("TSF_argv:",TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(TSF_argv)),TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("TSF_py:",TSF_log=TSF_debug_log)
