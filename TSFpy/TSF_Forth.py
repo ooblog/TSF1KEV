@@ -42,37 +42,54 @@ def TSF_Forth_stacks():    #TSF_doc:TSF_stacks(スタック)を取得する
     global TSF_stacks
     return TSF_stacks
 
-TSF_callwords,TSF_callcounts,TSF_callstack=[],[],TSF_Forth_1ststack()
+TSF_callptrs=OrderedDict()
 def TSF_Forth_Initcallptrs():    #TSF_doc:TSF_callwords,TSF_callcounts(コールスタック)を初期化する
-    global TSF_callwords,TSF_callcounts
-    TSF_callwords,TSF_callcounts=[TSF_Forth_1ststack()],[0]
-    return TSF_callwords,TSF_callcounts
+    global TSF_callptrs
+    TSF_callptrs=OrderedDict(); TSF_callptrs[TSF_Forth_1ststack()]=0
+    return TSF_callptrs
 
 def TSF_Forth_callptrs():    #TSF_doc:TSF_callwords,TSF_callcounts(コールスタック)を取得する
-    global TSF_callwords,TSF_callcounts
-    return TSF_callwords,TSF_callcounts
+    global TSF_callptrs
+    return TSF_callptrs
 
 def TSF_Forth_Init():    #TSF_doc:TSF_words,TSF_stacks,TSF_callptrsの3つをまとめて初期化する
     TSF_Forth_Initstacks(); TSF_Forth_Initwords(); TSF_Forth_Initcallptrs()
-    return TSF_words,TSF_stacks,TSF_callwords,TSF_callcounts
-
-def TSF_Forth_stackview(TSF_Nstyles=[]):    #TSF_doc:TSF_stacksの内容をテキスト取得する。
-    TSF_view_log=""
-    TSF_stacks=TSF_Forth_stacks()
-    TSF_stackK,TSF_stackV=TSF_Forth_1ststack(),TSF_stacks[TSF_Forth_1ststack()]
-    for TSF_stackK,TSF_stackV in TSF_stacks.items():
-        TSF_view_log=TSF_io_printlog(TSF_stackK,TSF_log=TSF_view_log)
-        TSF_view_log=TSF_io_printlog("\t{0}".format("\t".join(TSF_stackV)),TSF_log=TSF_view_log)
-    return TSF_view_log
+    return TSF_words,TSF_stacks,TSF_callptrs
 
 def TSF_Forth_settext(TSF_stack,TSF_text):    #TSF_doc:テキストを読み込んでTSF_stacksの一スタック扱いにする。
     global TSF_stacks
     TSF_stacks[TSF_stack]=TSF_text.rstrip('\n').replace('\t','\n').split('\n')
 
-def TSF_Forth_loadtext(TSF_stack,TSF_path):    #TSF_doc:テキストファイルを読み込んでTSF_stacksの一スタック扱いにする。
+def TSF_Forth_loadtext(TSF_stack,TSF_path,TSF_tab=None):    #TSF_doc:テキストファイルを読み込んでTSF_stacksの一スタック扱いにする。
     TSF_text=TSF_io_loadtext(TSF_path)
+    if TSF_tab != None:
+        TSF_text=TSF_text.replace('\t',TSF_tab)
     TSF_Forth_settext(TSF_stack,TSF_text)
     return TSF_text
+
+def TSF_Forth_stackview(TSF_Nstyles=[],TSF_tab=None):    #TSF_doc:TSF_stacksの内容をテキスト取得する。
+    TSF_view_log=""
+    TSF_stacks=TSF_Forth_stacks()
+    TSF_stackK,TSF_stackV=TSF_Forth_1ststack(),TSF_stacks[TSF_Forth_1ststack()]
+    for TSF_stackK,TSF_stackV in TSF_stacks.items():
+        TSF_view_log=TSF_io_printlog(TSF_stackK,TSF_log=TSF_view_log)
+        if TSF_stackK in TSF_Nstyles:
+            if TSF_tab != None:
+                TSF_stackV=[TSF_stack.replace(TSF_tab,'\t') for TSF_stack in TSF_stackV]
+            TSF_view_log=TSF_io_printlog("\t{0}".format("\n\t".join(TSF_stackV)),TSF_log=TSF_view_log)
+        else:
+            TSF_view_log=TSF_io_printlog("\t{0}".format("\t".join(TSF_stackV)),TSF_log=TSF_view_log)
+    return TSF_view_log
+
+def TSF_Forth_stackoneliner(TSF_tab=None):    #TSF_doc:TSF_stacksの内容を1行ずつでテキスト取得する。
+    TSF_view_log=""
+    TSF_stacks=TSF_Forth_stacks()
+    TSF_stackK,TSF_stackV=TSF_Forth_1ststack(),TSF_stacks[TSF_Forth_1ststack()]
+    for TSF_stackK,TSF_stackV in TSF_stacks.items():
+        if TSF_tab != None:
+            TSF_stackV=[TSF_stack.replace(TSF_tab,'\t') for TSF_stack in TSF_stackV]
+        TSF_view_log=TSF_io_printlog("{0}\t{1}\n".format(TSF_stackK,"\t".join(TSF_stackV)),TSF_log=TSF_view_log)
+    return TSF_view_log
 
 
 def TSF_Forth_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_Forth.py」単体テスト風デバッグ関数。
@@ -81,8 +98,11 @@ def TSF_Forth_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_Forth.py」単体テス
     TSF_debug_readme="debug/README.md"
     TSF_Forth_settext("TSF_argv:","\n".join(TSF_argv))
     TSF_Forth_settext("TSF_py:","\n".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout]))
-    TSF_Forth_loadtext(TSF_debug_readme,TSF_debug_readme)
-    TSF_debug_log+=TSF_Forth_stackview()
+    TSF_Forth_loadtext(TSF_debug_readme,TSF_debug_readme,"&tab;")
+    TSF_debug_log=TSF_io_printlog("--- TSF_Forth_stackview([TSF_debug_readme],'&tab;')",TSF_log=TSF_debug_log)
+    TSF_debug_log+=TSF_Forth_stackview([TSF_debug_readme],'&tab;')
+    TSF_debug_log=TSF_io_printlog("--- TSF_Forth_stackoneliner('&tab;')",TSF_log=TSF_debug_log)
+    TSF_debug_log+=TSF_Forth_stackoneliner('&tab;')
     return TSF_debug_log
 
 if __name__=="__main__":
