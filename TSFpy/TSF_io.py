@@ -70,6 +70,7 @@ def TSF_io_savetext(TSF_path,TSF_text):    #TSF_doc:TSF_pathにTSF_textを保存
     else:
         os.remove(TSF_text)
 
+
 def TSF_io_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_io.py」単体テスト風デバッグ関数。
     TSF_debug_log=""
     TSF_debug_log=TSF_io_printlog("TSF_Tab-Separated-Forth:",TSF_log=TSF_debug_log)

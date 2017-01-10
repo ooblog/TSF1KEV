@@ -2,7 +2,7 @@ set encoding=utf-8
 scriptencoding utf-8
 let s:kev_scriptdir = expand('<sfile>:p:h')
 
-"「KanEditVim」の初期設定(imap等含む)。漢字配列「kanmap.tsv」と単漢字辞書「kanchar.tsv」は「kanedit.vim」と同じフォルダに。
+"「KanEditVim」の初期設定(imap等含む)。漢字配列「kanmap,tsf」と単漢字辞書「kanchar,tsf」は「kanedit.vim」と同じフォルダに。
 function! KEVsetup()
     let s:kankbd_menuid = 10000
     let s:kankbd_HJKL = 'σ'
@@ -43,8 +43,17 @@ function! KEVsetup()
             let s:kankbd_kanmapNX[s:kanlinekey] = s:kankbd_inputkanas
         :endif
     :endfor
-    :let s:kankbd_kanmapfilepath = s:kev_scriptdir . "/kanmap.tsv"
+    let s:kankbd_kanmapreadable = 0
+    let s:kankbd_kanmapfilepath = s:kev_scriptdir . "/kanmap,tsf"
     :if filereadable(s:kankbd_kanmapfilepath)
+        let s:kankbd_kanmapreadable = !0
+    :else
+        let s:kankbd_kanmapfilepath = s:kev_scriptdir . "/kanmap,tsv"
+        :if filereadable(s:kankbd_kanmapfilepath)
+            let s:kankbd_kanmapreadable = !0
+        :endif
+    :endif
+    :if s:kankbd_kanmapreadable
         :for s:kanlinetsv in readfile(s:kankbd_kanmapfilepath)
             let s:kanlinelist = split(s:kanlinetsv,"\t")
             :if len(s:kanlinelist) >= 2
@@ -56,8 +65,17 @@ function! KEVsetup()
         :endfor
     :endif
     let s:kankbd_kancharDIC = {}
-    let s:kankbd_kancharfilepath = s:kev_scriptdir . "/kanchar.tsv"
+    let s:kankbd_kancharreadable = 0
+    let s:kankbd_kancharfilepath = s:kev_scriptdir . "/kanchar.tsf"
     :if filereadable(s:kankbd_kancharfilepath)
+        let s:kankbd_kancharreadable = !0
+    :else
+        let s:kankbd_kancharfilepath = s:kev_scriptdir . "/kanchar,tsv"
+        :if filereadable(s:kankbd_kancharfilepath)
+            let s:kankbd_kancharreadable = !0
+        :endif
+    :endif
+    :if s:kankbd_kancharreadable
         :for s:kanlinetsv in readfile(s:kankbd_kancharfilepath)
             let s:kanlinelist = split(s:kanlinetsv,"\t")
             :if len(s:kanlinelist) > 0 && s:kanlinelist[0] != ''
