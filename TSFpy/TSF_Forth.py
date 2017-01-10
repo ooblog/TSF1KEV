@@ -56,9 +56,11 @@ def TSF_Forth_settext(TSF_stack,TSF_text):    #TSF_doc:テキストを読み込�
     TSF_stacks[TSF_stack]=[""]*len(TSF_splits)
     for TSF_stackno in range(len(TSF_splits)):
         TSF_split=TSF_readlinenum(TSF_text,TSF_stackno)
-        TSF_stacks[TSF_stack][TSF_stackno]="test"
-        if sys.version_info.major == 2:
-            TSF_stacks[TSF_stack][TSF_stackno]=base64.b64encode("test")
+#        TSF_stacks[TSF_stack][TSF_stackno]="test"
+#        if sys.version_info.major == 2:
+#            TSF_stacks[TSF_stack][TSF_stackno]=base64.b64encode(TSF_split.encode("utf-8"))
+#            unicode(base64.b64decode(TSF_stacks[TSF_stack][TSF_stackno]),"utf-8")
+        TSF_stacks[TSF_stack][TSF_stackno]=TSF_split
     return TSF_stacks[TSF_stack]
 
 def TSF_Forth_loadtext(TSF_stack,TSF_path):    #TSF_doc:テキストファイルを読み込んでTSF_stacksの一スタック扱いにする。
@@ -81,8 +83,8 @@ def TSF_Forth_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_Forth.py」単体テス
     TSF_debug_readmeT=TSF_Forth_loadtext(TSF_debug_readme,TSF_debug_readme)
     TSF_debug_log=TSF_io_printlog("{0}:".format(TSF_debug_readme),TSF_log=TSF_debug_log)
     for TSF_stack in TSF_stacks[TSF_debug_readme]:
-        if sys.version_info.major == 2:
-            TSF_stack=base64.b64decode(TSF_stack)
+#        if sys.version_info.major == 2:
+#            TSF_stack=""+unicode(base64.b64decode(TSF_stack),"utf-8")
         TSF_debug_log=TSF_io_printlog("\t{0}".format(TSF_stack),TSF_log=TSF_debug_log)
     return TSF_debug_log
 
@@ -94,6 +96,16 @@ if __name__=="__main__":
     TSF_io_savetext(TSF_debug_savefilename,TSF_debug_log)
     TSF_debug_log=TSF_io_loadtext(TSF_debug_savefilename)
     print("")
-    print("--- {0} ---".format(TSF_debug_savefilename))
-    print(TSF_debug_log)
+    try:
+        print("--- {0} ---".format(TSF_debug_savefilename))
+    except:
+       print("can't 'print(TSF_debug_savefilename)'")
+    finally:
+        pass
+    try:
+        print(TSF_debug_log)
+    except:
+       print("can't 'print(TSF_debug_log)'")
+    finally:
+        pass
     sys.exit()

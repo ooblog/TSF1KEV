@@ -43,11 +43,8 @@ def TSF_io_loadtext(TSF_path,TSF_encoding="UTF-8"):    #TSF_doc:TSF_pathからTS
 TSF_io_stdout=sys.stdout.encoding if sys.stdout.encoding != None else locale.getpreferredencoding()
 def TSF_io_printlog(TSF_text,TSF_log=None):    #TSF_doc:TSF_textをターミナル(stdout)に表示する。TSF_logに追記もできる。
     TSF_io_printf=TSF_text.encode(TSF_io_stdout,"xmlcharrefreplace")
-    if TSF_libc != None:
-        TSF_libc.printf(b"%s\n",TSF_io_printf)
-    else:
-        print(TSF_text)
-    TSF_log=TSF_log+"{0}\n".format(TSF_io_printf) if TSF_log != None else ""
+    TSF_libc.printf(b"%s\n",TSF_io_printf)
+    TSF_log=TSF_log+"{0}\n".format(TSF_text) if TSF_log != None else ""
     return TSF_log
 
 def TSF_readlinenum(TSF_text,TSF_linenum):
@@ -94,6 +91,16 @@ if __name__=="__main__":
     TSF_io_savetext(TSF_debug_savefilename,TSF_debug_log)
     TSF_debug_log=TSF_io_loadtext(TSF_debug_savefilename)
     print("")
-    print("--- {0} ---".format(TSF_debug_savefilename))
-    print(TSF_debug_log)
+    try:
+        print("--- {0} ---".format(TSF_debug_savefilename))
+    except:
+       print("can't 'print(TSF_debug_savefilename)'")
+    finally:
+        pass
+    try:
+        print(TSF_debug_log)
+    except:
+       print("can't 'print(TSF_debug_log)'")
+    finally:
+        pass
     sys.exit()
