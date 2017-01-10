@@ -53,9 +53,12 @@ def TSF_Forth_Init():    #TSF_doc:TSF_words,TSF_stacks,TSF_callptrsの3つをま
 def TSF_Forth_settext(TSF_stack,TSF_text):    #TSF_doc:テキストを読み込んでTSF_stacksの一スタック扱いにする。
     global TSF_stacks
     TSF_splits=TSF_text.rstrip('\n').split('\n')
-    TSF_stacks[TSF_stack]=[TSF_split for TSF_split in TSF_splits]
-    TSF_stacks[TSF_stack]=["プログラミング","文法暫定案","まだ開発中"]
-    print(TSF_stacks)
+    TSF_stacks[TSF_stack]=[""]*len(TSF_splits)
+    for TSF_stackno in range(len(TSF_splits)):
+        TSF_split=TSF_readlinenum(TSF_text,TSF_stackno)
+        TSF_stacks[TSF_stack][TSF_stackno]="test"
+        if sys.version_info.major == 2:
+            TSF_stacks[TSF_stack][TSF_stackno]=base64.b64encode("test")
     return TSF_stacks[TSF_stack]
 
 def TSF_Forth_loadtext(TSF_stack,TSF_path):    #TSF_doc:テキストファイルを読み込んでTSF_stacksの一スタック扱いにする。
@@ -74,16 +77,13 @@ def TSF_Forth_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_Forth.py」単体テス
     TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(TSF_argv)),TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("TSF_py:",TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout])),TSF_log=TSF_debug_log)
-    TSF_debug_log=TSF_io_printlog("TSF_Forth_loadtext({0},{1})".format(TSF_debug_readme,TSF_debug_readme),TSF_log=TSF_debug_log); TSF_Forth_loadtext(TSF_debug_readme,TSF_debug_readme)
+    TSF_debug_log=TSF_io_printlog("TSF_Forth_loadtext({0},{1})".format(TSF_debug_readme,TSF_debug_readme),TSF_log=TSF_debug_log)
+    TSF_debug_readmeT=TSF_Forth_loadtext(TSF_debug_readme,TSF_debug_readme)
     TSF_debug_log=TSF_io_printlog("{0}:".format(TSF_debug_readme),TSF_log=TSF_debug_log)
-    TSF_debug_log=TSF_io_printlog("len(TSF_stacks[{0}]{1}:".format(TSF_debug_readme,len(TSF_stacks[TSF_debug_readme])),TSF_log=TSF_debug_log)
-    TSF_splits=TSF_stacks[TSF_debug_readme]
-    print(TSF_splits)
-    for TSF_stackno in range(len(TSF_splits)):
-        TSF_stack=TSF_splits[TSF_stackno]
-        print(TSF_stack.encode("UTF-8"))
-#        TSF_debug_log=TSF_io_printlog("{0}\t{1}".format(TSF_stackno,TSF_stack),TSF_log=TSF_debug_log)
-#        TSF_debug_log=TSF_io_printlog("{0}\t".format(TSF_stackno),TSF_log=TSF_debug_log)
+    for TSF_stack in TSF_stacks[TSF_debug_readme]:
+        if sys.version_info.major == 2:
+            TSF_stack=base64.b64decode(TSF_stack)
+        TSF_debug_log=TSF_io_printlog("\t{0}".format(TSF_stack),TSF_log=TSF_debug_log)
     return TSF_debug_log
 
 if __name__=="__main__":
