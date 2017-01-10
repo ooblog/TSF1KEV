@@ -25,15 +25,9 @@ if __name__=="__main__":
     TSF_debug_log=TSF_io_loadtext(TSF_debug_savefilename)
     print("")
     try:
-        print("--- {0} ---".format(TSF_debug_savefilename))
+        print("--- {0} ---\n{1}".format(TSF_debug_savefilename,TSF_debug_log))
     except:
-       print("can't 'print(TSF_debug_savefilename)'")
-    finally:
-        pass
-    try:
-        print(TSF_debug_log)
-    except:
-       print("can't 'print(TSF_debug_log)'")
+        print("can't 'print(TSF_debug_savefilename,TSF_debug_log)'")
     finally:
         pass
     sys.exit()

@@ -10,6 +10,8 @@ import ctypes
 import zipfile
 import base64
 import datetime
+from collections import OrderedDict
+
 
 TSF_io_name2codepoint,TSF_io_urlliburlretrieve=None,None
 if sys.version_info.major == 2:
@@ -30,6 +32,7 @@ if sys.platform.startswith("linux"):
     TSF_libc=ctypes.CDLL("libc.so.6")
 
 def TSF_io_loadtext(TSF_path,TSF_encoding="UTF-8"):    #TSF_doc:TSF_pathからTSF_textを読み込む。初期文字コードは「UTF-8」なのでいわゆるシフトJISを読み込む場合は「cp932」を指定する。
+    TSF_text=""
     if os.path.isfile(TSF_path):
         if sys.version_info.major == 2:
             with open(TSF_path,"r") as TSF_io_fileobj:
@@ -86,15 +89,9 @@ if __name__=="__main__":
     TSF_debug_log=TSF_io_loadtext(TSF_debug_savefilename)
     print("")
     try:
-        print("--- {0} ---".format(TSF_debug_savefilename))
+        print("--- {0} ---\n{1}".format(TSF_debug_savefilename,TSF_debug_log))
     except:
-       print("can't 'print(TSF_debug_savefilename)'")
-    finally:
-        pass
-    try:
-        print(TSF_debug_log)
-    except:
-       print("can't 'print(TSF_debug_log)'")
+        print("can't 'print(TSF_debug_savefilename,TSF_debug_log)'")
     finally:
         pass
     sys.exit()
