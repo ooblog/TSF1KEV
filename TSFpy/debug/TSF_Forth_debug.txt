@@ -1,7 +1,7 @@
-TSF_Tab-Separated-Forth
+TSF_Tab-Separated-Forth:
 	UTF-8	:TSF_encoding	0	:TSF_fin.
 TSF_argv:
-	TSF_Forth.py
+	./TSF_Forth.py	test
 TSF_py:
 	Python2.7.6	linux2	UTF-8
 TSF_Forth_loadtext(debug/README.md,debug/README.md)

@@ -6,7 +6,7 @@ from TSF_io import *
 from TSF_txt import *
 
 def TSF_Forth_1ststack():    #TSF_doc:TSF_初期化に使う1ststack名
-    return "TSF_Tab-Separated-Forth"
+    return "TSF_Tab-Separated-Forth:"
 
 def TSF_Forth_version():    #TSF_doc:TSF_初期化に使うバージョン(ブランチ)名
     return "20170108U045559"
@@ -25,6 +25,7 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
     return TSF_words
 
 def TSF_Forth_words():    #TSF_doc:TSF_words(ワード)を取得する
+    global TSF_words
     return TSF_words
 
 TSF_stacks={}
@@ -35,6 +36,7 @@ def TSF_Forth_Initstacks():    #TSF_doc:TSF_stacks(スタック)を初期化す�
     return TSF_stacks
 
 def TSF_Forth_stacks():    #TSF_doc:TSF_stacks(スタック)を取得する
+    global TSF_stacks
     return TSF_stacks
 
 TSF_callwords,TSF_callcounts=[],[]
@@ -43,7 +45,8 @@ def TSF_Forth_Initcallptrs():    #TSF_doc:TSF_callwords,TSF_callcounts(コール
     TSF_callwords,TSF_callcounts=[TSF_Forth_1ststack()],[0]
     return TSF_callwords,TSF_callcounts
 
-def TSF_Forth_stacks():    #TSF_doc:TSF_callwords,TSF_callcounts(コールスタック)を取得する
+def TSF_Forth_callptrs():    #TSF_doc:TSF_callwords,TSF_callcounts(コールスタック)を取得する
+    global TSF_callwords,TSF_callcounts
     return TSF_callwords,TSF_callcounts
 
 def TSF_Forth_Init():    #TSF_doc:TSF_words,TSF_stacks,TSF_callptrsの3つをまとめて初期化する
@@ -52,16 +55,7 @@ def TSF_Forth_Init():    #TSF_doc:TSF_words,TSF_stacks,TSF_callptrsの3つをま
 
 def TSF_Forth_settext(TSF_stack,TSF_text):    #TSF_doc:テキストを読み込んでTSF_stacksの一スタック扱いにする。
     global TSF_stacks
-    TSF_splits=TSF_text.rstrip('\n').split('\n')
-    TSF_stacks[TSF_stack]=[""]*len(TSF_splits)
-    for TSF_stackno in range(len(TSF_splits)):
-        TSF_split=TSF_readlinenum(TSF_text,TSF_stackno)
-#        TSF_stacks[TSF_stack][TSF_stackno]="test"
-#        if sys.version_info.major == 2:
-#            TSF_stacks[TSF_stack][TSF_stackno]=base64.b64encode(TSF_split.encode("utf-8"))
-#            unicode(base64.b64decode(TSF_stacks[TSF_stack][TSF_stackno]),"utf-8")
-        TSF_stacks[TSF_stack][TSF_stackno]=TSF_split
-    return TSF_stacks[TSF_stack]
+    TSF_stacks[TSF_stack]=TSF_text.rstrip('\n').split('\n')
 
 def TSF_Forth_loadtext(TSF_stack,TSF_path):    #TSF_doc:テキストファイルを読み込んでTSF_stacksの一スタック扱いにする。
     TSF_text=TSF_io_loadtext(TSF_path)
@@ -83,8 +77,6 @@ def TSF_Forth_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_Forth.py」単体テス
     TSF_debug_readmeT=TSF_Forth_loadtext(TSF_debug_readme,TSF_debug_readme)
     TSF_debug_log=TSF_io_printlog("{0}:".format(TSF_debug_readme),TSF_log=TSF_debug_log)
     for TSF_stack in TSF_stacks[TSF_debug_readme]:
-#        if sys.version_info.major == 2:
-#            TSF_stack=""+unicode(base64.b64decode(TSF_stack),"utf-8")
         TSF_debug_log=TSF_io_printlog("\t{0}".format(TSF_stack),TSF_log=TSF_debug_log)
     return TSF_debug_log
 

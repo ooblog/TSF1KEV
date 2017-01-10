@@ -47,12 +47,6 @@ def TSF_io_printlog(TSF_text,TSF_log=None):    #TSF_doc:TSF_textをターミナ�
     TSF_log=TSF_log+"{0}\n".format(TSF_text) if TSF_log != None else ""
     return TSF_log
 
-def TSF_readlinenum(TSF_text,TSF_linenum):
-    TSF_line=""
-    TSF_splits=TSF_text.rstrip('\n').split('\n')
-    TSF_line=TSF_splits[min(max(0,TSF_linenum),len(TSF_splits)-1)]
-    return TSF_line
-
 def TSF_io_savedir(TSF_path):    #TSF_doc:「TSF_io_savetext()」でファイル保存する時、1階層分のフォルダ1個を作成する。
     TSF_io_workdir=os.path.dirname(os.path.normpath(TSF_path))
     if not os.path.exists(TSF_io_workdir) and not os.path.isdir(TSF_io_workdir) and len(TSF_io_workdir): os.mkdir(TSF_io_workdir)
