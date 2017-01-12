@@ -19,7 +19,6 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
     TSF_words={}
     TSF_wordsdef=[
         ":TSF_encoding",              # [encode]TSFの文字コード宣言。極力冒頭に置くのが望ましい。1スタック積み下ろし。
-        ":TSF_Tab",                   # ['tab(foo)']テキスト入出力る時のタブ文字を参照文字「&tab(foo);」か何かにエスケープする。1スタック消費。
         ":TSF_alias",                  # [after,before]TSFワード(関数)を置き換える。2スタック積み下ろし。
         ":TSF_this",                   # [stack]thisスタックを変更(スタックをワード(関数)として呼ぶ)。通常はオーバーフローで呼び出し元に戻るが、再帰呼び出し等はループ扱いになる。ワード自体は1スタック積み下ろしだがスタック変化は未知数。
         ":TSF_that",                  # [stack]thatスタック(積み込み先スタック)を変更。1スタック積み下ろし。
@@ -59,16 +58,14 @@ def TSF_Forth_words():    #TSF_doc:TSF_words(ワード)を取得する
     return TSF_words
 
 TSF_stacks=OrderedDict()
-TSF_Tab="tab"  #"&{0};".format("tab(foo,hoge,toto"
 def TSF_Forth_Initstacks():    #TSF_doc:TSF_stacks(スタック)を初期化する
-    global TSF_stacks,TSF_Tab
+    global TSF_stacks
     TSF_stacks=OrderedDict()
-    TSF_Tab="tab"
-    TSF_stacks[TSF_Forth_1ststack()]=["UTF-8",":TSF_encoding",TSF_Tab,":TSF_Tab","0",":TSF_fin."]
+    TSF_stacks[TSF_Forth_1ststack()]=["UTF-8",":TSF_encoding","0",":TSF_fin."]
     return TSF_stacks
 
 def TSF_Forth_stacks():    #TSF_doc:TSF_stacks(スタック)を取得する
-    global TSF_stacks,TSF_Tab
+    global TSF_stacks
     return TSF_stacks
 
 TSF_callptrs=OrderedDict()
@@ -103,7 +100,6 @@ def TSF_Forth_settext(TSF_stack,TSF_text,TSF_style="T"):    #TSF_doc:テキス�
 
 def TSF_Forth_loadtext(TSF_stack,TSF_path):    #TSF_doc:テキストファイルを読み込んでTSF_stacksの一スタック扱いにする。
     TSF_text=TSF_io_loadtext(TSF_path)
-#    TSF_text=TSF_text.replace('\t',"&{0};".format(TSF_Tab))
     TSF_text=TSF_txt_ESCencode(TSF_text)
     TSF_Forth_settext(TSF_stack,TSF_text)
     TSF_styles[TSF_stack]="N"
@@ -114,17 +110,16 @@ def TSF_Forth_merge(TSF_stack):    #TSF_doc:「TSF_Forth_settext()」で読み�
     TSF_styles[TSF_stackthat]="T"
     for TSF_stackV in TSF_stacks[TSF_stack]:
         if len(TSF_stackV) == 0: continue;
-#        TSF_stackV=TSF_stackV.replace("&{0};".format(TSF_Tab),'\t')
         TSF_stackV=TSF_txt_ESCdecode(TSF_stackV)
         if not TSF_stackV.startswith('\t'):
             TSF_stackL=TSF_stackV.lstrip('\t').split('\t')
             TSF_stackthat=TSF_stackL[0]
             TSF_stacks[TSF_stackthat]=[]
-            TSF_styles[TSF_stackthat]="" if len(TSF_stackL) >= 2 else "T" 
+            TSF_styles[TSF_stackthat]="O" if len(TSF_stackL) >= 2 else ""
         TSF_stackL=TSF_stackV.split('\t')[1:]
         TSF_stacks[TSF_stackthat].extend(TSF_stackL)
-        if len(TSF_styles[TSF_stackthat]) == 0:
-            TSF_styles[TSF_stackthat]="T" if len(TSF_stackL) >= 2 else "N" 
+        if TSF_styles[TSF_stackthat] != "O":
+            TSF_styles[TSF_stackthat]="T" if len(TSF_stackL) >= 2 else "N"
     del TSF_stacks[TSF_stack]
 
 def TSF_Forth_stackview():    #TSF_doc:TSF_stacksの内容をテキスト取得する。
@@ -132,7 +127,6 @@ def TSF_Forth_stackview():    #TSF_doc:TSF_stacksの内容をテキスト取得�
     TSF_stacks=TSF_Forth_stacks()
     TSF_stackK,TSF_stackV=TSF_Forth_1ststack(),TSF_stacks[TSF_Forth_1ststack()]
     for TSF_stackK,TSF_stackV in TSF_stacks.items():
-#        TSF_stackV=[TSF_stk.replace("&{0};".format(TSF_Tab),'\t') for TSF_stk in TSF_stackV]
         TSF_stackV=[TSF_txt_ESCdecode(TSF_stk) for TSF_stk in TSF_stackV]
         if TSF_styles[TSF_stackK] == "O":
             TSF_view_log=TSF_io_printlog("{0}\t{1}\n".format(TSF_stackK,"\t".join(TSF_stackV)),TSF_log=TSF_view_log)

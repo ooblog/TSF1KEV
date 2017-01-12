@@ -6,10 +6,14 @@ import re
 from TSF_io import *
 
 def TSF_txt_ESCencode(TSF_text):
-    return TSF_text.replace('\t',"&{0};".format("tab"))
+#    return TSF_text.replace('\t',"&{0};".format("tab"))
+    TSF_text=TSF_text.replace('&',"&amp;").replace('\t',"&tab;")
+    return TSF_text
 
 def TSF_txt_ESCdecode(TSF_text):
-    return TSF_text.replace("&{0};".format("tab"),'\t')
+#    return TSF_text.replace("&{0};".format("tab"),'\t')
+    TSF_text=TSF_text.replace("&tab;",'\t').replace("&amp;",'&')
+    return TSF_text
 
 
 def TSF_txt_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_txt.py」単体テスト風デバッグ関数。

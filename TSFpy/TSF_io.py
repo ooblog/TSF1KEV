@@ -17,11 +17,15 @@ TSF_io_name2codepoint,TSF_io_urlliburlretrieve=None,None
 if sys.version_info.major == 2:
     import htmlentitydefs
     TSF_io_name2codepoint=htmlentitydefs.name2codepoint
+    import HTMLParser
+    TSF_io_htmlparser=HTMLParser
     import urllib
     TSF_io_urlliburlretrieve=urllib.urlretrieve
 if sys.version_info.major == 3:
     import html.entities
     TSF_io_name2codepoint=html.entities.name2codepoint
+    import html.parser
+    TSF_io_htmlparser=html.parser
     import urllib.request
     TSF_io_urlliburlretrieve=rllib.request.urlretrieve
 
