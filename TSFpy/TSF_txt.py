@@ -5,6 +5,12 @@ import re
 
 from TSF_io import *
 
+def TSF_txt_ESCencode(TSF_text):
+    return TSF_text.replace('\t',"&{0};".format("tab"))
+
+def TSF_txt_ESCdecode(TSF_text):
+    return TSF_text.replace("&{0};".format("tab"),'\t')
+
 
 def TSF_txt_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_txt.py」単体テスト風デバッグ関数。
     TSF_debug_log=""

@@ -103,7 +103,8 @@ def TSF_Forth_settext(TSF_stack,TSF_text,TSF_style="T"):    #TSF_doc:テキス�
 
 def TSF_Forth_loadtext(TSF_stack,TSF_path):    #TSF_doc:テキストファイルを読み込んでTSF_stacksの一スタック扱いにする。
     TSF_text=TSF_io_loadtext(TSF_path)
-    TSF_text=TSF_text.replace('\t',"&{0};".format(TSF_Tab))
+#    TSF_text=TSF_text.replace('\t',"&{0};".format(TSF_Tab))
+    TSF_text=TSF_txt_ESCencode(TSF_text)
     TSF_Forth_settext(TSF_stack,TSF_text)
     TSF_styles[TSF_stack]="N"
     return TSF_text
@@ -114,11 +115,12 @@ def TSF_Forth_merge(TSF_stack):    #TSF_doc:「TSF_Forth_settext()」で読み�
     for TSF_stackV in TSF_stacks[TSF_stack]:
         if len(TSF_stackV) == 0: continue;
 #        TSF_stackV=TSF_stackV.replace("&{0};".format(TSF_Tab),'\t')
+        TSF_stackV=TSF_txt_ESCdecode(TSF_stackV)
         if not TSF_stackV.startswith('\t'):
             TSF_stackL=TSF_stackV.lstrip('\t').split('\t')
             TSF_stackthat=TSF_stackL[0]
             TSF_stacks[TSF_stackthat]=[]
-            TSF_styles[TSF_stackthat]="" if len(TSF_stackL) >= 2 else "" 
+            TSF_styles[TSF_stackthat]="" if len(TSF_stackL) >= 2 else "T" 
         TSF_stackL=TSF_stackV.split('\t')[1:]
         TSF_stacks[TSF_stackthat].extend(TSF_stackL)
         if len(TSF_styles[TSF_stackthat]) == 0:
@@ -131,13 +133,13 @@ def TSF_Forth_stackview():    #TSF_doc:TSF_stacksの内容をテキスト取得�
     TSF_stackK,TSF_stackV=TSF_Forth_1ststack(),TSF_stacks[TSF_Forth_1ststack()]
     for TSF_stackK,TSF_stackV in TSF_stacks.items():
 #        TSF_stackV=[TSF_stk.replace("&{0};".format(TSF_Tab),'\t') for TSF_stk in TSF_stackV]
+        TSF_stackV=[TSF_txt_ESCdecode(TSF_stk) for TSF_stk in TSF_stackV]
         if TSF_styles[TSF_stackK] == "O":
             TSF_view_log=TSF_io_printlog("{0}\t{1}\n".format(TSF_stackK,"\t".join(TSF_stackV)),TSF_log=TSF_view_log)
         elif TSF_styles[TSF_stackK] == "T":
             TSF_view_log=TSF_io_printlog("{0}\n\t{1}\n".format(TSF_stackK,"\t".join(TSF_stackV)),TSF_log=TSF_view_log)
         else:  # TSF_styles[TSF_stackK] == "N":
             TSF_view_log=TSF_io_printlog("{0}\n\t{1}\n".format(TSF_stackK,"\n\t".join(TSF_stackV)),TSF_log=TSF_view_log)
-        print([TSF_stackK],TSF_stackV)
     return TSF_view_log
 
 
