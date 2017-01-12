@@ -10,17 +10,20 @@
 </p>
 <pre><code>
     TSF_Tab-Separated-Forth:
-    	main:	:TSF_call	:TSF_fin.
+    	UTF-8	:TSF_encoding	tab(foobarhogehogeblabla)	:TSF_Tab	main:	:TSF_this	0	:TSF_fin.
     
     main:
-    	about:	:TSF_push	about:	:TSF_len	:TSF_echoes
+    	about:	:TSF_pushthat	about:	:TSF_lenthat	:TSF_echoes
     
     about:
     	「TSF_Tab-Separated-Forth:」の概要(暫定案)。
-    	スタックはtsv単位。積んだスタックをワード(関数)で消化していくForth風構文。
-    	文字で始まる行はスタック名、タブで始まる行はスタック列内容。名と列のワンライナー記述可能。
+    	積んだスタックをワード(関数)などで消化していくForth風構文。スタックはtsVテキスト。
+    	TSFテキスト上の文字から始まる行はスタック名、タブで始まる行はスタック列内容。名と列のワンライナー記述可能。
     	改行のみ行はスルーだが、二重タブや末尾タブは0文字列とみなされスタック数増加に繋がるので注意。
-    	末尾再帰はループ。深い階層で祖先を「:TSF_call」すると子孫コールスタックはまとめて破棄される。
+    	TSFでは先頭から関数などを実行するthisスタックと末尾に引数などを積み上げるthatスタックを別々に指定できる。
+    	thisスタックのオーバーフローはコールスタックを消費して呼び出し元に戻って続きから再開。
+    	thatスタックのアンダーフローは0文字列を返却する。
+    	末尾再帰はループ。深い階層で祖先を「:TSF_this」すると子孫コールスタックはまとめて破棄される。
     	「:TSF_calc」という括弧が使える電卓を用意する予定なので逆ポーランド記法は強いられないはず。
 </code></pre>
 <p>
