@@ -11,8 +11,8 @@ def TSF_debug():    #TSF_doc:「TSF/TSF.py」単体テスト風デバッグ関�
     TSF_Forth_stackview()
 
 TSF_Forth_Init()
-#TSF_debug()
-#sys.exit()
+TSF_debug()
+sys.exit()
 
 if len(sys.argv) < 2 or sys.argv[1] in "--":
     TSF_Forth_settext(TSF_Forth_1ststack(),"\t".join(["UTF-8",":TSF_encoding","tab(foobarhogehogeblabla)",":TSF_Tab","main:",":TSF_this","0",":TSF_fin."]))

@@ -107,7 +107,30 @@ def TSF_Forth_loadtext(TSF_stack,TSF_path):    #TSF_doc:テキストファイル
     return TSF_text
 
 def TSF_Forth_merge(TSF_stack):    #TSF_doc:「TSF_Forth_settext()」で読み込んだテキストをスタックに変換する。
-    pass
+    TSF_stackthis=TSF_Forth_1ststack()
+    TSF_styles[TSF_stackthis]="T"
+    for TSF_stackV in TSF_stacks[TSF_stack]:
+        if len(TSF_stackV) == 0: continue;
+        TSF_stackV=TSF_stackV.replace("&{0};".format(TSF_Tab),'\t')
+        if TSF_stackV.startswith('\t'):
+            TSF_stackT=TSF_stackV.lstrip('\t')
+            TSF_stackT=TSF_stackT.split('\t')
+#            print(len(TSF_stackT),TSF_stackT)
+            if not TSF_stackthis in TSF_stacks:
+                TSF_stacks[TSF_stackthis]=[]
+            if len(TSF_stackT) > 0:
+                TSF_stacks[TSF_stackthis].extend(TSF_stackT[0:])
+        elif len(TSF_stackV):
+            TSF_stackT=TSF_stackV.split('\t')
+            TSF_stackthis=TSF_stackT[0]
+            TSF_styles[TSF_stackthis]=""
+            if TSF_stackT > 1:
+                if not TSF_stackthis in TSF_stacks:
+                    TSF_stacks[TSF_stackthis]=[]
+                if len(TSF_stackT[1:]) > 0:
+                    TSF_stacks[TSF_stackthis].extend(TSF_stackT[1:])
+                    TSF_styles[TSF_stackthis]="O"
+    del TSF_stacks[TSF_stack]
 
 def TSF_Forth_stackview():    #TSF_doc:TSF_stacksの内容をテキスト取得する。
     TSF_view_log=""
