@@ -5,10 +5,12 @@ from __future__ import division,print_function,absolute_import,unicode_literals
 from TSF_Forth import *
 
 def TSF_debug():    #TSF_doc:「TSF/TSF.py」単体テスト風デバッグ関数。
+    TSF_debug_mergefile="TSF.tsf"
     TSF_mergefile="debug/TSF_Forth_debug.txt"
     if len(TSF_Forth_loadtext(TSF_mergefile,TSF_mergefile)):
         TSF_Forth_merge(TSF_mergefile)
-    TSF_Forth_stackview()
+    TSF_debug_log=TSF_Forth_stackview()
+    TSF_io_savetext(TSF_debug_mergefile,TSF_debug_log)
 
 TSF_Forth_Init()
 TSF_debug()

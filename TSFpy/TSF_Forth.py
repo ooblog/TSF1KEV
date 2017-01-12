@@ -25,6 +25,8 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         ":TSF_that",                  # [stack]thatスタック(積み込み先スタック)を変更。1スタック積み下ろし。
         ":TSF_ifthis",                 # [stack,value]valueが0以外ならthisスタックを変更(スタックをワード(関数)として呼ぶ)。通常はオーバーフローで呼び出し元に戻るが、再帰呼び出し等はループ扱いになる。ワード自体は2スタック積み下ろしだがスタック変化は未知数。
         ":TSF_ifthat",                 # [stack,value]valueが0以外ならthatスタック(積み込み先スタック)を変更。2スタック積み下ろし。
+        ":TSF_casethis",              # […stackB,valueB,stackA,valueA,count]valueが0以外ならthisスタックを変更(スタックをワード(関数)として呼ぶ)。通常はオーバーフローで呼び出し元に戻るが、再帰呼び出し等はループ扱いになる。ワード自体はcount*2+1分スタック積み下ろしだがスタック変化は未知数。
+        ":TSF_casethat",              # […stackB,valueB,stackA,valueA,count]valueが0以外ならthatスタック(積み込み先スタック)を変更。count*2+1分スタック積み下ろし。
         ":TSF_NOT",                  # [value]thisスタック直近が0以外なら0に、0だったら1に上書き。文字列は数値変換できない場合は0。1スタック積み下ろして1スタック積み上げ。
         ":TSF_NOTs",                 # […valueB,valueA,count]「:TSF_NOT」の複数形。countの回数分、thisスタック直近が0以外なら0に、0だったら1に上書き。文字列は数値変換できない場合は0。count+1分スタック積み下ろしてcount分スタック積み上げ。
         ":TSF_AND",                  # [stackB,stackA]stackAが0以外ならAを、stackAが0ならBをスタックに残す。2スタック積み下ろして1スタック積み上げ。
@@ -43,8 +45,8 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         ":TSF_echoes",               # […valueB,valueA,count]指定した個数スタック内容を端末で表示する。count分スタック消費。
         ":TSF_view",                  # []スタック全体像を表示。
         ":TSF_fin.",                    # [errorcode]TSFを終了する。終了時に返却する数値が指定できる。1スタック消費。
-        ":TSF_reverse",               # [stackB,stackA]積み込み先スタックの直近2つの順番を入れ替える。
-        ":TSF_reverses",              # […stackB,stackA,count]積み込み先スタックの順番を指定した個数順番を入れ替える。
+        ":TSF_swap"  ,               # [stackB,stackA]積み込み先スタックの直近2つの順番を入れ替える。
+        ":TSF_reverse",               # […stackB,stackA,count]積み込み先スタックの順番を指定した個数順番を入れ替える。
         ":TSF_postpone",            # […stackB,stackA,count]積み込み先スタックの直近1つを指定した個数奥に突っ込む。
         ":TSF_‎Interrupt",             # […stackB,stackA,count]積み込み先スタックの指定した個数奥から1つを引っ張り出し一番手前に積む。
     ]
@@ -57,11 +59,11 @@ def TSF_Forth_words():    #TSF_doc:TSF_words(ワード)を取得する
     return TSF_words
 
 TSF_stacks=OrderedDict()
-TSF_Tab="tab(foobarhogehogeblabla)"  #"&{0};".format("tab(foo,hoge,toto"
+TSF_Tab="tab"  #"&{0};".format("tab(foo,hoge,toto"
 def TSF_Forth_Initstacks():    #TSF_doc:TSF_stacks(スタック)を初期化する
     global TSF_stacks,TSF_Tab
     TSF_stacks=OrderedDict()
-    TSF_Tab="tab(foobarhogehogeblabla)"
+    TSF_Tab="tab"
     TSF_stacks[TSF_Forth_1ststack()]=["UTF-8",":TSF_encoding",TSF_Tab,":TSF_Tab","0",":TSF_fin."]
     return TSF_stacks
 
@@ -107,29 +109,20 @@ def TSF_Forth_loadtext(TSF_stack,TSF_path):    #TSF_doc:テキストファイル
     return TSF_text
 
 def TSF_Forth_merge(TSF_stack):    #TSF_doc:「TSF_Forth_settext()」で読み込んだテキストをスタックに変換する。
-    TSF_stackthis=TSF_Forth_1ststack()
-    TSF_styles[TSF_stackthis]="T"
+    TSF_stackthat=TSF_Forth_1ststack()
+    TSF_styles[TSF_stackthat]="T"
     for TSF_stackV in TSF_stacks[TSF_stack]:
         if len(TSF_stackV) == 0: continue;
-        TSF_stackV=TSF_stackV.replace("&{0};".format(TSF_Tab),'\t')
-        if TSF_stackV.startswith('\t'):
-            TSF_stackT=TSF_stackV.lstrip('\t')
-            TSF_stackT=TSF_stackT.split('\t')
-#            print(len(TSF_stackT),TSF_stackT)
-            if not TSF_stackthis in TSF_stacks:
-                TSF_stacks[TSF_stackthis]=[]
-            if len(TSF_stackT) > 0:
-                TSF_stacks[TSF_stackthis].extend(TSF_stackT[0:])
-        elif len(TSF_stackV):
-            TSF_stackT=TSF_stackV.split('\t')
-            TSF_stackthis=TSF_stackT[0]
-            TSF_styles[TSF_stackthis]=""
-            if TSF_stackT > 1:
-                if not TSF_stackthis in TSF_stacks:
-                    TSF_stacks[TSF_stackthis]=[]
-                if len(TSF_stackT[1:]) > 0:
-                    TSF_stacks[TSF_stackthis].extend(TSF_stackT[1:])
-                    TSF_styles[TSF_stackthis]="O"
+#        TSF_stackV=TSF_stackV.replace("&{0};".format(TSF_Tab),'\t')
+        if not TSF_stackV.startswith('\t'):
+            TSF_stackL=TSF_stackV.lstrip('\t').split('\t')
+            TSF_stackthat=TSF_stackL[0]
+            TSF_stacks[TSF_stackthat]=[]
+            TSF_styles[TSF_stackthat]="" if len(TSF_stackL) >= 2 else "" 
+        TSF_stackL=TSF_stackV.split('\t')[1:]
+        TSF_stacks[TSF_stackthat].extend(TSF_stackL)
+        if len(TSF_styles[TSF_stackthat]) == 0:
+            TSF_styles[TSF_stackthat]="T" if len(TSF_stackL) >= 2 else "N" 
     del TSF_stacks[TSF_stack]
 
 def TSF_Forth_stackview():    #TSF_doc:TSF_stacksの内容をテキスト取得する。
@@ -137,13 +130,14 @@ def TSF_Forth_stackview():    #TSF_doc:TSF_stacksの内容をテキスト取得�
     TSF_stacks=TSF_Forth_stacks()
     TSF_stackK,TSF_stackV=TSF_Forth_1ststack(),TSF_stacks[TSF_Forth_1ststack()]
     for TSF_stackK,TSF_stackV in TSF_stacks.items():
-        TSF_stackV=[TSF_stack.replace("&{0};".format(TSF_Tab),'\t') for TSF_stack in TSF_stackV]
+#        TSF_stackV=[TSF_stk.replace("&{0};".format(TSF_Tab),'\t') for TSF_stk in TSF_stackV]
         if TSF_styles[TSF_stackK] == "O":
             TSF_view_log=TSF_io_printlog("{0}\t{1}\n".format(TSF_stackK,"\t".join(TSF_stackV)),TSF_log=TSF_view_log)
         elif TSF_styles[TSF_stackK] == "T":
             TSF_view_log=TSF_io_printlog("{0}\n\t{1}\n".format(TSF_stackK,"\t".join(TSF_stackV)),TSF_log=TSF_view_log)
         else:  # TSF_styles[TSF_stackK] == "N":
             TSF_view_log=TSF_io_printlog("{0}\n\t{1}\n".format(TSF_stackK,"\n\t".join(TSF_stackV)),TSF_log=TSF_view_log)
+        print([TSF_stackK],TSF_stackV)
     return TSF_view_log
 
 
@@ -163,7 +157,6 @@ if __name__=="__main__":
     TSF_debug_savefilename="debug/TSF_Forth_debug.txt"
     TSF_debug_log=TSF_Forth_debug(sys.argv)
     TSF_io_savetext(TSF_debug_savefilename,TSF_debug_log)
-    TSF_debug_log=TSF_io_loadtext(TSF_debug_savefilename)
     print("")
     try:
         print("--- {0} ---\n{1}".format(TSF_debug_savefilename,TSF_debug_log))

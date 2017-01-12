@@ -22,7 +22,6 @@ if __name__=="__main__":
     TSF_debug_savefilename="debug/TSF_txt_debug.txt"
     TSF_debug_log=TSF_txt_debug(sys.argv)
     TSF_io_savetext(TSF_debug_savefilename,TSF_debug_log)
-    TSF_debug_log=TSF_io_loadtext(TSF_debug_savefilename)
     print("")
     try:
         print("--- {0} ---\n{1}".format(TSF_debug_savefilename,TSF_debug_log))
