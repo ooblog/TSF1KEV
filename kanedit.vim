@@ -43,17 +43,8 @@ function! KEVsetup()
             let s:kankbd_kanmapNX[s:kanlinekey] = s:kankbd_inputkanas
         :endif
     :endfor
-    let s:kankbd_kanmapreadable = 0
-    let s:kankbd_kanmapfilepath = s:kev_scriptdir . "/kanmap,tsf"
-    :if filereadable(s:kankbd_kanmapfilepath)
-        let s:kankbd_kanmapreadable = !0
-    :else
-        let s:kankbd_kanmapfilepath = s:kev_scriptdir . "/kanmap,tsv"
-        :if filereadable(s:kankbd_kanmapfilepath)
-            let s:kankbd_kanmapreadable = !0
-        :endif
-    :endif
-    :if s:kankbd_kanmapreadable
+    let s:kankbd_kanmapfilepath = s:KEVfilereadable(s:kev_scriptdir . "/kanmap.tsf",s:kev_scriptdir . "/kanmap.tsv")
+    :if s:kankbd_kanmapfilepath != ""
         :for s:kanlinetsv in readfile(s:kankbd_kanmapfilepath)
             let s:kanlinelist = split(s:kanlinetsv,"\t")
             :if len(s:kanlinelist) >= 2
@@ -65,23 +56,17 @@ function! KEVsetup()
         :endfor
     :endif
     let s:kankbd_kancharDIC = {}
-    let s:kankbd_kancharreadable = 0
-    let s:kankbd_kancharfilepath = s:kev_scriptdir . "/kanchar.tsf"
-    :if filereadable(s:kankbd_kancharfilepath)
-        let s:kankbd_kancharreadable = !0
-    :else
-        let s:kankbd_kancharfilepath = s:kev_scriptdir . "/kanchar,tsv"
-        :if filereadable(s:kankbd_kancharfilepath)
-            let s:kankbd_kancharreadable = !0
-        :endif
-    :endif
-    :if s:kankbd_kancharreadable
+    let s:kankbd_kancharfilepath = s:KEVfilereadable(s:kev_scriptdir . "/kanchar.tsf",s:kev_scriptdir . "/kanchar.tsv")
+    :if s:kankbd_kancharfilepath != ""
         :for s:kanlinetsv in readfile(s:kankbd_kancharfilepath)
             let s:kanlinelist = split(s:kanlinetsv,"\t")
             :if len(s:kanlinelist) > 0 && s:kanlinelist[0] != ''
                 let s:kankbd_kancharDIC[s:kanlinelist[0]] = s:kanlinetsv
             :endif
         :endfor
+    :endif
+    :if !exists("s:kankbd_irohamenuname")
+        let s:kankbd_alphaamenuname = "鍵盤"
     :endif
     :if !exists("s:kankbd_menuname")
         let s:kankbd_kbdkanaNX = 1
@@ -92,8 +77,8 @@ function! KEVsetup()
         let s:kankbd_inputimap = s:kankbd_inputkanaN + s:kankbd_inputkanaX
         :for s:inputkey in range(len(s:kankbd_inputkeys)-1)
             let s:kankbd_menuhyphen = "[" . escape(s:kankbd_inputkeys[s:inputkey],s:kankbd_menuESCs) . "(" . s:kankbd_inputchoice[s:inputkey] . ")]"
-            execute "imenu  <silent> " . (s:kankbd_menuid+1) . "." . (s:inputkey+1) . " 鍵盤." . s:kankbd_menuhyphen . " <C-o><Plug>(KEVimap_" . s:kankbd_inputkanas[s:inputkey] . ")"
-            execute "nmenu  <silent> " . (s:kankbd_menuid+1) . "." . (s:inputkey+1) . " 鍵盤." . s:kankbd_menuhyphen . " <Plug>(KEVimap_" . s:kankbd_inputkanas[s:inputkey] . ")i"
+            execute "imenu  <silent> " . (s:kankbd_menuid+1) . "." . (s:inputkey+1) . " " . s:kankbd_alphaamenuname . "." . s:kankbd_menuhyphen . " <C-o><Plug>(KEVimap_" . s:kankbd_inputkanas[s:inputkey] . ")"
+            execute "nmenu  <silent> " . (s:kankbd_menuid+1) . "." . (s:inputkey+1) . " " . s:kankbd_alphaamenuname . "." . s:kankbd_menuhyphen . " <Plug>(KEVimap_" . s:kankbd_inputkanas[s:inputkey] . ")i"
         :endfor
     :else
         let s:kankbd_kbdkanaNX = !s:kankbd_kbdkanaNX
@@ -133,6 +118,17 @@ function! KEVsetup()
     imap <silent> <S-Space><Tab> <C-o><Plug>(KEVimap_find)
     imap <silent> <S-Space><S-Tab> <C-o><Plug>(KEVimap_Find)
     call KEVimap("ぬ")
+endfunction
+
+function! s:KEVfilereadable(TSFfilepath,TSVfilepath)
+    let s:kankbd_filepath = ""
+    :if filereadable(a:TSFfilepath)
+        let s:kankbd_filepath = a:TSFfilepath
+    :endif
+    :if filereadable(a:TSVfilepath)
+        let s:kankbd_filepath = a:TSVfilepath
+    :endif
+    return s:kankbd_filepath
 endfunction
 
 "「[Space][ぬ〜ろ]」等のコマンド入力で鍵盤(imap等)変更。「[Space][Tab]」で一文字検索モード。
@@ -280,8 +276,8 @@ function! KEVexit()
             execute "iunmap <silent> " . s:sigmakey
         :endfor
         execute "iunmenu <silent> " s:kankbd_menuname
-        execute "iunmenu <silent> 鍵盤"
-        execute "nunmenu <silent> 鍵盤"
+        execute "iunmenu <silent> " . s:kankbd_alphaamenuname
+        execute "nunmenu <silent> " . s:kankbd_alphaamenuname
     :endif
     unlet! s:kankbd_menuname
 endfunction
