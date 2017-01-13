@@ -48,6 +48,8 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         ":TSF_reverse",               # […stackB,stackA,count]積み込み先スタックの順番を指定した個数順番を入れ替える。
         ":TSF_postpone",            # […stackB,stackA,count]積み込み先スタックの直近1つを指定した個数奥に突っ込む。
         ":TSF_‎Interrupt",             # […stackB,stackA,count]積み込み先スタックの指定した個数奥から1つを引っ張り出し一番手前に積む。
+        ":TSF_retart",                # [stack]指定したスタックをTSFプログラムとみなして最初から実行。
+        ":TSF_merge",                # [stack]指定したスタックをTSFプログラムとみなして取り込む。
     ]
     for TSF_word in TSF_wordsdef:
         TSF_words[TSF_word]=TSF_word
@@ -58,10 +60,10 @@ def TSF_Forth_words():    #TSF_doc:TSF_words(ワード)を取得する
     return TSF_words
 
 TSF_stacks=OrderedDict()
-def TSF_Forth_Initstacks():    #TSF_doc:TSF_stacks(スタック)を初期化する
+def TSF_Forth_Initstacks(TSF_argv):    #TSF_doc:TSF_stacks(スタック)を初期化する
     global TSF_stacks
     TSF_stacks=OrderedDict()
-    TSF_stacks[TSF_Forth_1ststack()]=["UTF-8",":TSF_encoding","0",":TSF_fin."]
+    TSF_stacks[TSF_Forth_1ststack()]=["UTF-8",":TSF_encoding","0",":TSF_fin."]+TSF_argv
     return TSF_stacks
 
 def TSF_Forth_stacks():    #TSF_doc:TSF_stacks(スタック)を取得する
@@ -89,8 +91,8 @@ def TSF_Forth_styles():    #TSF_doc:TSF_callwords,TSF_callcounts(コールスタ
     global TSF_styles
     return TSF_styles
 
-def TSF_Forth_Init():    #TSF_doc:TSF_words,TSF_stacks,TSF_callptrsの3つをまとめて初期化する
-    TSF_Forth_Initstacks(); TSF_Forth_Initwords(); TSF_Forth_Initcallptrs(); TSF_Forth_Initstyles()
+def TSF_Forth_Init(TSF_argv):    #TSF_doc:TSF_words,TSF_stacks,TSF_callptrsの3つをまとめて初期化する
+    TSF_Forth_Initstacks(TSF_argv); TSF_Forth_Initwords(); TSF_Forth_Initcallptrs(); TSF_Forth_Initstyles()
     return TSF_words,TSF_stacks,TSF_callptrs
 
 def TSF_Forth_settext(TSF_stack,TSF_text,TSF_style="T"):    #TSF_doc:テキストを読み込んでTSF_stacksの一スタック扱いにする。
@@ -105,7 +107,7 @@ def TSF_Forth_loadtext(TSF_stack,TSF_path):    #TSF_doc:テキストファイル
     TSF_styles[TSF_stack]="N"
     return TSF_text
 
-def TSF_Forth_merge(TSF_stack):    #TSF_doc:「TSF_Forth_settext()」で読み込んだテキストをスタックに変換する。
+def TSF_Forth_merge(TSF_stack,TSF_ESCstack=[]):    #TSF_doc:「TSF_Forth_settext()」で読み込んだテキストをスタックに変換する。
     TSF_stackthat=TSF_Forth_1ststack()
     TSF_styles[TSF_stackthat]="T"
     for TSF_stackV in TSF_stacks[TSF_stack]:
@@ -113,13 +115,15 @@ def TSF_Forth_merge(TSF_stack):    #TSF_doc:「TSF_Forth_settext()」で読み�
         TSF_stackV=TSF_txt_ESCdecode(TSF_stackV)
         if not TSF_stackV.startswith('\t'):
             TSF_stackL=TSF_stackV.lstrip('\t').split('\t')
-            TSF_stackthat=TSF_stackL[0]
-            TSF_stacks[TSF_stackthat]=[]
-            TSF_styles[TSF_stackthat]="O" if len(TSF_stackL) >= 2 else ""
-        TSF_stackL=TSF_stackV.split('\t')[1:]
-        TSF_stacks[TSF_stackthat].extend(TSF_stackL)
-        if TSF_styles[TSF_stackthat] != "O":
-            TSF_styles[TSF_stackthat]="T" if len(TSF_stackL) >= 2 else "N"
+            if not TSF_stackL[0] in TSF_ESCstack:
+                TSF_stackthat=TSF_stackL[0]
+                TSF_stacks[TSF_stackthat]=[]
+                TSF_styles[TSF_stackthat]="O" if len(TSF_stackL) >= 2 else ""
+        if not TSF_stackthat in TSF_ESCstack:
+            TSF_stackL=TSF_stackV.split('\t')[1:]
+            TSF_stacks[TSF_stackthat].extend(TSF_stackL)
+            if TSF_styles[TSF_stackthat] != "O":
+                TSF_styles[TSF_stackthat]="T" if len(TSF_stackL) >= 2 else "N"
     del TSF_stacks[TSF_stack]
 
 def TSF_Forth_stackview():    #TSF_doc:TSF_stacksの内容をテキスト取得する。
@@ -138,11 +142,9 @@ def TSF_Forth_stackview():    #TSF_doc:TSF_stacksの内容をテキスト取得�
 
 
 def TSF_Forth_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_Forth.py」単体テスト風デバッグ関数。
-    TSF_Forth_Init()
+    TSF_Forth_Init(sys.argv)
     TSF_debug_log=""
     TSF_debug_readme="debug/README.md"
-    TSF_Forth_settext("TSF_argv:","\n".join(TSF_argv))
-    TSF_Forth_settext("TSF_py:","\n".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout]))
     TSF_Forth_loadtext(TSF_debug_readme,TSF_debug_readme)
     TSF_debug_log+=TSF_Forth_stackview()
     return TSF_debug_log

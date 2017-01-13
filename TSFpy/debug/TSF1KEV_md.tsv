@@ -26,7 +26,7 @@ LTsvver	<＠L:TsvLTsvver>
 目標は「<？https/LTsv10>」の「<？https/kanedit.vim>」などをVim使わずに「TSF」だけで動かす事。実装はとりあえずPythonで。<？BR>
 <？/P><？CODE>
     TSF_Tab-Separated-Forth:
-    	UTF-8	main:	:TSF_this	0	:TSF_fin.
+    	UTF-8	:TSF_encoding	main:	:TSF_this	0	:TSF_fin.	TSF.py
     
     main:
     	about:	:TSF_pushthat	about:	:TSF_lenthat	:TSF_echoes
