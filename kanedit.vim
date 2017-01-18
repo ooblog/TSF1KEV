@@ -2,11 +2,11 @@ set encoding=utf-8
 scriptencoding utf-8
 let s:kev_scriptdir = expand('<sfile>:p:h')
 
-"「KanEditVim」の初期設定(imap等含む)。漢字配列「kanmap,tsf」と単漢字辞書「kanchar,tsf」は「kanedit.vim」と同じフォルダに。
+"「KanEditVim」の初期化初期設定(imap等含む)。
 function! KEVsetup()
     let s:kankbd_menuid = 10000
     let s:kankbd_HJKL = 'σ'
-    let s:kankbd_dictype = ["英","名","音","訓","送","異","俗","簡","繁","越","地","顔","鍵","代","逆","非","熙","照","難","活","漫","筆","幅"]
+    let s:kankbd_dictype = ["英","名","音","訓","送","異","俗","簡","繁","越","地","顔","鍵","代","逆","非","照","熙","難","活","漫","筆","幅"]
     let s:kankbd_irohatype = ["ぬ","ふ","あ","う","え","お","や","ゆ","よ","わ","ほ","へ","た","て","い","す","か","ん","な","に","ら","せ",'゛','゜',"ち","と","し","は","き","く","ま","の","り","れ","け","む","つ","さ","そ","ひ","こ","み","も","ね","る","め","ろ"]
     let s:kankbd_irohatype += ["α","β","γ","δ","ε","ζ","η","θ","ι","κ","λ","μ","ν","ξ","ο","π","ρ","σ","τ","υ","φ","χ","ψ","ω","○","△","□"]
     let s:kankbd_irohatypeN = ["1(ぬ)","2(ふ)","3(あ)","4(う)","5(え)","6(お)","7(や)","8(ゆ)","9(よ)","0(わ)","-(ほ)","^(へ)","q(た)","s(て)","e(い)","r(す)","t(か)","y(ん)","u(な)","i(に)","o(ら)","p(せ)","@(＠)","[(ぷ)","a(ち)","s(と)","d(し)","f(は)","g(き)","h(く)","j(ま)","k(の)","l(り)",";(れ)",":(け)","](む)","z(つ)","x(さ)","c(そ)","v(ひ)","b(こ)","n(み)","m(も)",",(ね)","\\.(る)","/(め)","\\\\(ろ)"]
@@ -82,7 +82,7 @@ function! KEVsetup()
     imap <silent> <Space><Space> <Esc>
     imap <silent> <S-Space><S-Space> <C-V><Space>
     imap <silent> <S-Space><Space> <C-V>　
-    imap <silent> <Space><S-Space> <C-V>　
+    imap <silent> <Space><S-Space> <C-V><Tab>
     :for s:inputkey in range(len(s:kankbd_inputkeys)-1)
         let s:kankbd_inputhyphen = s:kankbd_ESCmap[s:kankbd_inputkeys[s:inputkey]]
         execute "noremap <Plug>(KEVimap_" . s:kankbd_inputkanas[s:inputkey] . ") :call KEVimap('" . s:kankbd_inputkanas[s:inputkey] . "')<Enter>"
@@ -96,8 +96,8 @@ function! KEVsetup()
     imap <silent> <Space><BS> <C-o><Plug>(KEVimap_alpha)
     execute "noremap <Plug>(KEVimap_HJKL) :call KEVimap('HJKL')<Enter>"
     execute "noremap <Plug>(KEVfiler) :call KEVfiler()<Enter>"
-    let s:kankbd_inputsigma = {'':"<esc><C-Q>",'':"<Nop>",'':"<Nop>",'':"<Nop>",'':"<Tab>",'':"<Nop>",'':"<Nop>",'':"<Nop>",'':"<C-o><Plug>(KEVfiler)",'':"<Nop>",
-\                              '':"<esc>ggVG",'':"<C-o>:w<Enter>",'':"<Nop>",'':"<C-o>/あ<Enter>",'':"<Nop>",'':"<Left>",'':"<Down>",'':"<Up>",'':"<Right>",'':"<BS>",'':"<Del>",'':"<Enter>",
+    let s:kankbd_inputsigma = {'':"<Nop>",'':"<Nop>",'':"<Nop>",'':"<Nop>",'':"<Tab>",'':"<Nop>",'':"<Nop>",'':"<Nop>",'':"<C-o><Plug>(KEVfiler)",'':"<Nop>",
+\                              '':"<esc>ggVG",'':"<C-o>:w<Enter>",'':"<Nop>",'':"<Nop>",'':"<Nop>",'':"<Left>",'':"<Down>",'':"<Up>",'':"<Right>",'':"<BS>",'':"<Del>",'':"<Enter>",
 \                              '':"<C-o>u",'':"<Nop>",'':"<Nop>",'':"<Nop>",'':"<Nop>",'':"<Nop>",'':"<Nop>",'':"<Home>",'':"<End>",'':"<PageUp>",'':"<PageDown>"}
     map <silent> <Space><Del> <Plug>(KEVimap_HJKL)i
     imap <silent> <Space><Del> <C-o><Plug>(KEVimap_HJKL)
@@ -113,7 +113,7 @@ function! KEVsetup()
     call KEVimap("ぬ")
 endfunction
 
-"TSV版と互換性持たせるため2種類のファイルを調べる・
+"辞書等の存在チェック。漢字配列「<？https/kanmap.tsv>」と単漢字辞書「<？https/kanchar.tsv>」は「<？https/kanedit.vim>」と同じフォルダに。	LTsv版と互換性持たせるため「.tsf」と「.tsv」の両ファイルの有無を調べる。
 function! s:KEVfilereadable(TSFfilepath,TSVfilepath)
     let s:kankbd_filepath = ""
     :if filereadable(a:TSFfilepath)
@@ -125,7 +125,7 @@ function! s:KEVfilereadable(TSFfilepath,TSVfilepath)
     return s:kankbd_filepath
 endfunction
 
-"「[Space][ぬ〜ろ]」等のコマンド入力で鍵盤(imap等)変更。「[Space][Tab]」で一文字検索モード。
+"「[Space],[1(ぬ)〜&#92;(ろ)]」等のコマンド入力で鍵盤(imap等)変更。「[Space],[Enter]」「[Space],[Tab]」で一文字検索モード。
 function! KEVimap(kankbd_kbdchar)
     :if a:kankbd_kbdchar == 'HJKL'
         call s:KEVdicmenu("鍵盤")
@@ -220,7 +220,7 @@ function! KEVimap(kankbd_kbdchar)
     let s:kankbd_choiceBF = s:kankbd_choiceAF
 endfunction
 
-"鍵盤と辞書を並び替える。
+"鍵盤と辞書を並び替える時のメニュー書き替えなどの処理。
 function! s:KEVdicmenu(menuname)
     :if exists("s:kankbd_alphamenuname")
         execute "iunmenu <silent> " s:kankbd_alphamenuname
@@ -243,7 +243,7 @@ function! s:KEVdicmenu(menuname)
     :endfor
 endfunction
 
-"「σ」鍵盤のOで履歴などからファイルを開く。
+"「σ」鍵盤で [o(ら)]が押された時に履歴などからファイルを開く簡易ファイラー。
 function! KEVfiler()
     cd $HOME
     let s:dirline = expand('%:p:h')
@@ -275,7 +275,7 @@ function! KEVfiler()
     :endwhile
 endfunction
 
-"メニューとimapを消去。
+"「KanEditVim」の終了。imap等マップ関連の撤去やメニューの撤去処理。
 function! KEVexit()
     :if exists("s:kankbd_irohamenuname")
         unmap <silent> <Space><Space>
@@ -308,6 +308,7 @@ function! KEVexit()
         execute "nunmenu <silent> " . s:kankbd_alphamenuname
     :endif
     unlet! s:kankbd_irohamenuname
+    unlet! s:kankbd_alphamenuname
 endfunction
 
 call KEVsetup()
