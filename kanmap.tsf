@@ -73,4 +73,4 @@ TSF_Tab-Separated-Forth:	UTF-8	:TSF_encoding	0	:TSF_fin.
 ○	⠶	⠷	⠸	⠹	⠺	⠻	⠼	⠽	⠾	⠵	 	 	⠑	⠗	⠅	⠒	⠓	⠙	⠕	⠉	⠏	⠐	 	 	⠁	⠓	⠄	⠆	⠇	⠈	⠊	⠋	⠌	 	 	 	⠚	⠘	⠃	⠖	⠂	⠎	⠍	 	⠿	 	⠀	⡯	⣏	⢟	⣿	 	 	 	⑧	 	⓪	 	 	⠫	⠱	⠟	⠬	⠮	⠳	⠯	⠣	⠩	⠪	 	 	⠛	⠭	⠞	⠠	⠡	⠢	⠤	⠥	⠦	 	 	 	⠴	⠲	⠝	⠰	⠜	⠨	⠧	 	 	 	 
 △	⡀	⡁	⡂	⡃	⡄	⡅	⡆	⡇	⡈	⡉	⡊	⡋	⡌	⡍	⡎	⡏	⡐	⡑	⡒	⡓	⡔	⡕	⡖	⡗	⡘	⡙	⡚	⡛	⡜	⡝	⡞	⡟	⡠	⡡	⡢	⡣	⡤	⡥	⡦	⡧	⡨	⡩	⡪	⡫	⡬	⡭	⡮	⡰	⡱	⡲	⡳	⡴	⡵	⡶	⡷	⡸	⡹	⡺	⡻	⡼	⡽	⡾	⡿	⢀	⢁	⢂	⢃	⢄	⢅	⢆	⢇	⢈	⢉	⢊	⢋	⢌	⢍	⢎	⢏	⢐	⢑	⢒	⢓	⢔	⢕	⢖	⢗	⢘	⢙	⢚	⢛	⢜	⢝	⢞
 □	⢠	⢡	⢢	⢣	⢤	⢥	⢦	⢧	⢨	⢩	⢪	⢫	⢬	⢭	⢮	⢯	⢰	⢱	⢲	⢳	⢴	⢵	⢶	⢷	⢸	⢹	⢺	⢻	⢼	⢽	⢾	⢿	⣀	⣁	⣂	⣃	⣄	⣅	⣆	⣇	⣈	⣉	⣊	⣋	⣌	⣍	⣎	⣐	⣑	⣒	⣓	⣔	⣕	⣖	⣗	⣘	⣙	⣚	⣛	⣜	⣝	⣞	⣟	⣠	⣡	⣢	⣣	⣤	⣥	⣦	⣧	⣨	⣩	⣪	⣫	⣬	⣭	⣮	⣯	⣰	⣱	⣲	⣳	⣴	⣵	⣶	⣷	⣸	⣹	⣺	⣻	⣼	⣽	⣾
-©	# Copyright (c) 2016 ooblog # License: MIT # https://github.com/ooblog/LTsv10kanedit/blob/master/LICENSE
+©	# Copyright (c) 2017 ooblog # License: MIT # https://github.com/ooblog/LTsv10kanedit/blob/master/LICENSE
