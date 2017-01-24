@@ -1,5 +1,5 @@
 TSF_Tab-Separated-Forth:
-	UTF-8	:TSF_encoding	0	:TSF_fin.	TSF_Forth.py
+	UTF-8	:TSF_encoding	0	:TSF_fin.	TSF_Forth.py	1
 
 debug/README.md
 	# プログラミング言語「TSF_Tab-Separated-Forth」開発予定。
@@ -7,24 +7,22 @@ debug/README.md
 	目標は「[LTsv10kanedit](https://github.com/ooblog/LTsv10kanedit "ooblog/LTsv10kanedit: 「L:Tsv」の読み書きを中心としたモジュール群と漢字入力「kanedit」のPythonによる実装です(準備中)。")」の「[LTsv/kanedit.vim](LTsv/kanedit.vim "LTsv/kanedit.vim")」などをVim使わずに「TSF」だけで動かす事。実装はとりあえずPythonで。  
 	
 	    TSF_Tab-Separated-Forth:
-	    	UTF-8	main:	:TSF_this	0	:TSF_fin.
-	    
-	    TSF_argv:
-	    	TSF.py
+	    	UTF-8	:TSF_encoding	main:	:TSF_this	0	:TSF_fin.	TSF.py
 	    
 	    main:
 	    	about:	:TSF_pushthat	about:	:TSF_lenthat	:TSF_echoes
 	    
 	    about:
 	    	「TSF_Tab-Separated-Forth:」の概要(暫定案)。
-	    	積んだスタックをワード(関数)などで消化していくForth風構文。スタックはtsVテキスト。
-	    	TSFテキスト上の文字から始まる行はスタック名、タブで始まる行はスタック列内容。名と列のワンライナー記述可能。
-	    	改行のみ行はスルーだが、二重タブや末尾タブは0文字列とみなされスタック数増加に繋がるので注意。
-	    	TSFでは先頭から関数などを実行するthisスタックと末尾に引数などを積み上げるthatスタックを別々に指定できる。
-	    	thisスタックのオーバーフローはコールスタックを消費して呼び出し元に戻って続きから再開。
+	    	積んだスタックをワード(関数)などで消化していくForth風インタプリタ。スタック単位はtsv文字列。
+	    	文字から始まる行はスタック名、タブで始まる行はスタック内容。改行のみの行は読み飛ばしノーカン。
+	    	タブのみ行は1スタック計算。他にも二重タブや末尾タブが文字列長0のスタックとみなされるので注意。
+	    	TSFでは先頭からワードを実行するthisスタックと末尾に引数などを積み上げるthatスタックを別々に指定できる。
 	    	thatスタックのアンダーフローは0文字列を返却する。
+	    	起動時のthatスタック(thisスタックも)は「TSF_Tab-Separated-Forth:」なのでargvもそこに追加される。
+	    	thisスタックのオーバーフローはコールスタックを消費して呼び出し元に戻って続きから再開。
 	    	末尾再帰はループ。深い階層で祖先を「:TSF_this」すると子孫コールスタックはまとめて破棄される。
-	    	「:TSF_calc」という括弧が使える電卓を用意する予定なので逆ポーランド記法は強いられないはず。
+	    	「:TSF_calc」という括弧が使える電卓を用意する予定なので逆ポーランド記法の数式計算は強いられないはず。
 	
 	TSFはまだ開発中なので、漢直をお探しの方は「[LTsv10kanedit](https://github.com/ooblog/LTsv10kanedit "ooblog/LTsv10kanedit: 「L:Tsv」の読み書きを中心としたモジュール群と漢字入力「kanedit」のPythonによる実装です(準備中)。")」をお使いください。  
 	
