@@ -136,7 +136,7 @@ def TSF_Forth_merge(TSF_stack,TSF_ESCstack=[]):    #TSF_doc:「TSF_Forth_settext
             TSF_stacks[TSF_stackthat].extend(TSF_stackL)
             if TSF_styles[TSF_stackthat] != "O":
                 TSF_styles[TSF_stackthat]="T" if len(TSF_stackL) >= 2 else "N"
-    del TSF_stacks[TSF_stack]
+#    del TSF_stacks[TSF_stack]
 
 def TSF_Forth_stackview():    #TSF_doc:TSF_stacksの内容をテキスト取得する。
     TSF_view_log=""
@@ -186,9 +186,17 @@ def TSF_poke(TSF_that,TSF_poke,TSF_count):    #TSF_doc:スタックに書き込�
         TSF_pokeerr=2
     return TSF_pokeerr
 
+TSF_encode="UTF-8"
 def TSF_encoding(TSF_this,TSF_count):    #TSF_doc:TSFファイルのエンコードを指定する。
-    TSF_peekdata=TSF_peek(TSF_this,TSF_count)
+    TSF_encode=TSF_peek(TSF_this,TSF_count-1)
+    print("TSF_encoding",TSF_encode)
 
+def TSF_Forth_run(TSF_this):    #TSF_doc:TSFを実行していく。
+    TSF_thisstack_name=TSF_this
+    print("TSF_thisstack_name",TSF_thisstack_name)
+    if TSF_thisstack_name in TSF_words:
+        for TSF_count in range(len(TSF_stacks[TSF_thisstack_name])):
+            print("TSF_stacks",TSF_stacks[TSF_thisstack_name][TSF_count])
 
 def TSF_Forth_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_Forth.py」単体テスト風デバッグ関数。
     TSF_Forth_Init(sys.argv)
