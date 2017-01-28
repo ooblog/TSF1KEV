@@ -24,7 +24,6 @@ if os.path.isfile(TSF_mergefile):
     TSF_debug_log=TSF_Forth_stackview()
     TSF_Forth_run()
 else:
-#    TSF_Forth_settext(TSF_Forth_1ststack(),"\t".join(["UTF-8",":TSF_encoding","main:",":TSF_this","0",":TSF_fin."]+sys.argv+[str(len(sys.argv))]))
     TSF_Forth_settext(TSF_Forth_1ststack(),"\t".join(["UTF-8",":TSF_encoding","main:",":TSF_this","0",":TSF_fin."]))
     TSF_Forth_settext("main:","\t".join(["about:",":TSF_pushthat","about:",":TSF_lenthat",":TSF_echoes"]))
     TSF_Forth_settext("about:",

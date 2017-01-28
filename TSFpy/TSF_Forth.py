@@ -123,6 +123,7 @@ def TSF_Forth_merge(TSF_stack,TSF_ESCstack=[]):    #TSF_doc:「TSF_Forth_settext
     TSF_styles[TSF_stackthat]="T"
     for TSF_stackV in TSF_stacks[TSF_stack]:
         if len(TSF_stackV) == 0: continue;
+        if TSF_stackV.startswith('#'): continue;
         TSF_stackV=TSF_txt_ESCdecode(TSF_stackV)
         if not TSF_stackV.startswith('\t'):
             TSF_stackL=TSF_stackV.lstrip('\t').split('\t')

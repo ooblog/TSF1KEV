@@ -10,6 +10,7 @@ import ctypes
 import zipfile
 import base64
 import datetime
+import math
 from collections import OrderedDict
 
 
@@ -53,6 +54,39 @@ def TSF_io_printlog(TSF_text,TSF_log=None):    #TSF_doc:TSF_textをターミナ�
     TSF_libc.printf(b"%s\n",TSF_io_printf)
     TSF_log=TSF_log+"{0}\n".format(TSF_text) if TSF_log != None else ""
     return TSF_log
+
+def TSF_io_readlinedeno(TSF_text):    #TSF_doc:TSF_textの行数を取得。
+    if len(TSF_text) > 0:
+        TSF_linedeno=TSF_text.count('\n') if TSF_text.endswith('\n') else TSF_text.count('\n')+1
+    else:
+        TSF_linedeno=0
+    return TSF_linedeno
+
+def TSF_io_readlinenum(TSF_text,TSF_linenum):    #TSF_doc:TSF_textから1行取得。
+    TSF_line=""
+    TSF_splits=TSF_text.rstrip('\n').split('\n')
+    if 0 <= LTsv_linenum < len(TSF_splits):
+        TSF_line=TSF_splits[LTsv_linenum]
+    return TSF_line
+
+def TSF_io_overlinenum(TSF_text,TSF_linenum,TSF_line=None):    #TSF_doc:TSF_textの1行上書。LTsv_line=Noneの時は1行削除。
+    TSF_splits=TSF_text.rstrip('\n').split('\n')
+    if LTsv_linenum < 0:
+        if TSF_line != None:
+            TSF_text = '\n'.join(TSF_line.rstrip('\n').split('\n')+TSF_splits)
+    elif len(TSF_splits) <= LTsv_linenum:
+        if TSF_line != None:
+            TSF_text = '\n'.join(TSF_splits+TSF_line.rstrip('\n').split('\n'))
+    else:
+        if TSF_line != None:
+            if TSF_linenum == int(TSF_linenum):
+                LTsv_text = '\n'.join(TSF_splits[:TSF_linenum]+LTsv_line.rstrip('\n').split('\n')+TSF_splits[TSF_linenum+1:])
+            else:
+                LTsv_text = '\n'.join(TSF_splits[:math.floor(TSF_linenum)]+LTsv_line.rstrip('\n').split('\n')+TSF_splits[math.ceil(TSF_linenum):])
+        else:
+            if type(LTsv_linenum) in (int, long):
+                TSF_splits.pop(LTsv_linenum); TSF_text = '\n'.join(TSF_splits)
+    return LTsv_text
 
 def TSF_io_savedir(TSF_path):    #TSF_doc:「TSF_io_savetext()」でファイル保存する時、1階層分のフォルダ1個を作成する。
     TSF_io_workdir=os.path.dirname(os.path.normpath(TSF_path))
