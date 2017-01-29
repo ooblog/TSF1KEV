@@ -18,6 +18,7 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
     global TSF_words
     TSF_words={}
     TSF_words={
+        TSF_fin:TSF_fin,
         ":TSF_encoding":TSF_encoding
     }
 #    TSF_wordsdef=[
@@ -187,16 +188,33 @@ def TSF_poke(TSF_that,TSF_poke,TSF_count):    #TSF_doc:スタックに書き込�
     return TSF_pokeerr
 
 TSF_encode="UTF-8"
+def TSF_fin(TSF_this,TSF_count):    #TSF_doc:TSFファイルのエンコードを指定する。
+    TSF_io_printlog("TSF_fin",TSF_encode)
+    return ""
+
 def TSF_encoding(TSF_this,TSF_count):    #TSF_doc:TSFファイルのエンコードを指定する。
     TSF_encode=TSF_peek(TSF_this,TSF_count-1)
-    print("TSF_encoding",TSF_encode)
+    TSF_io_printlog("TSF_encoding",TSF_encode)
+    return TSF_this
 
-def TSF_Forth_run(TSF_this):    #TSF_doc:TSFを実行していく。
-    TSF_thisstack_name=TSF_this
-    print("TSF_thisstack_name",TSF_thisstack_name)
-    if TSF_thisstack_name in TSF_words:
-        for TSF_count in range(len(TSF_stacks[TSF_thisstack_name])):
-            print("TSF_stacks",TSF_stacks[TSF_thisstack_name][TSF_count])
+def TSF_Forth_run(TSF_this=None,TSF_that=None):    #TSF_doc:TSFを実行していく。
+    TSF_thisstack_name=TSF_this if TSF_this != None else TSF_Forth_1ststack()
+    TSF_thatstack_name=TSF_that if TSF_that != None else TSF_Forth_1ststack()
+    TSF_thisstack_count=0
+    TSF_wordnext=TSF_thisstack_name
+#    while TSF_thisstack_count < len(TSF_stacks[TSF_thisstack_name]):
+    while TSF_thisstack_count < 19:
+        if TSF_stacks[TSF_thisstack_name][TSF_thisstack_count] in TSF_words:
+            TSF_wordnext=TSF_words[TSF_stacks[TSF_thisstack_name][TSF_thisstack_count]](TSF_thisstack_name,TSF_thisstack_count)
+        else:
+            TSF_push(TSF_thatstack_name,TSF_stacks[TSF_thisstack_name][TSF_thisstack_count])
+        TSF_thisstack_count += 1
+        if TSF_thisstack_name != TSF_wordnext:
+            if TSF_wordnext in TSF_stacks:
+                TSF_thisstack_name = TSF_wordnext
+            else:
+                break
+        TSF_io_printlog("TSF_stacks[{0}][{1}]={2}".format(TSF_thisstack_name,TSF_thisstack_count,TSF_stacks[TSF_thisstack_name][TSF_thisstack_count]))
 
 def TSF_Forth_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_Forth.py」単体テスト風デバッグ関数。
     TSF_Forth_Init(sys.argv)

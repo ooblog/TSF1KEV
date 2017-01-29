@@ -5,6 +5,10 @@ from __future__ import division,print_function,absolute_import,unicode_literals
 from TSF_Forth import *
 
 
+def TSF_pushargv(TSF_this,TSF_count):    #TSF_doc:TSFファイルのエンコードを指定する。
+    print("TSF_fin",TSF_encode)
+    return ""
+
 TSF_mergefile=""
 TSF_Forth_Init(sys.argv)
 if len(sys.argv) >= 2:
@@ -15,8 +19,8 @@ if os.path.isfile(TSF_mergefile):
         for TSF_argvcount in range(len(sys.argv)):
             TSF_push(TSF_Forth_1ststack(),sys.argv[-TSF_argvcount-1])
         TSF_push(TSF_Forth_1ststack(),str(len(sys.argv)))
-    TSF_debug_log=TSF_Forth_stackview()
     TSF_Forth_run(TSF_Forth_1ststack())
+    TSF_Forth_stackview()
 else:
     TSF_Forth_settext(TSF_Forth_1ststack(),"\t".join(["UTF-8",":TSF_encoding","main:",":TSF_this","0",":TSF_fin."]))
     TSF_Forth_settext("main:","\t".join(["about:",":TSF_pushthat","about:",":TSF_lenthat",":TSF_echoes"]))
@@ -37,5 +41,7 @@ else:
     TSF_io_savetext(TSF_debug_mergefile,TSF_debug_log)
     for TSF_argvcount in range(len(sys.argv)):
         TSF_push(TSF_Forth_1ststack(),sys.argv[-TSF_argvcount-1])
+    TSF_push(TSF_Forth_1ststack(),str(len(sys.argv)))
     TSF_Forth_run(TSF_Forth_1ststack())
+    TSF_Forth_stackview()
 sys.exit()
