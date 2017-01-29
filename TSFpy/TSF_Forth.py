@@ -190,6 +190,7 @@ def TSF_Forth_run(TSF_this=None,TSF_that=None):    #TSF_doc:TSFを実行して�
     while True:
         while TSF_thisstack_count < len(TSF_stacks[TSF_thisstack_name]) < 19:
             if TSF_stacks[TSF_thisstack_name][TSF_thisstack_count] in TSF_words:
+                TSF_io_printlog("TSF_stacks[{0}][{1}]()={2}".format(TSF_thisstack_name,TSF_thisstack_count,TSF_stacks[TSF_thisstack_name][TSF_thisstack_count]))
                 TSF_wordnext=TSF_words[TSF_stacks[TSF_thisstack_name][TSF_thisstack_count]](TSF_thisstack_name,TSF_thisstack_count)
             else:
                 TSF_push(TSF_thatstack_name,TSF_stacks[TSF_thisstack_name][TSF_thisstack_count])
@@ -199,10 +200,10 @@ def TSF_Forth_run(TSF_this=None,TSF_that=None):    #TSF_doc:TSFを実行して�
                     TSF_thisstack_name = TSF_wordnext
                 else:
                     break
-            TSF_io_printlog("TSF_stacks[{0}][{1}]={2}".format(TSF_thisstack_name,TSF_thisstack_count,TSF_stacks[TSF_thisstack_name][TSF_thisstack_count]))
+            TSF_io_printlog("TSF_stacks[{0}][{1}]={2}「{3}」".format(TSF_thisstack_name,TSF_thisstack_count,TSF_stacks[TSF_thisstack_name][TSF_thisstack_count],TSF_wordnext))
             TSF_thisstack_count += 1
         if len(TSF_callptrs) > 0:
-            TSF_thisstack_name,TSF_thisstack_count=TSF_callptrs.popitem(True)
+            TSF_thisstack_name,TSF_thisstack_count=TSF_callptrs.popitem(True); TSF_wordnext=TSF_thisstack_name
             TSF_io_printlog("TSF_thisstack_name,TSF_thisstack_count={0}{1}".format(TSF_thisstack_name,TSF_thisstack_count))
         else:
             break
