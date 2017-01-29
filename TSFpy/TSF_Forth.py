@@ -18,42 +18,11 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
     global TSF_words
     TSF_words={}
     TSF_words={
-        TSF_fin:TSF_fin,
-        ":TSF_encoding":TSF_encoding
+        ":TSF_fin.":TSF_fin,
+        ":TSF_encoding":TSF_encoding,
+        ":TSF_that":TSF_thatstack,
+        ":TSF_this":TSF_thisstack,
     }
-#    TSF_wordsdef=[
-#        ":TSF_encoding":TSF_encoding,    # [encode]TSFの文字コード宣言。極力冒頭に置くのが望ましい。1スタック積み下ろし。
-#        ":TSF_this",                   # [stack]thisスタックを変更(スタックをワード(関数)として呼ぶ)。通常はオーバーフローで呼び出し元に戻るが、再帰呼び出し等はループ扱いになる。ワード自体は1スタック積み下ろしだがスタック変化は未知数。
-#        ":TSF_that",                  # [stack]thatスタック(積み込み先スタック)を変更。1スタック積み下ろし。
-#        ":TSF_lenthis",               # [stack]thisスタック(実行中スタック)の数を数える。1スタック積み上げ。
-#        ":TSF_lenthat",               # [stack]thatスタック(積み込み先スタック)の数を数える。1スタック積み上げ。
-#        ":TSF_pushthis",             # [stack]指定したスタックを丸ごとthisスタック(実行中スタック)に積み上げ。
-#        ":TSF_pushthat",             # [stack]指定したスタックを丸ごとthatスタック(積み込み先スタック)に積み上げ。
-#        ":TSF_over.",                  # [errorcode]スタックを終了する。他言語のreturn返り値的なモノを用意する場合、単純ににスタックに積むだけ。
-#        ":TSF_fin.",                    # [errorcode]TSFを終了する。終了時に返却する数値が指定できる。1スタック消費。
-#        ":TSF_echo",                  # [value]直近1つのスタック内容を端末で表示する。1スタック消費。
-#        ":TSF_echoes",               # […valueB,valueA,count]指定した個数スタック内容を端末で表示する。count分スタック消費。
-#        ":TSF_alias",                  # [after,before]TSFワード(関数)を置き換える。2スタック積み下ろし。
-#        ":TSF_ifthis",                 # [stack,value]valueが0以外ならthisスタックを変更(スタックをワード(関数)として呼ぶ)。通常はオーバーフローで呼び出し元に戻るが、再帰呼び出し等はループ扱いになる。ワード自体は2スタック積み下ろしだがスタック変化は未知数。
-#        ":TSF_ifthat",                 # [stack,value]valueが0以外ならthatスタック(積み込み先スタック)を変更。2スタック積み下ろし。
-#        ":TSF_casethis",              # […stackB,valueB,stackA,valueA,count]valueが0以外ならthisスタックを変更(スタックをワード(関数)として呼ぶ)。通常はオーバーフローで呼び出し元に戻るが、再帰呼び出し等はループ扱いになる。ワード自体はcount*2+1分スタック積み下ろしだがスタック変化は未知数。
-#        ":TSF_casethat",              # […stackB,valueB,stackA,valueA,count]valueが0以外ならthatスタック(積み込み先スタック)を変更。count*2+1分スタック積み下ろし。
-#        ":TSF_slicethis",             # [first,lest,stack]指定したスタックの一部をthisスタック(実行中スタック)に積み上げ。
-#        ":TSF_slicethat",             # [first,lest,stack]指定したスタックの一部をthatスタック(積み込み先スタック)に積み上げ。
-#        ":TSF_calc",                  # [calc]スタックの内容で電卓する。スタック積み下ろし量はcalcの内容に左右されるので注意。
-#        ":TSF_style",                 # ['&tab;',styleNTO,stack]テキスト出力する時の表示方法を指定する。
-#        ":TSF_view",                  # []スタック全体像を表示。
-#        ":TSF_viewsave",              # [path]指定したスタックをテキストファイルに保存。1スタック消費。
-#        ":TSF_save",                  # [stack,path]指定したスタックをテキストファイルに保存。2スタック消費。
-#        ":TSF_load",                  # [stack,path]指定したスタックにテキストファイルを読み込む。TSF構文解析は「:TSF_merge」を使う。2スタック消費。
-#        ":TSF_merge",                # [stack]指定したスタックをTSFプログラムとみなして取り込む。
-#        ":TSF_swap"  ,               # [stackB,stackA]積み込み先スタックの直近2つの順番を入れ替える。
-#        ":TSF_reverse",               # […stackB,stackA,count]積み込み先スタックの順番を指定した個数順番を入れ替える。
-#        ":TSF_postpone",            # […stackB,stackA,count]積み込み先スタックの直近1つを指定した個数奥に突っ込む。
-#        ":TSF_‎Interrupt",             # […stackB,stackA,count]積み込み先スタックの指定した個数奥から1つを引っ張り出し一番手前に積む。
-#    ]
-#    for TSF_word in TSF_wordsdef:
-#        TSF_words[TSF_word]=TSF_word
     return TSF_words
 
 def TSF_Forth_words():    #TSF_doc:TSF_words(ワード)を取得する
@@ -187,34 +156,89 @@ def TSF_poke(TSF_that,TSF_poke,TSF_count):    #TSF_doc:スタックに書き込�
         TSF_pokeerr=2
     return TSF_pokeerr
 
-TSF_encode="UTF-8"
 def TSF_fin(TSF_this,TSF_count):    #TSF_doc:TSFファイルのエンコードを指定する。
-    TSF_io_printlog("TSF_fin",TSF_encode)
+    TSF_exitcode=TSF_pop(TSF_thatstack_name)
+    TSF_io_printlog("TSF_fin",TSF_exitcode)
     return ""
 
-def TSF_encoding(TSF_this,TSF_count):    #TSF_doc:TSFファイルのエンコードを指定する。
-    TSF_encode=TSF_peek(TSF_this,TSF_count-1)
+TSF_encode="UTF-8"
+def TSF_encoding(TSF_this,TSF_count):    #TSF_doc:[encode]TSFの文字コード宣言。極力冒頭に置くのが望ましい。1スタック積み下ろし。
+    TSF_encode=TSF_pop(TSF_thatstack_name)
     TSF_io_printlog("TSF_encoding",TSF_encode)
     return TSF_this
 
+def TSF_thatstack(TSF_that,TSF_count):    #TSF_doc:[stack]thatスタック(積み込み先スタック)を変更。1スタック積み下ろし。
+    global TSF_thatstack_name
+    TSF_thatstack_name=TSF_that
+    TSF_io_printlog("TSF_thatstack",TSF_that)
+    return TSF_this
+
+def TSF_thisstack(TSF_this,TSF_count):    #TSF_doc:[stack]thisスタックを変更(スタックをワード(関数)として呼ぶ)。通常はオーバーフローで呼び出し元に戻るが、再帰呼び出し等はループ扱いになる。ワード自体は1スタック積み下ろしだがスタック変化は未知数。
+    TSF_callptrs[TSF_this]=TSF_count+1
+    TSF_this=TSF_pop(TSF_thatstack_name)
+    TSF_io_printlog("TSF_thisstack",TSF_this)
+    return TSF_this
+
 def TSF_Forth_run(TSF_this=None,TSF_that=None):    #TSF_doc:TSFを実行していく。
+    global TSF_thisstack_name,TSF_thatstack_name,TSF_thisstack_count
     TSF_thisstack_name=TSF_this if TSF_this != None else TSF_Forth_1ststack()
     TSF_thatstack_name=TSF_that if TSF_that != None else TSF_Forth_1ststack()
     TSF_thisstack_count=0
     TSF_wordnext=TSF_thisstack_name
 #    while TSF_thisstack_count < len(TSF_stacks[TSF_thisstack_name]):
-    while TSF_thisstack_count < 19:
-        if TSF_stacks[TSF_thisstack_name][TSF_thisstack_count] in TSF_words:
-            TSF_wordnext=TSF_words[TSF_stacks[TSF_thisstack_name][TSF_thisstack_count]](TSF_thisstack_name,TSF_thisstack_count)
-        else:
-            TSF_push(TSF_thatstack_name,TSF_stacks[TSF_thisstack_name][TSF_thisstack_count])
-        TSF_thisstack_count += 1
-        if TSF_thisstack_name != TSF_wordnext:
-            if TSF_wordnext in TSF_stacks:
-                TSF_thisstack_name = TSF_wordnext
+    print("TSF_callptrs",len(TSF_callptrs))
+    while True:
+        while TSF_thisstack_count < len(TSF_stacks[TSF_thisstack_name]) < 19:
+            if TSF_stacks[TSF_thisstack_name][TSF_thisstack_count] in TSF_words:
+                TSF_wordnext=TSF_words[TSF_stacks[TSF_thisstack_name][TSF_thisstack_count]](TSF_thisstack_name,TSF_thisstack_count)
             else:
-                break
-        TSF_io_printlog("TSF_stacks[{0}][{1}]={2}".format(TSF_thisstack_name,TSF_thisstack_count,TSF_stacks[TSF_thisstack_name][TSF_thisstack_count]))
+                TSF_push(TSF_thatstack_name,TSF_stacks[TSF_thisstack_name][TSF_thisstack_count])
+            if TSF_thisstack_name != TSF_wordnext:
+                TSF_thisstack_count = 0
+                if TSF_wordnext in TSF_stacks:
+                    TSF_thisstack_name = TSF_wordnext
+                else:
+                    break
+            TSF_io_printlog("TSF_stacks[{0}][{1}]={2}".format(TSF_thisstack_name,TSF_thisstack_count,TSF_stacks[TSF_thisstack_name][TSF_thisstack_count]))
+            TSF_thisstack_count += 1
+        if len(TSF_callptrs) > 0:
+            TSF_thisstack_name,TSF_thisstack_count=TSF_callptrs.popitem(True)
+            TSF_io_printlog("TSF_thisstack_name,TSF_thisstack_count={0}{1}".format(TSF_thisstack_name,TSF_thisstack_count))
+        else:
+            break
+
+#    TSF_wordsdef=[
+#        ":TSF_encoding":TSF_encoding,    # [encode]TSFの文字コード宣言。極力冒頭に置くのが望ましい。1スタック積み下ろし。
+#        ":TSF_this",                   # [stack]thisスタックを変更(スタックをワード(関数)として呼ぶ)。通常はオーバーフローで呼び出し元に戻るが、再帰呼び出し等はループ扱いになる。ワード自体は1スタック積み下ろしだがスタック変化は未知数。
+#        ":TSF_that",                  # [stack]thatスタック(積み込み先スタック)を変更。1スタック積み下ろし。
+#        ":TSF_lenthis",               # [stack]thisスタック(実行中スタック)の数を数える。1スタック積み上げ。
+#        ":TSF_lenthat",               # [stack]thatスタック(積み込み先スタック)の数を数える。1スタック積み上げ。
+#        ":TSF_pushthis",             # [stack]指定したスタックを丸ごとthisスタック(実行中スタック)に積み上げ。
+#        ":TSF_pushthat",             # [stack]指定したスタックを丸ごとthatスタック(積み込み先スタック)に積み上げ。
+#        ":TSF_over.",                  # [errorcode]スタックを終了する。他言語のreturn返り値的なモノを用意する場合、単純ににスタックに積むだけ。
+#        ":TSF_fin.",                    # [errorcode]TSFを終了する。終了時に返却する数値が指定できる。1スタック消費。
+#        ":TSF_echo",                  # [value]直近1つのスタック内容を端末で表示する。1スタック消費。
+#        ":TSF_echoes",               # […valueB,valueA,count]指定した個数スタック内容を端末で表示する。count分スタック消費。
+#        ":TSF_alias",                  # [after,before]TSFワード(関数)を置き換える。2スタック積み下ろし。
+#        ":TSF_ifthis",                 # [stack,value]valueが0以外ならthisスタックを変更(スタックをワード(関数)として呼ぶ)。通常はオーバーフローで呼び出し元に戻るが、再帰呼び出し等はループ扱いになる。ワード自体は2スタック積み下ろしだがスタック変化は未知数。
+#        ":TSF_ifthat",                 # [stack,value]valueが0以外ならthatスタック(積み込み先スタック)を変更。2スタック積み下ろし。
+#        ":TSF_casethis",              # […stackB,valueB,stackA,valueA,count]valueが0以外ならthisスタックを変更(スタックをワード(関数)として呼ぶ)。通常はオーバーフローで呼び出し元に戻るが、再帰呼び出し等はループ扱いになる。ワード自体はcount*2+1分スタック積み下ろしだがスタック変化は未知数。
+#        ":TSF_casethat",              # […stackB,valueB,stackA,valueA,count]valueが0以外ならthatスタック(積み込み先スタック)を変更。count*2+1分スタック積み下ろし。
+#        ":TSF_slicethis",             # [first,lest,stack]指定したスタックの一部をthisスタック(実行中スタック)に積み上げ。
+#        ":TSF_slicethat",             # [first,lest,stack]指定したスタックの一部をthatスタック(積み込み先スタック)に積み上げ。
+#        ":TSF_calc",                  # [calc]スタックの内容で電卓する。スタック積み下ろし量はcalcの内容に左右されるので注意。
+#        ":TSF_style",                 # ['&tab;',styleNTO,stack]テキスト出力する時の表示方法を指定する。
+#        ":TSF_view",                  # []スタック全体像を表示。
+#        ":TSF_viewsave",              # [path]指定したスタックをテキストファイルに保存。1スタック消費。
+#        ":TSF_save",                  # [stack,path]指定したスタックをテキストファイルに保存。2スタック消費。
+#        ":TSF_load",                  # [stack,path]指定したスタックにテキストファイルを読み込む。TSF構文解析は「:TSF_merge」を使う。2スタック消費。
+#        ":TSF_merge",                # [stack]指定したスタックをTSFプログラムとみなして取り込む。
+#        ":TSF_swap"  ,               # [stackB,stackA]積み込み先スタックの直近2つの順番を入れ替える。
+#        ":TSF_reverse",               # […stackB,stackA,count]積み込み先スタックの順番を指定した個数順番を入れ替える。
+#        ":TSF_postpone",            # […stackB,stackA,count]積み込み先スタックの直近1つを指定した個数奥に突っ込む。
+#        ":TSF_‎Interrupt",             # […stackB,stackA,count]積み込み先スタックの指定した個数奥から1つを引っ張り出し一番手前に積む。
+#    ]
+
 
 def TSF_Forth_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_Forth.py」単体テスト風デバッグ関数。
     TSF_Forth_Init(sys.argv)
