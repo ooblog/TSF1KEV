@@ -3,8 +3,9 @@
 from __future__ import division,print_function,absolute_import,unicode_literals
 
 from TSF_io import *
-from TSF_txt import *
-#from TSF_calc import *
+#from TSF_txt import *
+from TSF_time import *
+from TSF_calc import *
 
 
 def TSF_Forth_1ststack():    #TSF_doc:TSF_初期化に使う1ststack名

@@ -71,6 +71,14 @@ def TSF_io_intstr0x(TSF_io_codestr):    #TSF_doc:テキストを数値に変換�
             break
     return TSF_io_codeint
 
+def TSF_txt_ESCencode(TSF_text):
+    TSF_text=TSF_text.replace('&',"&amp;").replace('\t',"&tab;")
+    return TSF_text
+
+def TSF_txt_ESCdecode(TSF_text):
+    TSF_text=TSF_text.replace("&tab;",'\t').replace("&amp;",'&')
+    return TSF_text
+
 def TSF_io_readlinedeno(TSF_text):    #TSF_doc:TSF_textの行数を取得。
     if len(TSF_text) > 0:
         TSF_linedeno=TSF_text.count('\n') if TSF_text.endswith('\n') else TSF_text.count('\n')+1
