@@ -7,10 +7,10 @@ debug/README.md
 	目標は「[LTsv10kanedit](https://github.com/ooblog/LTsv10kanedit "ooblog/LTsv10kanedit: 「L:Tsv」の読み書きを中心としたモジュール群と漢字入力「kanedit」のPythonによる実装です(準備中)。")」の「[LTsv/kanedit.vim](LTsv/kanedit.vim "LTsv/kanedit.vim")」などをVim使わずに「TSF」だけで動かす事。実装はとりあえずPythonで。  
 	
 	    TSF_Tab-Separated-Forth:
-	    	UTF-8	:TSF_encoding	main:	:TSF_this	0	:TSF_fin.	TSF.py	1
+	    	UTF-8	:TSF_encoding	main:	:TSF_this	0	:TSF_fin.
 	    
 	    main:
-	    	about:	:TSF_pushthat	about:	:TSF_lenthat	:TSF_echoes
+	    	about:	:TSF_pushthe	about:	:TSF_lenthe	:TSF_echoes
 	    
 	    about:
 	    	「TSF_Tab-Separated-Forth:」の概要(暫定案)。

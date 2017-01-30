@@ -7,8 +7,8 @@ from TSF_Forth import *
 
 def TSF_pushargv():    #TSF_doc:sys.argv(コマンドライン引数)を「TSF_Tab-Separated-Forth:」に追加。
     for TSF_argvcount in range(len(sys.argv)):
-        TSF_push(TSF_Forth_1ststack(),sys.argv[-TSF_argvcount-1])
-    TSF_push(TSF_Forth_1ststack(),str(len(sys.argv)))
+        TSF_Forth_push(TSF_Forth_1ststack(),sys.argv[-TSF_argvcount-1])
+    TSF_Forth_push(TSF_Forth_1ststack(),str(len(sys.argv)))
     return ""
 
 TSF_mergefile=""
@@ -37,10 +37,13 @@ else:
         "末尾再帰はループ。深い階層で祖先を「:TSF_this」すると子孫コールスタックはまとめて破棄される。\n"
         "「:TSF_calc」という括弧が使える電卓を用意する予定なので逆ポーランド記法の数式計算は強いられないはず。\n"
         ,TSF_style="N")
-#    TSF_debug_mergefile="debug/TSF.tsf"
-#    TSF_debug_log=TSF_Forth_stackview()
-#    TSF_io_savetext(TSF_debug_mergefile,TSF_debug_log)
+    TSF_debug_mergefile="debug/TSF.tsf"
+    print("-- TSF_Forth_stackview() --")
+    TSF_debug_log=TSF_Forth_stackview()
+    TSF_io_savetext(TSF_debug_mergefile,TSF_debug_log)
     TSF_pushargv()
+    print("-- TSF_Forth_run() --")
     TSF_Forth_run(TSF_Forth_1ststack())
-#    TSF_Forth_stackview()
+    print("-- TSF_Forth_stackview() --")
+    TSF_Forth_stackview()
 sys.exit()

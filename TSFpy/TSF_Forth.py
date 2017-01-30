@@ -18,12 +18,12 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
     global TSF_words
     TSF_words={}
     TSF_words={
-        ":TSF_fin.":TSF_fin,
-        ":TSF_encoding":TSF_encoding,
-        ":TSF_this":TSF_thisstack, ":TSF_that":TSF_thatstack,
-        ":TSF_echo":TSF_echo, ":TSF_echoes":TSF_echoes,
-        ":TSF_lenthe":TSF_lenthe, ":TSF_lenthis":TSF_lenthis, ":TSF_lenthat":TSF_lenthat,
-        ":TSF_pushthe":TSF_pushthe, ":TSF_pushthis":TSF_pushthis, ":TSF_pushthat":TSF_pushthat,
+        ":TSF_fin.":TSF_Forth_fin,
+        ":TSF_encoding":TSF_Forth_encoding,
+        ":TSF_this":TSF_Forth_this, ":TSF_that":TSF_Forth_that,
+        ":TSF_echo":TSF_Forth_echo, ":TSF_echoes":TSF_Forth_echoes,
+        ":TSF_lenthe":TSF_Forth_lenthe, ":TSF_lenthis":TSF_Forth_lenthis, ":TSF_lenthat":TSF_Forth_lenthat,
+        ":TSF_pushthe":TSF_Forth_pushthe, ":TSF_pushthis":TSF_Forth_pushthis, ":TSF_pushthat":TSF_Forth_pushthat,
     }
     return TSF_words
 
@@ -123,19 +123,19 @@ def TSF_Forth_stackview():    #TSF_doc:TSF_stacksの内容をテキスト取得�
             TSF_view_log=TSF_io_printlog("{0}\n\t{1}\n".format(TSF_stackK,"\n\t".join(TSF_stackV)),TSF_log=TSF_view_log)
     return TSF_view_log
 
-def TSF_pop(TSF_that):    #TSF_doc:スタックを積み下ろす。
+def TSF_Forth_pop(TSF_that):    #TSF_doc:スタックを積み下ろす。
     TSF_popdata=""
     if TSF_that in TSF_stacks and len(TSF_stacks[TSF_that]):
         TSF_popdata=TSF_stacks[TSF_that].pop()
     return TSF_popdata
 
-def TSF_push(TSF_that,TSF_pushdata):    #TSF_doc:スタックを積み上げる。
+def TSF_Forth_push(TSF_that,TSF_pushdata):    #TSF_doc:スタックを積み上げる。
     if TSF_that in TSF_stacks:
         TSF_stacks[TSF_that].append(TSF_pushdata)
     else:
         TSF_stacks[TSF_that]=[TSF_pushdata]
 
-def TSF_peek(TSF_that,TSF_count):    #TSF_doc:スタックから読み取る。
+def TSF_Forth_peek(TSF_that,TSF_count):    #TSF_doc:スタックから読み取る。
     TSF_peekdata=""
     if TSF_that in TSF_stacks:
         if 0 <= TSF_count < len(TSF_stacks[TSF_that]):
@@ -144,7 +144,7 @@ def TSF_peek(TSF_that,TSF_count):    #TSF_doc:スタックから読み取る。
             TSF_peekdata=TSF_stacks[TSF_that][TSF_count]
     return TSF_peekdata
 
-def TSF_poke(TSF_that,TSF_poke,TSF_count):    #TSF_doc:スタックに書き込む。正常なら0。TSF_countの値がはみ出した場合1。スタック自体が無かったら2。
+def TSF_Forth_poke(TSF_that,TSF_poke,TSF_count):    #TSF_doc:スタックに書き込む。正常なら0。TSF_countの値がはみ出した場合1。スタック自体が無かったら2。
     TSF_pokeerr=0
     if TSF_that in TSF_stacks:
         if 0 <= TSF_count < len(TSF_stacks[TSF_that]):
@@ -158,80 +158,68 @@ def TSF_poke(TSF_that,TSF_poke,TSF_count):    #TSF_doc:スタックに書き込�
     return TSF_pokeerr
 
 TSF_exitcode="0"
-def TSF_fin():    #TSF_doc:TSFファイルのエンコードを指定する。
+def TSF_Forth_fin():    #TSF_doc:TSFファイルのエンコードを指定する。
     global TSF_exitcode
-    TSF_exitcode=TSF_pop(TSF_thatstack_name)
-#    TSF_io_printlog("TSF_fin",TSF_exitcode)
+    TSF_exitcode=TSF_Forth_pop(TSF_thatstack_name)
     return ""
 
 TSF_encode="UTF-8"
-def TSF_encoding():    #TSF_doc:[encode]TSFの文字コード宣言。極力冒頭に置くのが望ましい。1スタック積み下ろし。
+def TSF_Forth_encoding():    #TSF_doc:[encode]TSFの文字コード宣言。極力冒頭に置くのが望ましい。1スタック積み下ろし。
     global TSF_encode
-    TSF_encode=TSF_pop(TSF_thatstack_name)
-#    TSF_io_printlog("TSF_encoding",TSF_encode)
+    TSF_encode=TSF_Forth_pop(TSF_thatstack_name)
     return TSF_thisstack_name
 
-def TSF_thisstack():    #TSF_doc:[stack]thisスタックを変更(スタックをワード(関数)として呼ぶ)。通常はオーバーフローで呼び出し元に戻るが、再帰呼び出し等はループ扱いになる。ワード自体は1スタック積み下ろしだがスタック変化は未知数。
+def TSF_Forth_this():    #TSF_doc:[stack]thisスタックを変更(スタックをワード(関数)として呼ぶ)。通常はオーバーフローで呼び出し元に戻るが、再帰呼び出し等はループ扱いになる。ワード自体は1スタック積み下ろしだがスタック変化は未知数。
     TSF_callptrs[TSF_thisstack_name]=TSF_thisstack_count+1
-    TSF_thisnext=TSF_pop(TSF_thatstack_name)
-#    TSF_io_printlog("TSF_thisstack",TSF_thisnext)
+    TSF_thisnext=TSF_Forth_pop(TSF_thatstack_name)
     return TSF_thisnext
 
-def TSF_thatstack():    #TSF_doc:[stack]thatスタック(積み込み先スタック)を変更。1スタック積み下ろし。
+def TSF_Forth_that():    #TSF_doc:[stack]thatスタック(積み込み先スタック)を変更。1スタック積み下ろし。
     global TSF_thatstack_name
-    TSF_thatstack_name=TSF_pop(TSF_thatstack_name)
-#    TSF_io_printlog("TSF_thatstack",TSF_that)
+    TSF_thatstack_name=TSF_Forth_pop(TSF_thatstack_name)
     return TSF_thisstack_name
 
-def TSF_echo():    #TSF_doc:[value]直近1つのスタック内容を端末で表示する。1スタック消費。
-    TSF_echotext=TSF_pop(TSF_thatstack_name)
+def TSF_Forth_echo():    #TSF_doc:[value]直近1つのスタック内容を端末で表示する。1スタック消費。
+    TSF_echotext=TSF_Forth_pop(TSF_thatstack_name)
     TSF_io_printlog(TSF_echotext)
-#    TSF_io_printlog("TSF_echo",TSF_echotext)
     return TSF_thisstack_name
 
-def TSF_echoes():    #TSF_doc:[…valueB,valueA,count]指定した個数スタック内容を端末で表示する。count分スタック消費。
-    TSF_echoloopT=TSF_pop(TSF_thatstack_name); TSF_echoloopI=TSF_io_intstr0x(TSF_echoloopT)
+def TSF_Forth_echoes():    #TSF_doc:[…valueB,valueA,count]指定した個数スタック内容を端末で表示する。count分スタック消費。
+    TSF_echoloopT=TSF_Forth_pop(TSF_thatstack_name); TSF_echoloopI=TSF_io_intstr0x(TSF_echoloopT)
     for TSF_echocount in range(TSF_echoloopI):
-        TSF_echo()
+        TSF_Forth_echo()
     return TSF_thisstack_name
 
-def TSF_lenthe():   #TSF_doc:[stack]指定したスタックの数を数える。1スタック積み上げ。
-    TSF_thename=TSF_pop(TSF_thatstack_name)
-    TSF_push(TSF_thatstack_name,str(len(TSF_stacks[TSF_thename])))
-#    TSF_io_printlog("TSF_len「{0}」「{1}」".format(TSF_thename,len(TSF_stacks[TSF_thename])))
+def TSF_Forth_lenthe():   #TSF_doc:[stack]指定したスタックの数を数える。1スタック積み上げ。
+    TSF_thename=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_Forth_push(TSF_thatstack_name,str(len(TSF_stacks[TSF_thename])))
     return TSF_thisstack_name
 
-def TSF_lenthis():   #TSF_doc:thisスタック(実行中スタック)の数を数える。1スタック積み上げ。
-    TSF_push(TSF_thatstack_name,str(len(TSF_stacks[TSF_thisstack_name])))
-#    TSF_io_printlog("TSF_len「{0}」「{1}」".format(TSF_thatstack_name,len(TSF_stacks[TSF_thatstack_name])))
+def TSF_Forth_lenthis():   #TSF_doc:thisスタック(実行中スタック)の数を数える。1スタック積み上げ。
+    TSF_Forth_push(TSF_thatstack_name,str(len(TSF_stacks[TSF_thisstack_name])))
     return TSF_thisstack_name
 
-def TSF_lenthat():   #TSF_doc:thatスタック(積み込み先スタック)の数を数える。1スタック積み上げ。
-    TSF_push(TSF_thatstack_name,str(len(TSF_stacks[TSF_thatstack_name])))
-#    TSF_io_printlog("TSF_len「{0}」「{1}」".format(TSF_thatstack_name,len(TSF_stacks[TSF_thatstack_name])))
+def TSF_Forth_lenthat():   #TSF_doc:thatスタック(積み込み先スタック)の数を数える。1スタック積み上げ。
+    TSF_Forth_push(TSF_thatstack_name,str(len(TSF_stacks[TSF_thatstack_name])))
     return TSF_thisstack_name
 
-def TSF_pushthe():   #TSF_doc:[stack]指定したスタックを丸ごとthatスタック(積み込み先スタック)に積み上げ。
-    TSF_thename=TSF_pop(TSF_thatstack_name)
-#    TSF_io_printlog("TSF_Tab-Separated-Forth:「{0}」".format(TSF_stacks[TSF_Forth_1ststack()]))
-#    TSF_io_printlog("TSF_pushthe「{0}」".format(TSF_thename))
+def TSF_Forth_pushthe():   #TSF_doc:[stack]指定したスタックを丸ごとthatスタック(積み込み先スタック)に積み上げ。
+    TSF_thename=TSF_Forth_pop(TSF_thatstack_name)
     if TSF_thename in TSF_stacks:
         for TSF_tsv in reversed(TSF_stacks[TSF_thename]):
-            TSF_push(TSF_thatstack_name,TSF_tsv)
+            TSF_Forth_push(TSF_thatstack_name,TSF_tsv)
     return TSF_thisstack_name
 
-def TSF_pushthis():   #TSF_doc:thisスタック(実行中スタック)を丸ごとthatスタック(積み込み先スタック)に積み上げ。
+def TSF_Forth_pushthis():   #TSF_doc:thisスタック(実行中スタック)を丸ごとthatスタック(積み込み先スタック)に積み上げ。
     if TSF_thisstack_name in TSF_stacks:
         for TSF_tsv in reversed(TSF_stacks[TSF_thisstack_name]):
-            TSF_push(TSF_thatstack_name,TSF_tsv)
-#    TSF_io_printlog("TSF_pushthis「{0}」".format(TSF_thatstack_name))
+            TSF_Forth_push(TSF_thatstack_name,TSF_tsv)
     return TSF_thisstack_name
 
-def TSF_pushthat():   #TSF_doc:thatスタック(積み込み先スタック)を丸ごとthatスタック(積み込み先スタック)に積み上げ。
+def TSF_Forth_pushthat():   #TSF_doc:thatスタック(積み込み先スタック)を丸ごとthatスタック(積み込み先スタック)に積み上げ。
     if TSF_thatstack_name in TSF_stacks:
         for TSF_tsv in reversed(TSF_stacks[TSF_thatstack_name]):
-            TSF_push(TSF_thatstack_name,TSF_tsv)
-#    TSF_io_printlog("TSF_pushthis「{0}」".format(TSF_thatstack_name))
+            TSF_Forth_push(TSF_thatstack_name,TSF_tsv)
     return TSF_thisstack_name
 
 def TSF_Forth_run(TSF_this=None,TSF_that=None):    #TSF_doc:TSFを実行していく。
@@ -245,9 +233,7 @@ def TSF_Forth_run(TSF_this=None,TSF_that=None):    #TSF_doc:TSFを実行して�
             if TSF_stacks[TSF_thisstack_name][TSF_thisstack_count] in TSF_words:
                 TSF_nextstack=TSF_words[TSF_stacks[TSF_thisstack_name][TSF_thisstack_count]]()
             else:
-                TSF_push(TSF_thatstack_name,TSF_stacks[TSF_thisstack_name][TSF_thisstack_count])
-#                TSF_io_printlog("push「{0}」".format(TSF_stacks[TSF_thisstack_name][TSF_thisstack_count]))
-#            TSF_io_printlog("{0}「{1}」".format(TSF_thatstack_name,TSF_stacks[TSF_thatstack_name]))
+                TSF_Forth_push(TSF_thatstack_name,TSF_stacks[TSF_thisstack_name][TSF_thisstack_count])
             TSF_thisstack_count += 1
             if TSF_thisstack_name != TSF_nextstack:
                 if TSF_nextstack in TSF_stacks:
@@ -257,22 +243,21 @@ def TSF_Forth_run(TSF_this=None,TSF_that=None):    #TSF_doc:TSFを実行して�
                     break
         if len(TSF_callptrs) > 0:
             TSF_thisstack_name,TSF_thisstack_count=TSF_callptrs.popitem(True); TSF_nextstack=TSF_thisstack_name
-#            TSF_io_printlog("TSF_thisstack_name,TSF_thisstack_count={0}{1}".format(TSF_thisstack_name,TSF_thisstack_count))
         else:
             break
 
 #    TSF_wordsdef=[
-#        ":TSF_encoding":TSF_encoding,    # [encode]TSFの文字コード宣言。極力冒頭に置くのが望ましい。1スタック積み下ろし。
-#        ":TSF_this",                   # [stack]thisスタックを変更(スタックをワード(関数)として呼ぶ)。通常はオーバーフローで呼び出し元に戻るが、再帰呼び出し等はループ扱いになる。ワード自体は1スタック積み下ろしだがスタック変化は未知数。
-#        ":TSF_that",                  # [stack]thatスタック(積み込み先スタック)を変更。1スタック積み下ろし。
-#        ":TSF_lenthis",               # [stack]thisスタック(実行中スタック)の数を数える。1スタック積み上げ。
-#        ":TSF_lenthat",               # [stack]thatスタック(積み込み先スタック)の数を数える。1スタック積み上げ。
-#        ":TSF_pushthis",             # [stack]指定したスタックを丸ごとthisスタック(実行中スタック)に積み上げ。
-#        ":TSF_pushthat",             # [stack]指定したスタックを丸ごとthatスタック(積み込み先スタック)に積み上げ。
+##        ":TSF_encoding":TSF_encoding,    # [encode]TSFの文字コード宣言。極力冒頭に置くのが望ましい。1スタック積み下ろし。
+##        ":TSF_this",                   # [stack]thisスタックを変更(スタックをワード(関数)として呼ぶ)。通常はオーバーフローで呼び出し元に戻るが、再帰呼び出し等はループ扱いになる。ワード自体は1スタック積み下ろしだがスタック変化は未知数。
+##        ":TSF_that",                  # [stack]thatスタック(積み込み先スタック)を変更。1スタック積み下ろし。
+##        ":TSF_lenthis",               # [stack]thisスタック(実行中スタック)の数を数える。1スタック積み上げ。
+##        ":TSF_lenthat",               # [stack]thatスタック(積み込み先スタック)の数を数える。1スタック積み上げ。
+##        ":TSF_pushthis",             # [stack]指定したスタックを丸ごとthisスタック(実行中スタック)に積み上げ。
+##       ":TSF_pushthat",             # [stack]指定したスタックを丸ごとthatスタック(積み込み先スタック)に積み上げ。
 #        ":TSF_over.",                  # [errorcode]スタックを終了する。他言語のreturn返り値的なモノを用意する場合、単純ににスタックに積むだけ。
-#        ":TSF_fin.",                    # [errorcode]TSFを終了する。終了時に返却する数値が指定できる。1スタック消費。
-#        ":TSF_echo",                  # [value]直近1つのスタック内容を端末で表示する。1スタック消費。
-#        ":TSF_echoes",               # […valueB,valueA,count]指定した個数スタック内容を端末で表示する。count分スタック消費。
+##        ":TSF_fin.",                    # [errorcode]TSFを終了する。終了時に返却する数値が指定できる。1スタック消費。
+##       ":TSF_echo",                  # [value]直近1つのスタック内容を端末で表示する。1スタック消費。
+##       ":TSF_echoes",               # […valueB,valueA,count]指定した個数スタック内容を端末で表示する。count分スタック消費。
 #        ":TSF_alias",                  # [after,before]TSFワード(関数)を置き換える。2スタック積み下ろし。
 #        ":TSF_ifthis",                 # [stack,value]valueが0以外ならthisスタックを変更(スタックをワード(関数)として呼ぶ)。通常はオーバーフローで呼び出し元に戻るが、再帰呼び出し等はループ扱いになる。ワード自体は2スタック積み下ろしだがスタック変化は未知数。
 #        ":TSF_ifthat",                 # [stack,value]valueが0以外ならthatスタック(積み込み先スタック)を変更。2スタック積み下ろし。
