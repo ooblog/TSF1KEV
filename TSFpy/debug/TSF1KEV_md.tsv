@@ -29,7 +29,7 @@ LTsvver	<＠L:TsvLTsvver>
     	UTF-8	:TSF_encoding	main:	:TSF_this	0	:TSF_fin.	TSF.py	1
     
     main:
-    	about:	:TSF_pushthat	about:	:TSF_lenthat	:TSF_echoes
+    	about:	:TSF_pushthe	about:	:TSF_lenthe	:TSF_echoes
     
     about:
     	「TSF_Tab-Separated-Forth:」の概要(暫定案)。
