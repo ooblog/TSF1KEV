@@ -55,6 +55,22 @@ def TSF_io_printlog(TSF_text,TSF_log=None):    #TSF_doc:TSF_textをターミナ�
     TSF_log=TSF_log+"{0}\n".format(TSF_text) if TSF_log != None else ""
     return TSF_log
 
+def TSF_io_intstr0x(TSF_io_codestr):    #TSF_doc:テキストを数値に変換する(整数10進か16進数)。
+    TSF_io_codestr="{0}".format(TSF_io_codestr)
+    TSF_io_codeint=0
+    try:
+        TSF_io_codeint=int(float(TSF_io_codestr))
+    except ValueError:
+        pass
+    for TSF_io_hexstr in ["0x","U+","$"]:
+        if TSF_io_hexstr in TSF_io_codestr:
+            try:
+                TSF_io_codeint=int(TSF_io_codestr.replace(TSF_io_hexstr,""),16)
+            except ValueError:
+                pass
+            break
+    return TSF_io_codeint
+
 def TSF_io_readlinedeno(TSF_text):    #TSF_doc:TSF_textの行数を取得。
     if len(TSF_text) > 0:
         TSF_linedeno=TSF_text.count('\n') if TSF_text.endswith('\n') else TSF_text.count('\n')+1

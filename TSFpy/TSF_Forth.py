@@ -22,6 +22,7 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         ":TSF_encoding":TSF_encoding,
         ":TSF_that":TSF_thatstack,
         ":TSF_this":TSF_thisstack,
+        ":TSF_echo":TSF_echo, ":TSF_echoes":TSF_echoes,
     }
     return TSF_words
 
@@ -92,7 +93,7 @@ def TSF_Forth_merge(TSF_stack,TSF_ESCstack=[]):    #TSF_doc:「TSF_Forth_settext
     TSF_styles[TSF_stackthat]="T"
     for TSF_stackV in TSF_stacks[TSF_stack]:
         if len(TSF_stackV) == 0: continue;
-        if TSF_stackV.startswith('#'): continue;
+        if TSF_stackV.startswith("#! /"): continue;
         TSF_stackV=TSF_txt_ESCdecode(TSF_stackV)
         if not TSF_stackV.startswith('\t'):
             TSF_stackL=TSF_stackV.lstrip('\t').split('\t')
@@ -181,29 +182,41 @@ def TSF_thisstack():    #TSF_doc:[stack]thisスタックを変更(スタック�
     TSF_io_printlog("TSF_thisstack",TSF_thisnext)
     return TSF_thisnext
 
+def TSF_echo():    #TSF_doc:[value]直近1つのスタック内容を端末で表示する。1スタック消費。
+    TSF_echotext=TSF_pop(TSF_thatstack_name)
+    TSF_io_printlog(TSF_echotext)
+    return TSF_thisstack_name
+
+def TSF_echoes():    #TSF_doc:[…valueB,valueA,count]指定した個数スタック内容を端末で表示する。count分スタック消費。
+    TSF_echoloopT=TSF_pop(TSF_thatstack_name); TSF_echoloopI=TSF_io_intstr0x(TSF_echoloopT)
+    for TSF_echocount in range(TSF_echoloopI):
+        TSF_echo()
+    return TSF_thisstack_name
+
+
 def TSF_Forth_run(TSF_this=None,TSF_that=None):    #TSF_doc:TSFを実行していく。
     global TSF_thisstack_name,TSF_thatstack_name,TSF_thisstack_count
     TSF_thisstack_name=TSF_this if TSF_this != None else TSF_Forth_1ststack()
     TSF_thatstack_name=TSF_that if TSF_that != None else TSF_Forth_1ststack()
     TSF_thisstack_count=0
-    TSF_wordnext=TSF_thisstack_name
+    TSF_nextstack=TSF_thisstack_name
     while True:
         while TSF_thisstack_count < len(TSF_stacks[TSF_thisstack_name]) < 19:
             if TSF_stacks[TSF_thisstack_name][TSF_thisstack_count] in TSF_words:
                 TSF_io_printlog("TSF_stacks[{0}][{1}]()={2}".format(TSF_thisstack_name,TSF_thisstack_count,TSF_stacks[TSF_thisstack_name][TSF_thisstack_count]))
-                TSF_wordnext=TSF_words[TSF_stacks[TSF_thisstack_name][TSF_thisstack_count]]()
+                TSF_nextstack=TSF_words[TSF_stacks[TSF_thisstack_name][TSF_thisstack_count]]()
             else:
                 TSF_push(TSF_thatstack_name,TSF_stacks[TSF_thisstack_name][TSF_thisstack_count])
-            if TSF_thisstack_name != TSF_wordnext:
+            if TSF_thisstack_name != TSF_nextstack:
                 TSF_thisstack_count = 0
-                if TSF_wordnext in TSF_stacks:
-                    TSF_thisstack_name = TSF_wordnext
+                if TSF_nextstack in TSF_stacks:
+                    TSF_thisstack_name = TSF_nextstack
                 else:
                     break
-            TSF_io_printlog("TSF_stacks[{0}][{1}]={2}「{3}」".format(TSF_thisstack_name,TSF_thisstack_count,TSF_stacks[TSF_thisstack_name][TSF_thisstack_count],TSF_wordnext))
+            TSF_io_printlog("TSF_stacks[{0}][{1}]={2}「{3}」".format(TSF_thisstack_name,TSF_thisstack_count,TSF_stacks[TSF_thisstack_name][TSF_thisstack_count],TSF_nextstack))
             TSF_thisstack_count += 1
         if len(TSF_callptrs) > 0:
-            TSF_thisstack_name,TSF_thisstack_count=TSF_callptrs.popitem(True); TSF_wordnext=TSF_thisstack_name
+            TSF_thisstack_name,TSF_thisstack_count=TSF_callptrs.popitem(True); TSF_nextstack=TSF_thisstack_name
             TSF_io_printlog("TSF_thisstack_name,TSF_thisstack_count={0}{1}".format(TSF_thisstack_name,TSF_thisstack_count))
         else:
             break
