@@ -3,7 +3,6 @@
 from __future__ import division,print_function,absolute_import,unicode_literals
 
 from TSF_io import *
-#from TSF_txt import *
 from TSF_time import *
 from TSF_calc import *
 
