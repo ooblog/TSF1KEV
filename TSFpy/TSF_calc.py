@@ -80,13 +80,29 @@ def TSF_calc_bracketsbalance(TSF_calcQ):
     TSF_calcA=TSF_calcA.replace('千','1000')
     TSF_calcA=TSF_calcA.replace('百','100')
     TSF_calcA=TSF_calcA.replace('十','10')
+    TSF_calcA=TSF_calcA.replace('y','('+str(math.pi)+')').replace('e','('+str(math.e)+')').replace('n','(n|0)')
+    for TSF_calc_opecase in TSF_calc_opemark:
+        if TSF_calc_opecase in TSF_calcA:
+            TSF_calcA=TSF_calcA.replace(TSF_calc_opecase,TSF_calc_opemark[TSF_calc_opecase])
     return TSF_calcA
 
 def TSF_calc(TSF_calcQ):
-    TSF_calcQ=TSF_calcQ.replace('\n','\t').replace('\t',''); TSF_calcA="n|0"
+    TSF_calcA="n|0"
     TSF_calcA=TSF_calc_bracketsbalance(TSF_calcQ);
+    TSF_calc_bracketreg=re.compile("[(](?<=[(])[^()]*(?=[)])[)]")
+#    print("TSF_calc",TSF_calcA)
+    while "(" in TSF_calcA:
+        for TSF_func in re.findall(TSF_calc_bracketreg,TSF_calcA):
+            TSF_calcA=TSF_calcA.replace(TSF_func,TSF_calc_function(TSF_func))
+    TSF_calcA=TSF_calcA.replace(TSF_calcA,TSF_calc_function(TSF_calcA))
     return TSF_calcA
 
+def TSF_calc_function(TSF_calcQ):
+#    print("TSF_calcQ",TSF_calcQ)
+    TSF_calcQ=TSF_calcQ.lstrip("(").rstrip(")")
+    TSF_calcA=TSF_calcQ
+#    print("TSF_calcA",TSF_calcA)
+    return TSF_calcA
 
 def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テスト風デバッグ関数。
     TSF_debug_log=""
@@ -97,7 +113,7 @@ def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テス�
     TSF_debug_log=TSF_io_printlog("TSF_py:",TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout])),TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("TSF_calc:",TSF_log=TSF_debug_log)
-    LTsv_calcQlist=[ "1/3)｛｝","(1/3*3","(1|3*3)","1|3","{1}+{2}","二百万円","十億円"]
+    LTsv_calcQlist=[ "Ｐ1/3)｛｝","(1/3*3","(1|3*3)","1|3","{1}+{2}","二百万円","十億円","底","周","∞"]
     for LTsv_calcQ in LTsv_calcQlist:
         TSF_debug_log=TSF_io_printlog("\t{0}⇔{1}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ)),TSF_debug_log)
     return TSF_debug_log
