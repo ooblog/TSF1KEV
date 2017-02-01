@@ -2,6 +2,7 @@
 # -*- coding: UTF-8 -*-
 from __future__ import division,print_function,absolute_import,unicode_literals
 import math
+import decimal
 import re
 
 
@@ -29,17 +30,6 @@ TSF_calc_opemarkP=["*p","*m","/p","/m","#p","#m","|p","|m","+p","+m","-p","-m",
               ")*(", "/("]
 TSF_calc_opemark=dict(zip(TSF_calc_opemarkC,TSF_calc_opemarkP))
 TSF_calc_usemark="1234567890.|pmyecn+-*/\\#%(S!LG~)" "銭十百千万億兆京垓"
-
-def TSF_calc_GCM(TSF_calcL,TSF_calcR):
-    TSF_GCMm,TSF_GCMn=abs(int(TSF_calcL)),abs(int(TSF_calcR))
-    if TSF_GCMm < TSF_GCMn:
-        TSF_GCMm,TSF_GCMn=TSF_GCMn,TSF_GCMm
-    while TSF_GCMn > 0:
-        TSF_GCMm,TSF_GCMn=TSF_GCMn,TSF_GCMm%TSF_GCMn
-    return TSF_GCMm
-
-def TSF_calc_LCM(TSF_calcL,TSF_calcR):
-    return abs(int(TSF_calcL))*abs(int(TSF_calcR))//TSF_calc_GCM(TSF_calcL,TSF_calcR)
 
 def TSF_calc_stackmarge(TSF_calcQ):
     TSF_calcK,TSF_calcA="",""
@@ -100,9 +90,95 @@ def TSF_calc(TSF_calcQ):
 def TSF_calc_function(TSF_calcQ):
 #    print("TSF_calcQ",TSF_calcQ)
     TSF_calcQ=TSF_calcQ.lstrip("(").rstrip(")")
-    TSF_calcA=TSF_calcQ
+    TSF_calcA=TSF_calc_addition(TSF_calcQ)
 #    print("TSF_calcA",TSF_calcA)
     return TSF_calcA
+    
+def TSF_calc_addition(TSF_calcQ):
+    TSF_calcLN,TSF_calcLD=0,1
+    TSF_calcQ=TSF_calcQ.replace("++","+").replace("+-","-").replace("--","+").replace("-+","-")
+    TSF_calcQ=TSF_calcQ.replace('+','\t+').replace('-','\t-').strip('\t')
+    TSF_calcQsplits=TSF_calcQ.split('\t')
+    for TSF_calcQmulti in TSF_calcQsplits:
+        TSF_calcR=TSF_calc_multiplication(TSF_calcQmulti); TSF_calcRN,TSF_calcRD=TSF_calcR.split('|')
+        if float(TSF_calcRD) == 0.0: break
+        TSF_calcLN=TSF_calcLN*int(TSF_calcRD)+int(TSF_calcRN)*TSF_calcLD
+        TSF_calcLD=TSF_calcLD*int(TSF_calcRD)
+    if TSF_calcRD == 0:
+        TSF_calcA="n|0"
+    else:
+        TSF_calcA="{0}|{1}".format(TSF_calcLN,TSF_calcLD)
+    return TSF_calcA
+
+def TSF_calc_multiplication(TSF_calcQ):
+    TSF_calcLN,TSF_calcLD=1,1
+    TSF_calcQ=TSF_calcQ.replace('*',"\t*").replace('/',"\t/").replace('\\',"\t\\").replace('#',"\t#").replace('L',"\tL").replace('G',"\tG")
+    TSF_calcQ=TSF_calcQ.replace("+p","+").replace("+m","-").replace("-m","+").replace("-p","-")
+    TSF_calcQ=TSF_calcQ.replace("p","+").replace("m","-")
+    TSF_calcQsplits=TSF_calcQ.split('\t')
+    for TSF_calcQmulti in TSF_calcQsplits:
+        TSF_calcO=TSF_calcQmulti[0] if len(TSF_calcQmulti)>0 else '*'
+        TSF_calcR=TSF_calc_fractalize(TSF_calcQmulti.lstrip('*/\\#LG')); TSF_calcRN,TSF_calcRD=TSF_calcR.split('|')
+        if float(TSF_calcRD) == 0.0: break
+        if TSF_calcO == '`':
+            TSF_calcLN=TSF_calcLN*int(TSF_calcRN)
+            TSF_calcLD=TSF_calcLD*int(TSF_calcRD)
+        if TSF_calcO == '/':
+            TSF_calcLN=TSF_calcLN*int(TSF_calcRD)
+            TSF_calcLD=TSF_calcLD*int(TSF_calcRN)
+    if TSF_calcRD == 0:
+        TSF_calcA="n|0"
+    else:
+        if TSF_calcLD < 0:
+            TSF_calcLN,TSF_calcLD=-TSF_calcLN,-TSF_calcLD
+        TSF_calcA="{0}|{1}".format(TSF_calcLN,TSF_calcLD)
+    return TSF_calcA
+
+def TSF_calc_fractalize(TSF_calcQ):
+    TSF_calcQ=TSF_calcQ.replace('/','|').rstrip('.').rstrip('+')
+    if not '|' in TSF_calcQ:
+        TSF_calcQ="{0}|1".format(TSF_calcQ)
+    TSF_calcR=TSF_calcQ.split('|'); TSF_calcNs,TSF_calcDs=TSF_calcR[0],TSF_calcR[1:]
+    if len(TSF_calcNs) == 0: TSF_calcNs="0"
+    if "n" in TSF_calcNs:
+        TSF_calcN,TSF_calcD=decimal.Decimal("0.0"),decimal.Decimal("0.0")
+    else:
+        try:
+            TSF_calcN=decimal.Decimal(TSF_calcNs)
+        except ValueError:
+            TSF_calcN=decimal.Decimal("0.0")
+        TSF_calcD=decimal.Decimal("1.0")
+        for TSF_calcDmulti in TSF_calcDs:
+            if len(TSF_calcDmulti) == 0: TSF_calcDmulti="0"
+            try:
+                TSF_calcD=TSF_calcD*decimal.Decimal(TSF_calcDmulti)
+            except ValueError:
+                TSF_calcD=decimal.Decimal("0.0")
+            if TSF_calcD == decimal.Decimal("0.0"): break;
+        while TSF_calcN != int(TSF_calcN) or TSF_calcD != int(TSF_calcD):
+            TSF_calcN,TSF_calcD=TSF_calcN*decimal.Decimal("10.0"),TSF_calcD*decimal.Decimal("10.0")
+    if TSF_calcD == decimal.Decimal("0.0"):
+        TSF_calcA="n|0"
+    else:
+        if TSF_calcD < 0:
+            TSF_calcN,TSF_calcD=-TSF_calcN,-TSF_calcD
+        TSF_calcGCM=TSF_calc_GCM(int(TSF_calcN),int(TSF_calcD))
+        TSF_calcD=TSF_calcD//TSF_calcGCM
+        TSF_calcN=TSF_calcN//TSF_calcGCM
+        TSF_calcA="{0}|{1}".format(TSF_calcN,TSF_calcD)
+    print("TSF_calc_fractalize,TSF_calcA=",TSF_calcA)
+    return TSF_calcA
+
+def TSF_calc_GCM(TSF_calcL,TSF_calcR):
+    TSF_GCMm,TSF_GCMn=abs(int(TSF_calcL)),abs(int(TSF_calcR))
+    if TSF_GCMm < TSF_GCMn:
+        TSF_GCMm,TSF_GCMn=TSF_GCMn,TSF_GCMm
+    while TSF_GCMn > 0:
+        TSF_GCMm,TSF_GCMn=TSF_GCMn,TSF_GCMm%TSF_GCMn
+    return TSF_GCMm
+
+def TSF_calc_LCM(TSF_calcL,TSF_calcR):
+    return abs(int(TSF_calcL))*abs(int(TSF_calcR))//TSF_calc_GCM(TSF_calcL,TSF_calcR)
 
 def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テスト風デバッグ関数。
     TSF_debug_log=""
@@ -113,7 +189,7 @@ def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テス�
     TSF_debug_log=TSF_io_printlog("TSF_py:",TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout])),TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("TSF_calc:",TSF_log=TSF_debug_log)
-    LTsv_calcQlist=[ "Ｐ1/3)｛｝","(1/3*3","(1|3*3)","1|3","{1}+{2}","二百万円","十億円","底","周","∞"]
+    LTsv_calcQlist=[ "Ｐ1/3)｛｝","(5/7*7","(5|13*13)","8|17","{1}+{2}","二百万円","十億円","底","周","∞"]
     for LTsv_calcQ in LTsv_calcQlist:
         TSF_debug_log=TSF_io_printlog("\t{0}⇔{1}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ)),TSF_debug_log)
     return TSF_debug_log
