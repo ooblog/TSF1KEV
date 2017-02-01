@@ -101,10 +101,12 @@ def TSF_calc_addition(TSF_calcQ):
     TSF_calcQsplits=TSF_calcQ.split('\t')
     for TSF_calcQmulti in TSF_calcQsplits:
         TSF_calcR=TSF_calc_multiplication(TSF_calcQmulti); TSF_calcRN,TSF_calcRD=TSF_calcR.split('|')
-        if float(TSF_calcRD) == 0.0: break
+        if float(TSF_calcRD) == 0.0:
+            TSF_calcLD=0
+            break
         TSF_calcLN=TSF_calcLN*int(TSF_calcRD)+int(TSF_calcRN)*TSF_calcLD
         TSF_calcLD=TSF_calcLD*int(TSF_calcRD)
-    if TSF_calcRD == 0:
+    if TSF_calcLD == 0:
         TSF_calcA="n|0"
     else:
         TSF_calcA="{0}|{1}".format(TSF_calcLN,TSF_calcLD)
@@ -119,19 +121,24 @@ def TSF_calc_multiplication(TSF_calcQ):
     for TSF_calcQmulti in TSF_calcQsplits:
         TSF_calcO=TSF_calcQmulti[0] if len(TSF_calcQmulti)>0 else '*'
         TSF_calcR=TSF_calc_fractalize(TSF_calcQmulti.lstrip('*/\\#LG')); TSF_calcRN,TSF_calcRD=TSF_calcR.split('|')
-        if float(TSF_calcRD) == 0.0: break
+        print("TSF_calc_multiplication,TSF_calcR,TSF_calcRN,TSF_calcRD=",TSF_calcR,TSF_calcRN,TSF_calcRD)
+        if float(TSF_calcRD) == 0.0:
+            TSF_calcLD=0
+            break
         if TSF_calcO == '`':
             TSF_calcLN=TSF_calcLN*int(TSF_calcRN)
             TSF_calcLD=TSF_calcLD*int(TSF_calcRD)
         if TSF_calcO == '/':
             TSF_calcLN=TSF_calcLN*int(TSF_calcRD)
             TSF_calcLD=TSF_calcLD*int(TSF_calcRN)
-    if TSF_calcRD == 0:
+    print("TSF_calc_multiplication,TSF_calcLN,TSF_calcLD=",TSF_calcLN,TSF_calcLD)
+    if float(TSF_calcLD) == 0.0:
         TSF_calcA="n|0"
     else:
         if TSF_calcLD < 0:
             TSF_calcLN,TSF_calcLD=-TSF_calcLN,-TSF_calcLD
         TSF_calcA="{0}|{1}".format(TSF_calcLN,TSF_calcLD)
+    print("TSF_calc_multiplication,TSF_calcA=",TSF_calcA)
     return TSF_calcA
 
 def TSF_calc_fractalize(TSF_calcQ):
@@ -166,7 +173,7 @@ def TSF_calc_fractalize(TSF_calcQ):
         TSF_calcD=TSF_calcD//TSF_calcGCM
         TSF_calcN=TSF_calcN//TSF_calcGCM
         TSF_calcA="{0}|{1}".format(TSF_calcN,TSF_calcD)
-    print("TSF_calc_fractalize,TSF_calcA=",TSF_calcA)
+#    print("TSF_calc_fractalize,TSF_calcA=",TSF_calcA)
     return TSF_calcA
 
 def TSF_calc_GCM(TSF_calcL,TSF_calcR):
@@ -189,7 +196,7 @@ def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テス�
     TSF_debug_log=TSF_io_printlog("TSF_py:",TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout])),TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("TSF_calc:",TSF_log=TSF_debug_log)
-    LTsv_calcQlist=[ "Ｐ1/3)｛｝","(5/7*7","(5|13*13)","8|17","{1}+{2}","二百万円","十億円","底","周","∞"]
+    LTsv_calcQlist=[ "Ｐ1/3)｛｝","(5/7*7","(5|13*13)","8|17","{1}+{2}","二百万円","十億円","底","周","∞","0/0"]
     for LTsv_calcQ in LTsv_calcQlist:
         TSF_debug_log=TSF_io_printlog("\t{0}⇔{1}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ)),TSF_debug_log)
     return TSF_debug_log
