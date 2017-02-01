@@ -80,18 +80,16 @@ def TSF_calc(TSF_calcQ):
     TSF_calcA="n|0"
     TSF_calcA=TSF_calc_bracketsbalance(TSF_calcQ);
     TSF_calc_bracketreg=re.compile("[(](?<=[(])[^()]*(?=[)])[)]")
-#    print("TSF_calc",TSF_calcA)
     while "(" in TSF_calcA:
         for TSF_func in re.findall(TSF_calc_bracketreg,TSF_calcA):
             TSF_calcA=TSF_calcA.replace(TSF_func,TSF_calc_function(TSF_func))
     TSF_calcA=TSF_calcA.replace(TSF_calcA,TSF_calc_function(TSF_calcA))
+    TSF_calcA=TSF_calc_fractalize(TSF_calcA)
     return TSF_calcA
 
 def TSF_calc_function(TSF_calcQ):
-#    print("TSF_calcQ",TSF_calcQ)
     TSF_calcQ=TSF_calcQ.lstrip("(").rstrip(")")
     TSF_calcA=TSF_calc_addition(TSF_calcQ)
-#    print("TSF_calcA",TSF_calcA)
     return TSF_calcA
     
 def TSF_calc_addition(TSF_calcQ):
@@ -121,24 +119,21 @@ def TSF_calc_multiplication(TSF_calcQ):
     for TSF_calcQmulti in TSF_calcQsplits:
         TSF_calcO=TSF_calcQmulti[0] if len(TSF_calcQmulti)>0 else '*'
         TSF_calcR=TSF_calc_fractalize(TSF_calcQmulti.lstrip('*/\\#LG')); TSF_calcRN,TSF_calcRD=TSF_calcR.split('|')
-        print("TSF_calc_multiplication,TSF_calcR,TSF_calcRN,TSF_calcRD=",TSF_calcR,TSF_calcRN,TSF_calcRD)
         if float(TSF_calcRD) == 0.0:
             TSF_calcLD=0
             break
-        if TSF_calcO == '`':
-            TSF_calcLN=TSF_calcLN*int(TSF_calcRN)
-            TSF_calcLD=TSF_calcLD*int(TSF_calcRD)
         if TSF_calcO == '/':
             TSF_calcLN=TSF_calcLN*int(TSF_calcRD)
             TSF_calcLD=TSF_calcLD*int(TSF_calcRN)
-    print("TSF_calc_multiplication,TSF_calcLN,TSF_calcLD=",TSF_calcLN,TSF_calcLD)
+        else:  # TSF_calcO == '`':
+            TSF_calcLN=TSF_calcLN*int(TSF_calcRN)
+            TSF_calcLD=TSF_calcLD*int(TSF_calcRD)
     if float(TSF_calcLD) == 0.0:
         TSF_calcA="n|0"
     else:
         if TSF_calcLD < 0:
             TSF_calcLN,TSF_calcLD=-TSF_calcLN,-TSF_calcLD
         TSF_calcA="{0}|{1}".format(TSF_calcLN,TSF_calcLD)
-    print("TSF_calc_multiplication,TSF_calcA=",TSF_calcA)
     return TSF_calcA
 
 def TSF_calc_fractalize(TSF_calcQ):
@@ -152,14 +147,14 @@ def TSF_calc_fractalize(TSF_calcQ):
     else:
         try:
             TSF_calcN=decimal.Decimal(TSF_calcNs)
-        except ValueError:
+        except decimal.InvalidOperation:
             TSF_calcN=decimal.Decimal("0.0")
         TSF_calcD=decimal.Decimal("1.0")
         for TSF_calcDmulti in TSF_calcDs:
             if len(TSF_calcDmulti) == 0: TSF_calcDmulti="0"
             try:
                 TSF_calcD=TSF_calcD*decimal.Decimal(TSF_calcDmulti)
-            except ValueError:
+            except decimal.InvalidOperation:
                 TSF_calcD=decimal.Decimal("0.0")
             if TSF_calcD == decimal.Decimal("0.0"): break;
         while TSF_calcN != int(TSF_calcN) or TSF_calcD != int(TSF_calcD):
@@ -173,7 +168,6 @@ def TSF_calc_fractalize(TSF_calcQ):
         TSF_calcD=TSF_calcD//TSF_calcGCM
         TSF_calcN=TSF_calcN//TSF_calcGCM
         TSF_calcA="{0}|{1}".format(TSF_calcN,TSF_calcD)
-#    print("TSF_calc_fractalize,TSF_calcA=",TSF_calcA)
     return TSF_calcA
 
 def TSF_calc_GCM(TSF_calcL,TSF_calcR):
@@ -196,7 +190,9 @@ def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テス�
     TSF_debug_log=TSF_io_printlog("TSF_py:",TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout])),TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("TSF_calc:",TSF_log=TSF_debug_log)
-    LTsv_calcQlist=[ "Ｐ1/3)｛｝","(5/7*7","(5|13*13)","8|17","{1}+{2}","二百万円","十億円","底","周","∞","0/0"]
+    LTsv_calcQlist=[ "Ｐ1/3)｛｝","(5/7*7","(5|13*13)","8|17","{1}+{2}","二百万円","十億円","底","周","∞","0/0","1/2-1/3", \
+     "1|6+1|3","3|4-1|4","2|3*3|4","2|5/4|5", \
+     "0.5|3.5","0.5/3.5","1|2/7|2","2|3|5|7","2||3","2|--|3","2|p-|3","2|..|3","2|p4.|3","2|m.4|3",]
     for LTsv_calcQ in LTsv_calcQlist:
         TSF_debug_log=TSF_io_printlog("\t{0}⇔{1}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ)),TSF_debug_log)
     return TSF_debug_log

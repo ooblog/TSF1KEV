@@ -24,6 +24,7 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         ":TSF_echo":TSF_Forth_echo, ":TSF_echoes":TSF_Forth_echoes,
         ":TSF_lenthe":TSF_Forth_lenthe, ":TSF_lenthis":TSF_Forth_lenthis, ":TSF_lenthat":TSF_Forth_lenthat,
         ":TSF_pushthe":TSF_Forth_pushthe, ":TSF_pushthis":TSF_Forth_pushthis, ":TSF_pushthat":TSF_Forth_pushthat,
+        ":TSF_calc":TSF_Forth_calc,
     }
     return TSF_words
 
@@ -221,6 +222,13 @@ def TSF_Forth_pushthat():   #TSF_doc:thatスタック(積み込み先スタッ�
         for TSF_tsv in reversed(TSF_stacks[TSF_thatstack_name]):
             TSF_Forth_push(TSF_thatstack_name,TSF_tsv)
     return TSF_thisstack_name
+
+def TSF_Forth_calc():   #TSF_doc:[calc]スタックの内容で電卓する。スタック積み下ろし量はcalcの内容に左右されるので注意。
+    TSF_tsv=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_tsv=TSF_calc(TSF_tsv)
+    TSF_Forth_push(TSF_thatstack_name,TSF_tsv)
+    return TSF_thisstack_name
+
 
 def TSF_Forth_run(TSF_this=None,TSF_that=None):    #TSF_doc:TSFを実行していく。
     global TSF_thisstack_name,TSF_thatstack_name,TSF_thisstack_count
