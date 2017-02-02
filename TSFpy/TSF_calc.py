@@ -7,7 +7,7 @@ import re
 
 
 TSF_calc_stackwide="｛｝{}［］[]「」『』"
-TSF_calc_stackhalf="{}{}{}{}{}{}"
+TSF_calc_stackhalf="[][][][][][]"
 TSF_calc_stackbracket=dict(zip(list(TSF_calc_stackwide),list(TSF_calc_stackhalf)))
 TSF_calc_opewide="ＰｐPpＭｍMm１２３４５６７８９０｜．" "正負分小円" "一二三四五六七八九〇" "壱弐参肆伍陸漆捌玖零" \
                "＋－％×／＼÷＃" "加減乗除余比" "足引掛割" "和差積商" "陌阡萬仙" \
@@ -31,19 +31,15 @@ TSF_calc_opemarkP=["*p","*m","/p","/m","#p","#m","|p","|m","+p","+m","-p","-m",
 TSF_calc_opemark=dict(zip(TSF_calc_opemarkC,TSF_calc_opemarkP))
 TSF_calc_usemark="1234567890.|pmyecn+-*/\\#%(S!LG~)" "銭十百千万億兆京垓"
 
-def TSF_calc_stackmarge(TSF_calcQ):
+def TSF_calc_stackmarge(TSF_calcQ,*TSF_stacksQ):
     TSF_calcK,TSF_calcA="",""
-    TSF_calc_stackreg=re.compile("[{](?<=[{])[^{}]*(?=[}])[}]")
     for TSF_calcbracketQ in TSF_calcQ:
-        TSF_calcK+=TSF_calc_stackbracket.get(TSF_calcbracketQ,TSF_calcbracketQ)
-    for TSF_func in re.findall(TSF_calc_stackreg,TSF_calcA):
-        TSF_calcK=TSF_calcA.replace(TSF_func,"({0})".format(TSF_func))
-    for TSF_calcbracketK in TSF_calcK:
-        TSF_calcA+=TSF_calc_operator.get(TSF_calcbracketK,TSF_calcbracketK)
+        TSF_calcA+=TSF_calc_stackbracket.get(TSF_calcbracketQ,TSF_calcbracketQ)
+    for TSF_stackC,TSF_stackQ in enumerate(TSF_stacksQ):
+        TSF_calcA=TSF_calcA.replace("[{0}]".format(TSF_stackC),"({0})".format(TSF_stackQ))
     return TSF_calcA
 
 def TSF_calc_bracketsbalance(TSF_calcQ):
-#    TSF_calcQ=TSF_calc_stackmarge(TSF_calcQ)
     TSF_calcA=""; TSF_calcbracketLR,TSF_calcbracketCAP=0,0
     for TSF_calcbracketQ in TSF_calcQ:
         TSF_calcA+=TSF_calcbracketQ if TSF_calcbracketQ in TSF_calc_usemark else ''
@@ -190,11 +186,12 @@ def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テス�
     TSF_debug_log=TSF_io_printlog("TSF_py:",TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout])),TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("TSF_calc:",TSF_log=TSF_debug_log)
-    LTsv_calcQlist=[ "Ｐ1/3)｛｝","(5/7*7","(5|13*13)","8|17","{1}+{2}","二百万円","十億円","底","周","∞","0/0","1/2-1/3", \
+    LTsv_calcQlist=[ "Ｐ1/3)｛｝","(5/7*7","(5|13*13)","8|17","{0}+{1}","二百万円","十億円","底","周","∞","0/0","1/2-1/3", \
      "1|6+1|3","3|4-1|4","2|3*3|4","2|5/4|5", \
      "0.5|3.5","0.5/3.5","1|2/7|2","2|3|5|7","2||3","2|--|3","2|p-|3","2|..|3","2|p4.|3","2|m.4|3",]
+    LTsv_calcQstack=["100","200","300"]
     for LTsv_calcQ in LTsv_calcQlist:
-        TSF_debug_log=TSF_io_printlog("\t{0}⇔{1}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ)),TSF_debug_log)
+        TSF_debug_log=TSF_io_printlog("\t{0}⇔{1}".format(LTsv_calcQ,TSF_calc(TSF_calc_stackmarge(LTsv_calcQ,*tuple(LTsv_calcQstack)))),TSF_debug_log)
     return TSF_debug_log
 
 if __name__=="__main__":
