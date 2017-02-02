@@ -6,16 +6,16 @@ import decimal
 import re
 
 
-TSF_calc_stackwide="｛｝{}［］「」『』"
-TSF_calc_stackhalf="{}{}{}{}{}"
+TSF_calc_stackwide="｛｝{}［］[]「」『』"
+TSF_calc_stackhalf="{}{}{}{}{}{}"
 TSF_calc_stackbracket=dict(zip(list(TSF_calc_stackwide),list(TSF_calc_stackhalf)))
 TSF_calc_opewide="ＰｐPpＭｍMm１２３４５６７８９０｜．" "正負分小円" "一二三四五六七八九〇" "壱弐参肆伍陸漆捌玖零" \
                "＋－％×／＼÷＃" "加減乗除余比" "足引掛割" "和差積商" "陌阡萬仙" \
-               "（）(){}{}ΣＳｓSsＣｃCc～！ＬｌllＧｇgg" "列但※囲〜値約倍" \
+               "（）()｛｝{}［］[]「」『』ΣＳｓSsＣｃCc～！ＬｌllＧｇgg" "列但※囲〜値約倍" \
                "周底無∞"
 TSF_calc_opehalf="ppppmmmm1234567890|." "pm|.." "1234567890" "1234567890" \
                "+-%*/\\/#" "+-*/#" "+-*/%" "+-*/" "百千万銭" \
-               "()()()()SSSSScccc~LLLLGGGG!" "SSSS~cLG" \
+               "()()()()()()()()SSSSScccc~LLLLGGGG!" "SSSS~cLG" \
                "yenn"
 TSF_calc_operator=dict(zip(list(TSF_calc_opewide),list(TSF_calc_opehalf)))
 TSF_calc_opemarkC=["*+","*-","/+","/-","#+","#-","|+","|-","++","+-","-+","--",
@@ -43,7 +43,7 @@ def TSF_calc_stackmarge(TSF_calcQ):
     return TSF_calcA
 
 def TSF_calc_bracketsbalance(TSF_calcQ):
-    TSF_calcQ=TSF_calc_stackmarge(TSF_calcQ)
+#    TSF_calcQ=TSF_calc_stackmarge(TSF_calcQ)
     TSF_calcA=""; TSF_calcbracketLR,TSF_calcbracketCAP=0,0
     for TSF_calcbracketQ in TSF_calcQ:
         TSF_calcA+=TSF_calcbracketQ if TSF_calcbracketQ in TSF_calc_usemark else ''

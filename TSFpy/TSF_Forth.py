@@ -18,13 +18,13 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
     global TSF_words
     TSF_words={}
     TSF_words={
-        ":TSF_fin.":TSF_Forth_fin,
-        ":TSF_encoding":TSF_Forth_encoding,
-        ":TSF_this":TSF_Forth_this, ":TSF_that":TSF_Forth_that,
-        ":TSF_echo":TSF_Forth_echo, ":TSF_echoes":TSF_Forth_echoes,
-        ":TSF_lenthe":TSF_Forth_lenthe, ":TSF_lenthis":TSF_Forth_lenthis, ":TSF_lenthat":TSF_Forth_lenthat,
-        ":TSF_pushthe":TSF_Forth_pushthe, ":TSF_pushthis":TSF_Forth_pushthis, ":TSF_pushthat":TSF_Forth_pushthat,
-        ":TSF_calc":TSF_Forth_calc,
+        "#TSF_fin.":TSF_Forth_fin,
+        "#TSF_encoding":TSF_Forth_encoding,
+        "#TSF_this":TSF_Forth_this, "#TSF_that":TSF_Forth_that,
+        "#TSF_echo":TSF_Forth_echo, "#TSF_echoes":TSF_Forth_echoes,
+        "#TSF_lenthe":TSF_Forth_lenthe, "#TSF_lenthis":TSF_Forth_lenthis, "#TSF_lenthat":TSF_Forth_lenthat,
+        "#TSF_pushthe":TSF_Forth_pushthe, "#TSF_pushthis":TSF_Forth_pushthis, "#TSF_pushthat":TSF_Forth_pushthat,
+        "#TSF_calc":TSF_Forth_calc,"#TSF_calc2":TSF_Forth_calc2,
     }
     return TSF_words
 
@@ -32,11 +32,17 @@ def TSF_Forth_words():    #TSF_doc:TSF_words(ワード)を取得する
     global TSF_words
     return TSF_words
 
+def TSF_Forth_pushargv():    #TSF_doc:sys.argv(コマンドライン引数)を「TSF_Tab-Separated-Forth:」に追加。
+    for TSF_argvcount in range(len(sys.argv)):
+        TSF_Forth_push(TSF_Forth_1ststack(),sys.argv[-TSF_argvcount-1])
+    TSF_Forth_push(TSF_Forth_1ststack(),str(len(sys.argv)))
+
 TSF_stacks=OrderedDict()
 def TSF_Forth_Initstacks(TSF_argv):    #TSF_doc:TSF_stacks(スタック)を初期化する
     global TSF_stacks
     TSF_stacks=OrderedDict()
     TSF_stacks[TSF_Forth_1ststack()]=["UTF-8",":TSF_encoding","0",":TSF_fin."]+TSF_argv+[str(len(TSF_argv))]
+    TSF_Forth_pushargv()
     return TSF_stacks
 
 def TSF_Forth_stacks():    #TSF_doc:TSF_stacks(スタック)を取得する
@@ -95,7 +101,7 @@ def TSF_Forth_merge(TSF_stack,TSF_ESCstack=[]):    #TSF_doc:「TSF_Forth_settext
     TSF_styles[TSF_stackthat]="T"
     for TSF_stackV in TSF_stacks[TSF_stack]:
         if len(TSF_stackV) == 0: continue;
-        if TSF_stackV.startswith("#! /"): continue;
+        if TSF_stackV.startswith("#"): continue;
         TSF_stackV=TSF_txt_ESCdecode(TSF_stackV)
         if not TSF_stackV.startswith('\t'):
             TSF_stackL=TSF_stackV.lstrip('\t').split('\t')
@@ -223,7 +229,13 @@ def TSF_Forth_pushthat():   #TSF_doc:thatスタック(積み込み先スタッ�
             TSF_Forth_push(TSF_thatstack_name,TSF_tsv)
     return TSF_thisstack_name
 
-def TSF_Forth_calc():   #TSF_doc:[calc]スタックの内容で電卓する。スタック積み下ろし量はcalcの内容に左右されるので注意。
+def TSF_Forth_calc():   #TSF_doc:[calc]スタックの内容で電卓する。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
+    TSF_tsv=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_tsv=TSF_calc(TSF_tsv)
+    TSF_Forth_push(TSF_thatstack_name,TSF_tsv)
+    return TSF_thisstack_name
+
+def TSF_Forth_calc2():   #TSF_doc:[…stackB,stackA,calc,count]スタックの内容で電卓する。count+1(calc)分スタック積み下ろし。
     TSF_tsv=TSF_Forth_pop(TSF_thatstack_name)
     TSF_tsv=TSF_calc(TSF_tsv)
     TSF_Forth_push(TSF_thatstack_name,TSF_tsv)
