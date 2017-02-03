@@ -23,7 +23,7 @@ def TSF_about_help():    #TSF_doc:TSFの概要とサンプルプログラム。
         "「#TSF_calc」という括弧が使える電卓を用意する予定なので逆ポーランド記法の数式計算は強いられないはず。\n"
         ,TSF_style="N")
     TSF_Forth_settext("calctest:","\t".join(["calcQQ 1/3+1|2=","#TSF_echo","1/3+1|2","#TSF_calcQQ","#TSF_echo"])+"\t"+ \
-    "\t".join(["calcFX 1/3+1|2=","#TSF_echo","1/3","1|2","[1]+[0]","2","#TSF_calcFX","#TSF_echo"]))
+    "\t".join(["calcFX 1/3+1|2=","#TSF_echo","1/3","1|2","[1]+[0]","2","#TSF_calc[]","#TSF_calcFX","#TSF_echo"]))
     TSF_debug_mergefile="debug/TSF.tsf"
     print("-- TSF_Forth_stackview() --")
     TSF_debug_log=TSF_Forth_stackview()

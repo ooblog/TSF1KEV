@@ -24,7 +24,8 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         "#TSF_echo":TSF_Forth_echo, "#TSF_echoes":TSF_Forth_echoes,
         "#TSF_lenthe":TSF_Forth_lenthe, "#TSF_lenthis":TSF_Forth_lenthis, "#TSF_lenthat":TSF_Forth_lenthat,
         "#TSF_pushthe":TSF_Forth_pushthe, "#TSF_pushthis":TSF_Forth_pushthis, "#TSF_pushthat":TSF_Forth_pushthat,
-        "#TSF_calcQQ":TSF_Forth_calcQQ,"#TSF_calcFX":TSF_Forth_calcFX,
+        "#TSF_calcFX":TSF_Forth_calcFX,"#TSF_calcQQ":TSF_Forth_calcQQ,
+        "#TSF_calc()":TSF_Forth_calcPB,"#TSF_calc{}":TSF_Forth_calcCB,"#TSF_calc[]":TSF_Forth_calcSB,"#TSF_calc｢｣":TSF_Forth_calcCB,
     }
     return TSF_words
 
@@ -229,6 +230,12 @@ def TSF_Forth_pushthat():   #TSF_doc:thatスタック(積み込み先スタッ�
             TSF_Forth_push(TSF_thatstack_name,TSF_tsv)
     return TSF_thisstack_name
 
+def TSF_Forth_calcFX():   #TSF_doc:[calc]スタック内容で毎回分数電卓する。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
+    TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_tsvA=TSF_calc(TSF_tsvQ)
+    TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
+    return TSF_thisstack_name
+
 TSF_calcs={}
 def TSF_Forth_calcQQ():   #TSF_doc:[calc]スタック内容で分数電卓する。一度計算した値を暗記(九九)。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
     global TSF_calcs
@@ -240,17 +247,30 @@ def TSF_Forth_calcQQ():   #TSF_doc:[calc]スタック内容で分数電卓する
     TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
     return TSF_thisstack_name
 
-def TSF_Forth_calcFX():   #TSF_doc:[…stackB,stackA,calc,count]複数のスタック内容で毎回再計算(分数電卓)する。count+1(calc)分スタック積み下ろし。
+def TSF_Forth_calcmarge(TSF_bracketL,TSF_bracketR):   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、指定された括弧の中の数値をスタック内容に置換。count+1(calc)分スタック積み下ろし。
     TSF_calcloopT=TSF_Forth_pop(TSF_thatstack_name); TSF_calcloopI=abs(TSF_io_intstr0x(TSF_calcloopT))
     TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
     TSF_stacksQ=[]
     for TSF_calccount in range(TSF_calcloopI):
         TSF_stacksQ.append(TSF_Forth_pop(TSF_thatstack_name))
-    TSF_tsvQ=TSF_calc_stackmarge(TSF_tsvQ,*tuple(TSF_stacksQ))
-    TSF_tsvA=TSF_calc(TSF_tsvQ)
+    TSF_tsvA=TSF_calc_stackmarge(TSF_tsvQ,TSF_bracketL,TSF_bracketR,*tuple(TSF_stacksQ))
     TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
+
+def TSF_Forth_calcPB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、丸括弧【(n)】の中の数値をスタック内容に置換。count+1(calc)分スタック積み下ろし。
+    TSF_Forth_calcmarge('(',')')
     return TSF_thisstack_name
 
+def TSF_Forth_calcBB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、波括弧【{n}】の中の数値をスタック内容に置換。count+1(calc)分スタック積み下ろし。
+    TSF_Forth_calcmarge('{','}')
+    return TSF_thisstack_name
+
+def TSF_Forth_calcSB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、角括弧【[n]】の中の数値をスタック内容に置換。count+1(calc)分スタック積み下ろし。
+    TSF_Forth_calcmarge('[',']')
+    return TSF_thisstack_name
+
+def TSF_Forth_calcCB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、鉤括弧【｢n｣】の中の数値をスタック内容に置換。count+1(calc)分スタック積み下ろし。
+    TSF_Forth_calcmarge('｢','｣')
+    return TSF_thisstack_name
 
 def TSF_Forth_run(TSF_this=None,TSF_that=None):    #TSF_doc:TSFを実行していく。
     global TSF_thisstack_name,TSF_thatstack_name,TSF_thisstack_count
