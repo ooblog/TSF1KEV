@@ -26,6 +26,7 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         "#TSF_pushthe":TSF_Forth_pushthe, "#TSF_pushthis":TSF_Forth_pushthis, "#TSF_pushthat":TSF_Forth_pushthat,
         "#TSF_calcFX":TSF_Forth_calcFX,"#TSF_calcQQ":TSF_Forth_calcQQ,
         "#TSF_calc()":TSF_Forth_calcPB,"#TSF_calc{}":TSF_Forth_calcCB,"#TSF_calc[]":TSF_Forth_calcSB,"#TSF_calc｢｣":TSF_Forth_calcCB,
+        "#TSF_join":TSF_Forth_join,"#TSF_split":TSF_Forth_split,"#TSF_chars":TSF_Forth_split,
     }
     return TSF_words
 
@@ -237,7 +238,7 @@ def TSF_Forth_calcFX():   #TSF_doc:[calc]スタック内容で毎回分数電卓
     return TSF_thisstack_name
 
 TSF_calcs={}
-def TSF_Forth_calcQQ():   #TSF_doc:[calc]スタック内容で分数電卓する。一度計算した値を暗記(九九)。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
+def TSF_Forth_calcQQ():   #TSF_doc:[calc]スタック内容で分数電卓する。一度計算した値は暗記(九九)するので再計算しない。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
     global TSF_calcs
     TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
     if TSF_tsvQ in TSF_calcs:
@@ -271,6 +272,17 @@ def TSF_Forth_calcSB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は�
 def TSF_Forth_calcCB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、鉤括弧【｢n｣】の中の数値をスタック内容に置換。count+1(calc)分スタック積み下ろし。
     TSF_Forth_calcmarge('｢','｣')
     return TSF_thisstack_name
+
+def TSF_Forth_join():   #TSF_doc:
+    return TSF_thisstack_name
+
+def TSF_Forth_split():   #TSF_doc:
+    return TSF_thisstack_name
+
+def TSF_Forth_split():   #TSF_doc:
+    return TSF_thisstack_name
+
+
 
 def TSF_Forth_run(TSF_this=None,TSF_that=None):    #TSF_doc:TSFを実行していく。
     global TSF_thisstack_name,TSF_thatstack_name,TSF_thisstack_count
@@ -315,7 +327,7 @@ def TSF_Forth_run(TSF_this=None,TSF_that=None):    #TSF_doc:TSFを実行して�
 #        ":TSF_casethat",              # […stackB,valueB,stackA,valueA,count]valueが0以外ならthatスタック(積み込み先スタック)を変更。count*2+1分スタック積み下ろし。
 #        ":TSF_slicethis",             # [first,lest,stack]指定したスタックの一部をthisスタック(実行中スタック)に積み上げ。
 #        ":TSF_slicethat",             # [first,lest,stack]指定したスタックの一部をthatスタック(積み込み先スタック)に積み上げ。
-#        ":TSF_calc",                  # [calc]スタックの内容で電卓する。スタック積み下ろし量はcalcの内容に左右されるので注意。
+##        ":TSF_calc",                  # [calc]スタックの内容で電卓する。スタック積み下ろし量はcalcの内容に左右されるので注意。
 #        ":TSF_style",                 # ['&tab;',styleNTO,stack]テキスト出力する時の表示方法を指定する。
 #        ":TSF_view",                  # []スタック全体像を表示。
 #        ":TSF_viewsave",              # [path]指定したスタックをテキストファイルに保存。1スタック消費。

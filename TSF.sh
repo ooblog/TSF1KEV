@@ -1,4 +1,4 @@
 #!/bin/sh
 script_dir=$(cd $(dirname ${BASH_SOURCE:-$0}); pwd)
-cd $script_dir
-TSFpy/TSF.py $@
+cd $script_dir"/TSFpy"
+./TSF.py $@
