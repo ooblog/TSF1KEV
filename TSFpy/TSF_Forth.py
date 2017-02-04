@@ -24,7 +24,7 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         "#TSF_echo":TSF_Forth_echo, "#TSF_echoes":TSF_Forth_echoes,
         "#TSF_lenthe":TSF_Forth_lenthe, "#TSF_lenthis":TSF_Forth_lenthis, "#TSF_lenthat":TSF_Forth_lenthat,
         "#TSF_pushthe":TSF_Forth_pushthe, "#TSF_pushthis":TSF_Forth_pushthis, "#TSF_pushthat":TSF_Forth_pushthat,
-        "#TSF_calcFX":TSF_Forth_calcFX,"#TSF_calcQQ":TSF_Forth_calcQQ,
+        "#TSF_calcQQ":TSF_Forth_calcQQ,"#TSF_calcFX":TSF_Forth_calcFX,"#TSF_calcDC":TSF_Forth_calcDC,
         "#TSF_calc()":TSF_Forth_calcPB,"#TSF_calc{}":TSF_Forth_calcCB,"#TSF_calc[]":TSF_Forth_calcSB,"#TSF_calc｢｣":TSF_Forth_calcCB,
         "#TSF_join":TSF_Forth_join,"#TSF_split":TSF_Forth_split,"#TSF_chars":TSF_Forth_split,
     }
@@ -193,7 +193,7 @@ def TSF_Forth_echo():    #TSF_doc:[value]直近1つのスタック内容を端�
     return TSF_thisstack_name
 
 def TSF_Forth_echoes():    #TSF_doc:[…valueB,valueA,count]指定した個数スタック内容を端末で表示する。count分スタック消費。
-    TSF_echoloopT=TSF_Forth_pop(TSF_thatstack_name); TSF_echoloopI=abs(TSF_io_intstr0x(TSF_echoloopT))
+    TSF_echoloopT=TSF_calc_decimalize(TSF_Forth_pop(TSF_thatstack_name)); TSF_echoloopI=abs(int(TSF_echoloopT if TSF_echoloopT != "n|0" else "0")) 
     for TSF_echocount in range(TSF_echoloopI):
         TSF_Forth_echo()
     return TSF_thisstack_name
@@ -230,12 +230,6 @@ def TSF_Forth_pushthat():   #TSF_doc:thatスタック(積み込み先スタッ�
             TSF_Forth_push(TSF_thatstack_name,TSF_tsv)
     return TSF_thisstack_name
 
-def TSF_Forth_calcFX():   #TSF_doc:[calc]スタック内容で毎回分数電卓する。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
-    TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
-    TSF_tsvA=TSF_calc(TSF_tsvQ)
-    TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
-    return TSF_thisstack_name
-
 TSF_calcs={}
 def TSF_Forth_calcQQ():   #TSF_doc:[calc]スタック内容で分数電卓する。一度計算した値は暗記(九九)するので再計算しない。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
     global TSF_calcs
@@ -244,6 +238,18 @@ def TSF_Forth_calcQQ():   #TSF_doc:[calc]スタック内容で分数電卓する
         TSF_tsvA=TSF_calcs[TSF_tsvQ]
     else:
         TSF_tsvA=TSF_calc(TSF_tsvQ); TSF_calcs[TSF_tsvQ]=TSF_tsvA
+    TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
+    return TSF_thisstack_name
+
+def TSF_Forth_calcFX():   #TSF_doc:[calc]スタック内容で毎回分数電卓する。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
+    TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_tsvA=TSF_calcs.get(TSF_tsvQ,TSF_calc(TSF_tsvQ))
+    TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
+    return TSF_thisstack_name
+
+def TSF_Forth_calcDC():   #TSF_doc:[calc]スタック内容で分数電卓する。計算結果は小数で。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
+    TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_tsvA=TSF_calc_decimalize(TSF_tsvQ)
     TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
     return TSF_thisstack_name
 

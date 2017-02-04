@@ -5,16 +5,18 @@ import math
 import decimal
 import re
 
-
-TSF_calc_opewide="1234567890.|pmYyEecn+-*/\\#%(S!LG~)" "銭十百千万億兆京垓" \
-                "ＰｐPpＭｍMm１２３４５６７８９０｜．" "正負分小円" "一二三四五六七八九〇" "壱弐参肆伍陸漆捌玖零" \
-                "＋－％×／＼÷＃" "加減乗除余比" "足引掛割" "和差積商" "陌阡萬仙" \
-                "（）()｛｝{}［］[]「」｢｣『』ΣＳｓSsＣｃCc～！ＬｌllＧｇgg" "列但※囲〜値約倍" \
+# Sin,Cos,Tan,Atan2,sQrt,LOg
+TSF_calc_opewide="1234567890.|pmYyEecn+-*/\\#%(S!~k)LG" "銭十百千万億兆京垓" \
+                "ＰｐPpＭｍMm１２３４５６７８９０｜．" "正負分小円圓" "一二三四五六七八九〇" "壱弐参肆伍陸漆捌玖零" \
+                "＋－×÷／＼＃％" "加減乗除比" "足引掛割" "和差積商" "陌阡萬仙" \
+                "（）()｛｝{}［］[]「」｢｣『』ΣＳｓSs～ＫｋKk値列但※囲〜" \
+                "ＬｌllＧｇgg約倍" \
                 "π周ｅ底∞無"
-TSF_calc_opehalf="1234567890.|pmYyEecn+-*/\\#%(S!LG~)" "銭十百千万億兆京垓" \
-                "ppppmmmm1234567890|." "pm|.." "1234567890" "1234567890" \
-                "+-%*/\\/#" "+-*/#" "+-*/%" "+-*/" "百千万銭" \
-                "()()()()()()()()()SSSSScccc~LLLLGGGG!" "SSSS~cLG" \
+TSF_calc_opehalf="1234567890.|pmYyEecn+-*/\\#%(S!~k)LG" "銭十百千万億兆京垓" \
+                "ppppmmmm1234567890|." "pm|..." "1234567890" "1234567890" \
+                "+-*//\\#%" "+-*/%" "+-*/" "+-*/" "百千万銭" \
+                "()()()()()()()()()SSSSS~kkkkkSSSS~" \
+                "LLLLGGGGLG" \
                 "yyeenn"
 TSF_calc_operator=dict(zip(list(TSF_calc_opewide),list(TSF_calc_opehalf)))
 TSF_calc_opemarkC=["*+","*-","/+","/-","#+","#-","|+","|-","++","+-","-+","--",
@@ -29,7 +31,7 @@ TSF_calc_opemarkP=["*p","*m","/p","/m","#p","#m","|p","|m","+p","+m","-p","-m",
                 ")*(", "/("]
 TSF_calc_opemark=dict(zip(TSF_calc_opemarkC,TSF_calc_opemarkP))
 
-def TSF_calc_stackmarge(TSF_calcQ,TSF_bracketL,TSF_bracketR,*TSF_stacksQ):
+def TSF_calc_stackmarge(TSF_calcQ,TSF_bracketL,TSF_bracketR,*TSF_stacksQ):    #TSF_doc:数式に番号順にスタックを挿入する。番号が見つからない場合途中で中断。・
     TSF_calcA=TSF_calcQ
     for TSF_stackC,TSF_stackQ in enumerate(TSF_stacksQ):
         TSF_calcK="{0}{1}{2}".format(TSF_bracketL,TSF_stackC,TSF_bracketR)
@@ -39,7 +41,7 @@ def TSF_calc_stackmarge(TSF_calcQ,TSF_bracketL,TSF_bracketR,*TSF_stacksQ):
             break
     return TSF_calcA
 
-def TSF_calc_bracketsbalance(TSF_calcQ):
+def TSF_calc_bracketsbalance(TSF_calcQ):    #TSF_doc:括弧のバランスを整える。ついでに無効な演算子を除去したり円周率億千万など計算の下準備。
     TSF_calcA=""; TSF_calcbracketLR,TSF_calcbracketCAP=0,0
     for TSF_calcbracketQ in TSF_calcQ:
         TSF_calcA+=TSF_calc_operator.get(TSF_calcbracketQ,'')
@@ -74,7 +76,7 @@ def TSF_calc_bracketsbalance(TSF_calcQ):
             TSF_calcA=TSF_calcA.replace(TSF_calc_opecase,TSF_calc_opemark[TSF_calc_opecase])
     return TSF_calcA
 
-def TSF_calc(TSF_calcQ):
+def TSF_calc(TSF_calcQ):    #TSF_doc:分数電卓のmain。括弧の内側を検索(正規表現)。
     TSF_calcA="n|0"
     TSF_calcA=TSF_calc_bracketsbalance(TSF_calcQ);
     TSF_calc_bracketreg=re.compile("[(](?<=[(])[^()]*(?=[)])[)]")
@@ -85,12 +87,12 @@ def TSF_calc(TSF_calcQ):
     TSF_calcA=TSF_calc_fractalize(TSF_calcA)
     return TSF_calcA
 
-def TSF_calc_function(TSF_calcQ):
+def TSF_calc_function(TSF_calcQ):    #TSF_doc:分数電卓の和集合積集合およびSin,Cos,Tan,Atan2,sQrt,LOg予定地。
     TSF_calcQ=TSF_calcQ.lstrip("(").rstrip(")")
     TSF_calcA=TSF_calc_addition(TSF_calcQ)
     return TSF_calcA
     
-def TSF_calc_addition(TSF_calcQ):
+def TSF_calc_addition(TSF_calcQ):    #TSF_doc:分数電卓の足し算引き算・消費税計算等。
     TSF_calcLN,TSF_calcLD=0,1
     TSF_calcQ=TSF_calcQ.replace("++","+").replace("+-","-").replace("--","+").replace("-+","-")
     TSF_calcQ=TSF_calcQ.replace('+','\t+').replace('-','\t-').strip('\t')
@@ -108,7 +110,7 @@ def TSF_calc_addition(TSF_calcQ):
         TSF_calcA="{0}|{1}".format(TSF_calcLN,TSF_calcLD)
     return TSF_calcA
 
-def TSF_calc_multiplication(TSF_calcQ):
+def TSF_calc_multiplication(TSF_calcQ):    #TSF_doc:分数電卓の掛け算割り算等。
     TSF_calcLN,TSF_calcLD=1,1
     TSF_calcQ=TSF_calcQ.replace('*',"\t*").replace('/',"\t/").replace('\\',"\t\\").replace('#',"\t#").replace('L',"\tL").replace('G',"\tG")
     TSF_calcQ=TSF_calcQ.replace("+p","+").replace("+m","-").replace("-m","+").replace("-p","-")
@@ -134,7 +136,7 @@ def TSF_calc_multiplication(TSF_calcQ):
         TSF_calcA="{0}|{1}".format(TSF_calcLN,TSF_calcLD)
     return TSF_calcA
 
-def TSF_calc_fractalize(TSF_calcQ):
+def TSF_calc_fractalize(TSF_calcQ):    #TSF_doc:分数電卓なので小数を分数に。
     TSF_calcQ=TSF_calcQ.replace('/','|').rstrip('.').rstrip('+')
     if not '|' in TSF_calcQ:
         TSF_calcQ="{0}|1".format(TSF_calcQ)
@@ -168,7 +170,15 @@ def TSF_calc_fractalize(TSF_calcQ):
         TSF_calcA="{0}|{1}".format(TSF_calcN,TSF_calcD)
     return TSF_calcA
 
-def TSF_calc_GCM(TSF_calcL,TSF_calcR):
+def TSF_calc_decimalize(TSF_calcQ):    #TSF_doc:分数電卓だけど分数ではなく小数を返す。ただし「n|0」の時は「n|0」を返す。
+    TSF_calcR=TSF_calc(TSF_calcQ); TSF_calcRN,TSF_calcRD=TSF_calcR.split('|')
+    if float(TSF_calcRD) != 0.0:
+        TSF_calcA=str(decimal.Decimal(TSF_calcRN)/decimal.Decimal(TSF_calcRD))
+    else:
+        TSF_calcA="n|0"
+    return TSF_calcA
+
+def TSF_calc_GCM(TSF_calcL,TSF_calcR):    #TSF_doc:最大公約数。
     TSF_GCMm,TSF_GCMn=abs(int(TSF_calcL)),abs(int(TSF_calcR))
     if TSF_GCMm < TSF_GCMn:
         TSF_GCMm,TSF_GCMn=TSF_GCMn,TSF_GCMm
@@ -176,7 +186,7 @@ def TSF_calc_GCM(TSF_calcL,TSF_calcR):
         TSF_GCMm,TSF_GCMn=TSF_GCMn,TSF_GCMm%TSF_GCMn
     return TSF_GCMm
 
-def TSF_calc_LCM(TSF_calcL,TSF_calcR):
+def TSF_calc_LCM(TSF_calcL,TSF_calcR):    #TSF_doc:最小公倍数。
     return abs(int(TSF_calcL))*abs(int(TSF_calcR))//TSF_calc_GCM(TSF_calcL,TSF_calcR)
 
 def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テスト風デバッグ関数。
@@ -193,7 +203,7 @@ def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テス�
      "0.5|3.5","0.5/3.5","1|2/7|2","2|3|5|7","2||3","2|--|3","2|p-|3","2|..|3","2|p4.|3","2|m.4|3",]
     LTsv_calcQstack=["100","200","300"]
     for LTsv_calcQ in LTsv_calcQlist:
-        TSF_debug_log=TSF_io_printlog("\t{0}⇔{1}".format(LTsv_calcQ,TSF_calc(TSF_calc_stackmarge(LTsv_calcQ,'[',']',*tuple(LTsv_calcQstack)))),TSF_debug_log)
+        TSF_debug_log=TSF_io_printlog("\t{0}⇔{1};{2}".format(LTsv_calcQ,TSF_calc(TSF_calc_stackmarge(LTsv_calcQ,'[',']',*tuple(LTsv_calcQstack))),TSF_calc_decimalize(LTsv_calcQ)),TSF_debug_log)
     return TSF_debug_log
 
 if __name__=="__main__":

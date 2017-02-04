@@ -7,7 +7,7 @@ from TSF_Forth import *
 
 def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサンプルプログラム。
     TSF_Forth_settext(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","main:","#TSF_this","0","#TSF_fin."]))
-    TSF_Forth_settext("main:","\t".join(["about:","#TSF_pushthe","about:","#TSF_lenthe","#TSF_echoes","calcQQtest:","#TSF_this","calcFXtest:","#TSF_this"]))
+    TSF_Forth_settext("main:","\t".join(["about:","#TSF_pushthe","about:","#TSF_lenthe","#TSF_echoes","calcQQtest:","#TSF_this","calcFXtest:","#TSF_this","calcDCtest:","#TSF_this"]))
     TSF_Forth_settext("about:",
         "「TSF_Tab-Separated-Forth」の概要(暫定案)。\n"
         "積んだスタックをワード(関数)などで消化していくForth風インタプリタ。スタック単位はtsv文字列。\n"
@@ -23,6 +23,7 @@ def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサン�
         ,TSF_style="N")
     TSF_Forth_settext("calcQQtest:","\t".join(["QQ(1/3+1|2)=","#TSF_echo","1/3+1|2","#TSF_calcQQ","#TSF_echo"]))
     TSF_Forth_settext("calcFXtest:","\t".join(["FX(1/3+1|2)=","#TSF_echo","1/3","1|2","[1]+[0]","#TSF_calc[]","#TSF_calcFX","#TSF_echo"]))
+    TSF_Forth_settext("calcDCtest:","\t".join(["DC(1/3+1|2)=","#TSF_echo","1/3","1|2","[1]+[0]","#TSF_calc[]","#TSF_calcDC","#TSF_echo"]))
     print("-- TSF_Forth_stackview() --")
     TSF_debug_log=TSF_Forth_stackview()
     if save_about_mergefile:

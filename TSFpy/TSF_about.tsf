@@ -2,7 +2,7 @@ TSF_Tab-Separated-Forth:
 	UTF-8	#TSF_encoding	main:	#TSF_this	0	#TSF_fin.
 
 main:
-	about:	#TSF_pushthe	about:	#TSF_lenthe	#TSF_echoes	calcQQtest:	#TSF_this	calcFXtest:	#TSF_this
+	about:	#TSF_pushthe	about:	#TSF_lenthe	#TSF_echoes	calcQQtest:	#TSF_this	calcFXtest:	#TSF_this	calcDCtest:	#TSF_this
 
 about:
 	「TSF_Tab-Separated-Forth」の概要(暫定案)。
@@ -14,7 +14,7 @@ about:
 	そもそもスタックが複数ある。他言語で言う変数の代わりにスタックがある。他言語で言う関数の引数や返り値もスタック経由。
 	存在しないthatスタックからの取得(存在するスタックのアンダーフロー含む)は0文字列を返却する。
 	存在しないthisスタックの呼び出し(存在するスタックのオーバーフロー含む)は呼び出し元に戻って続きから再開。
-	末尾再帰はループ。深い階層で祖先を「#TSF_this」すると子孫コールスタックはまとめて破棄される(未実装)。
+	末尾再帰はループ。深い階層で祖先を「#TSF_this」すると子孫コールスタックはまとめて破棄される(未テスト)。
 	「#TSF_calc[]」などの括弧と「#TSF_calcFX」などの分数電卓を用意したので逆ポーランド記法の数式計算は強いられないはず。
 
 calcQQtest:
@@ -22,4 +22,7 @@ calcQQtest:
 
 calcFXtest:
 	FX(1/3+1|2)=	#TSF_echo	1/3	1|2	[1]+[0]	#TSF_calc[]	#TSF_calcFX	#TSF_echo
+
+calcDCtest:
+	DC(1/3+1|2)=	#TSF_echo	1/3	1|2	[1]+[0]	#TSF_calc[]	#TSF_calcDC	#TSF_echo
 
