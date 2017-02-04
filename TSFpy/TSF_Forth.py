@@ -138,6 +138,12 @@ def TSF_Forth_pop(TSF_that):    #TSF_doc:スタックを積み下ろす。
         TSF_popdata=TSF_stacks[TSF_that].pop()
     return TSF_popdata
 
+def TSF_Forth_popdecimalize():    #TSF_doc:複数形のワードで最初のcountを数値として取得。
+    TSF_decimalT=TSF_Forth_pop(TSF_thatstack_name); 
+    TSF_decimalT=TSF_calc_decimalizeQQ(TSF_calcs.get(TSF_decimalT,TSF_calc(TSF_decimalT)))
+    TSF_decimalI=abs(int(float(TSF_decimalT if TSF_decimalT != "n|0" else "0")))
+    return TSF_decimalI
+
 def TSF_Forth_push(TSF_that,TSF_pushdata):    #TSF_doc:スタックを積み上げる。
     if TSF_that in TSF_stacks:
         TSF_stacks[TSF_that].append(TSF_pushdata)
@@ -193,7 +199,7 @@ def TSF_Forth_echo():    #TSF_doc:[value]直近1つのスタック内容を端�
     return TSF_thisstack_name
 
 def TSF_Forth_echoes():    #TSF_doc:[…valueB,valueA,count]指定した個数スタック内容を端末で表示する。count分スタック消費。
-    TSF_echoloopT=TSF_calc_decimalize(TSF_Forth_pop(TSF_thatstack_name)); TSF_echoloopI=abs(int(TSF_echoloopT if TSF_echoloopT != "n|0" else "0")) 
+    TSF_echoloopI=TSF_Forth_popdecimalize()
     for TSF_echocount in range(TSF_echoloopI):
         TSF_Forth_echo()
     return TSF_thisstack_name
@@ -241,15 +247,15 @@ def TSF_Forth_calcQQ():   #TSF_doc:[calc]スタック内容で分数電卓する
     TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
     return TSF_thisstack_name
 
-def TSF_Forth_calcFX():   #TSF_doc:[calc]スタック内容で毎回分数電卓する。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
+def TSF_Forth_calcFX():   #TSF_doc:[calc]スタック内容で分数電卓する。暗記はしないがQQを記憶をカンペする。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
     TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
     TSF_tsvA=TSF_calcs.get(TSF_tsvQ,TSF_calc(TSF_tsvQ))
     TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
     return TSF_thisstack_name
 
-def TSF_Forth_calcDC():   #TSF_doc:[calc]スタック内容で分数電卓する。計算結果は小数で。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
+def TSF_Forth_calcDC():   #TSF_doc:[calc]スタック内容で分数電卓する。計算結果を小数で求める過程で再計算になる。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
     TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
-    TSF_tsvA=TSF_calc_decimalize(TSF_tsvQ)
+    TSF_tsvA=TSF_calc_decimalizeQQ(TSF_calcs.get(TSF_tsvQ,TSF_calc(TSF_tsvQ)))
     TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
     return TSF_thisstack_name
 
@@ -275,6 +281,11 @@ def TSF_Forth_calcCB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は�
     return TSF_thisstack_name
 
 def TSF_Forth_join():   #TSF_doc:
+    TSF_joinloopI=TSF_Forth_popdecimalize()
+    TSF_joinlist=[]
+    for TSF_joincount in range(TSF_joinloopI):
+        TSF_joinlist.append(TSF_Forth_pop(TSF_thatstack_name))
+    TSF_Forth_push(TSF_thatstack_name,"".join(reversed(TSF_joinlist)))
     return TSF_thisstack_name
 
 def TSF_Forth_split():   #TSF_doc:

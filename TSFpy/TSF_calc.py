@@ -19,7 +19,6 @@ TSF_calc_opehalf="1234567890.|pmYyEen+-*/\\#%(MP~k)LG" "銭十百千万億兆京
                 "()()()()()()()()()MMMMP~~~kLG" \
                 "yyeenn"
 TSF_calc_operator=dict(zip(list(TSF_calc_opewide),list(TSF_calc_opehalf)))
-print(TSF_calc_operator)
 TSF_calc_opemarkC=["*+","*-","/+","/-","#+","#-","|+","|-","++","+-","-+","--",
                 "0c", "1c", "2c", "3c", "4c", "5c", "6c", "7c", "8c", "9c", ".c",
                 "0(", "1(", "2(", "3(", "4(", "5(", "6(", "7(", "8(", "9(", ".(",
@@ -181,8 +180,12 @@ def TSF_calc_fractalize(TSF_calcQ):    #TSF_doc:分数電卓なので小数を�
         TSF_calcA="{0}|{1}".format(TSF_calcN,TSF_calcD)
     return TSF_calcA
 
-def TSF_calc_decimalize(TSF_calcQ):    #TSF_doc:分数電卓だけど分数ではなく小数を返す。ただし「n|0」の時は「n|0」を返す。
-    TSF_calcR=TSF_calc(TSF_calcQ); TSF_calcRN,TSF_calcRD=TSF_calcR.split('|')
+def TSF_calc_decimalize(TSF_calcQ):    #TSF_doc:分数電卓だけど分数ではなく小数を返す(再計算)。ただし「n|0」の時は「n|0」を返す。
+    TSF_calcA=TSF_calc(TSF_calcQ); 
+    return TSF_calc_decimalizeQQ(TSF_calcA)
+    
+def TSF_calc_decimalizeQQ(TSF_calcQ):    #TSF_doc:分数(が入力されてるものと信用して)を変換して小数を返す。ただし「n|0」の時は「n|0」を返す。
+    TSF_calcRN,TSF_calcRD=TSF_calcQ.split('|')
     if float(TSF_calcRD) != 0.0:
         TSF_calcA=str(decimal.Decimal(TSF_calcRN)/decimal.Decimal(TSF_calcRD))
     else:

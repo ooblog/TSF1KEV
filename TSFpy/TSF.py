@@ -21,9 +21,9 @@ def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサン�
         "末尾再帰はループ。深い階層で祖先を「#TSF_this」すると子孫コールスタックはまとめて破棄される(未テスト)。\n"
         "「#TSF_calc[]」などの括弧と「#TSF_calcFX」などの分数電卓を用意したので逆ポーランド記法の数式計算は強いられないはず。\n"
         ,TSF_style="N")
-    TSF_Forth_settext("calcQQtest:","\t".join(["QQ(1/3+1|2)=","#TSF_echo","1/3+1|2","#TSF_calcQQ","#TSF_echo"]))
-    TSF_Forth_settext("calcFXtest:","\t".join(["FX(1/3+1|2)=","#TSF_echo","1/3","1|2","[1]+[0]","#TSF_calc[]","#TSF_calcFX","#TSF_echo"]))
-    TSF_Forth_settext("calcDCtest:","\t".join(["DC(1/3+1|2)=","#TSF_echo","1/3","1|2","[1]+[0]","#TSF_calc[]","#TSF_calcDC","#TSF_echo"]))
+    TSF_Forth_settext("calcQQtest:","\t".join(["QQ(1/3+1|2)=","1/3+1|2","#TSF_calcQQ","2","#TSF_join","#TSF_echo"]))
+    TSF_Forth_settext("calcFXtest:","\t".join(["FX(1/3+1|2)=","1/3","1|2","[1]+[0]","#TSF_calc[]","#TSF_calcFX","2","#TSF_join","#TSF_echo"]))
+    TSF_Forth_settext("calcDCtest:","\t".join(["DC(1/3+1|2)=","1/3","+","1|2","3","#TSF_join","#TSF_calcDC","2","#TSF_join","#TSF_echo"]))
     print("-- TSF_Forth_stackview() --")
     TSF_debug_log=TSF_Forth_stackview()
     if save_about_mergefile:
