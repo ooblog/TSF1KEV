@@ -260,9 +260,15 @@ def TSF_Forth_calcDC():   #TSF_doc:[calc]スタック内容で分数電卓する
     return TSF_thisstack_name
 
 def TSF_Forth_calcmarge(TSF_bracketL,TSF_bracketR):   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、指定された括弧の中の数値をスタック内容に置換。count+1(calc)分スタック積み下ろし。
-    TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
-    TSF_tsvA=TSF_calc_stackmarge(TSF_tsvQ,TSF_bracketL,TSF_bracketR,*tuple(reversed(TSF_stacks[TSF_thatstack_name])))
-    TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
+    TSF_calcA=TSF_Forth_pop(TSF_thatstack_name)
+#    TSF_tsvA=TSF_calc_stackmarge(TSF_tsvQ,TSF_bracketL,TSF_bracketR,*tuple(reversed(TSF_stacks[TSF_thatstack_name])))
+    for TSF_stackC,TSF_stackQ in enumerate(TSF_stacks[TSF_thatstack_name]):
+        TSF_calcK="{0}{1}{2}".format(TSF_bracketL,TSF_stackC,TSF_bracketR)
+        if TSF_calcK in TSF_calcA:
+            TSF_calcA=TSF_calcA.replace(TSF_calcK,"{0}{1}{2}".format(TSF_bracketL,TSF_Forth_pop(TSF_thatstack_name),TSF_bracketR))
+        else:
+            break
+    TSF_Forth_push(TSF_thatstack_name,TSF_calcA)
 
 def TSF_Forth_calcPB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、丸括弧【(n)】の中の数値をスタック内容に置換。count+1(calc)分スタック積み下ろし。
     TSF_Forth_calcmarge('(',')')
