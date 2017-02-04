@@ -179,7 +179,6 @@ def TSF_Forth_encoding():    #TSF_doc:[encode]TSFの文字コード宣言。極�
     return TSF_thisstack_name
 
 def TSF_Forth_this():    #TSF_doc:[stack]thisスタックを変更(スタックをワード(関数)として呼ぶ)。通常はオーバーフローで呼び出し元に戻るが、再帰呼び出し等はループ扱いになる。ワード自体は1スタック積み下ろしだがスタック変化は未知数。
-    TSF_callptrs[TSF_thisstack_name]=TSF_thisstack_count+1
     TSF_thisnext=TSF_Forth_pop(TSF_thatstack_name)
     return TSF_thisnext
 
@@ -295,6 +294,11 @@ def TSF_Forth_run(TSF_this=None,TSF_that=None):    #TSF_doc:TSFを実行して�
             TSF_thisstack_count += 1
             if TSF_thisstack_name != TSF_nextstack:
                 if TSF_nextstack in TSF_stacks:
+                    if TSF_thisstack_name in TSF_callptrs:
+                        while TSF_thisstack_name in TSF_callptrs:
+                            TSF_callptrs.pop()
+                    else:
+                        TSF_callptrs[TSF_thisstack_name]=TSF_thisstack_count
                     TSF_thisstack_name = TSF_nextstack
                     TSF_thisstack_count = 0
                 else:

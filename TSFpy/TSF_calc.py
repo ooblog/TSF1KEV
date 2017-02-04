@@ -6,27 +6,29 @@ import decimal
 import re
 
 
-TSF_calc_opewide="ＰｐPpＭｍMm１２３４５６７８９０｜．" "正負分小円" "一二三四五六七八九〇" "壱弐参肆伍陸漆捌玖零" \
-               "＋－％×／＼÷＃" "加減乗除余比" "足引掛割" "和差積商" "陌阡萬仙" \
-               "（）()｛｝{}［］[]「」｢｣『』ΣＳｓSsＣｃCc～！ＬｌllＧｇgg" "列但※囲〜値約倍" \
-               "周底無∞"
-TSF_calc_opehalf="ppppmmmm1234567890|." "pm|.." "1234567890" "1234567890" \
-               "+-%*/\\/#" "+-*/#" "+-*/%" "+-*/" "百千万銭" \
-               "()()()()()()()()()SSSSScccc~LLLLGGGG!" "SSSS~cLG" \
-               "yenn"
+TSF_calc_opewide="1234567890.|pmyecn+-*/\\#%(S!LG~)" "銭十百千万億兆京垓" \
+                "ＰｐPpＭｍMm１２３４５６７８９０｜．" "正負分小円" "一二三四五六七八九〇" "壱弐参肆伍陸漆捌玖零" \
+                "＋－％×／＼÷＃" "加減乗除余比" "足引掛割" "和差積商" "陌阡萬仙" \
+                "（）()｛｝{}［］[]「」｢｣『』ΣＳｓSsＣｃCc～！ＬｌllＧｇgg" "列但※囲〜値約倍" \
+                "周底無∞"
+TSF_calc_opehalf="1234567890.|pmyecn+-*/\\#%(S!LG~)" "銭十百千万億兆京垓" \
+                "ppppmmmm1234567890|." "pm|.." "1234567890" "1234567890" \
+                "+-%*/\\/#" "+-*/#" "+-*/%" "+-*/" "百千万銭" \
+                "()()()()()()()()()SSSSScccc~LLLLGGGG!" "SSSS~cLG" \
+                "yenn"
 TSF_calc_operator=dict(zip(list(TSF_calc_opewide),list(TSF_calc_opehalf)))
 TSF_calc_opemarkC=["*+","*-","/+","/-","#+","#-","|+","|-","++","+-","-+","--",
-              "0c", "1c", "2c", "3c", "4c", "5c", "6c", "7c", "8c", "9c", ".c",
-              "0(", "1(", "2(", "3(", "4(", "5(", "6(", "7(", "8(", "9(", ".(",
-              ")0", ")1", ")2", ")3", ")4", ")5", ")6", ")7", ")8", ")9", ").",
-              ")(", "|("]
+                "0c", "1c", "2c", "3c", "4c", "5c", "6c", "7c", "8c", "9c", ".c",
+                "0(", "1(", "2(", "3(", "4(", "5(", "6(", "7(", "8(", "9(", ".(",
+                ")0", ")1", ")2", ")3", ")4", ")5", ")6", ")7", ")8", ")9", ").",
+                ")(", "|("]
 TSF_calc_opemarkP=["*p","*m","/p","/m","#p","#m","|p","|m","+p","+m","-p","-m",
-              "0*c","1*c","2*c","3*c","4*c","5*c","6*c","7*c","8*c","9*c",".*c",
-              "0*(","1*(","2*(","3*(","4*(","5*(","6*(","7*(","8*(","9*(",".*(",
-              ")*0",")*1",")*2",")*3",")4*",")*5",")*6",")*7",")*8",")*9",")*.",
-              ")*(", "/("]
+                "0*c","1*c","2*c","3*c","4*c","5*c","6*c","7*c","8*c","9*c",".*c",
+                "0*(","1*(","2*(","3*(","4*(","5*(","6*(","7*(","8*(","9*(",".*(",
+                ")*0",")*1",")*2",")*3",")4*",")*5",")*6",")*7",")*8",")*9",")*.",
+                ")*(", "/("]
 TSF_calc_opemark=dict(zip(TSF_calc_opemarkC,TSF_calc_opemarkP))
-TSF_calc_usemark="1234567890.|pmyecn+-*/\\#%(S!LG~)" "銭十百千万億兆京垓"
+#TSF_calc_usemark="1234567890.|pmyecn+-*/\\#%(S!LG~)" "銭十百千万億兆京垓"
 
 def TSF_calc_stackmarge(TSF_calcQ,TSF_bracketL,TSF_bracketR,*TSF_stacksQ):
     TSF_calcA=TSF_calcQ
@@ -41,7 +43,9 @@ def TSF_calc_stackmarge(TSF_calcQ,TSF_bracketL,TSF_bracketR,*TSF_stacksQ):
 def TSF_calc_bracketsbalance(TSF_calcQ):
     TSF_calcA=""; TSF_calcbracketLR,TSF_calcbracketCAP=0,0
     for TSF_calcbracketQ in TSF_calcQ:
-        TSF_calcA+=TSF_calcbracketQ if TSF_calcbracketQ in TSF_calc_usemark else ''
+#        TSF_calcbracketQ=TSF_calc_operator.get(TSF_calcbracketQ,TSF_calcbracketQ)
+#        TSF_calcA+=TSF_calcbracketQ if TSF_calcbracketQ in TSF_calc_usemark else ''
+        TSF_calcA+=TSF_calc_operator.get(TSF_calcbracketQ,'')
         if TSF_calcbracketQ == '(':
             TSF_calcbracketLR+=1
         if TSF_calcbracketQ == ')':
@@ -66,6 +70,7 @@ def TSF_calc_bracketsbalance(TSF_calcQ):
     TSF_calcA=TSF_calcA.replace('百','100')
     TSF_calcA=TSF_calcA.replace('十','10')
     TSF_calcA=TSF_calcA.replace('y','('+str(math.pi)+')').replace('e','('+str(math.e)+')').replace('n','(n|0)')
+    print(TSF_calcA)
     for TSF_calc_opecase in TSF_calc_opemark:
         if TSF_calc_opecase in TSF_calcA:
             TSF_calcA=TSF_calcA.replace(TSF_calc_opecase,TSF_calc_opemark[TSF_calc_opecase])
@@ -185,7 +190,7 @@ def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テス�
     TSF_debug_log=TSF_io_printlog("TSF_py:",TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout])),TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("TSF_calc:",TSF_log=TSF_debug_log)
-    LTsv_calcQlist=[ "Ｐ1/3)｛｝","(5/7*7","(5|13*13)","8|17","[0]+[1]","二百万円","十億円","底","周","∞","0/0","1/2-1/3", \
+    LTsv_calcQlist=[ "Ｐ1/3)｛｝","(5/7*7","(5|13*13)","8|17","[0]+[1]","二百万円","十億円","底","周","3.14","∞","0/0","1/2-1/3", \
      "1|6+1|3","3|4-1|4","2|3*3|4","2|5/4|5", \
      "0.5|3.5","0.5/3.5","1|2/7|2","2|3|5|7","2||3","2|--|3","2|p-|3","2|..|3","2|p4.|3","2|m.4|3",]
     LTsv_calcQstack=["100","200","300"]
