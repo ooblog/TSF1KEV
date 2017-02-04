@@ -31,7 +31,11 @@ TSF_calc_usemark="1234567890.|pmyecn+-*/\\#%(S!LG~)" "銭十百千万億兆京�
 def TSF_calc_stackmarge(TSF_calcQ,TSF_bracketL,TSF_bracketR,*TSF_stacksQ):
     TSF_calcA=TSF_calcQ
     for TSF_stackC,TSF_stackQ in enumerate(TSF_stacksQ):
-        TSF_calcA=TSF_calcA.replace("{0}{1}{2}".format(TSF_bracketL,TSF_stackC,TSF_bracketR),"{0}{1}{2}".format(TSF_bracketL,TSF_stackQ,TSF_bracketR))
+        TSF_calcK="{0}{1}{2}".format(TSF_bracketL,TSF_stackC,TSF_bracketR)
+        if TSF_calcK in TSF_calcA:
+            TSF_calcA=TSF_calcA.replace(TSF_calcK,"{0}{1}{2}".format(TSF_bracketL,TSF_stackQ,TSF_bracketR))
+        else:
+            break
     return TSF_calcA
 
 def TSF_calc_bracketsbalance(TSF_calcQ):

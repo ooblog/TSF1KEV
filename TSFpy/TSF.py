@@ -22,7 +22,7 @@ def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサン�
         "「#TSF_calc[]」などの括弧と「#TSF_calcFX」などの分数電卓を用意したので逆ポーランド記法の数式計算は強いられないはず。\n"
         ,TSF_style="N")
     TSF_Forth_settext("calcQQtest:","\t".join(["QQ(1/3+1|2)=","#TSF_echo","1/3+1|2","#TSF_calcQQ","#TSF_echo"]))
-    TSF_Forth_settext("calcFXtest:","\t".join(["FX(1/3+1|2)=","#TSF_echo","1/3","1|2","[1]+[0]","2","#TSF_calc[]","#TSF_calcFX","#TSF_echo"]))
+    TSF_Forth_settext("calcFXtest:","\t".join(["FX(1/3+1|2)=","#TSF_echo","1/3","1|2","[1]+[0]","#TSF_calc[]","#TSF_calcFX","#TSF_echo"]))
     print("-- TSF_Forth_stackview() --")
     TSF_debug_log=TSF_Forth_stackview()
     if save_about_mergefile:

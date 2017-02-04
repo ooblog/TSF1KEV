@@ -25,7 +25,7 @@
     	QQ(1/3+1|2)=	#TSF_echo	1/3+1|2	#TSF_calcQQ	#TSF_echo
     
     calcFXtest:
-    	FX(1/3+1|2)=	#TSF_echo	1/3	1|2	[1]+[0]	2	#TSF_calc[]	#TSF_calcFX	#TSF_echo
+    	FX(1/3+1|2)=	#TSF_echo	1/3	1|2	[1]+[0]	#TSF_calc[]	#TSF_calcFX	#TSF_echo
 
 TSFはまだ開発中なので、漢直をお探しの方は「[LTsv10kanedit](https://github.com/ooblog/LTsv10kanedit "ooblog/LTsv10kanedit: 「L:Tsv」の読み書きを中心としたモジュール群と漢字入力「kanedit」のPythonによる実装です(準備中)。")」をお使いください。  
 

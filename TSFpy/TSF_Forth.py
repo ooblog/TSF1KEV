@@ -249,12 +249,8 @@ def TSF_Forth_calcQQ():   #TSF_doc:[calc]スタック内容で分数電卓する
     return TSF_thisstack_name
 
 def TSF_Forth_calcmarge(TSF_bracketL,TSF_bracketR):   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、指定された括弧の中の数値をスタック内容に置換。count+1(calc)分スタック積み下ろし。
-    TSF_calcloopT=TSF_Forth_pop(TSF_thatstack_name); TSF_calcloopI=abs(TSF_io_intstr0x(TSF_calcloopT))
     TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
-    TSF_stacksQ=[]
-    for TSF_calccount in range(TSF_calcloopI):
-        TSF_stacksQ.append(TSF_Forth_pop(TSF_thatstack_name))
-    TSF_tsvA=TSF_calc_stackmarge(TSF_tsvQ,TSF_bracketL,TSF_bracketR,*tuple(TSF_stacksQ))
+    TSF_tsvA=TSF_calc_stackmarge(TSF_tsvQ,TSF_bracketL,TSF_bracketR,*tuple(reversed(TSF_stacks[TSF_thatstack_name])))
     TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
 
 def TSF_Forth_calcPB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、丸括弧【(n)】の中の数値をスタック内容に置換。count+1(calc)分スタック積み下ろし。
