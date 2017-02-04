@@ -31,16 +31,6 @@ TSF_calc_opemarkP=["*p","*m","/p","/m","#p","#m","|p","|m","+p","+m","-p","-m",
                 ")*(", "/("]
 TSF_calc_opemark=dict(zip(TSF_calc_opemarkC,TSF_calc_opemarkP))
 
-#def TSF_calc_stackmarge(TSF_calcQ,TSF_bracketL,TSF_bracketR,*TSF_stacksQ):    #TSF_doc:数式に番号順にスタックを挿入する。番号が見つからない場合途中で中断。・
-#    TSF_calcA=TSF_calcQ
-#    for TSF_stackC,TSF_stackQ in enumerate(TSF_stacksQ):
-#        TSF_calcK="{0}{1}{2}".format(TSF_bracketL,TSF_stackC,TSF_bracketR)
-#        if TSF_calcK in TSF_calcA:
-#            TSF_calcA=TSF_calcA.replace(TSF_calcK,"{0}{1}{2}".format(TSF_bracketL,TSF_stackQ,TSF_bracketR))
-#        else:
-#            break
-#    return TSF_calcA
-
 def TSF_calc_bracketsbalance(TSF_calcQ):    #TSF_doc:括弧のバランスを整える。ついでに無効な演算子を除去したり円周率億千万など計算の下準備。
     TSF_calcA=""; TSF_calcbracketLR,TSF_calcbracketCAP=0,0
     for TSF_calcbracketQ in TSF_calcQ:
@@ -216,9 +206,7 @@ def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テス�
      "1|6+1|3","3|4-1|4","2|3*3|4","2|5/4|5", \
      "0.5|3.5","0.5/3.5","1|2/7|2","2|3|5|7","2||3","2|--|3","2|p-|3","2|..|3","2|p4.|3","2|m.4|3", \
      "10000+%8", "10000-5%","7\\3","3.14\\1"]
-#    LTsv_calcQstack=["100","200","300"]
     for LTsv_calcQ in LTsv_calcQlist:
-#        TSF_debug_log=TSF_io_printlog("\t{0}⇔{1};{2}".format(LTsv_calcQ,TSF_calc(TSF_calc_stackmarge(LTsv_calcQ,'[',']',*tuple(LTsv_calcQstack))),TSF_calc_decimalize(LTsv_calcQ)),TSF_debug_log)
         TSF_debug_log=TSF_io_printlog("\t{0}⇔{1};{2}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ),TSF_calc_decimalize(LTsv_calcQ)),TSF_debug_log)
     return TSF_debug_log
 

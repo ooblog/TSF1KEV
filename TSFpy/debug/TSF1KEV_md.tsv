@@ -48,10 +48,10 @@ LTsvver	<＠L:TsvLTsvver>
     	QQ(1/3+1|2)=	1/3+1|2	#TSF_calcQQ	2	#TSF_join	#TSF_echo
     
     calcFXtest:
-    	FX(1/3+1|2)=	1/3	1|2	[1]+[0]	#TSF_calc[]	#TSF_calcFX	2	#TSF_join	#TSF_echo
+    	FX(1/3+1|2)=	1	3	1|2	[2]/[1]+[0]	#TSF_calc[]	#TSF_calcFX	2	#TSF_join	#TSF_echo
     
     calcDCtest:
-    	DC(1/3+1|2)=	1/3	+	1|2	3	#TSF_join	#TSF_calcDC	2	#TSF_join	#TSF_echo
+    	DC(1/3+1|2)=	1	/	3	+	1|2	5	#TSF_join	#TSF_calcDC	2	#TSF_join	#TSF_echo
 <？/CODE><？P>
 TSFはまだ開発中なので、漢直をお探しの方は「<？https/LTsv10>」をお使いください。<？BR>
 <？/P>
