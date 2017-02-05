@@ -24,7 +24,8 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         "#TSF_echo":TSF_Forth_echo, "#TSF_echoes":TSF_Forth_echoes,
         "#TSF_lenthe":TSF_Forth_lenthe, "#TSF_lenthis":TSF_Forth_lenthis, "#TSF_lenthat":TSF_Forth_lenthat,
         "#TSF_pushthe":TSF_Forth_pushthe, "#TSF_pushthis":TSF_Forth_pushthis, "#TSF_pushthat":TSF_Forth_pushthat,
-        "#TSF_calcQQ":TSF_Forth_calcQQ,"#TSF_calcFX":TSF_Forth_calcFX,"#TSF_calcDC":TSF_Forth_calcDC,
+        "#TSF_calcQQ":TSF_Forth_calcQQ,"#TSF_calcFX":TSF_Forth_calcFX,
+        "#TSF_calcDC":TSF_Forth_calcDC,"#TSF_calcKN":TSF_Forth_calcKN,
         "#TSF_calc{}":TSF_Forth_calcCB,"#TSF_calc[]":TSF_Forth_calcSB,"#TSF_calc｢｣":TSF_Forth_calcCB,
         "#TSF_join":TSF_Forth_join,"#TSF_split":TSF_Forth_split,"#TSF_chars":TSF_Forth_split,
     }
@@ -206,35 +207,33 @@ def TSF_Forth_echoes():    #TSF_doc:[…valueB,valueA,count]指定した個数�
 
 def TSF_Forth_lenthe():   #TSF_doc:[stack]指定したスタックの数を数える。1スタック積み上げ。
     TSF_thename=TSF_Forth_pop(TSF_thatstack_name)
-#    TSF_Forth_push(TSF_thatstack_name,str(len(TSF_stacks[TSF_thename])))
     TSF_Forth_push(TSF_thatstack_name,str(len(TSF_stacks.get(TSF_thename,[]))))
     return TSF_thisstack_name
 
 def TSF_Forth_lenthis():   #TSF_doc:thisスタック(実行中スタック)の数を数える。1スタック積み上げ。
-    TSF_Forth_push(TSF_thatstack_name,str(len(TSF_stacks[TSF_thisstack_name])))
+    TSF_Forth_push(TSF_thatstack_name,str(len(TSF_stacks.get(TSF_thisstack_name,[]))))
     return TSF_thisstack_name
 
 def TSF_Forth_lenthat():   #TSF_doc:thatスタック(積み込み先スタック)の数を数える。1スタック積み上げ。
-    TSF_Forth_push(TSF_thatstack_name,str(len(TSF_stacks[TSF_thatstack_name])))
+    TSF_Forth_push(TSF_thatstack_name,str(len(TSF_stacks.get(TSF_thatstack_name,[]))))
     return TSF_thisstack_name
 
 def TSF_Forth_pushthe():   #TSF_doc:[stack]指定したスタックを丸ごとthatスタック(積み込み先スタック)に積み上げ。
     TSF_thename=TSF_Forth_pop(TSF_thatstack_name)
     if TSF_thename in TSF_stacks:
-#        for TSF_tsv in reversed(TSF_stacks[TSF_thename]):
         for TSF_tsv in reversed(TSF_stacks.get(TSF_thename,[])):
             TSF_Forth_push(TSF_thatstack_name,TSF_tsv)
     return TSF_thisstack_name
 
 def TSF_Forth_pushthis():   #TSF_doc:thisスタック(実行中スタック)を丸ごとthatスタック(積み込み先スタック)に積み上げ。
     if TSF_thisstack_name in TSF_stacks:
-        for TSF_tsv in reversed(TSF_stacks[TSF_thisstack_name]):
+        for TSF_tsv in reversed(TSF_stacks.get(TSF_thisstack_name,[])):
             TSF_Forth_push(TSF_thatstack_name,TSF_tsv)
     return TSF_thisstack_name
 
 def TSF_Forth_pushthat():   #TSF_doc:thatスタック(積み込み先スタック)を丸ごとthatスタック(積み込み先スタック)に積み上げ。
     if TSF_thatstack_name in TSF_stacks:
-        for TSF_tsv in reversed(TSF_stacks[TSF_thatstack_name]):
+        for TSF_tsv in reversed(TSF_stacks.get(TSF_thatstack_name,[])):
             TSF_Forth_push(TSF_thatstack_name,TSF_tsv)
     return TSF_thisstack_name
 
@@ -258,6 +257,12 @@ def TSF_Forth_calcFX():   #TSF_doc:[calc]スタック内容で分数電卓する
 def TSF_Forth_calcDC():   #TSF_doc:[calc]スタック内容で分数電卓する。計算結果を小数で求める過程で再計算になる。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
     TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
     TSF_tsvA=TSF_calc_decimalizeQQ(TSF_calcs.get(TSF_tsvQ,TSF_calc(TSF_tsvQ)))
+    TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
+    return TSF_thisstack_name
+
+def TSF_Forth_calcKN():   #TSF_doc:[calc]スタック内容で分数電卓する。計算結果を漢数字で求める過程で再計算になる。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
+    TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_tsvA=TSF_calc_decimalizeKN(TSF_calcs.get(TSF_tsvQ,TSF_calc(TSF_tsvQ)))
     TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
     return TSF_thisstack_name
 

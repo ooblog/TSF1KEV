@@ -26,13 +26,12 @@ def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサン�
     TSF_Forth_settext("calcQQtest:","\t".join(["「1/3-m1|2」→","1/3-m1|2","#TSF_calcQQ","2","#TSF_join","#TSF_echo"]))
     TSF_Forth_settext("calcFXtest:","\t".join(["「1 3 m1|2」を数式風に「[2]/[1]-[0]」で連結→","1","3","1|2","[2]/[1]-[0]","#TSF_calc[]","#TSF_calcFX","2","#TSF_join","#TSF_echo"]))
     TSF_Forth_settext("calcDCtest:","\t".join(["「1 / 3 - m1|2」まで分解して連結(ついでに小数デモ)→","1","/","3","-","m1|2","5","#TSF_join","#TSF_calcDC","2","#TSF_join","#TSF_echo"]))
-    TSF_Forth_settext("calc日本語風:","\t".join(["日本語風に「一割る三引くマイナス二分の一」→","一割る三引くマイナス二分の一","#TSF_calcFX","2","#TSF_join","#TSF_echo"]))
+    TSF_Forth_settext("calc日本語風:","\t".join(["日本語風に「一割る三引くマイナス二分の一」→","一割る三引くマイナス二分の一","#TSF_calcKN","2","#TSF_join","#TSF_echo"]))
     TSF_Forth_settext("aboutCalc:",
         "「calc」系ワード分数電卓の概要(暫定案)。\n"
         "「#TSF_calcQQ」「#TSF_calcFX」「#TSF_calcDC」と３つも電卓用ワード(関数)があるが、基本的には同じ分数計算。\n"
         "「#TSF_calcDC」は小数表示用途。「#TSF_calcQQ」は数式を九九のように暗記(参照透過風)。\n"
         "「#TSF_calc{}」「#TSF_calc[]」「#TSF_calc｢｣」ワードもあるが、計算ではなく「#TSF_join」など文字列連結操作扱い。\n"
-        "「1234567890〇一二三四五六七八九十百千万億兆京垓𥝱穣溝澗正載極」漢数字は一字で表せる10の48乗まで使用可能。\n"
         "「pm」分数自体のプラスマイナスは演算子と分けて表記(小数表示の時は他言語に合わせて「-」表記)。0で割った時は符号不明の「n|0」。\n"
         ,TSF_style="N")
     print("-- TSF_Forth_stackview() --")
