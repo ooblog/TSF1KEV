@@ -206,7 +206,8 @@ def TSF_Forth_echoes():    #TSF_doc:[…valueB,valueA,count]指定した個数�
 
 def TSF_Forth_lenthe():   #TSF_doc:[stack]指定したスタックの数を数える。1スタック積み上げ。
     TSF_thename=TSF_Forth_pop(TSF_thatstack_name)
-    TSF_Forth_push(TSF_thatstack_name,str(len(TSF_stacks[TSF_thename])))
+#    TSF_Forth_push(TSF_thatstack_name,str(len(TSF_stacks[TSF_thename])))
+    TSF_Forth_push(TSF_thatstack_name,str(len(TSF_stacks.get(TSF_thename,[]))))
     return TSF_thisstack_name
 
 def TSF_Forth_lenthis():   #TSF_doc:thisスタック(実行中スタック)の数を数える。1スタック積み上げ。
@@ -220,7 +221,8 @@ def TSF_Forth_lenthat():   #TSF_doc:thatスタック(積み込み先スタック
 def TSF_Forth_pushthe():   #TSF_doc:[stack]指定したスタックを丸ごとthatスタック(積み込み先スタック)に積み上げ。
     TSF_thename=TSF_Forth_pop(TSF_thatstack_name)
     if TSF_thename in TSF_stacks:
-        for TSF_tsv in reversed(TSF_stacks[TSF_thename]):
+#        for TSF_tsv in reversed(TSF_stacks[TSF_thename]):
+        for TSF_tsv in reversed(TSF_stacks.get(TSF_thename,[])):
             TSF_Forth_push(TSF_thatstack_name,TSF_tsv)
     return TSF_thisstack_name
 
@@ -264,20 +266,20 @@ def TSF_Forth_calcmarge(TSF_bracketL,TSF_bracketR):   #TSF_doc:[…stackB,stackA
     for TSF_stackC,TSF_stackQ in enumerate(TSF_stacks[TSF_thatstack_name]):
         TSF_calcK="{0}{1}{2}".format(TSF_bracketL,TSF_stackC,TSF_bracketR)
         if TSF_calcK in TSF_calcA:
-            TSF_calcA=TSF_calcA.replace(TSF_calcK,"({0})".format(TSF_Forth_pop(TSF_thatstack_name)))
+            TSF_calcA=TSF_calcA.replace(TSF_calcK,"{0}".format(TSF_Forth_pop(TSF_thatstack_name)))
         else:
             break
     TSF_Forth_push(TSF_thatstack_name,TSF_calcA)
 
-def TSF_Forth_calcBB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、波括弧【{n}】をスタック内容の丸括弧【(stack)】に置換。count+1(calc)分スタック積み下ろし。
+def TSF_Forth_calcBB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、波括弧【{n}】をスタック内容に置換。count+1(calc)分スタック積み下ろし。
     TSF_Forth_calcmarge('{','}')
     return TSF_thisstack_name
 
-def TSF_Forth_calcSB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、角括弧【[n]】をスタック内容の丸括弧【(stack)】に置換。count+1(calc)分スタック積み下ろし。
+def TSF_Forth_calcSB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、角括弧【[n]】をスタック内容に置換。count+1(calc)分スタック積み下ろし。
     TSF_Forth_calcmarge('[',']')
     return TSF_thisstack_name
 
-def TSF_Forth_calcCB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、鉤括弧【｢n｣】をスタック内容の丸括弧【(stack)】に置換。count+1(calc)分スタック積み下ろし。
+def TSF_Forth_calcCB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、鉤括弧【｢n｣】をスタック内容に置換。count+1(calc)分スタック積み下ろし。
     TSF_Forth_calcmarge('｢','｣')
     return TSF_thisstack_name
 

@@ -7,25 +7,28 @@ import re
 
 # suMmation和数列,Product積数列
 # Sin,Cos,Tan,Atan2,sQrt,LOg
-TSF_calc_opewide="1234567890.|$pmYyEen+-*/\\#%(MP~k)LG" "銭十百千万億兆京垓" \
-                "１２３４５６７８９０｜．" "正負分小円圓" "一二三四五六七八九〇" "壱弐参肆伍陸漆捌玖零" \
+TSF_calc_opewide="1234567890.|$pmyen+-*/\\#%(MP~k)LG" "銭十百千万億兆京垓𥝱秭穣溝澗正載極" \
+                "１２３４５６７８９０｜．" "負分小円圓" "一二三四五六七八九〇" "壱弐参肆伍陸漆捌玖零秭" \
                 "＋－×÷／＼＃％" "加減乗除比税" "足引掛割" "和差積商" "陌阡萬仙" \
                 "（）()｛｝{}［］[]「」｢｣『』Σ但※列Π囲～〜値約倍" \
                 "" \
                 "π周ｅ底∞無"
-TSF_calc_opehalf="1234567890.|$pmYyEen+-*/\\#%(MP~k)LG" "銭十百千万億兆京垓" \
-                "1234567890|." "pm$..." "1234567890" "1234567890" \
+TSF_calc_opehalf="1234567890.|$pmyen+-*/\\#%(MP~k)LG" "銭十百千万億兆京垓𥝱秭穣溝澗正載極" \
+                "1234567890|." "m$..." "1234567890" "1234567890𥝱" \
                 "+-*//\\#%" "+-*/%%" "+-*/" "+-*/" "百千万銭" \
                 "()()()()()()()()()MMMMP~~~kLG" \
                 "yyeenn"
 TSF_calc_operator=dict(zip(list(TSF_calc_opewide),list(TSF_calc_opehalf)))
+TSF_calc_opelong=["円周率","ネイピア数","プラス","マイナス","氷点下"]
+TSF_calc_opelshort=["π","ｅ","p","m","m"]
+TSF_calc_opeword=dict(zip(TSF_calc_opelong,TSF_calc_opelshort))
 TSF_calc_opemarkC=["*+","*-","/+","/-","#+","#-","|+","|-","++","+-","-+","--",
-                "0c", "1c", "2c", "3c", "4c", "5c", "6c", "7c", "8c", "9c", ".c",
+                "0k", "1k", "2k", "3k", "4k", "5k", "6k", "7k", "8k", "9k", ".k",
                 "0(", "1(", "2(", "3(", "4(", "5(", "6(", "7(", "8(", "9(", ".(",
                 ")0", ")1", ")2", ")3", ")4", ")5", ")6", ")7", ")8", ")9", ").",
                 ")(", "|("]
 TSF_calc_opemarkP=["*p","*m","/p","/m","#p","#m","|p","|m","+p","+m","-p","-m",
-                "0*c","1*c","2*c","3*c","4*c","5*c","6*c","7*c","8*c","9*c",".*c",
+                "0*k","1*k","2*k","3*k","4*k","5*k","6*k","7*k","8*k","9*k",".*k",
                 "0*(","1*(","2*(","3*(","4*(","5*(","6*(","7*(","8*(","9*(",".*(",
                 ")*0",")*1",")*2",")*3",")4*",")*5",")*6",")*7",")*8",")*9",")*.",
                 ")*(", "/("]
@@ -33,6 +36,8 @@ TSF_calc_opemark=dict(zip(TSF_calc_opemarkC,TSF_calc_opemarkP))
 
 def TSF_calc_bracketsbalance(TSF_calcQ):    #TSF_doc:括弧のバランスを整える。ついでに無効な演算子を除去したり円周率億千万など計算の下準備。
     TSF_calcA=""; TSF_calcbracketLR,TSF_calcbracketCAP=0,0
+    for TSF_opewordK,TSF_opewordV in TSF_calc_opeword.items():
+        TSF_calcQ=TSF_calcQ.replace(TSF_opewordK,TSF_opewordV)
     for TSF_calcbracketQ in TSF_calcQ:
         TSF_calcA+=TSF_calc_operator.get(TSF_calcbracketQ,'')
         if TSF_calcbracketQ == '(':
@@ -46,20 +51,28 @@ def TSF_calc_bracketsbalance(TSF_calcQ):    #TSF_doc:括弧のバランスを整
     if TSF_calcbracketLR < 0:
         TSF_calcA='('*abs(TSF_calcbracketLR)+TSF_calcA
     TSF_calcA='('*abs(TSF_calcbracketCAP)+TSF_calcA+')'*abs(TSF_calcbracketCAP)
+#    TSF_io_printlog(TSF_calcA)
     TSF_calcA=re.sub(re.compile("([0-9千百十]+?)銭"),"+(\\1/100)",TSF_calcA)
     TSF_calcA=re.sub(re.compile("([0-9千百十]+?)万"),"(\\1)*1"+'0'*4+"+",TSF_calcA)
     TSF_calcA=re.sub(re.compile("([0-9千百十]+?)億"),"(\\1)*1"+'0'*8+"+",TSF_calcA)
     TSF_calcA=re.sub(re.compile("([0-9千百十]+?)兆"),"(\\1)*1"+'0'*12+"+",TSF_calcA)
     TSF_calcA=re.sub(re.compile("([0-9千百十]+?)京"),"(\\1)*1"+'0'*16+"+",TSF_calcA)
     TSF_calcA=re.sub(re.compile("([0-9千百十]+?)垓"),"(\\1)*1"+'0'*20+"+",TSF_calcA)
+    TSF_calcA=re.sub(re.compile("([0-9千百十]+?)𥝱"),"(\\1)*1"+'0'*24+"+",TSF_calcA)
+    TSF_calcA=re.sub(re.compile("([0-9千百十]+?)穣"),"(\\1)*1"+'0'*28+"+",TSF_calcA)
+    TSF_calcA=re.sub(re.compile("([0-9千百十]+?)溝"),"(\\1)*1"+'0'*32+"+",TSF_calcA)
+    TSF_calcA=re.sub(re.compile("([0-9千百十]+?)澗"),"(\\1)*1"+'0'*36+"+",TSF_calcA)
+    TSF_calcA=re.sub(re.compile("([0-9千百十]+?)正"),"(\\1)*1"+'0'*40+"+",TSF_calcA)
+    TSF_calcA=re.sub(re.compile("([0-9千百十]+?)載"),"(\\1)*1"+'0'*44+"+",TSF_calcA)
+    TSF_calcA=re.sub(re.compile("([0-9千百十]+?)極"),"(\\1)*1"+'0'*48+"+",TSF_calcA)
     TSF_calcA=re.sub(re.compile("([0-9]+?)千"),"(\\1*1000)+",TSF_calcA)
     TSF_calcA=re.sub(re.compile("([0-9]+?)百"),"(\\1*100)+",TSF_calcA)
     TSF_calcA=re.sub(re.compile("([0-9]+?)十"),"(\\1*10)+",TSF_calcA)
-    TSF_calcA=TSF_calcA.replace('千','1000')
-    TSF_calcA=TSF_calcA.replace('百','100')
-    TSF_calcA=TSF_calcA.replace('十','10')
-    TSF_calcA=TSF_calcA.replace('y','('+str(math.pi)+')').replace('e','('+str(math.e)+')').replace('n','(n|0)')
-    TSF_calcA=TSF_calcA.replace('Y','('+str(decimal.Decimal(math.pi))+')').replace('E','('+str(decimal.Decimal(math.e))+')')
+    TSF_calcA=TSF_calcA.replace('千',"1000")
+    TSF_calcA=TSF_calcA.replace('百',"100")
+    TSF_calcA=TSF_calcA.replace('十',"10")
+    TSF_calcA=TSF_calcA.replace('y','('+str(decimal.Decimal(math.pi))+')').replace('e','('+str(decimal.Decimal(math.e))+')')
+    TSF_calcA=TSF_calcA.replace('n','(n|0)')
 #    print(TSF_calcA)
     for TSF_calc_opecase in TSF_calc_opemark:
         if TSF_calc_opecase in TSF_calcA:
@@ -205,7 +218,7 @@ def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テス�
     TSF_debug_log=TSF_io_printlog("TSF_py:",TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout])),TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("TSF_calc:",TSF_log=TSF_debug_log)
-    LTsv_calcQlist=[ "Ｐ1/3)｛｝","(5/7*7","(5|13*13)","8|17","[0]+[1]","二百万円","十億円","3.14","π","Y","ｅ","E","∞","0/0","1/2-1/3", \
+    LTsv_calcQlist=[ "Ｐ1/3)｛｝","(5/7*7","(5|13*13)","8|17","[0]+[1]","二百万円","十億円","3.14","円周率","π","ネイピア数","ｅ","∞","0/0","1/2-1/3", \
      "1|6+1|3","3|4-1|4","2|3*3|4","2|5/4|5", \
      "0.5|3.5","0.5/3.5","1|2/7|2","2|3|5|7","2||3","2|--|3","2|p-|3","2|..|3","2|p4.|3","2|m.4|3", \
      "10000+%8", "10000-5%","7\\3","3.14\\1","二分の一"]
