@@ -68,9 +68,9 @@ def TSF_calc_bracketsbalance(TSF_calcQ):    #TSF_doc:括弧のバランスを整
     TSF_calcA=re.sub(re.compile("([0-9]+?)千"),"(\\1*1000)+",TSF_calcA)
     TSF_calcA=re.sub(re.compile("([0-9]+?)百"),"(\\1*100)+",TSF_calcA)
     TSF_calcA=re.sub(re.compile("([0-9]+?)十"),"(\\1*10)+",TSF_calcA)
-    TSF_calcA=TSF_calcA.replace('千',"1000")
-    TSF_calcA=TSF_calcA.replace('百',"100")
-    TSF_calcA=TSF_calcA.replace('十',"10")
+    TSF_calcA=TSF_calcA.replace('千',"1000+")
+    TSF_calcA=TSF_calcA.replace('百',"100+")
+    TSF_calcA=TSF_calcA.replace('十',"10+")
     TSF_calcA=TSF_calcA.replace('y','('+str(decimal.Decimal(math.pi))+')').replace('e','('+str(decimal.Decimal(math.e))+')')
     TSF_calcA=TSF_calcA.replace('n','(n|0)')
 #    print(TSF_calcA)
@@ -88,6 +88,8 @@ def TSF_calc(TSF_calcQ):    #TSF_doc:分数電卓のmain。括弧の内側を検
             TSF_calcA=TSF_calcA.replace(TSF_func,TSF_calc_function(TSF_func))
     TSF_calcA=TSF_calcA.replace(TSF_calcA,TSF_calc_function(TSF_calcA))
     TSF_calcA=TSF_calc_fractalize(TSF_calcA)
+    if TSF_calcA != "0|1" and TSF_calcA != "n|0":
+        TSF_calcA=TSF_calcA.replace('-','m') if TSF_calcA.startswith("-") else "p{0}".format(TSF_calcA)
     return TSF_calcA
 
 def TSF_calc_function(TSF_calcQ):    #TSF_doc:分数電卓の和集合積集合およびSin,Cos,Tan,Atan2,sQrt,LOg予定地。
@@ -191,7 +193,7 @@ def TSF_calc_decimalize(TSF_calcQ):    #TSF_doc:分数電卓だけど分数で�
     return TSF_calc_decimalizeQQ(TSF_calcA)
     
 def TSF_calc_decimalizeQQ(TSF_calcQ):    #TSF_doc:分数(が入力されてるものと信用して)を変換して小数を返す。ただし「n|0」の時は「n|0」を返す。
-    TSF_calcRN,TSF_calcRD=TSF_calcQ.split('|')
+    TSF_calcRN,TSF_calcRD=TSF_calcQ.replace('m','-').replace('p','').split('|')
     if float(TSF_calcRD) != 0.0:
         TSF_calcA=str(decimal.Decimal(TSF_calcRN)/decimal.Decimal(TSF_calcRD))
     else:
@@ -218,10 +220,10 @@ def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テス�
     TSF_debug_log=TSF_io_printlog("TSF_py:",TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout])),TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("TSF_calc:",TSF_log=TSF_debug_log)
-    LTsv_calcQlist=[ "Ｐ1/3)｛｝","(5/7*7","(5|13*13)","8|17","[0]+[1]","二百万円","十億円","3.14","円周率","π","ネイピア数","ｅ","∞","0/0","1/2-1/3", \
+    LTsv_calcQlist=[ "Ｐ1/3)｛｝","(5/7*7","(5|13*13)","8|17","[0]+[1]","二百万円","十億百二十円","十億と飛んで百二十円","百二十円","3.14","円周率","π","ネイピア数","ｅ","∞","0/0","1/2-1/3", \
      "1|6+1|3","3|4-1|4","2|3*3|4","2|5/4|5", \
      "0.5|3.5","0.5/3.5","1|2/7|2","2|3|5|7","2||3","2|--|3","2|p-|3","2|..|3","2|p4.|3","2|m.4|3", \
-     "10000+%8", "10000-5%","7\\3","3.14\\1","二分の一"]
+     "10000+%8", "10000-5%","7\\3","3.14\\1","二分の一","0/100"]
     for LTsv_calcQ in LTsv_calcQlist:
         TSF_debug_log=TSF_io_printlog("\t{0}⇔{1};{2}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ),TSF_calc_decimalize(LTsv_calcQ)),TSF_debug_log)
     return TSF_debug_log
