@@ -7,7 +7,8 @@ from TSF_Forth import *
 
 def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサンプルプログラム。
     TSF_Forth_settext(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","main:","#TSF_this","0","#TSF_fin."]))
-    TSF_Forth_settext("main:","\t".join(["about:","#TSF_pushthe","about:","#TSF_lenthe","#TSF_echoes","calcQQtest:","#TSF_this","calcFXtest:","#TSF_this","calcDCtest:","#TSF_this"]))
+    TSF_Forth_settext("main:","\t".join(["about:","#TSF_pushthe","about:","#TSF_lenthe","#TSF_echoes", \
+        "calcQQtest:","#TSF_this","calcFXtest:","#TSF_this","calcDCtest:","#TSF_this","calc日本語風:","#TSF_this"]))
     TSF_Forth_settext("about:",
         "「TSF_Tab-Separated-Forth」の概要(暫定案)。\n"
         "積んだスタックをワード(関数)などで消化していくForth風インタプリタ。スタック単位はtsv文字列。\n"
@@ -21,9 +22,10 @@ def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサン�
         "末尾再帰はループ。深い階層で祖先を「#TSF_this」すると子孫コールスタックはまとめて破棄される(未テスト)。\n"
         "「#TSF_calc[]」などの括弧と「#TSF_calcFX」などの分数電卓を用意したので逆ポーランド記法の数式計算は強いられないはず。\n"
         ,TSF_style="N")
-    TSF_Forth_settext("calcQQtest:","\t".join(["QQ(1/3+1|2)=","1/3+1|2","#TSF_calcQQ","2","#TSF_join","#TSF_echo"]))
-    TSF_Forth_settext("calcFXtest:","\t".join(["FX(1/3+1|2)=","1","3","1|2","[2]/[1]+[0]","#TSF_calc[]","#TSF_calcFX","2","#TSF_join","#TSF_echo"]))
-    TSF_Forth_settext("calcDCtest:","\t".join(["DC(1/3+1|2)=","1","/","3","+","1|2","5","#TSF_join","#TSF_calcDC","2","#TSF_join","#TSF_echo"]))
+    TSF_Forth_settext("calcQQtest:","\t".join(["QQ(1/3+1|2)→","1/3+1|2","#TSF_calcQQ","2","#TSF_join","#TSF_echo"]))
+    TSF_Forth_settext("calcFXtest:","\t".join(["FX(1/3+1|2)→","1","3","1|2","[2]/[1]+[0]","#TSF_calc[]","#TSF_calcFX","2","#TSF_join","#TSF_echo"]))
+    TSF_Forth_settext("calcDCtest:","\t".join(["DC(1/3+1|2)→","1","/","3","+","1|2","5","#TSF_join","#TSF_calcDC","2","#TSF_join","#TSF_echo"]))
+    TSF_Forth_settext("calc日本語風:","\t".join(["日本語風(一割る三足す二分の一)→","一割る三足す二分の一","#TSF_calcFX","2","#TSF_join","#TSF_echo"]))
     print("-- TSF_Forth_stackview() --")
     TSF_debug_log=TSF_Forth_stackview()
     if save_about_mergefile:

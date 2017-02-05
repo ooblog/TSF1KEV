@@ -7,14 +7,14 @@ import re
 
 # suMmation和数列,Product積数列
 # Sin,Cos,Tan,Atan2,sQrt,LOg
-TSF_calc_opewide="1234567890.|pmYyEen+-*/\\#%(MP~k)LG" "銭十百千万億兆京垓" \
+TSF_calc_opewide="1234567890.|$pmYyEen+-*/\\#%(MP~k)LG" "銭十百千万億兆京垓" \
                 "１２３４５６７８９０｜．" "正負分小円圓" "一二三四五六七八九〇" "壱弐参肆伍陸漆捌玖零" \
                 "＋－×÷／＼＃％" "加減乗除比税" "足引掛割" "和差積商" "陌阡萬仙" \
                 "（）()｛｝{}［］[]「」｢｣『』Σ但※列Π囲～〜値約倍" \
                 "" \
                 "π周ｅ底∞無"
-TSF_calc_opehalf="1234567890.|pmYyEen+-*/\\#%(MP~k)LG" "銭十百千万億兆京垓" \
-                "1234567890|." "pm|..." "1234567890" "1234567890" \
+TSF_calc_opehalf="1234567890.|$pmYyEen+-*/\\#%(MP~k)LG" "銭十百千万億兆京垓" \
+                "1234567890|." "pm$..." "1234567890" "1234567890" \
                 "+-*//\\#%" "+-*/%%" "+-*/" "+-*/" "百千万銭" \
                 "()()()()()()()()()MMMMP~~~kLG" \
                 "yyeenn"
@@ -140,6 +140,9 @@ def TSF_calc_fractalize(TSF_calcQ):    #TSF_doc:分数電卓なので小数を�
     TSF_calcQ=TSF_calcQ.replace('/','|').rstrip('.').rstrip('+')
     if not '|' in TSF_calcQ:
         TSF_calcQ="{0}|1".format(TSF_calcQ)
+    if '$' in TSF_calcQ:
+        TSF_calcR=TSF_calcQ.split('$')
+        TSF_calcQ="{1}|{0}".format(TSF_calcR[0],TSF_calcR[1])
     TSF_calcR=TSF_calcQ.split('|'); TSF_calcNs,TSF_calcDs=TSF_calcR[0],TSF_calcR[1:]
     if len(TSF_calcNs) == 0: TSF_calcNs="0"
     if "n" in TSF_calcNs:
@@ -205,7 +208,7 @@ def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テス�
     LTsv_calcQlist=[ "Ｐ1/3)｛｝","(5/7*7","(5|13*13)","8|17","[0]+[1]","二百万円","十億円","3.14","π","Y","ｅ","E","∞","0/0","1/2-1/3", \
      "1|6+1|3","3|4-1|4","2|3*3|4","2|5/4|5", \
      "0.5|3.5","0.5/3.5","1|2/7|2","2|3|5|7","2||3","2|--|3","2|p-|3","2|..|3","2|p4.|3","2|m.4|3", \
-     "10000+%8", "10000-5%","7\\3","3.14\\1"]
+     "10000+%8", "10000-5%","7\\3","3.14\\1","二分の一"]
     for LTsv_calcQ in LTsv_calcQlist:
         TSF_debug_log=TSF_io_printlog("\t{0}⇔{1};{2}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ),TSF_calc_decimalize(LTsv_calcQ)),TSF_debug_log)
     return TSF_debug_log

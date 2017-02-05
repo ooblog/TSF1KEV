@@ -267,7 +267,6 @@ def TSF_Forth_calcmarge(TSF_bracketL,TSF_bracketR):   #TSF_doc:[…stackB,stackA
             TSF_calcA=TSF_calcA.replace(TSF_calcK,"({0})".format(TSF_Forth_pop(TSF_thatstack_name)))
         else:
             break
-        print("TSF_calcK",TSF_calcK,TSF_calcA)
     TSF_Forth_push(TSF_thatstack_name,TSF_calcA)
 
 def TSF_Forth_calcBB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、波括弧【{n}】をスタック内容の丸括弧【(stack)】に置換。count+1(calc)分スタック積み下ろし。
