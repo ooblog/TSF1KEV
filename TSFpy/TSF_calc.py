@@ -196,6 +196,9 @@ def TSF_calc_fractalize(TSF_calcQ):    #TSF_doc:分数電卓なので小数を�
             TSF_calcA="n|0"
     return TSF_calcA
 
+def TSF_calc_LCM(TSF_calcN,TSF_calcD):    #TSF_doc:最小公倍数の計算。
+    return decimal.Decimal(TSF_calcN*TSF_calcD)//fractions.gcd(TSF_calcN,TSF_calcD)
+
 def TSF_calc_decimalize(TSF_calcQ):    #TSF_doc:分数電卓だけど分数ではなく小数を返す(再計算)。ただし「n|0」の時は「n|0」を返す。
     TSF_calcA=TSF_calc(TSF_calcQ); 
     return TSF_calc_decimalizeQQ(TSF_calcA)
