@@ -2,13 +2,16 @@
 # -*- coding: UTF-8 -*-
 from __future__ import division,print_function,absolute_import,unicode_literals
 
+from TSF_io import *
+from TSF_calc import *
+from TSF_time import *
 from TSF_Forth import *
 
 
 def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサンプルプログラム。
     TSF_Forth_settext(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","main1:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_settext("main1:","\t".join(["aboutTSF:","#TSF_pushthe","aboutTSF:","#TSF_lenthe","#TSF_echoes","main2:","#TSF_this"]))
-    TSF_Forth_settext("main2:","\t".join([" ","#TSF_echo","calcQQtest:","#TSF_this","calcFXtest:","#TSF_this","calcDCtest:","#TSF_this","calc日本語風:","#TSF_this"," ","#TSF_echo","main3:","#TSF_this"]))
+    TSF_Forth_settext("main2:","\t".join(["#","#TSF_echo","calcQQtest:","#TSF_this","calcFXtest:","#TSF_this","calcDCtest:","#TSF_this","calc日本語風:","#TSF_this","#","#TSF_echo","main3:","#TSF_this"]))
     TSF_Forth_settext("main3:","\t".join(["aboutCalc:","#TSF_pushthe","aboutCalc:","#TSF_lenthe","#TSF_echoes"]))
     TSF_Forth_settext("aboutTSF:",
         "「TSF_Tab-Separated-Forth」の概要(暫定案)。\n"
@@ -33,6 +36,8 @@ def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサン�
         "「#TSF_calcDC」は小数表示用途。「#TSF_calcQQ」は数式を九九のように暗記(参照透過風)。\n"
         "「#TSF_calc{}」「#TSF_calc[]」「#TSF_calc｢｣」ワードもあるが、計算ではなく「#TSF_join」など文字列連結操作扱い。\n"
         "「pm」分数自体のプラスマイナスは演算子と分けて表記(小数表示の時は他言語に合わせて「-」表記)。0で割った時は符号不明の「n|0」。\n"
+        "1234567890の他に漢数字〇一二三四五六七八九十百千万億兆京垓𥝱なども使用可能。穣以上は28桁越えエラーになるので「n|0」。\n"
+        
         ,TSF_style="N")
     print("-- TSF_Forth_stackview() --")
     TSF_debug_log=TSF_Forth_stackview()

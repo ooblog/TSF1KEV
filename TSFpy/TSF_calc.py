@@ -5,6 +5,8 @@ import math
 import decimal
 import re
 
+from TSF_io import *
+
 # suMmation和数列,Product積数列
 # Sin,Cos,Tan,Atan2,sQrt,LOg
 TSF_calc_opewide="1234567890.|$pmyen+-*/\\#%(MP~k)LG" "銭十百千万億兆京垓𥝱穣溝澗正載極恒阿那思量" \
@@ -54,7 +56,6 @@ def TSF_calc_bracketsbalance(TSF_calcQ):    #TSF_doc:括弧のバランスを整
     if TSF_calcbracketLR < 0:
         TSF_calcA='('*abs(TSF_calcbracketLR)+TSF_calcA
     TSF_calcA='('*abs(TSF_calcbracketCAP)+TSF_calcA+')'*abs(TSF_calcbracketCAP)
-#    TSF_io_printlog(TSF_calcA)
     TSF_calcA=re.sub(re.compile("([0-9千百十]+?)銭"),"+(\\1)/100",TSF_calcA)
     for TSF_okusenK,TSF_okusenV in TSF_calc_okusendic.items():
         TSF_calcA=re.sub(re.compile("([0-9千百十]+?){0}".format(TSF_okusenK)),"(\\1)*{0}+".format(TSF_okusenV),TSF_calcA)
@@ -69,6 +70,7 @@ def TSF_calc_bracketsbalance(TSF_calcQ):    #TSF_doc:括弧のバランスを整
         TSF_calcA=TSF_calcA.replace(TSF_okusenK,"{0}+".format(TSF_okusenV))
     TSF_calcA=TSF_calcA.replace('y','('+str(decimal.Decimal(math.pi))+')').replace('e','('+str(decimal.Decimal(math.e))+')')
     TSF_calcA=TSF_calcA.replace('n','(n|0)')
+#    TSF_io_printlog(TSF_calcA)
     for TSF_calc_opecase in TSF_calc_opemark:
         if TSF_calc_opecase in TSF_calcA:
             TSF_calcA=TSF_calcA.replace(TSF_calc_opecase,TSF_calc_opemark[TSF_calc_opecase])
@@ -146,7 +148,7 @@ def TSF_calc_multiplication(TSF_calcQ):    #TSF_doc:分数電卓の掛け算割�
         TSF_calcA="{0}|{1}".format(TSF_calcLN,TSF_calcLD)
     return TSF_calcA
 
-def TSF_calc_fractalize(TSF_calcQ):    #TSF_doc:分数電卓なので小数を分数に。
+def TSF_calc_fractalize(TSF_calcQ):    #TSF_doc:分数電卓なので小数を分数に。0で割る、もしくは桁が限界越えたときなどは「n|0」を返す。
     TSF_calcQ=TSF_calcQ.replace('/','|').rstrip('.').rstrip('+')
     if not '|' in TSF_calcQ:
         TSF_calcQ="{0}|1".format(TSF_calcQ)
@@ -177,11 +179,44 @@ def TSF_calc_fractalize(TSF_calcQ):    #TSF_doc:分数電卓なので小数を�
     else:
         if TSF_calcD < 0:
             TSF_calcN,TSF_calcD=-TSF_calcN,-TSF_calcD
-        TSF_calcGCM=TSF_calc_GCM(int(TSF_calcN),int(TSF_calcD))
-        TSF_calcD=TSF_calcD//TSF_calcGCM
-        TSF_calcN=TSF_calcN//TSF_calcGCM
-        TSF_calcA="{0}|{1}".format(TSF_calcN,TSF_calcD)
+        TSF_calcGCM=TSF_calc_GCM(TSF_calcN,TSF_calcD)
+        try:
+            TSF_calcN=TSF_calcN.to_integral_value()//TSF_calcGCM
+            TSF_calcD=TSF_calcD.to_integral_value()//TSF_calcGCM
+            TSF_calcA="{0}|{1}".format(TSF_calcN,TSF_calcD)
+        except decimal.InvalidOperation:
+            TSF_calcA="n|0"
     return TSF_calcA
+
+def TSF_calc_GCM(TSF_calcL,TSF_calcR):    #TSF_doc:最大公約数。計算できない場合はエラーとして0を返す。
+    TSF_GCMm,TSF_GCMn=TSF_calcL.to_integral_value().copy_abs(),TSF_calcR.to_integral_value().copy_abs()
+    if TSF_GCMm < TSF_GCMn:
+        TSF_GCMm,TSF_GCMn=TSF_GCMn,TSF_GCMm
+    while TSF_GCMn > decimal.Decimal("0"):
+        TSF_GCMm=TSF_GCMn
+        try:
+            TSF_GCMn=TSF_GCMm%TSF_GCMn
+        except decimal.InvalidOperation:
+            TSF_GCMn,TSF_GCMm=decimal.Decimal("0"),decimal.Decimal("0")
+    return TSF_GCMm
+
+def TSF_calc_LCM(TSF_calcL,TSF_calcR):    #TSF_doc:最小公倍数。計算できない場合はエラーとして0を返す。
+    try:
+        TSF_LCM=TSF_calcL.copy_abs()*TSF_calcR.copy_abs()//TSF_calc_GCM(TSF_calcL,TSF_calcR)
+    except decimal.InvalidOperation:
+        TSF_LCM=decimal.Decimal("0")
+    return TSF_LCM
+
+#def _TSF_calc_GCM(TSF_calcL,TSF_calcR):    #TSF_doc:最大公約数。
+#    TSF_GCMm,TSF_GCMn=abs(int(TSF_calcL)),abs(int(TSF_calcR))
+#    if TSF_GCMm < TSF_GCMn:
+#        TSF_GCMm,TSF_GCMn=TSF_GCMn,TSF_GCMm
+#    while TSF_GCMn > 0:
+#        TSF_GCMm,TSF_GCMn=TSF_GCMn,TSF_GCMm%TSF_GCMn
+#    return TSF_GCMm
+#
+#def _TSF_calc_LCM(TSF_calcL,TSF_calcR):    #TSF_doc:最小公倍数。
+#    return abs(int(TSF_calcL))*abs(int(TSF_calcR))//TSF_calc_GCM(TSF_calcL,TSF_calcR)
 
 def TSF_calc_decimalize(TSF_calcQ):    #TSF_doc:分数電卓だけど分数ではなく小数を返す(再計算)。ただし「n|0」の時は「n|0」を返す。
     TSF_calcA=TSF_calc(TSF_calcQ); 
@@ -216,16 +251,6 @@ def TSF_calc_decimalizeKNcomma(TSF_calcQ):    #TSF_doc:整数を4桁で区切っ
             TSF_calcA="{0}{1}{2}".format(TSF_calcQ,TSF_okusenK,TSF_calcA)
     return TSF_calcA
 
-def TSF_calc_GCM(TSF_calcL,TSF_calcR):    #TSF_doc:最大公約数。
-    TSF_GCMm,TSF_GCMn=abs(int(TSF_calcL)),abs(int(TSF_calcR))
-    if TSF_GCMm < TSF_GCMn:
-        TSF_GCMm,TSF_GCMn=TSF_GCMn,TSF_GCMm
-    while TSF_GCMn > 0:
-        TSF_GCMm,TSF_GCMn=TSF_GCMn,TSF_GCMm%TSF_GCMn
-    return TSF_GCMm
-
-def TSF_calc_LCM(TSF_calcL,TSF_calcR):    #TSF_doc:最小公倍数。
-    return abs(int(TSF_calcL))*abs(int(TSF_calcR))//TSF_calc_GCM(TSF_calcL,TSF_calcR)
 
 def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テスト風デバッグ関数。
     TSF_debug_log=""
@@ -240,7 +265,7 @@ def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テス�
      "1|6+1|3","3|4-1|4","2|3*3|4","2|5/4|5", \
      "0.5|3.5","0.5/3.5","1|2/7|2","2|3|5|7","2||3","2|--|3","2|p-|3","2|..|3","2|p4.|3","2|m.4|3", \
      "10000+%8", "10000-5%","7\\3","3.14\\1","二分の一","0/100", \
-     "9000𥝱"]
+     "9000𥝱", "穣"]
 #     "恒河沙","阿僧祇","那由他","不可思議","無量大数"]
     for LTsv_calcQ in LTsv_calcQlist:
         TSF_debug_log=TSF_io_printlog("\t{0}⇔{1};{2};{3}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ),TSF_calc_decimalize(LTsv_calcQ),TSF_calc_decimalizeKN(TSF_calc(LTsv_calcQ))),TSF_debug_log)

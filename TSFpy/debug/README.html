@@ -10,10 +10,16 @@
 </p>
 <pre><code>
     TSF_Tab-Separated-Forth:
-    	UTF-8	#TSF_encoding	main:	#TSF_this	0	#TSF_fin.
+    	UTF-8	#TSF_encoding	main1:	#TSF_this	0	#TSF_fin.
     
-    main:
-    	about:	#TSF_pushthe	about:	#TSF_lenthe	#TSF_echoes	calcQQtest:	#TSF_this	calcFXtest:	#TSF_this	calcDCtest:	#TSF_this	calc日本語風:	#TSF_this
+    main1:
+    	aboutTSF:	#TSF_pushthe	aboutTSF:	#TSF_lenthe	#TSF_echoes	main2:	#TSF_this
+    
+    main2:
+    	#	#TSF_echo	calcQQtest:	#TSF_this	calcFXtest:	#TSF_this	calcDCtest:	#TSF_this	calc日本語風:	#TSF_this	#	#TSF_echo	main3:	#TSF_this
+    
+    main3:
+    	aboutCalc:	#TSF_pushthe	aboutCalc:	#TSF_lenthe	#TSF_echoes
     
     about:
     	「TSF_Tab-Separated-Forth」の概要(暫定案)。
@@ -29,16 +35,24 @@
     	「#TSF_calc[]」などの括弧と「#TSF_calcFX」などの分数電卓を用意したので逆ポーランド記法の数式計算は強いられないはず。
     
     calcQQtest:
-    	QQ(1/3+1|2)→	1/3+1|2	#TSF_calcQQ	2	#TSF_join	#TSF_echo
+    	「1/3-m1|2」→	1/3-m1|2	#TSF_calcQQ	2	#TSF_join	#TSF_echo
     
     calcFXtest:
-    	FX(1/3+1|2)→	1	3	1|2	[2]/[1]+[0]	#TSF_calc[]	#TSF_calcFX	2	#TSF_join	#TSF_echo
+    	「1 3 m1|2」を数式風に「[2]/[1]-[0]」で連結→	1	3	1|2	[2]/[1]-[0]	#TSF_calc[]	#TSF_calcFX	2	#TSF_join	#TSF_echo
     
     calcDCtest:
-    	DC(1/3+1|2)→	1	/	3	+	1|2	5	#TSF_join	#TSF_calcDC	2	#TSF_join	#TSF_echo
+    	「1 / 3 - m1|2」まで分解して連結(ついでに小数デモ)→	1	/	3	-	m1|2	5	#TSF_join	#TSF_calcDC	2	#TSF_join	#TSF_echo
     
     calc日本語風:
-    	日本語風(一割る三足す二分の一)→	一割る三足す二分の一	#TSF_calcFX	2	#TSF_join	#TSF_echo
+    	日本語風に「一割る三引くマイナス二分の一」→	一割る三引くマイナス二分の一	#TSF_calcKN	2	#TSF_join	#TSF_echo
+    
+    aboutCalc:
+    	「calc」系ワード分数電卓の概要(暫定案)。
+    	「#TSF_calcQQ」「#TSF_calcFX」「#TSF_calcDC」と３つも電卓用ワード(関数)があるが、基本的には同じ分数計算。
+    	「#TSF_calcDC」は小数表示用途。「#TSF_calcQQ」は数式を九九のように暗記(参照透過風)。
+    	「#TSF_calc{}」「#TSF_calc[]」「#TSF_calc｢｣」ワードもあるが、計算ではなく「#TSF_join」など文字列連結操作扱い。
+    	「pm」分数自体のプラスマイナスは演算子と分けて表記(小数表示の時は他言語に合わせて「-」表記)。0で割った時は符号不明の「n|0」。
+    	1234567890の他に漢数字〇一二三四五六七八九十百千万億兆京垓𥝱なども使用可能。穣以上は28桁越えエラーになるので「n|0」。
 </code></pre>
 <p>
 
