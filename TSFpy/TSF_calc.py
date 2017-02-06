@@ -115,13 +115,10 @@ def TSF_calc_addition(TSF_calcQ):    #TSF_doc:分数電卓の足し算引き算�
             TSF_calcLN=TSF_calcLN*decimal.Decimal(TSF_calcRD)+decimal.Decimal(TSF_calcRN)*TSF_calcLD
             TSF_calcLD=TSF_calcLD*decimal.Decimal(TSF_calcRD)
         try:
-            TSF_calcLND=fractions.Fraction(TSF_calcLN/TSF_calcLD)
-            TSF_calcRND=str(TSF_calcLND).replace("Fraction(","|").replace("/","|").replace(")","")
-            if not '|' in TSF_calcRND:
-                TSF_calcRND="{0}|1".format(TSF_calcRND)
-            TSF_calcRN,TSF_calcRD=TSF_calcR.split('|')
-            TSF_calcLN,TSF_calcLD=decimal.Decimal(TSF_calcRN),decimal.Decimal(TSF_calcLD)
-            TSF_calcA="{0}|{1}".format(TSF_calcLN,TSF_calcLD)
+            TSF_GCD=fractions.gcd(TSF_calcLN,TSF_calcLD)
+            TSF_calcLN=TSF_calcLN//TSF_GCD
+            TSF_calcLD=TSF_calcLD//TSF_GCD
+            TSF_calcA=str(TSF_calcLN)+"|"+str(TSF_calcLD)
         except decimal.InvalidOperation:
             TSF_calcA="n|0"
     return TSF_calcA
@@ -155,13 +152,10 @@ def TSF_calc_multiplication(TSF_calcQ):    #TSF_doc:分数電卓の掛け算割�
             TSF_calcLN=TSF_calcLN*decimal.Decimal(TSF_calcRN)
             TSF_calcLD=TSF_calcLD*decimal.Decimal(TSF_calcRD)
         try:
-            TSF_calcLND=fractions.Fraction(TSF_calcLN/TSF_calcLD)
-            TSF_calcRND=str(TSF_calcLND).replace("Fraction(","|").replace("/","|").replace(")","")
-            if not '|' in TSF_calcRND:
-                TSF_calcRND="{0}|1".format(TSF_calcRND)
-            TSF_calcRN,TSF_calcRD=TSF_calcR.split('|')
-            TSF_calcLN,TSF_calcLD=decimal.Decimal(TSF_calcRN),decimal.Decimal(TSF_calcLD)
-            TSF_calcA="{0}|{1}".format(TSF_calcLN,TSF_calcLD)
+            TSF_GCD=fractions.gcd(TSF_calcLN,TSF_calcLD)
+            TSF_calcLN=TSF_calcLN//TSF_GCD
+            TSF_calcLD=TSF_calcLD//TSF_GCD
+            TSF_calcA=str(TSF_calcLN)+"|"+str(TSF_calcLD)
         except decimal.InvalidOperation:
             TSF_calcA="n|0"
     return TSF_calcA
@@ -191,10 +185,11 @@ def TSF_calc_fractalize(TSF_calcQ):    #TSF_doc:分数電卓なので小数を�
                 TSF_calcD=decimal.Decimal("0")
         if TSF_calcD != decimal.Decimal("0"):
             try:
-                TSF_calcND=fractions.Fraction(TSF_calcN/TSF_calcD)
-                TSF_calcA=str(TSF_calcND).replace("Fraction(","|").replace("/","|").replace(")","")
-                if not '|' in TSF_calcA:
-                    TSF_calcA="{0}|1".format(TSF_calcA)
+                TSF_GCD=fractions.gcd(TSF_calcN,TSF_calcD)
+                TSF_calcN=TSF_calcN//TSF_GCD
+                TSF_calcD=TSF_calcD//TSF_GCD
+                if TSF_calcD < decimal.Decimal("0"): TSF_calcN,TSF_calcD=-TSF_calcN,-TSF_calcD
+                TSF_calcA=str(TSF_calcN)+"|"+str(TSF_calcD)
             except decimal.InvalidOperation:
                 TSF_calcA="n|0"
         else:
@@ -248,7 +243,7 @@ def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テス�
      "1|6+1|3","3|4-1|4","2|3*3|4","2|5/4|5", \
      "0.5|3.5","0.5/3.5","1|2/7|2","2|3|5|7","2||3","2|--|3","2|p-|3","2|..|3","2|p4.|3","2|m.4|3", \
      "10000+%8", "10000-5%","7\\3","3.14\\1","二分の一","0/100","3|2#1|3","3|2", \
-     "90𥝱","900𥝱","9000𥝱","穣","無量大数"]
+     "90𥝱","900𥝱","9000𥝱","穣","無量大数","1/-9","1|-9"]
     for LTsv_calcQ in LTsv_calcQlist:
 #        TSF_debug_log=TSF_io_printlog("\t{0}⇔{1};{2};{3}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ),TSF_calc_decimalize(LTsv_calcQ),TSF_calc_decimalizeKN(TSF_calc(LTsv_calcQ))),TSF_debug_log)
         TSF_debug_log=TSF_io_printlog("\t{0}⇔{1}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ)),TSF_debug_log)
