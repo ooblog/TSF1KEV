@@ -10,20 +10,22 @@ from TSF_io import *
 
 # suMmation和数列,Product積数列
 # Sin,Cos,Tan,Atan2,sQrt,LOg
-TSF_calc_opewide="1234567890.|$pmyen+-*/\\#%(MP~k)LG" "銭十百千万億兆京垓𥝱穣溝澗正載極恒阿那思量" \
+TSF_calc_opewide="1234567890.|$pmyen+-*/\\#%(MP~k)Gg" "銭十百千万億兆京垓𥝱穣溝澗正載極恒阿那思量" \
                 "１２３４５６７８９０｜．" "負分小円圓" "一二三四五六七八九〇" "壱弐参肆伍陸漆捌玖零秭" \
                 "＋－×÷／＼＃％" "加減乗除比税" "足引掛割" "和差積商" "陌阡萬仙秭" \
                 "（）()｛｝{}［］[]「」｢｣『』Σ但※列Π囲～〜値約倍" \
                 "" \
                 "π周ｅ底∞無桁"
-TSF_calc_opehalf="1234567890.|$pmyen+-*/\\#%(MP~k)LG" "銭十百千万億兆京垓𥝱穣溝澗正載極恒阿那思量" \
+TSF_calc_opehalf="1234567890.|$pmyen+-*/\\#%(MP~k)Gg" "銭十百千万億兆京垓𥝱穣溝澗正載極恒阿那思量" \
                 "1234567890|." "m$..." "1234567890" "1234567890𥝱" \
                 "+-*//\\#%" "+-*/%%" "+-*/" "+-*/" "百千万銭𥝱" \
-                "()()()()()()()()()MMMMP~~~kLG" \
+                "()()()()()()()()()MMMMP~~~kGg" \
                 "yyeennF"
 TSF_calc_operator=dict(zip(list(TSF_calc_opewide),list(TSF_calc_opehalf)))
-TSF_calc_opelong=["恒河沙","阿僧祇","那由他","不可思議","無量大数","無限","円周率","ネイピア数","プラス","マイナス","氷点下"]
-TSF_calc_opelshort=["恒","阿","那","思","量","∞","π","ｅ","p","m","m"]
+TSF_calc_opelong=["恒河沙","阿僧祇","那由他","不可思議","無量大数","無限","円周率","ネイピア数","プラス","マイナス","氷点下"
+                "最大公約数","最小公倍数","公約数","公倍数"]
+TSF_calc_opelshort=["恒","阿","那","思","量","∞","π","ｅ","p","m", \
+                "G","g","G","g"]
 TSF_calc_opeword=dict(zip(TSF_calc_opelong,TSF_calc_opelshort))
 TSF_calc_opemarkC=["*+","*-","/+","/-","#+","#-","|+","|-","++","+-","-+","--",
                 "0k", "1k", "2k", "3k", "4k", "5k", "6k", "7k", "8k", "9k", ".k",
@@ -227,17 +229,21 @@ def TSF_calc_decimalizeKN(TSF_calcQ):    #TSF_doc:分数(が入力されてる�
         TSF_calcA=TSF_calcA.replace("1分の",'')
     else:
         TSF_calcA="n|0"
+    TSF_calcA=TSF_calcA.replace('恒','恒河沙').replace('阿','阿僧祇').replace('那','那由他').replace('思','不可思議').replace('量','無量大数')
     return TSF_calcA
     
-def TSF_calc_decimalizeKNcomma(TSF_calcQ):    #TSF_doc:整数を4桁で区切って漢数字を付ける(極まで)。
+def TSF_calc_decimalizeKNcomma(TSF_calcQ):    #TSF_doc:整数を4桁で区切って漢数字を付ける。
     TSF_calcA=""
     TSF_calcO=decimal.Decimal(TSF_calcQ); TSF_calcQ=TSF_calcO%decimal.Decimal(10000)
     if TSF_calcQ:
         TSF_calcA+=str(TSF_calcQ)
     for TSF_okusenK in TSF_calc_okusenman:
-        TSF_calcO=TSF_calcO//10000; TSF_calcQ=TSF_calcO%decimal.Decimal(10000)
+        TSF_calcO=TSF_calcO//decimal.Decimal(10000); TSF_calcQ=TSF_calcO%decimal.Decimal(10000)
         if TSF_calcQ > decimal.Decimal(0):
             TSF_calcA="{0}{1}{2}".format(TSF_calcQ,TSF_okusenK,TSF_calcA)
+    if TSF_calcO > decimal.Decimal(10000):
+        TSF_calcO=TSF_calcO//decimal.Decimal(10000)
+        TSF_calcA=str(TSF_calcO)+TSF_calcA
     return TSF_calcA
 
 
