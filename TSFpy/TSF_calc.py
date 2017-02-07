@@ -15,12 +15,12 @@ TSF_calc_opewide="1234567890.|$pmyen+-*/\\#%(MP~k)LG" "銭十百千万億兆京�
                 "＋－×÷／＼＃％" "加減乗除比税" "足引掛割" "和差積商" "陌阡萬仙秭" \
                 "（）()｛｝{}［］[]「」｢｣『』Σ但※列Π囲～〜値約倍" \
                 "" \
-                "π周ｅ底∞無"
+                "π周ｅ底∞無桁"
 TSF_calc_opehalf="1234567890.|$pmyen+-*/\\#%(MP~k)LG" "銭十百千万億兆京垓𥝱穣溝澗正載極恒阿那思量" \
                 "1234567890|." "m$..." "1234567890" "1234567890𥝱" \
                 "+-*//\\#%" "+-*/%%" "+-*/" "+-*/" "百千万銭𥝱" \
                 "()()()()()()()()()MMMMP~~~kLG" \
-                "yyeenn"
+                "yyeennF"
 TSF_calc_operator=dict(zip(list(TSF_calc_opewide),list(TSF_calc_opehalf)))
 TSF_calc_opelong=["恒河沙","阿僧祇","那由他","不可思議","無量大数","無限","円周率","ネイピア数","プラス","マイナス","氷点下"]
 TSF_calc_opelshort=["恒","阿","那","思","量","∞","π","ｅ","p","m","m"]
@@ -39,7 +39,14 @@ TSF_calc_opemark=dict(zip(TSF_calc_opemarkC,TSF_calc_opemarkP))
 TSF_calc_okusenman="万億兆京垓𥝱穣溝澗正載極恒阿那思量"
 TSF_calc_okusenzero=['1'+'0'*((o+1)*4) for o in range(len(TSF_calc_okusenman))]
 TSF_calc_okusendic=dict(zip(list(TSF_calc_okusenman),TSF_calc_okusenzero))
-decimal.getcontext().prec=72
+TSF_calc_precisionMAX=72; decimal.getcontext().prec=TSF_calc_precisionMAX
+TSF_calc_PI="31415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679"
+TSF_calc_E="27182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274"
+
+def TSF_calc_precision(TSF_prec):    #TSF_doc:電卓の有効桁数を変更する。初期値は72桁(千無量大数)
+    global TSF_calc_precisionMAX
+    TSF_calc_precisionMAX=min(max(TSF_prec,4),100)
+    decimal.getcontext().prec=TSF_calc_precisionMAX
 
 def TSF_calc_bracketsbalance(TSF_calcQ):    #TSF_doc:括弧のバランスを整える。ついでに無効な演算子を除去したり円周率億千万など計算の下準備。
     TSF_calcA=""; TSF_calcbracketLR,TSF_calcbracketCAP=0,0
@@ -70,8 +77,9 @@ def TSF_calc_bracketsbalance(TSF_calcQ):    #TSF_doc:括弧のバランスを整
     TSF_calcA=TSF_calcA.replace('千',"1000+")
     for TSF_okusenK,TSF_okusenV in TSF_calc_okusendic.items():
         TSF_calcA=TSF_calcA.replace(TSF_okusenK,"{0}+".format(TSF_okusenV))
-    TSF_calcA=TSF_calcA.replace('y','('+str(decimal.Decimal(math.pi))+')').replace('e','('+str(decimal.Decimal(math.e))+')')
-    TSF_calcA=TSF_calcA.replace('n','(n|0)')
+    TSF_calcA=TSF_calcA.replace('y',("{0}|1".format(TSF_calc_PI[:TSF_calc_precisionMAX])+'0'*(TSF_calc_precisionMAX-1)))
+    TSF_calcA=TSF_calcA.replace('e',("{0}|1".format(TSF_calc_E[:TSF_calc_precisionMAX])+'0'*(TSF_calc_precisionMAX-1)))
+    TSF_calcA=TSF_calcA.replace('F',str(TSF_calc_precisionMAX)).replace('n','(n|0)')
 #    TSF_io_printlog(TSF_calcA)
     for TSF_calc_opecase in TSF_calc_opemark:
         if TSF_calc_opecase in TSF_calcA:
@@ -242,14 +250,19 @@ def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テス�
     TSF_debug_log=TSF_io_printlog("TSF_py:",TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout])),TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("TSF_calc:",TSF_log=TSF_debug_log)
-    LTsv_calcQlist=[ "8|17","Ｐ1/3)｛｝","(5/7*7","(5|13*13)","[0]+[1]","億","二百万円","十億百二十円","十億と飛んで百二十円","百二十円","3.14","円周率","π","ネイピア数","ｅ","∞","0/0","1/2-1/3", \
+    LTsv_calcQlist=[ "8|17","Ｐ1/3)｛｝","(5/7*7","(5|13*13)","[0]+[1]","億","二百万円","十億百二十円","十億と飛んで百二十円","百二十円","3.14","円周率","ネイピア数","∞","0/0","1/2-1/3", \
      "1|6+1|3","3|4-1|4","2|3*3|4","2|5/4|5", \
      "0.5|3.5","0.5/3.5","1|2/7|2","2|3|5|7","2||3","2|--|3","2|p-|3","2|..|3","2|p4.|3","2|m.4|3", \
      "10000+%8", "10000-5%","7\\3","3.14\\1","二分の一","0/100","3|2#1|3","3|2", \
-     "90𥝱","900𥝱","9000𥝱","穣","無量大数","1/-9","1|-9"]
+     "90𥝱","900𥝱","9000𥝱","穣","無量大数","1/-9","1|-9","桁","π","ｅ"]
+    TSF_calc_precision(72)
     for LTsv_calcQ in LTsv_calcQlist:
+        TSF_debug_log=TSF_io_printlog("\t{0}⇔{1};{2};{3}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ),TSF_calc_decimalize(LTsv_calcQ),TSF_calc_decimalizeKN(TSF_calc(LTsv_calcQ))),TSF_debug_log)
+#        TSF_debug_log=TSF_io_printlog("\t{0}⇔{1}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ)),TSF_debug_log)
+ #   TSF_calc_precision(4)
+#    for LTsv_calcQ in LTsv_calcQlist:
 #        TSF_debug_log=TSF_io_printlog("\t{0}⇔{1};{2};{3}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ),TSF_calc_decimalize(LTsv_calcQ),TSF_calc_decimalizeKN(TSF_calc(LTsv_calcQ))),TSF_debug_log)
-        TSF_debug_log=TSF_io_printlog("\t{0}⇔{1}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ)),TSF_debug_log)
+#        TSF_debug_log=TSF_io_printlog("\t{0}⇔{1}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ)),TSF_debug_log)
     return TSF_debug_log
 
 if __name__=="__main__":

@@ -25,7 +25,7 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         "#TSF_lenthe":TSF_Forth_lenthe, "#TSF_lenthis":TSF_Forth_lenthis, "#TSF_lenthat":TSF_Forth_lenthat,
         "#TSF_pushthe":TSF_Forth_pushthe, "#TSF_pushthis":TSF_Forth_pushthis, "#TSF_pushthat":TSF_Forth_pushthat,
         "#TSF_calcQQ":TSF_Forth_calcQQ,"#TSF_calcFX":TSF_Forth_calcFX,
-        "#TSF_calcDC":TSF_Forth_calcDC,"#TSF_calcKN":TSF_Forth_calcKN,
+        "#TSF_calcDC":TSF_Forth_calcDC,"#TSF_calcKN":TSF_Forth_calcKN,"#TSF_calcPR":TSF_Forth_calcPR,
         "#TSF_calc{}":TSF_Forth_calcCB,"#TSF_calc[]":TSF_Forth_calcSB,"#TSF_calc｢｣":TSF_Forth_calcCB,
         "#TSF_join":TSF_Forth_join,"#TSF_split":TSF_Forth_split,"#TSF_chars":TSF_Forth_split,
     }
@@ -264,6 +264,10 @@ def TSF_Forth_calcKN():   #TSF_doc:[calc]スタック内容で分数電卓する
     TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
     TSF_tsvA=TSF_calc_decimalizeKN(TSF_calcs.get(TSF_tsvQ,TSF_calc(TSF_tsvQ)))
     TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
+    return TSF_thisstack_name
+
+def TSF_Forth_calcPR():   #TSF_doc:[prec]
+    TSF_calc_precision(int(TSF_Forth_popdecimalize()))
     return TSF_thisstack_name
 
 def TSF_Forth_calcmarge(TSF_bracketL,TSF_bracketR):   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、指定された括弧の中の数値をスタック内容に置換。count+1(calc)分スタック積み下ろし。
