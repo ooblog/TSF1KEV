@@ -102,7 +102,6 @@ def TSF_calc(TSF_calcQ):    #TSF_doc:分数電卓のmain。括弧の内側を検
     return TSF_calcA
 
 def TSF_calc_function(TSF_calcQ):    #TSF_doc:分数電卓の和集合積集合およびSin,Cos,Tan,Atan2,sQrt,LOg予定地。
-    TSF_calcA="n|0"
     TSF_calcQ=TSF_calcQ.lstrip("(").rstrip(")")
     TSF_calcO='P' if 'P' in TSF_calcQ else ''
     TSF_calcO='M' if 'M' in TSF_calcQ else TSF_calcO
@@ -113,23 +112,22 @@ def TSF_calc_function(TSF_calcQ):    #TSF_doc:分数電卓の和集合積集合�
         TSF_calcO='+' if 'M'==TSF_calcO else '*'
         TSF_calcSeq,TSF_calcLim=TSF_calcQ.split('\t')
         TSF_calcsequences=""
-#        print("TSF_calcSeq,TSF_calcLim",TSF_calcSeq,TSF_calcO,TSF_calcLim)
         if not '~' in TSF_calcLim:
-            for TSF_LimK in range(abs(int(float(TSF_calc_decimalize(TSF_calcLim))))):
-                TSF_calcsequences+="("+TSF_calc_addition(TSF_calcSeq)+")"+TSF_calcO
-#            print("TSF_calcsequences=",TSF_calcsequences)
+            TSF_calcLim="1~"+str(abs(int(float(TSF_calc_decimalize(TSF_calcLim)))))
+        TSF_LimStart,TSF_LimGoal=TSF_calcLim.split('~')[0],TSF_calcLim.split('~')[-1]
+        TSF_LimStart,TSF_LimGoal=int(float(TSF_calc_decimalize(TSF_LimStart))),int(float(TSF_calc_decimalize(TSF_LimGoal)))
+#        print("TSF_LimStart,TSF_LimGoal=",TSF_LimStart,TSF_LimGoal)
+        if TSF_LimStart <= TSF_LimGoal:
+            TSF_limstep=1; TSF_LimGoal+=1
         else:
-            TSF_LimStart,TSF_LimGoal=TSF_calcLim.split('~')[0],TSF_calcLim.split('~')[-1]
-#            print("TSF_LimStart,TSF_LimGoal",TSF_LimStart,TSF_LimGoal)
-            TSF_LimStart,TSF_LimGoal=int(float(TSF_calc_decimalize(TSF_LimStart))),int(float(TSF_calc_decimalize(TSF_LimGoal)))
-            if TSF_LimStart <= TSF_LimGoal:
-                TSF_limstep=1
-            else:
-                TSF_limstep=-1
-            for TSF_LimK in range(TSF_LimStart,TSF_LimGoal,TSF_limstep):
-                TSF_calcsequences+="("+TSF_calc_addition(TSF_calcSeq)+")"+TSF_calcO
-#            print("TSF_calcsequences=",TSF_calcsequences)
+            TSF_limstep=-1; TSF_LimGoal-=1
+        for TSF_LimK in range(TSF_LimStart,TSF_LimGoal,TSF_limstep):
+            TSF_calcsequences+=TSF_calc_addition(TSF_calcSeq.replace('k',str(TSF_LimK)))+TSF_calcO
+        TSF_calcsequences=TSF_calcsequences.rstrip(TSF_calcO)
+#        print("TSF_calcsequences=",TSF_calcsequences)
         TSF_calcQ=TSF_calc(TSF_calcsequences)
+    else:
+        TSF_calcQ=TSF_calcQ.replace('k','0')
     TSF_calcA=TSF_calc_addition(TSF_calcQ)
     return TSF_calcA
     
@@ -332,7 +330,7 @@ def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テス�
      "10000+%8", "10000-5%","7\\3","3.14\\1","二分の一","0/100","3|2#1|3","3|2", \
      "90𥝱","900𥝱","9000𥝱","穣","無量大数","1/-9","1|-9","桁","π","ｅ", \
      "6,4G","6,4g","6,4","6と4の公約数","6と4の公倍数","6と4","√４","√２","２の平方根","E1","E2","Ee","E256/E2","L256/L2","L256","L2", \
-     "1M7","1M5~10","1M10~0","1P7","1P5~10","1P10~0"]
+     "kM7","kM5~10","kM10~0","kP7","kP5~10","kP10~0","k*2M100","kM100","kP1~10"]
     TSF_calc_precision(72)
     for LTsv_calcQ in LTsv_calcQlist:
         TSF_debug_log=TSF_io_printlog("\t{0}⇔{1};{2};{3}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ),TSF_calc_decimalize(LTsv_calcQ),TSF_calc_decimalizeKN(TSF_calc(LTsv_calcQ))),TSF_debug_log)
