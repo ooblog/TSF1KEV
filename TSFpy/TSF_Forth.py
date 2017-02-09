@@ -27,7 +27,7 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         "#TSF_calcQQ":TSF_Forth_calcQQ,"#TSF_calcFX":TSF_Forth_calcFX,
         "#TSF_calcDC":TSF_Forth_calcDC,"#TSF_calcKN":TSF_Forth_calcKN,"#TSF_calcPR":TSF_Forth_calcPR,
         "#TSF_calc{}":TSF_Forth_calcCB,"#TSF_calc[]":TSF_Forth_calcSB,"#TSF_calc｢｣":TSF_Forth_calcCB,
-        "#TSF_join":TSF_Forth_join,"#TSF_split":TSF_Forth_split,"#TSF_chars":TSF_Forth_chars,
+        "#TSF_join":TSF_Forth_join,"#TSF_joinC":TSF_Forth_joinC,"#TSF_split":TSF_Forth_split,"#TSF_chars":TSF_Forth_chars,
     }
     return TSF_words
 
@@ -308,7 +308,7 @@ def TSF_Forth_joinC():   #TSF_doc:[…stackB,stackA,,count]count自身とcount�
     TSF_joinlist=[]
     for TSF_joincount in range(TSF_joinloopI):
         TSF_joinlist.append(TSF_Forth_pop(TSF_thatstack_name))
-    TSF_Forth_push(TSF_thatstack_name,"".join(reversed(TSF_joinlist)))
+    TSF_Forth_push(TSF_thatstack_name,TSF_joinloopC.join(reversed(TSF_joinlist)))
     return TSF_thisstack_name
 
 def TSF_Forth_split():   #TSF_doc:
@@ -384,8 +384,9 @@ def TSF_Forth_run(TSF_this=None,TSF_that=None):    #TSF_doc:TSFを実行して�
 def TSF_Forth_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_Forth.py」単体テスト風デバッグ関数。
     TSF_Forth_Init(sys.argv)
     TSF_debug_log=""
-    TSF_debug_readme="debug/README.md"
-    TSF_Forth_loadtext(TSF_debug_readme,TSF_debug_readme)
+    TSF_debug_readmeL="../README.md"
+    TSF_debug_readmeS="/debug/README.txt"
+    TSF_Forth_loadtext(TSF_debug_readmeL,TSF_debug_readmeL)
     TSF_debug_log+=TSF_Forth_stackview()
     return TSF_debug_log
 
