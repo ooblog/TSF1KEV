@@ -266,7 +266,9 @@ def TSF_Forth_calcKN():   #TSF_doc:[calc]スタック内容で分数電卓する
     TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
     return TSF_thisstack_name
 
-def TSF_Forth_calcPR():   #TSF_doc:[prec]
+def TSF_Forth_calcPR():   #TSF_doc:[prec]有効桁数を変更する。桁数が変わると同じ式でも値が変わるので暗記(九九)も初期化する。
+    global TSF_calcs
+    TSF_calcs={}
     TSF_calc_precision(int(TSF_Forth_popdecimalize()))
     return TSF_thisstack_name
 
@@ -362,7 +364,7 @@ def TSF_Forth_run(TSF_this=None,TSF_that=None):    #TSF_doc:TSFを実行して�
 #        ":TSF_viewsave",              # [path]指定したスタックをテキストファイルに保存。1スタック消費。
 #        ":TSF_save",                  # [stack,path]指定したスタックをテキストファイルに保存。2スタック消費。
 #        ":TSF_load",                  # [stack,path]指定したスタックにテキストファイルを読み込む。TSF構文解析は「:TSF_merge」を使う。2スタック消費。
-#        ":TSF_merge",                # [stack]指定したスタックをTSFプログラムとみなして取り込む。
+##        ":TSF_merge",                # [stack]指定したスタックをTSFプログラムとみなして取り込む。
 #        ":TSF_swap"  ,               # [stackB,stackA]積み込み先スタックの直近2つの順番を入れ替える。
 #        ":TSF_reverse",               # […stackB,stackA,count]積み込み先スタックの順番を指定した個数順番を入れ替える。
 #        ":TSF_postpone",            # […stackB,stackA,count]積み込み先スタックの直近1つを指定した個数奥に突っ込む。

@@ -9,18 +9,18 @@ import re
 from TSF_io import *
 
 # suMmation和数列,Product積数列
-# Sin,Cos,Tan,Atan2,sQrt,LOg
-TSF_calc_opewide="1234567890.|$pmyen+-*/\\#%(MP~k),GgELR" "銭十百千万億兆京垓𥝱穣溝澗正載極恒阿那思量F" \
+# Sin,Cos,Tan,Atan2,math.ceil,math.floor
+TSF_calc_opewide="1234567890.|$pmyen+-*/\\#%(MP~k),GgELR" "銭十百千万億兆京垓𥝱穣溝澗正載極恒阿那思量f" \
                 "１２３４５６７８９０｜．" "負分小円圓" "一二三四五六七八九〇" "壱弐参肆伍陸漆捌玖零秭" \
                 "＋－×÷／＼＃％" "加減乗除比税" "足引掛割" "和差積商" "陌阡萬仙秭と" \
                 "（）()｛｝{}［］[]「」｢｣『』Σ但※列Π囲～〜値約倍" \
                 "" \
                 "常対√根π周ｅ底∞無桁"
-TSF_calc_opehalf="1234567890.|$pmyen+-*/\\#%(MP~k),GgELR" "銭十百千万億兆京垓𥝱穣溝澗正載極恒阿那思量F" \
+TSF_calc_opehalf="1234567890.|$pmyen+-*/\\#%(MP~k),GgELR" "銭十百千万億兆京垓𥝱穣溝澗正載極恒阿那思量f" \
                 "1234567890|." "m$..." "1234567890" "1234567890𥝱" \
                 "+-*//\\#%" "+-*/%%" "+-*/" "+-*/" "百千万銭𥝱," \
                 "()()()()()()()()()MMMMP~~~kGg" \
-                "LERRyyeennF"
+                "LERRyyeennf"
 TSF_calc_operator=dict(zip(list(TSF_calc_opewide),list(TSF_calc_opehalf)))
 TSF_calc_opelong=["恒河沙","阿僧祇","那由他","不可思議","無量大数","無限","円周率","ネイピア数","プラス","マイナス","氷点下"
                 "最大公約数","最小公倍数","公約数","公倍数","とんで","とばして","とぶことの","平方根","常用対数","自然対数"]
@@ -81,7 +81,7 @@ def TSF_calc_bracketsbalance(TSF_calcQ):    #TSF_doc:括弧のバランスを整
         TSF_calcA=TSF_calcA.replace(TSF_okusenK,"{0}+".format(TSF_okusenV))
     TSF_calcA=TSF_calcA.replace('y',("{0}|1".format(TSF_calc_PI[:TSF_calc_precisionMAX])+'0'*(TSF_calc_precisionMAX-1)))
     TSF_calcA=TSF_calcA.replace('e',("{0}|1".format(TSF_calc_E[:TSF_calc_precisionMAX])+'0'*(TSF_calc_precisionMAX-1)))
-    TSF_calcA=TSF_calcA.replace('F',str(TSF_calc_precisionMAX)).replace('n','(n|0)')
+    TSF_calcA=TSF_calcA.replace('f',str(TSF_calc_precisionMAX)).replace('n','(n|0)')
 #    TSF_io_printlog(TSF_calcA)
     for TSF_calc_opecase in TSF_calc_opemark:
         if TSF_calc_opecase in TSF_calcA:
