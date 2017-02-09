@@ -113,9 +113,11 @@ def TSF_calc_function(TSF_calcQ):    #TSF_doc:分数電卓の和集合積集合�
         TSF_calcSeq,TSF_calcLim=TSF_calcQ.split('\t')
         TSF_calcsequences=""
         if not '~' in TSF_calcLim:
-            TSF_calcLim="1~"+str(abs(int(float(TSF_calc_decimalize(TSF_calcLim)))))
+#            TSF_calcLim="1~"+str(abs(int(float(TSF_calc_decimalize(TSF_calcLim)))))
+            TSF_calcLim="1~"+str(abs(decimal.Decimal(TSF_calc_decimalize(TSF_calcLim)).to_integral_value()))
         TSF_LimStart,TSF_LimGoal=TSF_calcLim.split('~')[0],TSF_calcLim.split('~')[-1]
-        TSF_LimStart,TSF_LimGoal=int(float(TSF_calc_decimalize(TSF_LimStart))),int(float(TSF_calc_decimalize(TSF_LimGoal)))
+#        TSF_LimStart,TSF_LimGoal=int(float(TSF_calc_decimalize(TSF_LimStart))),int(float(TSF_calc_decimalize(TSF_LimGoal)))
+        TSF_LimStart,TSF_LimGoal=decimal.Decimal(TSF_calc_decimalize(TSF_LimStart)).to_integral_value(),decimal.Decimal(TSF_calc_decimalize(TSF_LimGoal)).to_integral_value()
 #        print("TSF_LimStart,TSF_LimGoal=",TSF_LimStart,TSF_LimGoal)
         if TSF_LimStart <= TSF_LimGoal:
             TSF_limstep=1; TSF_LimGoal+=1
@@ -208,15 +210,24 @@ def TSF_calc_multiplication(TSF_calcQ):    #TSF_doc:分数電卓の掛け算割�
                 TSF_calcA="n|0"
                 break
         elif TSF_calcO == 'l':
-            try:
-                TSF_calcLND=str(fractions.Fraction(decimal.getcontext().ln(TSF_calcLN/TSF_calcLD)/decimal.getcontext().ln(decimal.Decimal(TSF_calcRN)/decimal.Decimal(TSF_calcRD))))
-                if '/' in TSF_calcLND:
-                    TSF_calcLN,TSF_calcLD=TSF_calcLND.split('/'); TSF_calcLN,TSF_calcLD=decimal.Decimal(TSF_calcLN),decimal.Decimal(TSF_calcLD)
-                else:
-                    TSF_calcLN,TSF_calcLD=decimal.Decimal(TSF_calcLND),decimal.Decimal(1)
-            except decimal.InvalidOperation:
-                TSF_calcA="n|0"
-                break
+            TSF_calcA=""
+            if TSF_calcR == "2|1" and TSF_calcLD == 1:
+                TSF_calcLND=TSF_calcLN; TSF_calclog2=0
+                while decimal.getcontext().remainder(TSF_calcLND,2) == 0:
+                    TSF_calcLND=decimal.Decimal(decimal.getcontext().divide(TSF_calcLND,2)); TSF_calclog2+=1
+                if decimal.getcontext().power(2,TSF_calclog2) == TSF_calcLN:
+                    TSF_calcLN,TSF_calcLD=decimal.Decimal(TSF_calclog2),decimal.Decimal(1)
+                    TSF_calcA=str(TSF_calcLN)+"|"+str(TSF_calcLD)
+            if TSF_calcA == "":
+                try:
+                    TSF_calcLND=str(fractions.Fraction(decimal.getcontext().ln(TSF_calcLN/TSF_calcLD)/decimal.getcontext().ln(decimal.Decimal(TSF_calcRN)/decimal.Decimal(TSF_calcRD))))
+                    if '/' in TSF_calcLND:
+                        TSF_calcLN,TSF_calcLD=TSF_calcLND.split('/'); TSF_calcLN,TSF_calcLD=decimal.Decimal(TSF_calcLN),decimal.Decimal(TSF_calcLD)
+                    else:
+                        TSF_calcLN,TSF_calcLD=decimal.Decimal(TSF_calcLND),decimal.Decimal(1)
+                except decimal.InvalidOperation:
+                    TSF_calcA="n|0"
+                    break
         elif TSF_calcO == '&':
             TSF_calcLN=TSF_calcLN*decimal.Decimal(TSF_calcRD)+decimal.Decimal(TSF_calcRN)*TSF_calcLD
             TSF_calcLD=TSF_calcLD*decimal.Decimal(TSF_calcRD)
@@ -356,7 +367,7 @@ def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テス�
     for LTsv_calcQ in LTsv_calcQlist:
         TSF_debug_log=TSF_io_printlog("\t{0}⇔{1};{2};{3}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ),TSF_calc_decimalize(LTsv_calcQ),TSF_calc_decimalizeKN(TSF_calc(LTsv_calcQ))),TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("TSF_calc対数乗数:",TSF_log=TSF_debug_log)
-    LTsv_calcQlist=["E1","E2","Ee","L10000","L256","E256/E2","L256/L2","E256+L256","256&2l","E(256-2)","E(254)","2&16^","2&1|2^","2&0^","2&0|0^","0&0^","2&2^+3&2^"]
+    LTsv_calcQlist=["E1","E2","Ee","L10000","L256","E256/E2","L256/L2","E256+L256","256&2l","254&2l","10000&10l","E(256-2)","E(254)","2&16^","2&1|2^","2&0^","2&0|0^","0&0^","2&2^+3&2^"]
     for LTsv_calcQ in LTsv_calcQlist:
         TSF_debug_log=TSF_io_printlog("\t{0}⇔{1};{2};{3}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ),TSF_calc_decimalize(LTsv_calcQ),TSF_calc_decimalizeKN(TSF_calc(LTsv_calcQ))),TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("TSF_calc数列:",TSF_log=TSF_debug_log)
