@@ -327,7 +327,7 @@ def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テス�
     LTsv_calcQlist=["億","二百万円","十億百二十円","十億と飛んで百二十円","百二十円","3.14","円周率","ネイピア数","∞","√２","２の平方根","無量大数"]
     for LTsv_calcQ in LTsv_calcQlist:
         TSF_debug_log=TSF_io_printlog("\t{0}⇔{1};{2};{3}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ),TSF_calc_decimalize(LTsv_calcQ),TSF_calc_decimalizeKN(TSF_calc(LTsv_calcQ))),TSF_debug_log)
-    TSF_debug_log=TSF_io_printlog("TSF_calc小数分数:",TSF_log=TSF_debug_log)
+    TSF_debug_log=TSF_io_printlog("TSF_calc小数分数パーセント:",TSF_log=TSF_debug_log)
     LTsv_calcQlist=["0.5|3.5","0.5/3.5","1|2/7|2","2|3|5|7","0/100","100/0","10000+%8", "10000-5%","7\\3","3.14\\1","9#6","3|2#1|3"]
     for LTsv_calcQ in LTsv_calcQlist:
         TSF_debug_log=TSF_io_printlog("\t{0}⇔{1};{2};{3}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ),TSF_calc_decimalize(LTsv_calcQ),TSF_calc_decimalizeKN(TSF_calc(LTsv_calcQ))),TSF_debug_log)

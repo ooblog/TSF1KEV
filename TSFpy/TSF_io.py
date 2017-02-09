@@ -157,3 +157,8 @@ if __name__=="__main__":
     finally:
         pass
     sys.exit()
+
+
+# Copyright (c) 2017 ooblog
+# License: MIT
+# https://github.com/ooblog/TSF1KEV/blob/master/LICENSE

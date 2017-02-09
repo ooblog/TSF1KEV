@@ -27,7 +27,7 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         "#TSF_calcQQ":TSF_Forth_calcQQ,"#TSF_calcFX":TSF_Forth_calcFX,
         "#TSF_calcDC":TSF_Forth_calcDC,"#TSF_calcKN":TSF_Forth_calcKN,"#TSF_calcPR":TSF_Forth_calcPR,
         "#TSF_calc{}":TSF_Forth_calcCB,"#TSF_calc[]":TSF_Forth_calcSB,"#TSF_calc｢｣":TSF_Forth_calcCB,
-        "#TSF_join":TSF_Forth_join,"#TSF_split":TSF_Forth_split,"#TSF_chars":TSF_Forth_split,
+        "#TSF_join":TSF_Forth_join,"#TSF_split":TSF_Forth_split,"#TSF_chars":TSF_Forth_chars,
     }
     return TSF_words
 
@@ -139,8 +139,8 @@ def TSF_Forth_pop(TSF_that):    #TSF_doc:スタックを積み下ろす。
         TSF_popdata=TSF_stacks[TSF_that].pop()
     return TSF_popdata
 
-def TSF_Forth_popdecimalize():    #TSF_doc:複数形のワードで最初のcountを数値として取得。
-    TSF_decimalT=TSF_Forth_pop(TSF_thatstack_name); 
+def TSF_Forth_popdecimalize(TSF_that):    #TSF_doc:複数形のワードで最初のcountを数値として取得。
+    TSF_decimalT=TSF_Forth_pop(TSF_that); 
     TSF_decimalT=TSF_calc_decimalizeQQ(TSF_calcs.get(TSF_decimalT,TSF_calc(TSF_decimalT)))
     TSF_decimalI=abs(int(float(TSF_decimalT if TSF_decimalT != "n|0" else "0")))
     return TSF_decimalI
@@ -200,7 +200,7 @@ def TSF_Forth_echo():    #TSF_doc:[value]直近1つのスタック内容を端�
     return TSF_thisstack_name
 
 def TSF_Forth_echoes():    #TSF_doc:[…valueB,valueA,count]指定した個数スタック内容を端末で表示する。count分スタック消費。
-    TSF_echoloopI=TSF_Forth_popdecimalize()
+    TSF_echoloopI=TSF_Forth_popdecimalize(TSF_thatstack_name)
     for TSF_echocount in range(TSF_echoloopI):
         TSF_Forth_echo()
     return TSF_thisstack_name
@@ -269,10 +269,10 @@ def TSF_Forth_calcKN():   #TSF_doc:[calc]スタック内容で分数電卓する
 def TSF_Forth_calcPR():   #TSF_doc:[prec]有効桁数を変更する。桁数が変わると同じ式でも値が変わるので暗記(九九)も初期化する。
     global TSF_calcs
     TSF_calcs={}
-    TSF_calc_precision(int(TSF_Forth_popdecimalize()))
+    TSF_calc_precision(TSF_Forth_popdecimalize(TSF_thatstack_name))
     return TSF_thisstack_name
 
-def TSF_Forth_calcmarge(TSF_bracketL,TSF_bracketR):   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、指定された括弧の中の数値をスタック内容に置換。count+1(calc)分スタック積み下ろし。
+def TSF_Forth_calcmarge(TSF_bracketL,TSF_bracketR):   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、指定された括弧の中の数値をスタック内容に置換。calc自身とcalc内の該当括弧分スタック積み下ろし。
     TSF_calcA=TSF_Forth_pop(TSF_thatstack_name)
     for TSF_stackC,TSF_stackQ in enumerate(TSF_stacks[TSF_thatstack_name]):
         TSF_calcK="{0}{1}{2}".format(TSF_bracketL,TSF_stackC,TSF_bracketR)
@@ -282,20 +282,29 @@ def TSF_Forth_calcmarge(TSF_bracketL,TSF_bracketR):   #TSF_doc:[…stackB,stackA
             break
     TSF_Forth_push(TSF_thatstack_name,TSF_calcA)
 
-def TSF_Forth_calcBB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、波括弧【{n}】をスタック内容に置換。count+1(calc)分スタック積み下ろし。
+def TSF_Forth_calcBB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、波括弧【{n}】をスタック内容に置換。calc自身とcalc内の該当括弧分スタック積み下ろし。
     TSF_Forth_calcmarge('{','}')
     return TSF_thisstack_name
 
-def TSF_Forth_calcSB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、角括弧【[n]】をスタック内容に置換。count+1(calc)分スタック積み下ろし。
+def TSF_Forth_calcSB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、角括弧【[n]】をスタック内容に置換。calc自身とcalc内の該当括弧分スタック積み下ろし。
     TSF_Forth_calcmarge('[',']')
     return TSF_thisstack_name
 
-def TSF_Forth_calcCB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、鉤括弧【｢n｣】をスタック内容に置換。count+1(calc)分スタック積み下ろし。
+def TSF_Forth_calcCB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、鉤括弧【｢n｣】をスタック内容に置換。calc自身とcalc内の該当括弧分スタック積み下ろし。
     TSF_Forth_calcmarge('｢','｣')
     return TSF_thisstack_name
 
-def TSF_Forth_join():   #TSF_doc:
-    TSF_joinloopI=TSF_Forth_popdecimalize()
+def TSF_Forth_join():   #TSF_doc:[…stackB,stackA,count]count自身とcount数値分スタック積み下ろし。
+    TSF_joinloopI=TSF_Forth_popdecimalize(TSF_thatstack_name)
+    TSF_joinlist=[]
+    for TSF_joincount in range(TSF_joinloopI):
+        TSF_joinlist.append(TSF_Forth_pop(TSF_thatstack_name))
+    TSF_Forth_push(TSF_thatstack_name,"".join(reversed(TSF_joinlist)))
+    return TSF_thisstack_name
+
+def TSF_Forth_joinC():   #TSF_doc:[…stackB,stackA,,count]count自身とcount数値分スタック積み下ろし。
+    TSF_joinloopI=TSF_Forth_popdecimalize(TSF_thatstack_name)
+    TSF_joinloopC=TSF_Forth_pop(TSF_thatstack_name)
     TSF_joinlist=[]
     for TSF_joincount in range(TSF_joinloopI):
         TSF_joinlist.append(TSF_Forth_pop(TSF_thatstack_name))
@@ -305,7 +314,7 @@ def TSF_Forth_join():   #TSF_doc:
 def TSF_Forth_split():   #TSF_doc:
     return TSF_thisstack_name
 
-def TSF_Forth_split():   #TSF_doc:
+def TSF_Forth_chars():   #TSF_doc:
     return TSF_thisstack_name
 
 
@@ -394,3 +403,8 @@ if __name__=="__main__":
     finally:
         pass
     sys.exit()
+
+
+# Copyright (c) 2017 ooblog
+# License: MIT
+# https://github.com/ooblog/TSF1KEV/blob/master/LICENSE
