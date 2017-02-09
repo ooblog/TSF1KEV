@@ -134,8 +134,8 @@ def TSF_calc_function(TSF_calcQ):    #TSF_doc:分数電卓の和集合積集合�
 def TSF_calc_addition(TSF_calcQ):    #TSF_doc:分数電卓の足し算引き算・消費税計算等。
     TSF_calcLN,TSF_calcLD=decimal.Decimal(0),decimal.Decimal(1)
     TSF_calcQ=TSF_calcQ.replace("++","+").replace("+-","-").replace("--","+").replace("-+","-")
-    TSF_calcQ=TSF_calcQ.replace('+','\t+').replace('-','\t-').strip('\t')
-    TSF_calcQsplits=TSF_calcQ.split('\t')
+    TSF_calcQ=TSF_calcQ.replace('+','\t+').replace('-','\t-')
+    TSF_calcQsplits=TSF_calcQ.strip('\t').split('\t')
     for TSF_calcQmulti in TSF_calcQsplits:
         TSF_calcO=TSF_calcQmulti[0] if len(TSF_calcQmulti)>0 else '+'
         TSF_calcO=TSF_calcO if not '%' in TSF_calcQmulti else '%'
@@ -162,10 +162,10 @@ def TSF_calc_addition(TSF_calcQ):    #TSF_doc:分数電卓の足し算引き算�
 def TSF_calc_multiplication(TSF_calcQ):    #TSF_doc:分数電卓の掛け算割り算等。
     TSF_calcLN,TSF_calcLD=decimal.Decimal(1),decimal.Decimal(1)
     TSF_calcQ=TSF_calcQ.replace('*',"\t*").replace('/',"\t/").replace('\\',"\t\\").replace('#',"\t#").replace('&',"\t&")
-#    TSF_calcQ=TSF_calcQ.replace('G',"G\t").replace('g',"g\t").replace('^',"^\t")
+    TSF_calcQ=TSF_calcQ.replace('G',"G\t").replace('g',"g\t").replace('^',"^\t")
     TSF_calcQ=TSF_calcQ.replace("+p","+").replace("+m","-").replace("-m","+").replace("-p","-")
     TSF_calcQ=TSF_calcQ.replace("p","+").replace("m","-")
-    TSF_calcQsplits=TSF_calcQ.split('\t')
+    TSF_calcQsplits=TSF_calcQ.replace("\t\t",'\t').strip('\t').split('\t')
     for TSF_calcQmulti in TSF_calcQsplits:
 #        print("TSF_calcQmulti",TSF_calcQmulti)
         TSF_calcO=TSF_calcQmulti[0] if len(TSF_calcQmulti)>0 else '*'
@@ -345,7 +345,7 @@ def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テス�
     for LTsv_calcQ in LTsv_calcQlist:
         TSF_debug_log=TSF_io_printlog("\t{0}⇔{1};{2};{3}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ),TSF_calc_decimalize(LTsv_calcQ),TSF_calc_decimalizeKN(TSF_calc(LTsv_calcQ))),TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("TSF_calc対数乗数:",TSF_log=TSF_debug_log)
-    LTsv_calcQlist=["E1","E2","Ee","L10000","L256","E256/E2","L256/L2","E256+L256","E(256-2)","E(254)","2&16^","2&1|2^","2&0^","2&0|0^","0&0^"]
+    LTsv_calcQlist=["E1","E2","Ee","L10000","L256","E256/E2","L256/L2","E256+L256","E(256-2)","E(254)","2&16^","2&1|2^","2&0^","2&0|0^","0&0^","2&2^+3&2^"]
     for LTsv_calcQ in LTsv_calcQlist:
         TSF_debug_log=TSF_io_printlog("\t{0}⇔{1};{2};{3}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ),TSF_calc_decimalize(LTsv_calcQ),TSF_calc_decimalizeKN(TSF_calc(LTsv_calcQ))),TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("TSF_calc数列:",TSF_log=TSF_debug_log)
