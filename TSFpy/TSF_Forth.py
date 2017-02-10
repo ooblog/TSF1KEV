@@ -18,7 +18,7 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
     global TSF_words
     TSF_words={}
     TSF_words={
-        "#TSF_fin.":TSF_Forth_fin,
+        "#TSF_fin.":TSF_Forth_fin,"#TSF_over":TSF_Forth_over,
         "#TSF_encoding":TSF_Forth_encoding,
         "#TSF_this":TSF_Forth_this, "#TSF_that":TSF_Forth_that,
         "#TSF_echo":TSF_Forth_echo, "#TSF_echoes":TSF_Forth_echoes,
@@ -173,10 +173,14 @@ def TSF_Forth_poke(TSF_that,TSF_poke,TSF_count):    #TSF_doc:スタックに書�
         TSF_pokeerr=2
     return TSF_pokeerr
 
-TSF_exitcode="0"
-def TSF_Forth_fin():    #TSF_doc:TSFファイルのエンコードを指定する。
-    global TSF_exitcode
+TSF_exitcode=""
+def TSF_Forth_fin():    #TSF_doc:[errmsg]TSF終了時のオプションを指定する。1スタック積み下ろし。
+    global TSF_callptrs,TSF_exitcode
     TSF_exitcode=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_callptrs={}
+    return ""
+
+def TSF_Forth_over():    #TSF_doc:スタックを抜けてコールポインタを1つ減らす。コールポインタが0の時はTSF終了。スタック変化無し。
     return ""
 
 TSF_encode="UTF-8"
@@ -362,7 +366,7 @@ def TSF_Forth_run(TSF_this=None,TSF_that=None):    #TSF_doc:TSFを実行して�
 ##        ":TSF_lenthat",               # [stack]thatスタック(積み込み先スタック)の数を数える。1スタック積み上げ。
 ##        ":TSF_pushthis",             # [stack]指定したスタックを丸ごとthisスタック(実行中スタック)に積み上げ。
 ##       ":TSF_pushthat",             # [stack]指定したスタックを丸ごとthatスタック(積み込み先スタック)に積み上げ。
-#        ":TSF_over.",                  # [errorcode]スタックを終了する。他言語のreturn返り値的なモノを用意する場合、単純ににスタックに積むだけ。
+##        ":TSF_over.",                  # [errorcode]スタックを終了する。他言語のreturn返り値的なモノを用意する場合、単純ににスタックに積むだけ。
 ##        ":TSF_fin.",                    # [errorcode]TSFを終了する。終了時に返却する数値が指定できる。1スタック消費。
 ##       ":TSF_echo",                  # [value]直近1つのスタック内容を端末で表示する。1スタック消費。
 ##       ":TSF_echoes",               # […valueB,valueA,count]指定した個数スタック内容を端末で表示する。count分スタック消費。
