@@ -9,15 +9,26 @@ from collections import OrderedDict
 
 from TSF_io import *
 
-# suMmation和数列,Product積数列
-# Sin,Cos,Tan,Atan2,math.ceil,math.floor
-TSF_calc_opewide="1234567890.|$pmyen+-*/\\#%(MP~k)&Ggl^ELR" "銭十百千万億兆京垓𥝱穣溝澗正載極恒阿那思量f" \
-                "１２３４５６７８９０｜．" "負分点円圓" "一二三四五六七八九〇" "壱弐参肆伍陸漆捌玖零秭" \
+# Sin,Cos,Tan,Atan2
+# max,min><,abs!
+# 「o」ゼロ以上か「O」ゼロ越えるか＞≧
+# 「Z」ゼロか・ゼロの時「z」ゼロでないか・ゼロでない時「N」ゼロ除算でないか・ゼロ除算の時 0|1 or 1|1 or n|0 #≠＝
+# 「u」ゼロ以下か「U」ゼロ未満か＜≦
+#「AND」z(z0|1*z1|1)
+#「OR」z(z0|1+z1|1)
+#「XOR」z(z0|1-z1|1)
+#「NAND」Z(z0|1*z1|1)
+#「NOR」Z(z0|1+z1|1)
+#「NXOR」Z(z0|1-z1|1)
+TSF_calc_opewide="f1234567890.|$pmyen+-*/\\#%(MP~k)&Ggl^ELRZzOoUuN><!" \
+                "銭十百千万億兆京垓𥝱穣溝澗正載極恒阿那思量" \
+                "１２３４５６７８９０｜．" "負分点円圓" "一二三四五六七八九〇" "壱弐参肆伍陸漆捌玖零" \
                 "＋－×÷／＼＃％" "加減乗除比税" "足引掛割" "和差積商" "陌阡萬仙秭" \
                 "（）()｛｝{}［］[]「」｢｣『』Σ但※列Π囲～〜値との約倍" \
                 "乗常進対√根π周ｅ底∞無桁"
-TSF_calc_opehalf="1234567890.|$pmyen+-*/\\#%(MP~k)&Ggl^ELR" "銭十百千万億兆京垓𥝱穣溝澗正載極恒阿那思量f" \
-                "1234567890|." "m$..." "1234567890" "1234567890𥝱" \
+TSF_calc_opehalf="f1234567890.|$pmyen+-*/\\#%(MP~k)&Ggl^ELRZzOoUuN><!" \
+                "銭十百千万億兆京垓𥝱穣溝澗正載極恒阿那思量" \
+                "1234567890|." "m$..." "1234567890" "1234567890" \
                 "+-*//\\#%" "+-*/%%" "+-*/" "+-*/" "百千万銭𥝱" \
                 "()()()()()()()()()MMMMP~~~k&&Gg" \
                 "^LlERRyyeennf"
@@ -42,6 +53,7 @@ TSF_calc_okusenman="万億兆京垓𥝱穣溝澗正載極恒阿那思量"
 TSF_calc_okusenzero=['1'+'0'*((o+1)*4) for o in range(len(TSF_calc_okusenman))]
 TSF_calc_okusendic=dict(zip(list(TSF_calc_okusenman),TSF_calc_okusenzero))
 TSF_calc_precisionMAX=72; decimal.getcontext().prec=TSF_calc_precisionMAX
+TSF_calc_precisionROUND=decimal.ROUND_DOWN; decimal.getcontext().rounding=TSF_calc_precisionROUND
 TSF_calc_PI="31415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679"
 TSF_calc_E="27182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274"
 
@@ -49,6 +61,21 @@ def TSF_calc_precision(TSF_prec):    #TSF_doc:電卓の有効桁数を変更す�
     global TSF_calc_precisionMAX
     TSF_calc_precisionMAX=min(max(TSF_prec,4),100)
     decimal.getcontext().prec=TSF_calc_precisionMAX
+
+TSF_calc_roundopt={
+    "ROUND_DOWN":decimal.ROUND_DOWN,     #0方向に丸める(デフォルト)
+    "ROUND_UP":decimal.ROUND_UP,    #0から遠ざかる方に丸める
+    "ROUND_CEILING":decimal.ROUND_DOWN,    #+Infinity方向に丸める
+    "ROUND_FLOOR":decimal.ROUND_FLOOR,    #-Infinity方向に丸める
+    "ROUND_HALF_UP":decimal.ROUND_HALF_UP,    #四捨五入する
+    "ROUND_HALF_DOWN":decimal.ROUND_HALF_DOWN,    #五捨五超入(五捨六入)する
+    "ROUND_HALF_EVEN":decimal.ROUND_HALF_EVEN,    #偶捨奇入(偶数丸め・ISO丸め・JIS丸め・銀行丸め)する
+    "ROUND_05UP":decimal.ROUND_05UP,    #0方向に丸めた結果末尾が0か5になる場合は0から遠ざかる方に丸める。
+}
+def TSF_calc_rounding(TSF_round):    #TSF_doc:電卓の丸め誤差の挙動を指定。初期値はROUND_DOWN(ゼロ方向に丸める)
+    global TSF_calc_precisionROUND
+    TSF_calc_precisionROUND=TSF_calc_roundopt.get(TSF_round,decimal.ROUND_DOWN)
+    decimal.getcontext().prec=TSF_calc_precisionROUND
 
 def TSF_calc_bracketsbalance(TSF_calcQ):    #TSF_doc:括弧のバランスを整える。ついでに無効な演算子を除去したり円周率億千万など計算の下準備。
     TSF_calcA=""; TSF_calcbracketLR,TSF_calcbracketCAP=0,0
@@ -113,12 +140,9 @@ def TSF_calc_function(TSF_calcQ):    #TSF_doc:分数電卓の和集合積集合�
         TSF_calcSeq,TSF_calcLim=TSF_calcQ.split('\t')
         TSF_calcsequences=""
         if not '~' in TSF_calcLim:
-#            TSF_calcLim="1~"+str(abs(int(float(TSF_calc_decimalize(TSF_calcLim)))))
             TSF_calcLim="1~"+str(abs(decimal.Decimal(TSF_calc_decimalize(TSF_calcLim)).to_integral_value()))
         TSF_LimStart,TSF_LimGoal=TSF_calcLim.split('~')[0],TSF_calcLim.split('~')[-1]
-#        TSF_LimStart,TSF_LimGoal=int(float(TSF_calc_decimalize(TSF_LimStart))),int(float(TSF_calc_decimalize(TSF_LimGoal)))
         TSF_LimStart,TSF_LimGoal=decimal.Decimal(TSF_calc_decimalize(TSF_LimStart)).to_integral_value(),decimal.Decimal(TSF_calc_decimalize(TSF_LimGoal)).to_integral_value()
-#        print("TSF_LimStart,TSF_LimGoal=",TSF_LimStart,TSF_LimGoal)
         if TSF_LimStart <= TSF_LimGoal:
             TSF_limstep=1; TSF_LimGoal+=1
         else:
@@ -126,7 +150,6 @@ def TSF_calc_function(TSF_calcQ):    #TSF_doc:分数電卓の和集合積集合�
         for TSF_LimK in range(TSF_LimStart,TSF_LimGoal,TSF_limstep):
             TSF_calcsequences+=TSF_calc_addition(TSF_calcSeq.replace('k',str(TSF_LimK)))+TSF_calcO
         TSF_calcsequences=TSF_calcsequences.rstrip(TSF_calcO)
-#        print("TSF_calcsequences=",TSF_calcsequences)
         TSF_calcQ=TSF_calc(TSF_calcsequences)
     else:
         TSF_calcQ=TSF_calcQ.replace('k','0')
@@ -216,7 +239,6 @@ def TSF_calc_multiplication(TSF_calcQ):    #TSF_doc:分数電卓の掛け算割�
                 if TSF_calclogNR > 0:
                     while decimal.getcontext().remainder(TSF_calcLND,TSF_calclogNR) == 0:
                         TSF_calcLND=decimal.Decimal(decimal.getcontext().divide(TSF_calcLND,TSF_calclogNR)); TSF_calclogNL+=1
-#                    print("decimal.getcontext().power(TSF_calclogNR,TSF_calclogNL)",decimal.getcontext().power(TSF_calclogNR,TSF_calclogNL),TSF_calcLN)
                     if decimal.getcontext().power(TSF_calclogNR,TSF_calclogNL) == TSF_calcLN:
                         TSF_calcLN,TSF_calcLD=decimal.Decimal(TSF_calclogNL),decimal.Decimal(1)
                         TSF_calcA=str(TSF_calcLN)+"|"+str(TSF_calcLD)
@@ -373,7 +395,7 @@ def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テス�
     for LTsv_calcQ in LTsv_calcQlist:
         TSF_debug_log=TSF_io_printlog("\t{0}⇔{1};{2};{3}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ),TSF_calc_decimalize(LTsv_calcQ),TSF_calc_decimalizeKN(TSF_calc(LTsv_calcQ))),TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("TSF_calc数列:",TSF_log=TSF_debug_log)
-    LTsv_calcQlist=["kM7","kM5~10","kM10~0","kP7","kP5~10","kP10~0","k*2M100","kM100","kP1~10","2P16"]
+    LTsv_calcQlist=["kM7","kM5~10","kM10~0","kP7","kP5~10","kP10~0","kM100","kP1~10","2P16"]
     for LTsv_calcQ in LTsv_calcQlist:
         TSF_debug_log=TSF_io_printlog("\t{0}⇔{1};{2};{3}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ),TSF_calc_decimalize(LTsv_calcQ),TSF_calc_decimalizeKN(TSF_calc(LTsv_calcQ))),TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("TSF_calc公約数公倍数:",TSF_log=TSF_debug_log)

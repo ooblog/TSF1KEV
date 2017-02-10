@@ -25,7 +25,7 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         "#TSF_lenthe":TSF_Forth_lenthe, "#TSF_lenthis":TSF_Forth_lenthis, "#TSF_lenthat":TSF_Forth_lenthat,
         "#TSF_pushthe":TSF_Forth_pushthe, "#TSF_pushthis":TSF_Forth_pushthis, "#TSF_pushthat":TSF_Forth_pushthat,
         "#TSF_calcQQ":TSF_Forth_calcQQ,"#TSF_calcFX":TSF_Forth_calcFX,
-        "#TSF_calcDC":TSF_Forth_calcDC,"#TSF_calcKN":TSF_Forth_calcKN,"#TSF_calcPR":TSF_Forth_calcPR,
+        "#TSF_calcDC":TSF_Forth_calcDC,"#TSF_calcKN":TSF_Forth_calcKN,"#TSF_calcPR":TSF_Forth_calcPR,"#TSF_calcRO":TSF_Forth_calcRO,
         "#TSF_calc{}":TSF_Forth_calcCB,"#TSF_calc[]":TSF_Forth_calcSB,"#TSF_calc｢｣":TSF_Forth_calcCB,
         "#TSF_join":TSF_Forth_join,"#TSF_joinC":TSF_Forth_joinC,"#TSF_split":TSF_Forth_split,"#TSF_chars":TSF_Forth_chars,
     }
@@ -270,6 +270,12 @@ def TSF_Forth_calcPR():   #TSF_doc:[prec]有効桁数を変更する。桁数が
     global TSF_calcs
     TSF_calcs={}
     TSF_calc_precision(TSF_Forth_popdecimalize(TSF_thatstack_name))
+    return TSF_thisstack_name
+
+def TSF_Forth_calcRO():   #TSF_doc:[round]端数処理を変更する。端数が変わると同じ式でも値が変わるので暗記(九九)も初期化する。
+    global TSF_calcs
+    TSF_calcs={}
+    TSF_calc_rounding(TSF_Forth_popdecimalize(TSF_thatstack_name))
     return TSF_thisstack_name
 
 def TSF_Forth_calcmarge(TSF_bracketL,TSF_bracketR):   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、指定された括弧の中の数値をスタック内容に置換。calc自身とcalc内の該当括弧分スタック積み下ろし。
