@@ -11,6 +11,7 @@ from TSF_io import *
 
 # Sin,Cos,Tan,Atan2
 # max,min><,abs!
+# ?~三項演算子
 # 「o」ゼロ以上か「O」ゼロ越えるか＞≧
 # 「Z」ゼロか・ゼロの時「z」ゼロでないか・ゼロでない時「N」ゼロ除算でないか・ゼロ除算の時 0|1 or 1|1 or n|0 #≠＝
 # 「u」ゼロ以下か「U」ゼロ未満か＜≦
@@ -24,19 +25,19 @@ TSF_calc_opewide="f1234567890.|$pmyen+-*/\\#%(MP~k)&Ggl^ELRZzOoUuN><!" \
                 "銭十百千万億兆京垓𥝱穣溝澗正載極恒阿那思量" \
                 "１２３４５６７８９０｜．" "負分点円圓" "一二三四五六七八九〇" "壱弐参肆伍陸漆捌玖零" \
                 "＋－×÷／＼＃％" "加減乗除比税" "足引掛割" "和差積商" "陌阡萬仙秭" \
-                "（）()｛｝{}［］[]「」｢｣『』Σ但※列Π囲～〜値との約倍" \
+                "（）()｛｝{}［］[]「」｢｣『』Σ但※列Π囲～〜値と約倍" \
                 "乗常進対√根π周ｅ底∞無桁"
 TSF_calc_opehalf="f1234567890.|$pmyen+-*/\\#%(MP~k)&Ggl^ELRZzOoUuN><!" \
                 "銭十百千万億兆京垓𥝱穣溝澗正載極恒阿那思量" \
                 "1234567890|." "m$..." "1234567890" "1234567890" \
                 "+-*//\\#%" "+-*/%%" "+-*/" "+-*/" "百千万銭𥝱" \
-                "()()()()()()()()()MMMMP~~~k&&Gg" \
+                "()()()()()()()()()MMMMP~~~k&Gg" \
                 "^LlERRyyeennf"
 TSF_calc_operator=OrderedDict(zip(list(TSF_calc_opewide),list(TSF_calc_opehalf)))
 TSF_calc_opelong=["恒河沙","阿僧祇","那由他","不可思議","無量大数","無限","円周率","ネイピア数","プラス","マイナス","氷点下","小数点"
-                "最大公約数","最小公倍数","公約数","公倍数","とんで","とばして","とぶことの","平方根","の平方根","常用対数","進対数","自然対数"]
+                "最大公約数","最小公倍数","公約数","公倍数","とんで","とばして","とぶことの","平方根","常用対数","進対数","自然対数"]
 TSF_calc_opelshort=["恒","阿","那","思","量","∞","π","ｅ","p","m",".", \
-                "約","倍","約","倍","","","","根","根","常","進","対"]
+                "約","倍","約","倍","","","","根","常","進","対"]
 TSF_calc_opeword=dict(zip(TSF_calc_opelong,TSF_calc_opelshort))
 TSF_calc_opemarkC=["*+","*-","/+","/-","#+","#-","|+","|-","++","+-","-+","--",
                 "0k", "1k", "2k", "3k", "4k", "5k", "6k", "7k", "8k", "9k", ".k",
@@ -63,14 +64,14 @@ def TSF_calc_precision(TSF_prec):    #TSF_doc:電卓の有効桁数を変更す�
     decimal.getcontext().prec=TSF_calc_precisionMAX
 
 TSF_calc_roundopt={
-    "ROUND_DOWN":decimal.ROUND_DOWN,     #0方向に丸める(デフォルト)
-    "ROUND_UP":decimal.ROUND_UP,    #0から遠ざかる方に丸める
-    "ROUND_CEILING":decimal.ROUND_DOWN,    #+Infinity方向に丸める
-    "ROUND_FLOOR":decimal.ROUND_FLOOR,    #-Infinity方向に丸める
-    "ROUND_HALF_UP":decimal.ROUND_HALF_UP,    #四捨五入する
-    "ROUND_HALF_DOWN":decimal.ROUND_HALF_DOWN,    #五捨五超入(五捨六入)する
-    "ROUND_HALF_EVEN":decimal.ROUND_HALF_EVEN,    #偶捨奇入(偶数丸め・ISO丸め・JIS丸め・銀行丸め)する
-    "ROUND_05UP":decimal.ROUND_05UP,    #0方向に丸めた結果末尾が0か5になる場合は0から遠ざかる方に丸める。
+    "ROUND_DOWN":decimal.ROUND_DOWN,  "ゼロ方向に丸める":decimal.ROUND_DOWN,  "ゼロ方向に切り捨てる":decimal.ROUND_DOWN,
+    "ROUND_UP":decimal.ROUND_UP,  "ゼロから遠ざかる方に丸める":decimal.ROUND_UP,   "ゼロから遠ざかる様に切り上げる":decimal.ROUND_UP,
+    "ROUND_FLOOR":decimal.ROUND_FLOOR,  "マイナス無限方向に丸める":decimal.ROUND_FLOOR,  "マイナス無限方向に切り捨てる":decimal.ROUND_FLOOR,
+    "ROUND_CEILING":decimal.ROUND_DOWN,  "プラス無限方向に丸める":decimal.ROUND_DOWN,  "プラス無限方向に切り上げる":decimal.ROUND_DOWN,
+    "ROUND_HALF_UP":decimal.ROUND_HALF_UP,  "四捨五入する":decimal.ROUND_HALF_UP,
+    "ROUND_HALF_DOWN":decimal.ROUND_HALF_DOWN,  "五捨五超入する":decimal.ROUND_HALF_DOWN,  "五捨六入する":decimal.ROUND_HALF_DOWN,
+    "ROUND_HALF_EVEN":decimal.ROUND_HALF_EVEN,  "偶捨奇入する":decimal.ROUND_HALF_EVEN,  "銀行丸めする":decimal.ROUND_HALF_EVEN,  "ISO丸めする":decimal.ROUND_HALF_EVEN,
+    "ROUND_05UP":decimal.ROUND_05UP,  "ゼロ方向に切り捨てた結果末尾桁が0か5になる場合はゼロから遠ざかる様に切り上げる":decimal.ROUND_05UP,
 }
 def TSF_calc_rounding(TSF_round):    #TSF_doc:電卓の丸め誤差の挙動を指定。初期値はROUND_DOWN(ゼロ方向に丸める)
     global TSF_calc_precisionROUND

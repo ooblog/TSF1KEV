@@ -173,7 +173,7 @@ def TSF_Forth_poke(TSF_that,TSF_poke,TSF_count):    #TSF_doc:スタックに書�
         TSF_pokeerr=2
     return TSF_pokeerr
 
-TSF_exitcode=""
+TSF_exitcode="0"
 def TSF_Forth_fin():    #TSF_doc:[errmsg]TSF終了時のオプションを指定する。1スタック積み下ろし。
     global TSF_callptrs,TSF_exitcode
     TSF_exitcode=TSF_Forth_pop(TSF_thatstack_name)

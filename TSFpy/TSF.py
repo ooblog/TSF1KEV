@@ -92,7 +92,7 @@ elif TSF_mergefile == "--about":
     TSF_command_about(True)
 else:
     TSF_command_about(False)
-sys.exit()
+sys.exit(0 if TSF_exitcode == "0" or TSF_exitcode == "0|1" else TSF_exitcode)
 
 
 # Copyright (c) 2017 ooblog
