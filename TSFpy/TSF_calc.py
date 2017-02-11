@@ -9,7 +9,6 @@ from collections import OrderedDict
 
 from TSF_io import *
 
-# Sin,Cos,Tan,Atan2,hypot
 # max,min><
 # 「o」ゼロ以上か「O」ゼロ越えるか＞≧
 # 「Z」ゼロか・ゼロの時「z」ゼロでないか・ゼロでない時「N」ゼロ除算でないか・ゼロ除算の時 0|1 or 1|1 or n|0 #≠＝
@@ -62,7 +61,7 @@ TSF_calc_E="27182818284590452353602874713526624977572470936999595749669676277240
 
 def TSF_calc_precision(TSF_prec):    #TSF_doc:電卓の有効桁数を変更する。初期値は72桁(千無量大数)
     global TSF_calc_precisionMAX
-    TSF_calc_precisionMAX=min(max(TSF_prec,4),200)
+    TSF_calc_precisionMAX=min(max(TSF_prec,4),100)
     decimal.getcontext().prec=TSF_calc_precisionMAX
 
 TSF_calc_roundopt={
@@ -309,6 +308,7 @@ def TSF_calc_fractalize(TSF_calcQ):    #TSF_doc:分数電卓なので小数を�
     TSF_calc_root=False
     TSF_calc_ln,TSF_calc_log10=False,False
     TSF_calc_sin,TSF_calc_cos,TSF_calc_tan=False,False,False
+    TSF_calc_asin,TSF_calc_acos,TSF_calc_atan=False,False,False
     TSF_calc_abs=False
     TSF_calcQ=TSF_calcQ.replace('/','|').rstrip('.').rstrip('+')
     if not '|' in TSF_calcQ:
@@ -327,6 +327,12 @@ def TSF_calc_fractalize(TSF_calcQ):    #TSF_doc:分数電卓なので小数を�
         TSF_calcQ=TSF_calcQ.replace('C',''); TSF_calc_cos=True
     if 'T' in TSF_calcQ:
         TSF_calcQ=TSF_calcQ.replace('T',''); TSF_calc_tan=True
+    if 's' in TSF_calcQ:
+        TSF_calcQ=TSF_calcQ.replace('s',''); TSF_calc_asin=True
+    if 'c' in TSF_calcQ:
+        TSF_calcQ=TSF_calcQ.replace('c',''); TSF_calc_acos=True
+    if 't' in TSF_calcQ:
+        TSF_calcQ=TSF_calcQ.replace('t',''); TSF_calc_atan=True
     if '!' in TSF_calcQ:
         TSF_calcQ=TSF_calcQ.replace('!',''); TSF_calc_abs=True
     TSF_calcR=TSF_calcQ.split('|'); TSF_calcNs,TSF_calcDs=TSF_calcR[0],TSF_calcR[1:]
@@ -379,18 +385,48 @@ def TSF_calc_fractalize(TSF_calcQ):    #TSF_doc:分数電卓なので小数を�
         if TSF_calc_sin == True:
             try:
                 TSF_calcA=str(decimal.Decimal(math.sin(decimal.Decimal(TSF_calcN/TSF_calcD))))
+            except ValueError:
+                TSF_calcA="n|0"
             except decimal.InvalidOperation:
                 TSF_calcA="n|0"
             TSF_calcA=TSF_calc_fractalize(TSF_calcA)
         if TSF_calc_cos == True:
             try:
                 TSF_calcA=str(decimal.Decimal(math.cos(decimal.Decimal(TSF_calcN/TSF_calcD))))
+            except ValueError:
+                TSF_calcA="n|0"
             except decimal.InvalidOperation:
                 TSF_calcA="n|0"
             TSF_calcA=TSF_calc_fractalize(TSF_calcA)
         if TSF_calc_tan == True:
             try:
                 TSF_calcA=str(decimal.Decimal(math.tan(decimal.Decimal(TSF_calcN/TSF_calcD))))
+            except ValueError:
+                TSF_calcA="n|0"
+            except decimal.InvalidOperation:
+                TSF_calcA="n|0"
+            TSF_calcA=TSF_calc_fractalize(TSF_calcA)
+        if TSF_calc_asin == True:
+            try:
+                TSF_calcA=str(decimal.Decimal(math.asin(decimal.Decimal(TSF_calcN/TSF_calcD))))
+            except ValueError:
+                TSF_calcA="n|0"
+            except decimal.InvalidOperation:
+                TSF_calcA="n|0"
+            TSF_calcA=TSF_calc_fractalize(TSF_calcA)
+        if TSF_calc_acos == True:
+            try:
+                TSF_calcA=str(decimal.Decimal(math.acos(decimal.Decimal(TSF_calcN/TSF_calcD))))
+            except ValueError:
+                TSF_calcA="n|0"
+            except decimal.InvalidOperation:
+                TSF_calcA="n|0"
+            TSF_calcA=TSF_calc_fractalize(TSF_calcA)
+        if TSF_calc_atan == True:
+            try:
+                TSF_calcA=str(decimal.Decimal(math.atan(decimal.Decimal(TSF_calcN/TSF_calcD))))
+            except ValueError:
+                TSF_calcA="n|0"
             except decimal.InvalidOperation:
                 TSF_calcA="n|0"
             TSF_calcA=TSF_calc_fractalize(TSF_calcA)
@@ -447,14 +483,15 @@ def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テス�
     TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout])),TSF_log=TSF_debug_log)
 #    TSF_calc_precision(20)
     LTsv_calcQlist=OrderedDict([
-        ("TSF_calc漢数字:",["億","二百万円","十億百二十円","十億と飛んで百二十円","百二十円","3.14","円周率","ネイピア数","∞","√２","２の平方根","256を二進対数","２を16乗","無量大数"]),
+        ("TSF_calc漢数字:",["億","二百万円","十億百二十円","十億と飛んで百二十円","百二十円","3.14","円周率","ネイピア数","∞","√２","√m2","２の平方根","256を二進対数","２を16乗","無量大数"]),
         ("TSF_calc小数分数パーセント:",["0.5|3.5","0.5/3.5","1|2/7|2","2|3|5|7","0/100","100/0","10000+%8", "10000-5%","7\\3","3.14\\1","9#6","3|2#1|3","-6","m6","-6!","m6!"]),
-        ("TSF_calc対数乗数:",["E1","E2","Ee","L10000","L256","E256/E2","L256/L2","E256+L256","256&2l","254&2l","10000&10l","81&3l","E(256-2)","E(254)","2&16^","2&1|2^","2&0^","2&0|0^","0&0^","2&2^+3&2^"]),
+        ("TSF_calc対数乗数:",["E1","E2","Ee","E0","L10000","L256","E256/E2","L256/L2","E256+L256","256&2l","254&2l","10000&10l","81&3l","E(256-2)","E(254)","2&16^","2&1|2^","2&0^","2&0|0^","0&0^","2&2^+3&2^"]),
         ("TSF_calcラジアンatan2:",["0&m9a","m9&m9A","m9&m9a","m9&0A","m9&0a","0&9A","0&9a","9&9A","9&9a","9&0A","9&0a","9&m9A","9&m9a","0&m9A","0&0A","0&0a"]),
         ("TSF_calc和数列積数列:",["kM7","kM5~10","kM10~0","kP7","kP5~10","kP10~0","kP10~2","kM100","kP1~10","2P16"]),
         ("TSF_calc公約数公倍数:",["12&16G","12と16の公約数","12と16の最大公約数","12&16g","12と16の公倍数","12と16の最小公倍数"]),
         ("TSF_calc条件演算子(三項演算子):",["1?111~222","0?111~222","n/0?111~222"]),
-        ("TSF_calc三角関数sincostan:",["S(Y*0|360)","S(Y*30|360)","S(Y*60|360)","S(Y*90|360)","C(Y*0|360)","C(Y*30|360)","C(Y*60|360)","C(Y*90|360)","T(Y*0|360)","T(Y*30|360)","T(Y*60|360)","T(Y*90|360)"]),
+        ("TSF_calc円周率:",["y","Y","Y*30|360","Y/360*30"]),
+        ("TSF_calc三角関数sincostan:",["S(Y/360*0)","S(Y/360*30)","S(Y/360*60)","S(Y/360*90)","C(Y/360*0)","C(Y/360*30)","C(Y/360*60)","C(Y/360*90)","T(Y/360*0)","T(Y/360*30)","T(Y/360*60)","T(Y/360*90)"]),
     ])
     for TSF_QlistK,TSF_QlistV in LTsv_calcQlist.items():
         TSF_debug_log=TSF_io_printlog(TSF_QlistK,TSF_log=TSF_debug_log)
