@@ -73,7 +73,7 @@ TSF_calc_roundopt={
     "ROUND_HALF_EVEN":decimal.ROUND_HALF_EVEN,  "偶捨奇入する":decimal.ROUND_HALF_EVEN,  "銀行丸めする":decimal.ROUND_HALF_EVEN,  "ISO丸めする":decimal.ROUND_HALF_EVEN,
     "ROUND_05UP":decimal.ROUND_05UP,  "ゼロ方向に切り捨てた結果末尾桁が0か5になる場合はゼロから遠ざかる様に切り上げる":decimal.ROUND_05UP,
 }
-def TSF_calc_rounding(TSF_round):    #TSF_doc:電卓の丸め誤差の挙動を指定。初期値はROUND_DOWN(ゼロ方向に丸める)
+def TSF_calc_rounding(TSF_round):    #TSF_doc:電卓の端数処理を指定。初期値はROUND_DOWN(ゼロ方向に丸める)
     global TSF_calc_precisionROUND
     TSF_calc_precisionROUND=TSF_calc_roundopt.get(TSF_round,decimal.ROUND_DOWN)
     decimal.getcontext().prec=TSF_calc_precisionROUND

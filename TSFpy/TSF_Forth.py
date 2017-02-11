@@ -18,20 +18,36 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
     global TSF_words
     TSF_words={}
     TSF_words={
-        "#TSF_fin.":TSF_Forth_fin,"#TSF_over":TSF_Forth_over,
-        "#TSF_encoding":TSF_Forth_encoding,
-        "#TSF_this":TSF_Forth_this, "#TSF_that":TSF_Forth_that,
-        "#TSF_echo":TSF_Forth_echo, "#TSF_echoes":TSF_Forth_echoes,
-        "#TSF_lenthe":TSF_Forth_lenthe, "#TSF_lenthis":TSF_Forth_lenthis, "#TSF_lenthat":TSF_Forth_lenthat,
-        "#TSF_pushthe":TSF_Forth_pushthe, "#TSF_pushthis":TSF_Forth_pushthis, "#TSF_pushthat":TSF_Forth_pushthat,
-        "#TSF_calcQQ":TSF_Forth_calcQQ,"#TSF_calcFX":TSF_Forth_calcFX,
-        "#TSF_calcDC":TSF_Forth_calcDC,"#TSF_calcKN":TSF_Forth_calcKN,"#TSF_calcPR":TSF_Forth_calcPR,"#TSF_calcRO":TSF_Forth_calcRO,
-        "#TSF_calc{}":TSF_Forth_calcCB,"#TSF_calc[]":TSF_Forth_calcSB,"#TSF_calc｢｣":TSF_Forth_calcCB,
-        "#TSF_join":TSF_Forth_join,"#TSF_joinC":TSF_Forth_joinC,"#TSF_split":TSF_Forth_split,"#TSF_chars":TSF_Forth_chars,
+        "#TSF_fin.":TSF_Forth_fin,  "コードと共にTSFを終了。":TSF_Forth_fin,
+        "#TSF_over":TSF_Forth_over,  "スタックを出る":TSF_Forth_over,  "スタックを出る(TSFも終了)":TSF_Forth_over,
+        "#TSF_encoding":TSF_Forth_encoding,  "でエンコード":TSF_Forth_encoding,
+        "#TSF_this":TSF_Forth_this,  "のスタックに入る":TSF_Forth_this,  "スタックを実行":TSF_Forth_this,
+        "#TSF_that":TSF_Forth_that,  "スタックを積込先にする":TSF_Forth_that,
+        "#TSF_echo":TSF_Forth_echo,  "を表示する":TSF_Forth_echo,
+        "#TSF_echoes":TSF_Forth_echoes,  "行分表示する":TSF_Forth_echoes,
+        "#TSF_lenthe":TSF_Forth_lenthe,  "のスタック個数":TSF_Forth_lenthe,
+        "#TSF_lenthis":TSF_Forth_lenthis,  "実行中スタックの個数":TSF_Forth_lenthis,
+        "#TSF_lenthat":TSF_Forth_lenthat,  "積込先スタックの個数":TSF_Forth_lenthat,
+        "#TSF_pushthe":TSF_Forth_pushthe,  "のスタックを積む":TSF_Forth_pushthe,
+        "#TSF_pushthis":TSF_Forth_pushthis,  "実行中スタックを自身に積む":TSF_Forth_pushthis,
+        "#TSF_pushthat":TSF_Forth_pushthat,  "積込先スタックから積む":TSF_Forth_pushthat,
+        "#TSF_calcQQ":TSF_Forth_calcQQ,  "を計算して暗記もする":TSF_Forth_calcQQ,  "で九九る":TSF_Forth_calcQQ,
+        "#TSF_calcFX":TSF_Forth_calcFX,  "を計算する":TSF_Forth_calcFX,
+        "#TSF_calcDC":TSF_Forth_calcDC,  "を小数に計算する":TSF_Forth_calcDC,
+        "#TSF_calcKN":TSF_Forth_calcKN,  "を単位付き計算する":TSF_Forth_calcKN,
+        "#TSF_calcPR":TSF_Forth_calcPR,  "を有効桁数":TSF_Forth_calcPR,
+        "#TSF_calcRO":TSF_Forth_calcRO,  "で端数処理":TSF_Forth_calcRO,
+        "#TSF_calc{}":TSF_Forth_calcCB,  "波括弧で数式に連結":TSF_Forth_calcCB,
+        "#TSF_calc[]":TSF_Forth_calcSB,  "角括弧で数式に連結":TSF_Forth_calcSB,
+        "#TSF_calc｢｣":TSF_Forth_calcCB,  "鉤括弧で数式に連結":TSF_Forth_calcCB,
+        "#TSF_join":TSF_Forth_join,  "個分連結":TSF_Forth_join,
+        "#TSF_joinC":TSF_Forth_joinC,  "個分挟んで連結":TSF_Forth_joinC,
+        "#TSF_split":TSF_Forth_split,  "の文字で分解":TSF_Forth_split,
+        "#TSF_chars":TSF_Forth_chars,  "一文字ずつに分解":TSF_Forth_chars,
     }
     return TSF_words
 
-def TSF_Forth_words():    #TSF_doc:TSF_words(ワード)を取得する
+def TSF_Forth_words(TSF_word=None):    #TSF_doc:TSF_words(ワード)を取得する
     global TSF_words
     return TSF_words
 

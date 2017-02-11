@@ -11,7 +11,7 @@ from TSF_Forth import *
 def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサンプルプログラム。
     TSF_Forth_settext(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","main1:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_settext("main1:","\t".join(["aboutTSF:","#TSF_pushthe","aboutTSF:","#TSF_lenthe","#TSF_echoes","main2:","#TSF_this"]))
-    TSF_Forth_settext("main2:","\t".join(["#分数電卓のテスト","#TSF_echo","16","#TSF_calcPR","calcQQtest:","#TSF_this","calcFXtest:","#TSF_this","calcDCtest:","#TSF_this","calc日本語風:","#TSF_this","#","#TSF_echo","main3:","#TSF_this"]))
+    TSF_Forth_settext("main2:","\t".join(["#分数電卓のテスト","#TSF_echo","16","#TSF_calcPR","calcQQtest:","#TSF_this","calcFXtest:","#TSF_this","calcDCtest:","#TSF_this","calcKNテスト:","#TSF_this","#","#TSF_echo","main3:","#TSF_this"]))
     TSF_Forth_settext("main3:","\t".join(["aboutCalc:","#TSF_pushthe","aboutCalc:","#TSF_lenthe","#TSF_echoes"]))
     TSF_Forth_settext("aboutTSF:",
         "「TSF_Tab-Separated-Forth」の概要(暫定案)。\n"
@@ -29,7 +29,7 @@ def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサン�
     TSF_Forth_settext("calcQQtest:","\t".join(["「1/3-m1|2」→","1/3-m1|2","#TSF_calcQQ","2","#TSF_join","#TSF_echo"]))
     TSF_Forth_settext("calcFXtest:","\t".join(["「1 3 m1|2」を数式風に「[2]/[1]-[0]」で連結→","1","3","1|2","[2]/[1]-[0]","#TSF_calc[]","#TSF_calcFX","2","#TSF_join","#TSF_echo"]))
     TSF_Forth_settext("calcDCtest:","\t".join(["「1 / 3 - m1|2」まで分解して連結(ついでに小数デモ)→","1","/","3","-","m1|2","5","#TSF_join","#TSF_calcDC","2","#TSF_join","#TSF_echo"]))
-    TSF_Forth_settext("calc日本語風:","\t".join(["日本語風に「一割る三引くマイナス二分の一」→","一割る三引くマイナス二分の一","#TSF_calcKN","2","#TSF_join","#TSF_echo"]))
+    TSF_Forth_settext("calcKNテスト:","\t".join(["「一割る三引くマイナス二分の一(ついでに単位付き計算デモ)」は","一割る三引くマイナス二分の一","を単位付き計算する","2","個分連結","を表示する"]))
     TSF_Forth_settext("aboutCalc:",
         "「calc」系ワード分数電卓の概要(暫定案)。\n"
         "「#TSF_calcQQ」「#TSF_calcFX」「#TSF_calcDC」と３つも電卓用ワード(関数)があるが、基本的には同じ分数計算。\n"
