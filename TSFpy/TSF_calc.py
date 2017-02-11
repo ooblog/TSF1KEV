@@ -10,8 +10,7 @@ from collections import OrderedDict
 from TSF_io import *
 
 # Sin,Cos,Tan,Atan2
-# max,min><,abs!
-# ?~三項演算子
+# max,min><
 # 「o」ゼロ以上か「O」ゼロ越えるか＞≧
 # 「Z」ゼロか・ゼロの時「z」ゼロでないか・ゼロでない時「N」ゼロ除算でないか・ゼロ除算の時 0|1 or 1|1 or n|0 #≠＝
 # 「u」ゼロ以下か「U」ゼロ未満か＜≦
@@ -21,13 +20,13 @@ from TSF_io import *
 #「NAND」Z(z0|1*z1|1)
 #「NOR」Z(z0|1+z1|1)
 #「NXOR」Z(z0|1-z1|1)
-TSF_calc_opewide="f1234567890.|$pm!yen+-*/\\#%(MP?~k)&Ggl^ELRZzOoUuN><" \
+TSF_calc_opewide="f1234567890.pm|$ELRSsCcTt!yen+-*/\\#%(MP?~k)&GglA^ZzOoUuN><" \
                 "銭十百千万億兆京垓𥝱穣溝澗正載極恒阿那思量" \
                 "１２３４５６７８９０｜．" "絶負分点円圓" "一二三四五六七八九〇" "壱弐参肆伍陸漆捌玖零" \
                 "＋－×÷／＼＃％" "加減乗除比税" "足引掛割" "和差積商" "陌阡萬仙秭" \
                 "（）()｛｝{}［］[]「」｢｣『』Σ但※列Π囲～〜値とを約倍" \
                 "乗常進対√根π周ｅ底∞無桁"
-TSF_calc_opehalf="f1234567890.|$pm!yen+-*/\\#%(MP?~k)&Ggl^ELRZzOoUuN><" \
+TSF_calc_opehalf="f1234567890.pm|$ELRSsCcTt!yen+-*/\\#%(MP?~k)&GglA^ZzOoUuN><" \
                 "銭十百千万億兆京垓𥝱穣溝澗正載極恒阿那思量" \
                 "1234567890|." "!m$..." "1234567890" "1234567890" \
                 "+-*//\\#%" "+-*/%%" "+-*/" "+-*/" "百千万銭𥝱" \
@@ -143,11 +142,13 @@ def TSF_calc_function(TSF_calcQ):    #TSF_doc:分数電卓の和集合積集合�
         TSF_calcSeq,TSF_calcLim=TSF_calcQ.split('\t')
         TSF_calcsequences=""
         if not '~' in TSF_calcLim:
-            TSF_calcLim="1~"+str(abs(decimal.Decimal(TSF_calc_decimalize(TSF_calcLim)).to_integral_value()))
+#            TSF_calcLim="1~"+str(abs(decimal.Decimal(TSF_calc_decimalize(TSF_calcLim)).to_integral_value()))
+            TSF_calcLim="1~"+str(abs(decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_calcLim))).to_integral_value()))
         TSF_LimStart,TSF_LimGoal=TSF_calcLim.split('~')[0],TSF_calcLim.split('~')[-1]
         if TSF_calcO in "PM":
             TSF_calcO='+' if 'M'==TSF_calcO else '*'
-            TSF_LimStart,TSF_LimGoal=decimal.Decimal(TSF_calc_decimalize(TSF_LimStart)).to_integral_value(),decimal.Decimal(TSF_calc_decimalize(TSF_LimGoal)).to_integral_value()
+#            TSF_LimStart,TSF_LimGoal=decimal.Decimal(TSF_calc_decimalize(TSF_LimStart)).to_integral_value(),decimal.Decimal(TSF_calc_decimalize(TSF_LimGoal)).to_integral_value()
+            TSF_LimStart,TSF_LimGoal=decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_LimStart))).to_integral_value(),decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_LimGoal))).to_integral_value()
             if TSF_LimStart <= TSF_LimGoal:
                 TSF_limstep=1; TSF_LimGoal+=1
             else:
@@ -161,7 +162,7 @@ def TSF_calc_function(TSF_calcQ):    #TSF_doc:分数電卓の和集合積集合�
                 TSF_calcsequences="n|0"
             else:
                 TSF_calcsequences=TSF_LimStart if TSF_calcsequences != "0|1" else TSF_LimGoal
-        TSF_calcQ=TSF_calc(TSF_calcsequences)
+        TSF_calcQ=TSF_calcsequences
     else:
         TSF_calcQ=TSF_calcQ.replace('k','0')
     TSF_calcA=TSF_calc_addition(TSF_calcQ)
@@ -410,7 +411,7 @@ def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テス�
     LTsv_calcQlist=["E1","E2","Ee","L10000","L256","E256/E2","L256/L2","E256+L256","256&2l","254&2l","10000&10l","81&3l","E(256-2)","E(254)","2&16^","2&1|2^","2&0^","2&0|0^","0&0^","2&2^+3&2^"]
     for LTsv_calcQ in LTsv_calcQlist:
         TSF_debug_log=TSF_io_printlog("\t{0}⇔{1};{2};{3}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ),TSF_calc_decimalize(LTsv_calcQ),TSF_calc_decimalizeKN(TSF_calc(LTsv_calcQ))),TSF_debug_log)
-    TSF_debug_log=TSF_io_printlog("TSF_calc数列:",TSF_log=TSF_debug_log)
+    TSF_debug_log=TSF_io_printlog("TSF_calc和数列積数列:",TSF_log=TSF_debug_log)
     LTsv_calcQlist=["kM7","kM5~10","kM10~0","kP7","kP5~10","kP10~0","kP10~2","kM100","kP1~10","2P16"]
     for LTsv_calcQ in LTsv_calcQlist:
         TSF_debug_log=TSF_io_printlog("\t{0}⇔{1};{2};{3}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ),TSF_calc_decimalize(LTsv_calcQ),TSF_calc_decimalizeKN(TSF_calc(LTsv_calcQ))),TSF_debug_log)
