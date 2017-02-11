@@ -27,7 +27,7 @@ def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサン�
         "「#TSF_calc[]」などの括弧と「#TSF_calcFX」などの分数電卓を用意したので逆ポーランド記法の数式計算は強いられないはず。\n"
         ,TSF_style="N")
     TSF_Forth_settext("calcQQtest:","\t".join(["「1/3-m1|2」→","1/3-m1|2","#TSF_calcQQ","2","#TSF_join","#TSF_echo"]))
-    TSF_Forth_settext("calcFXtest:","\t".join(["「1 3 m1|2」を数式風に「[2]/[1]-[0]」で連結→","1","3","1|2","[2]/[1]-[0]","#TSF_calc[]","#TSF_calcFX","2","#TSF_join","#TSF_echo"]))
+    TSF_Forth_settext("calcFXtest:","\t".join(["「1 3 m1|2」を数式風に「[2]/[1]-[0]」で連結→","1","3","m1|2","[2]/[1]-[0]","#TSF_calc[]","#TSF_calcFX","2","#TSF_join","#TSF_echo"]))
     TSF_Forth_settext("calcDCtest:","\t".join(["「1 / 3 - m1|2」まで分解して連結(ついでに小数デモ)→","1","/","3","-","m1|2","5","#TSF_join","#TSF_calcDC","2","#TSF_join","#TSF_echo"]))
     TSF_Forth_settext("calcKNテスト:","\t".join(["「一割る三引くマイナス二分の一(ついでに単位付き計算デモ)」は","一割る三引くマイナス二分の一","を単位付き計算する","2","個分連結","を表示する"]))
     TSF_Forth_settext("aboutCalc:",
