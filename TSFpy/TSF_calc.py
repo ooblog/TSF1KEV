@@ -24,18 +24,18 @@ TSF_calc_opewide="f1234567890.pm|$ELRSsCcTt!yYen+-*/\\#%(MP?~k)&GglAa^ZzOoUuN><"
                 "１２３４５６７８９０｜．" "絶負分点円圓" "一二三四五六七八九〇" "壱弐参肆伍陸漆捌玖零" \
                 "＋－×÷／＼＃％" "加減乗除比税" "足引掛割" "和差積商" "陌阡萬仙秭" \
                 "（）()｛｝{}［］[]「」｢｣『』Σ但※列Π囲～〜値とを約倍" \
-                "乗常進対√根π周ｅ底∞無桁"
+                "乗常進対√根π周θｅ底∞無桁"
 TSF_calc_opehalf="f1234567890.pm|$ELRSsCcTt!yYen+-*/\\#%(MP?~k)&GglAa^ZzOoUuN><" \
                 "銭十百千万億兆京垓𥝱穣溝澗正載極恒阿那思量" \
                 "1234567890|." "!m$..." "1234567890" "1234567890" \
                 "+-*//\\#%" "+-*/%%" "+-*/" "+-*/" "百千万銭𥝱" \
                 "()()()()()()()()()MMMMP~~~k&&Gg" \
-                "^LlERRyyeennf"
+                "^LlERRyyYeennf"
 TSF_calc_operator=OrderedDict(zip(list(TSF_calc_opewide),list(TSF_calc_opehalf)))
-TSF_calc_opelong=["恒河沙","阿僧祇","那由他","不可思議","無量大数","無限","円周率","ネイピア数","プラス","マイナス","氷点下","小数点", \
+TSF_calc_opelong=["恒河沙","阿僧祇","那由他","不可思議","無量大数","無限","円周率","2π","２π","ネイピア数","プラス","マイナス","氷点下","小数点", \
                 "最大公約数","最小公倍数","公約数","公倍数","とんで","とばして","とぶことの","平方根","常用対数","進対数","自然対数", \
                 "絶対値"]
-TSF_calc_opelshort=["恒","阿","那","思","量","∞","π","ｅ","p","m","点","点", \
+TSF_calc_opelshort=["恒","阿","那","思","量","∞","π","θ","θ","ｅ","p","m","点","点", \
                 "約","倍","約","倍","","","","根","常","進","対", \
                 "絶"]
 TSF_calc_opeword=dict(zip(TSF_calc_opelong,TSF_calc_opelshort))
@@ -54,6 +54,7 @@ TSF_calc_okusenman="万億兆京垓𥝱穣溝澗正載極恒阿那思量"
 TSF_calc_okusenzero=['1'+'0'*((o+1)*4) for o in range(len(TSF_calc_okusenman))]
 TSF_calc_okusendic=dict(zip(list(TSF_calc_okusenman),TSF_calc_okusenzero))
 TSF_calc_precisionMAX=72; decimal.getcontext().prec=TSF_calc_precisionMAX
+TSF_calc_precisionPI=TSF_calc_precisionMAX-4;
 TSF_calc_precisionROUND=decimal.ROUND_DOWN; decimal.getcontext().rounding=TSF_calc_precisionROUND
 TSF_calc_PI="31415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679"
 TSF_calc_PI2="62831853071795864769252867665590057683943387987502116419498891846156328125724179972560696506842341359"
@@ -61,7 +62,27 @@ TSF_calc_E="27182818284590452353602874713526624977572470936999595749669676277240
 
 def TSF_calc_precision(TSF_prec):    #TSF_doc:電卓の有効桁数を変更する。初期値は72桁(千無量大数)
     global TSF_calc_precisionMAX
-    TSF_calc_precisionMAX=min(max(TSF_prec,4),100)
+    TSF_calc_precisionMAX=min(max(TSF_prec,5),100)
+    decimal.getcontext().prec=TSF_calc_precisionMAX
+
+def TSF_calc_PIprecision(TSF_precPI):    #TSF_doc:電卓の円周率とネイピア数の有効桁数を別途設定する。初期値は68桁(無量大数)
+    global TSF_calc_precisionPI
+    TSF_calc_precisionPI=min(max(TSF_precPI,1),TSF_calc_precisionMAX-4)
+    decimal.getcontext().prec=TSF_calc_precisionMAX*2
+    TSF_PI_A,TSF_PI_B,TSF_PI_T,TSF_PI_C=decimal.Decimal(1),decimal.Decimal(1)/decimal.Decimal(2).sqrt(),decimal.Decimal(1)/decimal.Decimal(4),decimal.Decimal(1)
+    for TSF_PI_X in range(int(math.ceil(math.log(TSF_precPI,2)))):
+       TSF_PI_AB=decimal.Decimal(TSF_PI_A+TSF_PI_B)/decimal.Decimal(2)
+       TSF_PI_B=decimal.getcontext().sqrt(TSF_PI_A*TSF_PI_B)
+       TSF_PI_T-=decimal.Decimal(TSF_PI_C)*decimal.getcontext().power(TSF_PI_A-TSF_PI_AB,2)
+       TSF_PI_A=TSF_PI_AB; TSF_PI_C*=2
+    TSF_PI_P2=decimal.getcontext().power(TSF_PI_A+TSF_PI_B,2)/TSF_PI_T/decimal.Decimal(2)
+    TSF_calc_PI2=str(TSF_PI_P2).replace('.',''); TSF_calc_PI=str(TSF_PI_P2/decimal.Decimal(2)).replace('.','')
+    TSF_PI_E,TSF_PI_K=decimal.Decimal(1),decimal.Decimal(1)
+    for TSF_PI_X in range(TSF_precPI):
+        TSF_PI_K*=decimal.Decimal(TSF_PI_X+1)
+        TSF_PI_EK=TSF_PI_E
+        TSF_PI_E+=decimal.Decimal(1)/TSF_PI_K
+    TSF_calc_E=str(TSF_PI_E).replace('.','')
     decimal.getcontext().prec=TSF_calc_precisionMAX
 
 TSF_calc_roundopt={
@@ -108,9 +129,9 @@ def TSF_calc_bracketsbalance(TSF_calcQ):    #TSF_doc:括弧のバランスを整
     TSF_calcA=TSF_calcA.replace('千',"1000+")
     for TSF_okusenK,TSF_okusenV in TSF_calc_okusendic.items():
         TSF_calcA=TSF_calcA.replace(TSF_okusenK,"{0}+".format(TSF_okusenV))
-    TSF_calcA=TSF_calcA.replace('y',("{0}|1".format(TSF_calc_PI[:TSF_calc_precisionMAX])+'0'*(TSF_calc_precisionMAX-1)))
-    TSF_calcA=TSF_calcA.replace('Y',("{0}|1".format(TSF_calc_PI2[:TSF_calc_precisionMAX])+'0'*(TSF_calc_precisionMAX-1)))
-    TSF_calcA=TSF_calcA.replace('e',("{0}|1".format(TSF_calc_E[:TSF_calc_precisionMAX])+'0'*(TSF_calc_precisionMAX-1)))
+    TSF_calcA=TSF_calcA.replace('y',("{0}|1".format(TSF_calc_PI[:TSF_calc_precisionPI])+'0'*(TSF_calc_precisionPI-1)))
+    TSF_calcA=TSF_calcA.replace('Y',("{0}|1".format(TSF_calc_PI2[:TSF_calc_precisionPI])+'0'*(TSF_calc_precisionPI-1)))
+    TSF_calcA=TSF_calcA.replace('e',("{0}|1".format(TSF_calc_E[:TSF_calc_precisionPI])+'0'*(TSF_calc_precisionPI-1)))
     TSF_calcA=TSF_calcA.replace('f',str(TSF_calc_precisionMAX)).replace('n','(n|0)')
 #    TSF_io_printlog("TSF_calc_bracketsbalance:{0}".format(TSF_calcA))
     for TSF_calc_opecase in TSF_calc_opemark:
@@ -482,6 +503,7 @@ def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テス�
     TSF_debug_log=TSF_io_printlog("TSF_py:",TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout])),TSF_log=TSF_debug_log)
 #    TSF_calc_precision(20)
+#    TSF_calc_PIprecision(100)
     LTsv_calcQlist=OrderedDict([
         ("TSF_calc漢数字:",["億","二百万円","十億百二十円","十億と飛んで百二十円","百二十円","3.14","円周率","ネイピア数","∞","√２","√m2","２の平方根","256を二進対数","２を16乗","無量大数"]),
         ("TSF_calc小数分数パーセント:",["0.5|3.5","0.5/3.5","1|2/7|2","2|3|5|7","0/100","100/0","10000+%8", "10000-5%","7\\3","3.14\\1","9#6","3|2#1|3","-6","m6","-6!","m6!"]),
@@ -490,8 +512,8 @@ def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テス�
         ("TSF_calc和数列積数列:",["kM7","kM5~10","kM10~0","kP7","kP5~10","kP10~0","kP10~2","kM100","kP1~10","2P16"]),
         ("TSF_calc公約数公倍数:",["12&16G","12と16の公約数","12と16の最大公約数","12&16g","12と16の公倍数","12と16の最小公倍数"]),
         ("TSF_calc条件演算子(三項演算子):",["1?111~222","0?111~222","n/0?111~222"]),
-        ("TSF_calc円周率:",["y","Y","Y*30|360","Y/360*30"]),
-        ("TSF_calc三角関数sincostan:",["S(Y/360*0)","S(Y/360*30)","S(Y/360*60)","S(Y/360*90)","C(Y/360*0)","C(Y/360*30)","C(Y/360*60)","C(Y/360*90)","T(Y/360*0)","T(Y/360*30)","T(Y/360*60)","T(Y/360*90)"]),
+        ("TSF_calc円周率:",["y","Y","π","θ","θ|2","θ*30|360","θ/360*30","30|360*θ","S(θ*30|360)","S(Y/360*30)"]),
+        ("TSF_calc三角関数sincostan:",["S(θ*0|360)","S(θ*30|360)","S(θ*60|360)","S(θ*90|360)","C(θ*0|360)","C(θ*30|360)","C(θ*60|360)","C(θ*90|360)","T(θ*0|360)","T(θ*30|360)","T(θ*60|360)","T(θ*90|360)"]),
     ])
     for TSF_QlistK,TSF_QlistV in LTsv_calcQlist.items():
         TSF_debug_log=TSF_io_printlog(TSF_QlistK,TSF_log=TSF_debug_log)
