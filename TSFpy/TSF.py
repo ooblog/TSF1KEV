@@ -61,14 +61,27 @@ def TSF_command_helloworld():    #TSF_doc:TSFのより小さなサンプルプ�
     TSF_Forth_settext(TSF_Forth_1ststack(),"\t".join(["Hello world","#TSF_echo"]))
     TSF_Forth_stackview()
 
+def TSF_command_calc(TSF_calctype=None):    #TSF_doc:TSFのより小さなサンプルプログラム。
+    TSF_calcQ=sys.argv[2].decode(sys.stdout.encoding) if len(sys.argv) > 2 else "n|0"
+    if TSF_calctype == "--calcDC":
+        TSF_calcA=TSF_calc_decimalize(TSF_calcQ)
+    elif TSF_calctype == "--calcKN":
+        TSF_calcA=TSF_calc_decimalizeKN(TSF_calc(TSF_calcQ))
+    else:
+        TSF_calcA=TSF_calc(TSF_calcQ)
+    TSF_io_printlog(TSF_calcA)
+
 def TSF_command_help():    #TSF_doc:TSFのより小さなサンプルプログラム。
     TSF_Forth_settext(TSF_Forth_1ststack(),"\t".join(["about:","#TSF_pushthe","about:","#TSF_lenthe","#TSF_echoes","0","#TSF_fin."]))
     TSF_Forth_settext("about:",
         'usage: ./TSF.py [command|file.tsf] [argv] ...\n'
         'command:\n'
         '  --help        this commands view\n'
-        '  --helloworld  "Hello world  #TSF_echo" view\n'
         '  --about       samplecode(UTF-8) view and saveto "' +TSF_about_mergefile+ '" \n'
+        '  --helloworld  "Hello world  #TSF_echo" view\n'
+        '  --calc        fractions calculator "--calc 1/3-m1|2"-> p5|6 \n'
+        '  --calcDC      fractions calculator "--calc 1/3-m1|2"-> 0.8333... \n'
+        '  --calcKN      fractions calculator "--calc 1/3-m1|2"-> 6分の5 \n'
         '  not exist     samplecode(UTF-8) view only (no save)\n'
         ,TSF_style="N")
     TSF_Forth_run(TSF_Forth_1ststack())
@@ -84,12 +97,14 @@ if os.path.isfile(TSF_mergefile):
         TSF_Forth_merge(TSF_mergefile,[])
         TSF_Forth_pushargv()
     TSF_Forth_run(TSF_Forth_1ststack())
-elif TSF_mergefile == "--helloworld":
-    TSF_command_helloworld()
-elif TSF_mergefile == "--help":
-    TSF_command_help()
 elif TSF_mergefile == "--about":
     TSF_command_about(True)
+elif TSF_mergefile == "--helloworld":
+    TSF_command_helloworld()
+elif TSF_mergefile in ["--calc","--calcDC","--calcKN"]:
+    TSF_command_calc(TSF_mergefile)
+elif TSF_mergefile == "--help":
+    TSF_command_help()
 else:
     TSF_command_about(False)
 sys.exit(0 if TSF_exitcode == "0" or TSF_exitcode == "0|1" else TSF_exitcode)
