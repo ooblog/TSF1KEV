@@ -34,7 +34,7 @@ def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサン�
         "「calc」系ワード分数電卓の概要(暫定案)。\n"
         "「#TSF_calcQQ」「#TSF_calcFX」「#TSF_calcDC」と３つも電卓用ワード(関数)があるが、基本的には同じ分数計算。\n"
         "「#TSF_calcDC」は小数表示用途。「#TSF_calcQQ」は数式を九九のように暗記(参照透過風)。\n"
-        "「#TSF_calcPR」は有効桁数の調整。初期値は72桁(千無量大数)。「π」(円周率)「ｅ」(ネイピア数)の都合で4桁から100桁の範囲。\n"
+        "「#TSF_calcPR」は有効桁数の調整。初期値は72桁(千無量大数)。「π」(円周率)などは桁溢れ予防で68桁(一無量大数)。\n"
         "「#TSF_calcRO」は端数処理の調整。初期値は「ROUND_DOWN」(0方向に丸める)。\n"
         "有効桁数「#TSF_calcPR」や端数処理「#TSF_calcRO」など数式の計算結果に影響があると思われる場合は「#TSF_calcQQ」の九九を忘却。\n"
         "「#TSF_calc{}」「#TSF_calc[]」「#TSF_calc｢｣」ワードもあるが、計算ではなく「#TSF_join」など文字列連結操作扱い。\n"

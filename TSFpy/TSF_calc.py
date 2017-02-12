@@ -60,17 +60,12 @@ TSF_calc_PI="3141592653589793238462643383279502884197169399375105820974944592307
 TSF_calc_PI2="62831853071795864769252867665590057683943387987502116419498891846156328125724179972560696506842341359"
 TSF_calc_E="27182818284590452353602874713526624977572470936999595749669676277240766303535475945713821785251664274"
 
-def TSF_calc_precision(TSF_prec):    #TSF_doc:電卓の有効桁数を変更する。初期値は72桁(千無量大数)
-    global TSF_calc_precisionMAX
-    TSF_calc_precisionMAX=min(max(TSF_prec,5),100)
-    decimal.getcontext().prec=TSF_calc_precisionMAX
-
-def TSF_calc_PIprecision(TSF_precPI):    #TSF_doc:電卓の円周率とネイピア数の有効桁数を別途設定する。初期値は68桁(無量大数)
-    global TSF_calc_precisionPI
-    TSF_calc_precisionPI=min(max(TSF_precPI,1),TSF_calc_precisionMAX-4)
+def TSF_calc_precision(TSF_prec):    #TSF_doc:電卓の有効桁数を変更する。初期値は72桁(千無量大数)。円周率とネイピア数も4桁控えて再計算する。
+    global TSF_calc_precisionMAX,TSF_calc_precisionPI
+    TSF_calc_precisionMAX=min(max(TSF_prec,5),100); TSF_calc_precisionPI=TSF_calc_precisionMAX-4
     decimal.getcontext().prec=TSF_calc_precisionMAX*2
     TSF_PI_A,TSF_PI_B,TSF_PI_T,TSF_PI_C=decimal.Decimal(1),decimal.Decimal(1)/decimal.Decimal(2).sqrt(),decimal.Decimal(1)/decimal.Decimal(4),decimal.Decimal(1)
-    for TSF_PI_X in range(int(math.ceil(math.log(TSF_precPI,2)))):
+    for TSF_PI_X in range(int(math.ceil(math.log(TSF_calc_precisionPI,2)))):
        TSF_PI_AB=decimal.Decimal(TSF_PI_A+TSF_PI_B)/decimal.Decimal(2)
        TSF_PI_B=decimal.getcontext().sqrt(TSF_PI_A*TSF_PI_B)
        TSF_PI_T-=decimal.Decimal(TSF_PI_C)*decimal.getcontext().power(TSF_PI_A-TSF_PI_AB,2)
@@ -78,9 +73,8 @@ def TSF_calc_PIprecision(TSF_precPI):    #TSF_doc:電卓の円周率とネイピ
     TSF_PI_P2=decimal.getcontext().power(TSF_PI_A+TSF_PI_B,2)/TSF_PI_T/decimal.Decimal(2)
     TSF_calc_PI2=str(TSF_PI_P2).replace('.',''); TSF_calc_PI=str(TSF_PI_P2/decimal.Decimal(2)).replace('.','')
     TSF_PI_E,TSF_PI_K=decimal.Decimal(1),decimal.Decimal(1)
-    for TSF_PI_X in range(TSF_precPI):
+    for TSF_PI_X in range(TSF_calc_precisionPI):
         TSF_PI_K*=decimal.Decimal(TSF_PI_X+1)
-        TSF_PI_EK=TSF_PI_E
         TSF_PI_E+=decimal.Decimal(1)/TSF_PI_K
     TSF_calc_E=str(TSF_PI_E).replace('.','')
     decimal.getcontext().prec=TSF_calc_precisionMAX
@@ -502,8 +496,7 @@ def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テス�
     TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(TSF_argv)),TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("TSF_py:",TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout])),TSF_log=TSF_debug_log)
-#    TSF_calc_precision(20)
-#    TSF_calc_PIprecision(100)
+    TSF_calc_precision(20)
     LTsv_calcQlist=OrderedDict([
         ("TSF_calc漢数字:",["億","二百万円","十億百二十円","十億と飛んで百二十円","百二十円","3.14","円周率","ネイピア数","∞","√２","√m2","２の平方根","256を二進対数","２を16乗","無量大数"]),
         ("TSF_calc小数分数パーセント:",["0.5|3.5","0.5/3.5","1|2/7|2","2|3|5|7","0/100","100/0","10000+%8", "10000-5%","7\\3","3.14\\1","9#6","3|2#1|3","-6","m6","-6!","m6!"]),
