@@ -131,10 +131,7 @@ def TSF_calc(TSF_calcQ):    #TSF_doc:分数電卓のmain。括弧の内側を検
     while "(" in TSF_calcA:
         for TSF_func in re.findall(TSF_calc_bracketreg,TSF_calcA):
             TSF_calcA=TSF_calcA.replace(TSF_func,TSF_calc_function(TSF_func))
-            if TSF_calcA != "0|1" and TSF_calcA != "n|0":
-                TSF_calcA=TSF_calcA.replace('-','m') if TSF_calcA.startswith("-") else "p{0}".format(TSF_calcA)
     TSF_calcA=TSF_calcA.replace(TSF_calcA,TSF_calc_function(TSF_calcA))
-    TSF_calcA=TSF_calc_fractalize(TSF_calcA)
     return TSF_calcA
 
 TSF_calc_NOZUs=OrderedDict([
@@ -145,15 +142,23 @@ TSF_calc_NOZUs=OrderedDict([
     ('o',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:TSF_LimFirst if decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_calcSeq.replace('k',"0")))) > 0 else TSF_LimRest)),
     ('U',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:TSF_LimFirst if decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_calcSeq.replace('k',"0")))) <= 0 else TSF_LimRest)),
     ('u',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:TSF_LimFirst if decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_calcSeq.replace('k',"0")))) < 0 else TSF_LimRest)),
-#    ('M',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:"1|1" if decimal.Decimal(TSF_calcSeq) =="n|0" else "0|1")),
-#    ('P',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:"1|1" if decimal.Decimal(TSF_calcSeq) =="n|0" else "0|1")),
+    ('M',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:
+        "+".join([TSF_calc_addition(TSF_calcSeq.replace('k',str(TSF_LimK))) for TSF_LimK in TSF_calc_function_limit(TSF_LimFirst,TSF_LimRest)]).rstrip("+")
+    )),
+    ('P',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:
+        "*".join([TSF_calc_addition(TSF_calcSeq.replace('k',str(TSF_LimK))) for TSF_LimK in TSF_calc_function_limit(TSF_LimFirst,TSF_LimRest)]).rstrip("*")
+    )),
 ])
-def TSF_calc_function(TSF_calcQ):    #TSF_doc:分数電卓の和集合積集合およびSin,Cos,Tan,Atan2,sQrt,LOg予定地。
-    TSF_calcQ=TSF_calcQ.lstrip("(").rstrip(")")
-#    TSF_calcO='?' if '?' in TSF_calcQ else ''
-#    TSF_calcO='P' if 'P' in TSF_calcQ else TSF_calcO
-#    TSF_calcO='M' if 'M' in TSF_calcQ else TSF_calcO
+def TSF_calc_function_limit(TSF_LimFirst,TSF_LimRest):    #TSF_doc:和集合積集合のrange作成。
+    TSF_LimStart,TSF_LimGoal=decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_LimFirst))).to_integral_value(),decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_LimRest))).to_integral_value()
+    if TSF_LimStart <= TSF_LimGoal:
+        TSF_limstep=1; TSF_LimGoal+=1
+    else:
+        TSF_limstep=-1; TSF_LimGoal-=1
+    return range(TSF_LimStart,TSF_LimGoal,TSF_limstep)
 
+def TSF_calc_function(TSF_calcQ):    #TSF_doc:分数電卓の和集合積集合およびゼロ比較演算子系。
+    TSF_calcQ=TSF_calcQ.lstrip("(").rstrip(")")
     TSF_calcOfind=-1; TSF_calc_NOZUin=""
     for TSF_calc_NOZU in TSF_calc_NOZUs.keys():
         if TSF_calc_NOZU in TSF_calcQ:
@@ -173,6 +178,9 @@ def TSF_calc_function(TSF_calcQ):    #TSF_doc:分数電卓の和集合積集合�
 #        print("TSF_calcSeq,TSF_LimFirst,TSF_LimRest=",TSF_calc_NOZUin[-1],TSF_calcSeq,TSF_LimFirst,TSF_LimRest)
         TSF_calcQ=TSF_calc_NOZUs[TSF_calc_NOZUin[-1]](TSF_calcSeq,TSF_LimFirst,TSF_LimRest)
 
+#    TSF_calcO='?' if '?' in TSF_calcQ else ''
+#    TSF_calcO='P' if 'P' in TSF_calcQ else TSF_calcO
+#    TSF_calcO='M' if 'M' in TSF_calcQ else TSF_calcO
 #    if TSF_calcO != '':
 #        TSF_calcOfind=TSF_calcQ.find(TSF_calcO)
  #       TSF_calcQ=TSF_calcQ[:TSF_calcOfind]+'\t'+TSF_calcQ[TSF_calcOfind+1:]
@@ -231,9 +239,11 @@ def TSF_calc_addition(TSF_calcQ):    #TSF_doc:分数電卓の足し算引き算�
             TSF_calcA=str(TSF_calcLN)+"|"+str(TSF_calcLD)
         except decimal.InvalidOperation:
             TSF_calcA="n|0"
+    if TSF_calcA != "0|1" and TSF_calcA != "n|0":
+        TSF_calcA=TSF_calcA.replace('-','m') if TSF_calcA.startswith("-") else "p{0}".format(TSF_calcA)
     return TSF_calcA
 
-def TSF_calc_multiplication(TSF_calcQ):    #TSF_doc:分数電卓の掛け算割り算等。
+def TSF_calc_multiplication(TSF_calcQ):    #TSF_doc:分数電卓の掛け算割り算等。公倍数公約数、最大値最小値も扱う。
     TSF_calcLN,TSF_calcLD=decimal.Decimal(1),decimal.Decimal(1)
     TSF_calcQ=TSF_calcQ.replace('*',"\t*").replace('/',"\t/").replace('\\',"\t\\").replace('#',"\t#").replace('&',"\t&")
     TSF_calcQ=TSF_calcQ.replace('G',"G\t").replace('g',"g\t").replace('^',"^\t").replace('l',"l\t").replace('A',"A\t").replace('a',"a\t").replace('>',">\t").replace('<',"<\t")
@@ -361,7 +371,7 @@ TSF_calc_SCTs=OrderedDict([
     ('c',(lambda TSF_calcN,TSF_calcD:str(decimal.Decimal(math.acos(decimal.Decimal(TSF_calcN/TSF_calcD)))))),
     ('t',(lambda TSF_calcN,TSF_calcD:str(decimal.Decimal(math.atan(decimal.Decimal(TSF_calcN/TSF_calcD)))))),
 ])
-def TSF_calc_fractalize(TSF_calcQ):    #TSF_doc:分数電卓なので小数を分数に。0で割る、もしくは桁が限界越えたときなどは「n|0」を返す。
+def TSF_calc_fractalize(TSF_calcQ):    #TSF_doc:分数電卓なので小数を分数に。ついでに平方根や三角関数も。0で割る、もしくは桁が限界越えたときなどは「n|0」を返す。
     TSF_calcQ=TSF_calcQ.replace('/','|').rstrip('.').rstrip('+')
     if '$' in TSF_calcQ:
         TSF_calcR=TSF_calcQ.split('$'); TSF_calcQ="{1}|{0}".format(TSF_calcR[0],TSF_calcR[1])
