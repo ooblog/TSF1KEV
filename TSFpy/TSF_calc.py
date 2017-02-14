@@ -142,12 +142,8 @@ TSF_calc_NOZUs=OrderedDict([
     ('o',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:TSF_LimFirst if decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_calcSeq.replace('k',"0")))) > 0 else TSF_LimRest)),
     ('U',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:TSF_LimFirst if decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_calcSeq.replace('k',"0")))) <= 0 else TSF_LimRest)),
     ('u',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:TSF_LimFirst if decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_calcSeq.replace('k',"0")))) < 0 else TSF_LimRest)),
-    ('M',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:
-        "+".join([TSF_calc_addition(TSF_calcSeq.replace('k',str(TSF_LimK))) for TSF_LimK in TSF_calc_function_limit(TSF_LimFirst,TSF_LimRest)]).rstrip("+")
-    )),
-    ('P',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:
-        "*".join([TSF_calc_addition(TSF_calcSeq.replace('k',str(TSF_LimK))) for TSF_LimK in TSF_calc_function_limit(TSF_LimFirst,TSF_LimRest)]).rstrip("*")
-    )),
+    ('M',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:"+".join([TSF_calc_addition(TSF_calcSeq.replace('k',str(TSF_LimK))) for TSF_LimK in TSF_calc_function_limit(TSF_LimFirst,TSF_LimRest)]).rstrip("+"))),
+    ('P',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:"*".join([TSF_calc_addition(TSF_calcSeq.replace('k',str(TSF_LimK))) for TSF_LimK in TSF_calc_function_limit(TSF_LimFirst,TSF_LimRest)]).rstrip("*"))),
 ])
 def TSF_calc_function_limit(TSF_LimFirst,TSF_LimRest):    #TSF_doc:和集合積集合のrange作成。
     TSF_LimStart,TSF_LimGoal=decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_LimFirst))).to_integral_value(),decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_LimRest))).to_integral_value()
@@ -156,7 +152,6 @@ def TSF_calc_function_limit(TSF_LimFirst,TSF_LimRest):    #TSF_doc:和集合積�
     else:
         TSF_limstep=-1; TSF_LimGoal-=1
     return range(TSF_LimStart,TSF_LimGoal,TSF_limstep)
-
 def TSF_calc_function(TSF_calcQ):    #TSF_doc:分数電卓の和集合積集合およびゼロ比較演算子系。
     TSF_calcQ=TSF_calcQ.lstrip("(").rstrip(")")
     TSF_calcOfind=-1; TSF_calc_NOZUin=""
@@ -175,42 +170,7 @@ def TSF_calc_function(TSF_calcQ):    #TSF_doc:分数電卓の和集合積集合�
             else:
                 TSF_calcLim=TSF_calcLim+"~0"
         TSF_LimFirst,TSF_LimRest=TSF_calcLim.split('~')[0],TSF_calcLim.split('~')[-1]
-#        print("TSF_calcSeq,TSF_LimFirst,TSF_LimRest=",TSF_calc_NOZUin[-1],TSF_calcSeq,TSF_LimFirst,TSF_LimRest)
         TSF_calcQ=TSF_calc_NOZUs[TSF_calc_NOZUin[-1]](TSF_calcSeq,TSF_LimFirst,TSF_LimRest)
-
-#    TSF_calcO='?' if '?' in TSF_calcQ else ''
-#    TSF_calcO='P' if 'P' in TSF_calcQ else TSF_calcO
-#    TSF_calcO='M' if 'M' in TSF_calcQ else TSF_calcO
-#    if TSF_calcO != '':
-#        TSF_calcOfind=TSF_calcQ.find(TSF_calcO)
- #       TSF_calcQ=TSF_calcQ[:TSF_calcOfind]+'\t'+TSF_calcQ[TSF_calcOfind+1:]
- #       TSF_calcQ=TSF_calcQ.replace('M','').replace('P','').replace('?','')
-#        TSF_calcSeq,TSF_calcLim=TSF_calcQ.split('\t')
- #       TSF_calcsequences=""
-#        if not '~' in TSF_calcLim:
-##            TSF_calcLim="1~"+str(abs(decimal.Decimal(TSF_calc_decimalize(TSF_calcLim)).to_integral_value()))
-#            TSF_calcLim="1~"+str(abs(decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_calcLim))).to_integral_value()))
-#        TSF_LimStart,TSF_LimGoal=TSF_calcLim.split('~')[0],TSF_calcLim.split('~')[-1]
- #       if TSF_calcO in "PM":
- #           TSF_calcO='+' if 'M'==TSF_calcO else '*'
-##            TSF_LimStart,TSF_LimGoal=decimal.Decimal(TSF_calc_decimalize(TSF_LimStart)).to_integral_value(),decimal.Decimal(TSF_calc_decimalize(TSF_LimGoal)).to_integral_value()
-#            TSF_LimStart,TSF_LimGoal=decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_LimStart))).to_integral_value(),decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_LimGoal))).to_integral_value()
-#            if TSF_LimStart <= TSF_LimGoal:
-#                TSF_limstep=1; TSF_LimGoal+=1
-#            else:
-#                TSF_limstep=-1; TSF_LimGoal-=1
-#            for TSF_LimK in range(TSF_LimStart,TSF_LimGoal,TSF_limstep):
-#                TSF_calcsequences+=TSF_calc_addition(TSF_calcSeq.replace('k',str(TSF_LimK)))+TSF_calcO
-#            TSF_calcsequences=TSF_calcsequences.rstrip(TSF_calcO)
-#        elif TSF_calcO in "?":
-#            TSF_calcsequences=TSF_calc_addition(TSF_calcSeq.replace('k',"0"))
-#            if TSF_calcsequences == "n|0":
-#                TSF_calcsequences="n|0"
-#            else:
-#                TSF_calcsequences=TSF_LimStart if TSF_calcsequences != "0|1" else TSF_LimGoal
-#        TSF_calcQ=TSF_calcsequences
-#    else:
-#        TSF_calcQ=TSF_calcQ.replace('k','0')
     TSF_calcA=TSF_calc_addition(TSF_calcQ)
     return TSF_calcA
     
@@ -481,14 +441,13 @@ def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テス�
         ("TSF_calcゼロ以上演算子(三項演算子):",["m1O1|1~0|1","0O1|1~0|1","p1O1|1~0|1","m1o1|1~0|1","0o1|1~0|1","p1o1|1~0|1"]),
         ("TSF_calcゼロ以下演算子(三項演算子):",["m1U1|1~0|1","0U1|1~0|1","p1U1|1~0|1","m1u1|1~0|1","0u1|1~0|1","p1u1|1~0|1"]),
         ("TSF_calcゼロ除算演算子(三項演算子):",["0/1N1|1~0|1","1/0N1|1~0|1"]),
-#        ("TSF_calc平方根atan2:",["√２","0&m9a","0&m9a","m9&m9A","m9&m9a","m9&0A","m9&0a","0&9A","0&9a","9&9A","9&9a","9&0A","9&0a","9&m9A","9&m9a","0&m9A","0&0A","0&0a"]),
-#        ("TSF_calc対数乗数:",["E1","E2","Ee","E0","L10000","L256","E256/E2","L256/L2","E256+L256","256&2l","254&2l","10000&10l","81&3l","E(256-2)","E(254)","2&16^","2&1|2^","2&0^","2&0|0^","0&0^","2&2^+3&2^"]),
-#        ("TSF_calc円周率:",["y","Y","π","θ","θ|2","θ*30|360","θ/360*30","30|360*θ","S(θ*30|360)","S(Y/360*30)"]),
-#        ("TSF_calc三角関数sincostan:",["S(θ*0|360)","S(θ*30|360)","S(θ*60|360)","S(θ*90|360)","C(θ*0|360)","C(θ*30|360)","C(θ*60|360)","C(θ*90|360)","T(θ*0|360)","T(θ*30|360)","T(θ*60|360)","T(θ*90|360)"]),
+        ("TSF_calc max,min:",["0&0<","0&1<","1&0<","1&1<","0&0>","0&1>","1&0>","1&1>"]),
+        ("TSF_calc平方根atan2:",["√２","0&m9a","0&m9a","m9&m9A","m9&m9a","m9&0A","m9&0a","0&9A","0&9a","9&9A","9&9a","9&0A","9&0a","9&m9A","9&m9a","0&m9A","0&0A","0&0a"]),
+        ("TSF_calc対数乗数:",["E1","E2","Ee","E0","L10000","L256","E256/E2","L256/L2","E256+L256","256&2l","254&2l","10000&10l","81&3l","E(256-2)","E(254)","2&16^","2&1|2^","2&0^","2&0|0^","0&0^","2&2^+3&2^"]),
+        ("TSF_calc円周率:",["y","Y","π","θ","θ|2","θ*30|360","θ/360*30","30|360*θ","S(θ*30|360)","S(Y/360*30)"]),
+        ("TSF_calc三角関数sincostan:",["S(θ*0|360)","S(θ*30|360)","S(θ*60|360)","S(θ*90|360)","C(θ*0|360)","C(θ*30|360)","C(θ*60|360)","C(θ*90|360)","T(θ*0|360)","T(θ*30|360)","T(θ*60|360)","T(θ*90|360)"]),
         ("TSF_calc和数列積数列:",["kM7","kM5~10","kM10~0","kP7","kP5~10","kP10~0","kP10~2","kM100","kP1~10","2P16"]),
-#        ("TSF_calc公約数公倍数:",["12&16G","12と16の公約数","12と16の最大公約数","12&16g","12と16の公倍数","12と16の最小公倍数"]),
-#        ("TSF_calc条件演算子(三項演算子):",["1?111~222","0?111~222","n/0?111~222"]),
-#        ("TSF_calc max,min:",["0&0<","0&1<","1&0<","1&1<","0&0>","0&1>","1&0>","1&1>"]),
+        ("TSF_calc公約数公倍数:",["12&16G","12と16の公約数","12と16の最大公約数","12&16g","12と16の公倍数","12と16の最小公倍数"]),
     ])
     for TSF_QlistK,TSF_QlistV in LTsv_calcQlist.items():
         TSF_debug_log=TSF_io_printlog(TSF_QlistK,TSF_log=TSF_debug_log)
