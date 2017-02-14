@@ -16,7 +16,6 @@ def TSF_Forth_version():    #TSF_doc:TSF_初期化に使うバージョン(ブ�
 TSF_words={}
 def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
     global TSF_words
-    TSF_words={}
     TSF_words={
         "#TSF_fin.":TSF_Forth_fin,  "コードと共にTSFを終了。":TSF_Forth_fin,
         "#TSF_over":TSF_Forth_over,  "スタックを出る":TSF_Forth_over,  "スタックを出る(TSFも終了)":TSF_Forth_over,

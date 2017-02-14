@@ -12,7 +12,9 @@ def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサン�
     TSF_Forth_settext(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","main1:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_settext("main1:","\t".join(["aboutTSF:","#TSF_pushthe","aboutTSF:","#TSF_lenthe","#TSF_echoes","main2:","#TSF_this"]))
     TSF_Forth_settext("main2:","\t".join(["#分数電卓のテスト","#TSF_echo","16","#TSF_calcPR","calcQQtest:","#TSF_this","calcFXtest:","#TSF_this","calcDCtest:","#TSF_this","calcKNテスト:","#TSF_this","#","#TSF_echo","main3:","#TSF_this"]))
-    TSF_Forth_settext("main3:","\t".join(["aboutCalc:","#TSF_pushthe","aboutCalc:","#TSF_lenthe","#TSF_echoes"]))
+    TSF_Forth_settext("main3:","\t".join(["aboutCalc:","#TSF_pushthe","aboutCalc:","#TSF_lenthe","#TSF_echoes","main4:","#TSF_this"]))
+    TSF_Forth_settext("main4:","\t".join(["aboutRPN:","#TSF_pushthe","aboutRPN:","#TSF_lenthe","#TSF_echoes","main5:","#TSF_this"]))
+    TSF_Forth_settext("main5:","\t".join(["aboutCASE:","#TSF_pushthe","aboutCASE:","#TSF_lenthe","#TSF_echoes"]))
     TSF_Forth_settext("aboutTSF:",
         "「TSF_Tab-Separated-Forth」の概要(暫定案)。\n"
         "積んだスタックをワード(関数)などで消化していくForth風インタプリタ。スタック単位はtsv文字列。\n"
@@ -45,7 +47,17 @@ def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサン�
         "「81&3l」や「256の二進対数」という任意底対数の演算子で整数同士専用のアルゴリズムを経由できた場合は「256&2l」が8になる。\n"
         "「kM1~10」で1から10まで合計するような和数列(総和)が使える。同様に「kP1~10」で積数列(総乗)を用いて乗数や階乗の計算も可能。\n"
         "(最大)公約数は「12&16G」。(最小)公倍数は「12&16g」。「&」のみを単独で使った場合は掛け算の同じ優先順位で加算する。\n"
+        "三項演算子(条件演算子)は「?」。「k?1~0」の例でkがゼロでない時は真なので1、ゼロの時は偽なので1。「n|0」の時は「n|0」。\n"
         "0で割るもしくは有効桁数溢れなど、何らかの事情で計算できない場合は便宜上「n|0」という事にする。「p」「m」は付かない。\n"
+        ,TSF_style="N")
+    TSF_Forth_settext("aboutRPN:",
+        "「RPN」系ワード逆ポーランド電卓の概要(暫定案)。\n"
+        "逆ポーランド記法の数式計算は強いられないとは言ったが、括弧も日本語訳も分数も排除した速度優先の電卓を別途用意(予定)。状況に合わせて使い分け(予定)。\n"
+        "「#TSF_calcFX」等に存在した演算優先順位(平方根常用対数など＞積商算公約公倍数任意底対数など＞加減算消費税など＞三項演算子数列積和など)は存在しない。\n"
+        ,TSF_style="N")
+    TSF_Forth_settext("aboutCASE:",
+        "条件分岐について(未定)。\n"
+        "数式と段取りの分離について(仮)。\n"
         ,TSF_style="N")
     print("-- TSF_Forth_stackview() --")
     TSF_debug_log=TSF_Forth_stackview()
@@ -106,7 +118,8 @@ elif TSF_mergefile in ["--calc","--calcDC","--calcKN"]:
 elif TSF_mergefile == "--help":
     TSF_command_help()
 else:
-    TSF_command_about(False)
+#    TSF_command_about(False)
+     TSF_command_help()
 sys.exit(0 if TSF_exitcode == "0" or TSF_exitcode == "0|1" else TSF_exitcode)
 
 
