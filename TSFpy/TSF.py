@@ -118,8 +118,8 @@ elif TSF_mergefile in ["--calc","--calcDC","--calcKN"]:
 elif TSF_mergefile == "--help":
     TSF_command_help()
 else:
-#    TSF_command_about(False)
-     TSF_command_help()
+    TSF_command_about(False)
+#     TSF_command_help()
 sys.exit(0 if TSF_exitcode == "0" or TSF_exitcode == "0|1" else TSF_exitcode)
 
 
