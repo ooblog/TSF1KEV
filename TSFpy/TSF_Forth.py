@@ -19,17 +19,28 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
     TSF_words={
         "#TSF_fin.":TSF_Forth_fin,  "コードと共にTSFを終了。":TSF_Forth_fin,
         "#TSF_over":TSF_Forth_over,  "スタックを出る":TSF_Forth_over,  "スタックを出る(TSFも終了)":TSF_Forth_over,
+# "TSF_newword" "という言葉を作る"
+# "TSF_noword" "という言葉を忘れる"
+# "TSF_style" "で表示するスタイル"
         "#TSF_encoding":TSF_Forth_encoding,  "でエンコード":TSF_Forth_encoding,
         "#TSF_this":TSF_Forth_this,  "のスタックに入る":TSF_Forth_this,  "スタックを実行":TSF_Forth_this,
+# "TSF_casethis" "つ前のスタックに入る"
         "#TSF_that":TSF_Forth_that,  "スタックを積込先にする":TSF_Forth_that,
+# "TSF_casethat" "つ前のスタックを積込先にする"
         "#TSF_echo":TSF_Forth_echo,  "を表示する":TSF_Forth_echo,
         "#TSF_echoes":TSF_Forth_echoes,  "行分表示する":TSF_Forth_echoes,
         "#TSF_lenthe":TSF_Forth_lenthe,  "のスタック個数":TSF_Forth_lenthe,
         "#TSF_lenthis":TSF_Forth_lenthis,  "実行中スタックの個数":TSF_Forth_lenthis,
         "#TSF_lenthat":TSF_Forth_lenthat,  "積込先スタックの個数":TSF_Forth_lenthat,
+# "TSF_lenthey "スタック一覧の個数"
         "#TSF_pushthe":TSF_Forth_pushthe,  "のスタックを積む":TSF_Forth_pushthe,
         "#TSF_pushthis":TSF_Forth_pushthis,  "実行中スタックを自身に積む":TSF_Forth_pushthis,
         "#TSF_pushthat":TSF_Forth_pushthat,  "積込先スタックから積む":TSF_Forth_pushthat,
+# "TSF_pushthey" "スタック一覧を積む"
+# "TSF_popthe" "スタックに積込元スタックを積み直す"
+# "TSF_popthis" "実行中スタックに積込元スタックを積み直す"
+# "TSF_popthat "スタックを積み下ろす"
+# "TSF_delthe" "スタックそのものを削除"
         "#TSF_calcQQ":TSF_Forth_calcQQ,  "を計算して暗記もする":TSF_Forth_calcQQ,  "で九九る":TSF_Forth_calcQQ,
         "#TSF_calcFX":TSF_Forth_calcFX,  "を計算する":TSF_Forth_calcFX,
         "#TSF_calcDC":TSF_Forth_calcDC,  "を小数に計算する":TSF_Forth_calcDC,
@@ -43,6 +54,10 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         "#TSF_joinC":TSF_Forth_joinC,  "個分挟んで連結":TSF_Forth_joinC,
         "#TSF_split":TSF_Forth_split,  "の文字で分解":TSF_Forth_split,
         "#TSF_chars":TSF_Forth_chars,  "一文字ずつに分解":TSF_Forth_chars,
+# "TSF_load" "ファイルをテキストとしてスタックに読み込む"
+# "TSF_marge" "スタックをTSFとしてスタックに混ぜる"
+# "TSF_nomarge" "スタックをテキスト化してスタックに読み込む"
+# "TSF_save" "スタックをテキストとしてファイルに書き込む"
     }
     return TSF_words
 
@@ -298,14 +313,14 @@ def TSF_Forth_calcRO():   #TSF_doc:[round]端数処理を変更する。端数�
     return TSF_thisstack_name
 
 def TSF_Forth_calcmarge(TSF_bracketL,TSF_bracketR):   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、指定された括弧の中の数値をスタック内容に置換。calc自身とcalc内の該当括弧分スタック積み下ろし。
-    TSF_calcA=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_tsvA=TSF_Forth_pop(TSF_thatstack_name)
     for TSF_stackC,TSF_stackQ in enumerate(TSF_stacks[TSF_thatstack_name]):
         TSF_calcK="{0}{1}{2}".format(TSF_bracketL,TSF_stackC,TSF_bracketR)
-        if TSF_calcK in TSF_calcA:
-            TSF_calcA=TSF_calcA.replace(TSF_calcK,"{0}".format(TSF_Forth_pop(TSF_thatstack_name)))
+        if TSF_calcK in TSF_tsvA:
+            TSF_tsvA=TSF_tsvA.replace(TSF_calcK,"{0}".format(TSF_Forth_pop(TSF_thatstack_name)))
         else:
             break
-    TSF_Forth_push(TSF_thatstack_name,TSF_calcA)
+    TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
 
 def TSF_Forth_calcBB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、波括弧【{n}】をスタック内容に置換。calc自身とcalc内の該当括弧分スタック積み下ろし。
     TSF_Forth_calcmarge('{','}')
@@ -319,7 +334,7 @@ def TSF_Forth_calcCB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は�
     TSF_Forth_calcmarge('｢','｣')
     return TSF_thisstack_name
 
-def TSF_Forth_join():   #TSF_doc:[…stackB,stackA,count]count自身とcount数値分スタック積み下ろし。
+def TSF_Forth_join():   #TSF_doc:[…stackB,stackA,count]文字列に連結する。count自身とcount数値分スタック積み下ろし、連結した文字列を積み込み。
     TSF_joinloopI=TSF_Forth_popdecimalize(TSF_thatstack_name)
     TSF_joinlist=[]
     for TSF_joincount in range(TSF_joinloopI):
@@ -327,7 +342,7 @@ def TSF_Forth_join():   #TSF_doc:[…stackB,stackA,count]count自身とcount数�
     TSF_Forth_push(TSF_thatstack_name,"".join(reversed(TSF_joinlist)))
     return TSF_thisstack_name
 
-def TSF_Forth_joinC():   #TSF_doc:[…stackB,stackA,,count]count自身とcount数値分スタック積み下ろし。
+def TSF_Forth_joinC():   #TSF_doc:[…stackB,stackA,joint,count]文字列に連結する。count自身とjointとcount数値分スタック積み下ろし、連結した文字列を積み込み。
     TSF_joinloopI=TSF_Forth_popdecimalize(TSF_thatstack_name)
     TSF_joinloopC=TSF_Forth_pop(TSF_thatstack_name)
     TSF_joinlist=[]
@@ -336,10 +351,18 @@ def TSF_Forth_joinC():   #TSF_doc:[…stackB,stackA,,count]count自身とcount�
     TSF_Forth_push(TSF_thatstack_name,TSF_joinloopC.join(reversed(TSF_joinlist)))
     return TSF_thisstack_name
 
-def TSF_Forth_split():   #TSF_doc:
+def TSF_Forth_split():   #TSF_doc:[…stackB,stackA,string,spliter]文字列を分割する。stringとspliter分スタック積み下ろし、分割された文字列分スタック積み込み。
+    TSF_tsvP=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_tsvK=TSF_tsvQ.split(TSF_tsvP)
+    for TSF_tsvA in TSF_tsvK:
+        TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
     return TSF_thisstack_name
 
-def TSF_Forth_chars():   #TSF_doc:
+def TSF_Forth_chars():   #TSF_doc:[…stackB,stackA,string]文字列を一文字ずつに分割する。stringスタック積み下ろし、分割された文字分スタック積み込み。
+    TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
+    for TSF_tsvA in TSF_tsvQ:
+        TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
     return TSF_thisstack_name
 
 
@@ -372,38 +395,6 @@ def TSF_Forth_run(TSF_this=None,TSF_that=None):    #TSF_doc:TSFを実行して�
             TSF_thisstack_name,TSF_thisstack_count=TSF_callptrs.popitem(True); TSF_nextstack=TSF_thisstack_name
         else:
             break
-
-#    TSF_wordsdef=[
-##        ":TSF_encoding":TSF_encoding,    # [encode]TSFの文字コード宣言。極力冒頭に置くのが望ましい。1スタック積み下ろし。
-##        ":TSF_this",                   # [stack]thisスタックを変更(スタックをワード(関数)として呼ぶ)。通常はオーバーフローで呼び出し元に戻るが、再帰呼び出し等はループ扱いになる。ワード自体は1スタック積み下ろしだがスタック変化は未知数。
-##        ":TSF_that",                  # [stack]thatスタック(積み込み先スタック)を変更。1スタック積み下ろし。
-##        ":TSF_lenthis",               # [stack]thisスタック(実行中スタック)の数を数える。1スタック積み上げ。
-##        ":TSF_lenthat",               # [stack]thatスタック(積み込み先スタック)の数を数える。1スタック積み上げ。
-##        ":TSF_pushthis",             # [stack]指定したスタックを丸ごとthisスタック(実行中スタック)に積み上げ。
-##       ":TSF_pushthat",             # [stack]指定したスタックを丸ごとthatスタック(積み込み先スタック)に積み上げ。
-##        ":TSF_over.",                  # [errorcode]スタックを終了する。他言語のreturn返り値的なモノを用意する場合、単純ににスタックに積むだけ。
-##        ":TSF_fin.",                    # [errorcode]TSFを終了する。終了時に返却する数値が指定できる。1スタック消費。
-##       ":TSF_echo",                  # [value]直近1つのスタック内容を端末で表示する。1スタック消費。
-##       ":TSF_echoes",               # […valueB,valueA,count]指定した個数スタック内容を端末で表示する。count分スタック消費。
-#        ":TSF_alias",                  # [after,before]TSFワード(関数)を置き換える。2スタック積み下ろし。
-#        ":TSF_ifthis",                 # [stack,value]valueが0以外ならthisスタックを変更(スタックをワード(関数)として呼ぶ)。通常はオーバーフローで呼び出し元に戻るが、再帰呼び出し等はループ扱いになる。ワード自体は2スタック積み下ろしだがスタック変化は未知数。
-#        ":TSF_ifthat",                 # [stack,value]valueが0以外ならthatスタック(積み込み先スタック)を変更。2スタック積み下ろし。
-#        ":TSF_casethis",              # […stackB,valueB,stackA,valueA,count]valueが0以外ならthisスタックを変更(スタックをワード(関数)として呼ぶ)。通常はオーバーフローで呼び出し元に戻るが、再帰呼び出し等はループ扱いになる。ワード自体はcount*2+1分スタック積み下ろしだがスタック変化は未知数。
-#        ":TSF_casethat",              # […stackB,valueB,stackA,valueA,count]valueが0以外ならthatスタック(積み込み先スタック)を変更。count*2+1分スタック積み下ろし。
-#        ":TSF_slicethis",             # [first,lest,stack]指定したスタックの一部をthisスタック(実行中スタック)に積み上げ。
-#        ":TSF_slicethat",             # [first,lest,stack]指定したスタックの一部をthatスタック(積み込み先スタック)に積み上げ。
-##        ":TSF_calc",                  # [calc]スタックの内容で電卓する。スタック積み下ろし量はcalcの内容に左右されるので注意。
-#        ":TSF_style",                 # ['&tab;',styleNTO,stack]テキスト出力する時の表示方法を指定する。
-#        ":TSF_view",                  # []スタック全体像を表示。
-#        ":TSF_viewsave",              # [path]指定したスタックをテキストファイルに保存。1スタック消費。
-#        ":TSF_save",                  # [stack,path]指定したスタックをテキストファイルに保存。2スタック消費。
-#        ":TSF_load",                  # [stack,path]指定したスタックにテキストファイルを読み込む。TSF構文解析は「:TSF_merge」を使う。2スタック消費。
-##        ":TSF_merge",                # [stack]指定したスタックをTSFプログラムとみなして取り込む。
-#        ":TSF_swap"  ,               # [stackB,stackA]積み込み先スタックの直近2つの順番を入れ替える。
-#        ":TSF_reverse",               # […stackB,stackA,count]積み込み先スタックの順番を指定した個数順番を入れ替える。
-#        ":TSF_postpone",            # […stackB,stackA,count]積み込み先スタックの直近1つを指定した個数奥に突っ込む。
-#        ":TSF_‎Interrupt",             # […stackB,stackA,count]積み込み先スタックの指定した個数奥から1つを引っ張り出し一番手前に積む。
-#    ]
 
 
 def TSF_Forth_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_Forth.py」単体テスト風デバッグ関数。
