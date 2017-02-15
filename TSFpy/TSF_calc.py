@@ -22,10 +22,10 @@ TSF_calc_opehalf="f1234567890.pm!|$ELRSsCcTtyYen+-*/\\#%(MPZzOoUuN~k)&GglAa^><" 
                 "()()()()()()()()()MMMMP~~~k&&Gg" \
                 "^LlERRyyYeennf"
 TSF_calc_operator=OrderedDict(zip(list(TSF_calc_opewide),list(TSF_calc_opehalf)))
-TSF_calc_opelong=["恒河沙","阿僧祇","那由他","不可思議","無量大数","無限","円周率","2π","２π","ネイピア数","プラス","マイナス","氷点下","小数点", \
+TSF_calc_opelong=["恒河沙","阿僧祇","那由他","不可思議","無量大数","無限","分の","円周率","2π","２π","ネイピア数","プラス","マイナス","氷点下","小数点", \
                 "最大公約数","最小公倍数","公約数","公倍数","とんで","とばして","とぶことの","平方根","常用対数","進対数","自然対数","絶対値", \
                 "sin","cos","tan"]
-TSF_calc_opelshort=["恒","阿","那","思","量","∞","π","θ","θ","ｅ","p","m","点","点","絶", \
+TSF_calc_opelshort=["恒","阿","那","思","量","∞","$","π","θ","θ","ｅ","p","m","点","点","絶", \
                 "約","倍","約","倍","","","","根","常","進","対", \
                 "S","C","T"]
 TSF_calc_opeword=dict(zip(TSF_calc_opelong,TSF_calc_opelshort))
@@ -33,12 +33,12 @@ TSF_calc_opemarkC=["*+","*-","/+","/-","#+","#-","|+","|-","++","+-","-+","--",
                 "0k", "1k", "2k", "3k", "4k", "5k", "6k", "7k", "8k", "9k", ".k",
                 "0(", "1(", "2(", "3(", "4(", "5(", "6(", "7(", "8(", "9(", ".(",
                 ")0", ")1", ")2", ")3", ")4", ")5", ")6", ")7", ")8", ")9", ").",
-                ")(", "|("]
+                ")(", "|(", "+$"]
 TSF_calc_opemarkP=["*p","*m","/p","/m","#p","#m","|p","|m","+p","+m","-p","-m",
                 "0*k","1*k","2*k","3*k","4*k","5*k","6*k","7*k","8*k","9*k",".*k",
                 "0*(","1*(","2*(","3*(","4*(","5*(","6*(","7*(","8*(","9*(",".*(",
                 ")*0",")*1",")*2",")*3",")4*",")*5",")*6",")*7",")*8",")*9",")*.",
-                ")*(", "/("]
+                ")*(", "/(", "$"]
 TSF_calc_opemark=dict(zip(TSF_calc_opemarkC,TSF_calc_opemarkP))
 TSF_calc_okusenman="万億兆京垓𥝱穣溝澗正載極恒阿那思量"
 TSF_calc_okusenzero=['1'+'0'*((o+1)*4) for o in range(len(TSF_calc_okusenman))]
@@ -144,6 +144,7 @@ TSF_calc_NOZUs=OrderedDict([
     ('u',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:TSF_LimFirst if decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_calcSeq.replace('k',"0"))).replace("n|0","+Infinity")) < 0 else TSF_LimRest)),
     ('M',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:"+".join([TSF_calc_addition(TSF_calcSeq.replace('k',str(TSF_LimK))) for TSF_LimK in TSF_calc_function_limit(TSF_LimFirst,TSF_LimRest)]))),
     ('P',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:"*".join([TSF_calc_addition(TSF_calcSeq.replace('k',str(TSF_LimK))) for TSF_LimK in TSF_calc_function_limit(TSF_LimFirst,TSF_LimRest)]))),
+    ('$',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:str(TSF_calc_addition(TSF_LimFirst.replace('k',"0")))+"/"+str(TSF_calc_addition(TSF_calcSeq.replace('k',"0"))))),
 ])
 def TSF_calc_function_limit(TSF_LimFirst,TSF_LimRest):    #TSF_doc:和集合積集合のrange作成。
     TSF_LimStart,TSF_LimGoal=decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_LimFirst))).to_integral_value(),decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_LimRest))).to_integral_value()
@@ -167,9 +168,14 @@ def TSF_calc_function(TSF_calcQ):    #TSF_doc:分数電卓の和集合積集合�
         if not '~' in TSF_calcLim:
             if TSF_calc_NOZUin in "MP":
                 TSF_calcLim="1~"+TSF_calcLim
+            elif TSF_calc_NOZUin in "$":
+                TSF_calcLim=TSF_calcLim
             else:
                 TSF_calcLim=TSF_calcLim+"~0"
-        TSF_LimFirst,TSF_LimRest=TSF_calcLim.split('~')[0],TSF_calcLim.split('~')[-1]
+        if '~' in TSF_calcLim:
+            TSF_LimFirst,TSF_LimRest=TSF_calcLim.split('~')[0],TSF_calcLim.split('~')[-1]
+        else:
+            TSF_LimFirst,TSF_LimRest=TSF_calcLim,TSF_calcLim
         TSF_calcQ=TSF_calc_NOZUs[TSF_calc_NOZUin[-1]](TSF_calcSeq,TSF_LimFirst,TSF_LimRest)
     TSF_calcA=TSF_calc_addition(TSF_calcQ)
     return TSF_calcA
@@ -245,7 +251,12 @@ def TSF_calc_multiplication(TSF_calcQ):    #TSF_doc:分数電卓の掛け算割�
             TSF_calcLD=TSF_calcLD*decimal.Decimal(TSF_calcRD)
         elif TSF_calcO == '^':
             try:
-                TSF_calcLND=TSF_calc_fractalize(str(decimal.getcontext().power(TSF_calcLN/TSF_calcLD,decimal.Decimal(TSF_calcRN)/decimal.Decimal(TSF_calcRD))))
+#                TSF_calcLND=TSF_calc_fractalize(str(decimal.getcontext().power(decimal.Decimal(TSF_calcLN)/decimal.Decimal(TSF_calcLD),decimal.Decimal(TSF_calcRN)/decimal.Decimal(TSF_calcRD))))
+#                TSF_calcRN,TSF_calcRD=TSF_calcLND.replace('m','-').replace('p','').split('|')
+#                TSF_calcLN,TSF_calcLD=decimal.Decimal(TSF_calcRN),decimal.Decimal(TSF_calcRD)
+                TSF_calcRND=decimal.Decimal(TSF_calcRN)/decimal.Decimal(TSF_calcRD)
+                TSF_calcRND=str(decimal.getcontext().power(TSF_calcLN,TSF_calcRND))+'|'+str(decimal.getcontext().power(TSF_calcLD,TSF_calcRND))
+                TSF_calcLND=TSF_calc_fractalize(TSF_calcRND)
                 TSF_calcRN,TSF_calcRD=TSF_calcLND.replace('m','-').replace('p','').split('|')
                 TSF_calcLN,TSF_calcLD=decimal.Decimal(TSF_calcRN),decimal.Decimal(TSF_calcRD)
             except decimal.InvalidOperation:
@@ -330,8 +341,8 @@ TSF_calc_SCTs=OrderedDict([
 ])
 def TSF_calc_fractalize(TSF_calcQ):    #TSF_doc:分数電卓なので小数を分数に。ついでに平方根や三角関数も。0で割る、もしくは桁が限界越えたときなどは「n|0」を返す。
     TSF_calcQ=TSF_calcQ.replace('/','|').rstrip('.').rstrip('+')
-    if '$' in TSF_calcQ:
-        TSF_calcR=TSF_calcQ.split('$'); TSF_calcQ="{1}|{0}".format(TSF_calcR[0],TSF_calcR[1])
+#    if '$' in TSF_calcQ:
+#        TSF_calcR=TSF_calcQ.split('$'); TSF_calcQ="{1}|{0}".format(TSF_calcR[0],TSF_calcR[1])
     if not '|' in TSF_calcQ:
         TSF_calcQ="{0}|1".format(TSF_calcQ)
     TSF_calcM=TSF_calcQ.count('m')+TSF_calcQ.count('-') if not '!' in TSF_calcQ else 0
@@ -430,9 +441,9 @@ def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テス�
     TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(TSF_argv)),TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("TSF_py:",TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout])),TSF_log=TSF_debug_log)
-    TSF_calc_precision(20)
+    TSF_calc_precision(150)
     LTsv_calcQlist=OrderedDict([
-        ("TSF_calc漢数字:",["億","二百万円","十億百二十円","十億と飛んで百二十円","百二十円","3.14","円周率","ネイピア数","∞","√２","√m2","２の平方根","256を二進対数","２を16乗","無量大数"]),
+        ("TSF_calc漢数字:",["2分の1を5乗","(2分の1)を5乗","2分の(1を5乗)","(100分の1)を5乗","(8万分の1)を5乗","(478万分の1)を5乗","億","二百万円","十億百二十円","十億と飛んで百二十円","百二十円","3.14","円周率","ネイピア数","∞","√２","√m2","２の平方根","256を二進対数","２を16乗","無量大数"]),
         ("TSF_calc小数分数パーセント:",["0.5|3.5","0.5/3.5","1|2/7|2","2|3|5|7","0/100","100/0","10000+%8", "10000-5%","7\\3","3.14\\1","9#6","3|2#1|3","-6","m6","-m6","-6!","m6!","-m6!"]),
         ("TSF_calcゼロ比較演算子(三項演算子):",["m1Z1|1~0|1","0Z1|1~0|1","p1Z1|1~0|1","m1z1|1~0|1","0z1|1~0|1","p1z1|1~0|1"]),
         ("TSF_calcゼロ以上演算子(三項演算子):",["m1O1|1~0|1","0O1|1~0|1","p1O1|1~0|1","m1o1|1~0|1","0o1|1~0|1","p1o1|1~0|1"]),
