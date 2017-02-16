@@ -132,29 +132,21 @@ def TSF_calc(TSF_calcQ,TSF_calcQQ=None):    #TSF_doc:分数電卓のmain。括�
     TSF_calc_bracketreg=re.compile("[(](?<=[(])[^()]*(?=[)])[)]")
     while "(" in TSF_calcA:
         for TSF_calcK in re.findall(TSF_calc_bracketreg,TSF_calcA):
-            TSF_calcA=TSF_calcA.replace(TSF_calcK,TSF_calc_function(TSF_calcK))
-    TSF_calcA=TSF_calcA.replace(TSF_calcA,TSF_calc_function(TSF_calcA))
-    
-#    if TSF_calcQQ != None:
-#        if TSF_calcQQ == True:
-#            while "(" in TSF_calcA:
-#                for TSF_calcK in re.findall(TSF_calc_bracketreg,TSF_calcA):
-#                    TSF_calcK=TSF_calcK.lstrip("(").rstrip(")")
-#                    TSF_calcA=TSF_calcA.replace(TSF_calcA,TSF_calcQQmemory.get(TSF_calcK,TSF_calc_function(TSF_calcK))); TSF_calcQQmemory[TSF_calcK]=TSF_calcA
-#            TSF_calcK=TSF_calcA
-#            TSF_calcA=TSF_calcA.replace(TSF_calcA,TSF_calcQQmemory.get(TSF_calcK,TSF_calc_function(TSF_calcK))); TSF_calcQQmemory[TSF_calcK]=TSF_calcA
-#        else:
-#            while "(" in TSF_calcA:
-#                for TSF_calcK in re.findall(TSF_calc_bracketreg,TSF_calcA):
-#                    TSF_calcA=TSF_calcA.replace(TSF_calcA,TSF_calc_function(TSF_calcK.lstrip("(").rstrip(")")))
-#            TSF_calcA=TSF_calcA.replace(TSF_calcA,TSF_calc_function(TSF_calcA))
-#    else:
-#        while "(" in TSF_calcA:
-#            for TSF_calcK in re.findall(TSF_calc_bracketreg,TSF_calcA):
-#                TSF_calcK=TSF_calcK.lstrip("(").rstrip(")")
-#                TSF_calcA=TSF_calcA.replace(TSF_calcA,TSF_calcQQmemory.get(TSF_calcK,TSF_calc_function(TSF_calcK)))
-#        TSF_calcK=TSF_calcA
-#        TSF_calcA=TSF_calcA.replace(TSF_calcA,TSF_calcQQmemory.get(TSF_calcK,TSF_calc_function(TSF_calcA)))
+            TSF_calcA=TSF_calcA.replace(TSF_calcK,TSF_calc_referential(TSF_calcK,TSF_calcQQ))
+    TSF_calcA=TSF_calcA.replace(TSF_calcA,TSF_calc_referential(TSF_calcA,TSF_calcQQ))
+    return TSF_calcA
+
+TSF_calcQQmemory={}
+def TSF_calc_referential(TSF_calcQ,TSF_calcQQ=None):    #TSF_doc:分数電卓の和集合積集合およびゼロ比較演算子系。
+    global TSF_calcQQmemory
+    TSF_calcQ=TSF_calcQ.lstrip("(").rstrip(")")
+    if TSF_calcQQ != None:
+        if TSF_calcQQ == True:
+            TSF_calcA=TSF_calcQ.replace(TSF_calcQ,TSF_calcQQmemory.get(TSF_calcQ,TSF_calc_function(TSF_calcQ))); TSF_calcQQmemory[TSF_calcQ]=TSF_calcA
+        else:
+            TSF_calcA=TSF_calcQ.replace(TSF_calcQ,TSF_calc_function(TSF_calcQ))
+    else:
+        TSF_calcA=TSF_calcQ.replace(TSF_calcQ,TSF_calcQQmemory.get(TSF_calcQ,TSF_calc_function(TSF_calcQ)))
     return TSF_calcA
 
 TSF_calc_NOZUs=OrderedDict([
@@ -176,9 +168,8 @@ def TSF_calc_function_limit(TSF_LimFirst,TSF_LimRest):    #TSF_doc:和集合積�
     else:
         TSF_limstep=-1; TSF_LimGoal-=1
     return range(TSF_LimStart,TSF_LimGoal,TSF_limstep)
-TSF_calcQQmemory={}
-def TSF_calc_function(TSF_calcQ,TSF_calcQQ=None):    #TSF_doc:分数電卓の和集合積集合およびゼロ比較演算子系。
-    TSF_calcQ=TSF_calcQ.lstrip("(").rstrip(")")
+def TSF_calc_function(TSF_calcQ):    #TSF_doc:分数電卓の和集合積集合およびゼロ比較演算子系。
+#    TSF_calcQ=TSF_calcQ.lstrip("(").rstrip(")")
     TSF_calcOfind=-1; TSF_calc_NOZUin=""
     for TSF_calc_NOZU in TSF_calc_NOZUs.keys():
         if TSF_calc_NOZU in TSF_calcQ:
@@ -281,7 +272,8 @@ def TSF_calc_multiplication(TSF_calcQ):    #TSF_doc:分数電卓の掛け算割�
         elif TSF_calcO == '^':
             try:
                 TSF_calcRND=decimal.Decimal(TSF_calcRN)/decimal.Decimal(TSF_calcRD)
-                TSF_calcRND=str(decimal.getcontext().power(TSF_calcLN,TSF_calcRND))+'|'+str(decimal.getcontext().power(TSF_calcLD,TSF_calcRND))
+#                TSF_calcRND=str(decimal.getcontext().power(TSF_calcLN,TSF_calcRND))+'|'+str(decimal.getcontext().power(TSF_calcLD,TSF_calcRND))
+                TSF_calcRND="|".join([str(decimal.getcontext().power(TSF_calcLN,TSF_calcRND)),str(decimal.getcontext().power(TSF_calcLD,TSF_calcRND))])
                 TSF_calcLND=TSF_calc_fractalize(TSF_calcRND)
                 TSF_calcRN,TSF_calcRD=TSF_calcLND.replace('m','-').replace('p','').split('|')
                 TSF_calcLN,TSF_calcLD=decimal.Decimal(TSF_calcRN),decimal.Decimal(TSF_calcRD)
@@ -400,7 +392,8 @@ def TSF_calc_fractalize(TSF_calcQ):    #TSF_doc:分数電卓なので小数を�
                 TSF_calcD=TSF_calcD//TSF_GCD
                 if TSF_calcM%2 != 0:
                     TSF_calcN=-TSF_calcN
-                TSF_calcA=str(TSF_calcN)+'|'+str(TSF_calcD)
+#                TSF_calcA=str(TSF_calcN)+'|'+str(TSF_calcD)
+                TSF_calcA="|".join([str(TSF_calcN),str(TSF_calcD)])
             except decimal.InvalidOperation:
                 TSF_calcA="n|0"
         else:
@@ -466,26 +459,27 @@ def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テス�
     TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(TSF_argv)),TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("TSF_py:",TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout])),TSF_log=TSF_debug_log)
-    TSF_calc_precision(16)
+    TSF_calc_precision(50)
     LTsv_calcQlist=OrderedDict([
         ("TSF_calc漢数字:",["一割る三引く(マイナス二分の一)","2分の1を5乗","(2分の1)を5乗","2分の(1を5乗)","(100分の1)を5乗","(8万分の1)を5乗","(478万分の1)を5乗","億","二百万円","十億百二十円","十億と飛んで百二十円","百二十円","3.14","円周率","ネイピア数","∞","√２","√m2","２の平方根","256を二進対数","２を16乗","無量大数"]),
-#        ("TSF_calc小数分数パーセント:",["0.5|3.5","0.5/3.5","1|2/7|2","2|3|5|7","0/100","100/0","10000+%8", "10000-5%","7\\3","3.14\\1","9#6","3|2#1|3","-6","m6","-m6","-6!","m6!","-m6!"]),
-#        ("TSF_calcゼロ比較演算子(三項演算子):",["m1Z1|1~0|1","0Z1|1~0|1","p1Z1|1~0|1","m1z1|1~0|1","0z1|1~0|1","p1z1|1~0|1"]),
-#        ("TSF_calcゼロ以上演算子(三項演算子):",["m1O1|1~0|1","0O1|1~0|1","p1O1|1~0|1","m1o1|1~0|1","0o1|1~0|1","p1o1|1~0|1"]),
-#        ("TSF_calcゼロ以下演算子(三項演算子):",["m1U1|1~0|1","0U1|1~0|1","p1U1|1~0|1","m1u1|1~0|1","0u1|1~0|1","p1u1|1~0|1"]),
-#        ("TSF_calcゼロ除算演算子(三項演算子):",["n|0N1|1~0|1","0/1N1|1~0|1","1/0N1|1~0|1","1/0?1|1~0|1","n|0Z1|1~0|1","n|0z1|1~0|1","n|0O1|1~0|1","n|0o1|1~0|1","n|0U1|1~0|1","n|0u1|1~0|1"]),
-#        ("TSF_calc max,min:",["0&0<","0&1<","1&0<","1&1<","0&0>","0&1>","1&0>","1&1>"]),
-#        ("TSF_calc平方根atan2:",["√２","0&m9a","0&m9a","m9&m9A","m9&m9a","m9&0A","m9&0a","0&9A","0&9a","9&9A","9&9a","9&0A","9&0a","9&m9A","9&m9a","0&m9A","0&0A","0&0a"]),
-#        ("TSF_calc対数乗数:",["E1","E2","Ee","E0","L10000","L256","E256/E2","L256/L2","E256+L256","256&2l","254&2l","10000&10l","81&3l","E(256-2)","E(254)","2&16^","2&1|2^","2&0^","2&0|0^","0&0^","2&2^+3&2^"]),
-#        ("TSF_calc円周率:",["y","Y","π","θ","θ|2","θ*30|360","θ/360*30","30|360*θ","S(θ*30|360)","S(Y/360*30)"]),
-#        ("TSF_calc三角関数sincostan:",["sin(θ*0|360)","S(θ*30|360)","S(θ*60|360)","S(θ*90|360)","cos(θ*0|360)","C(θ*30|360)","C(θ*60|360)","C(θ*90|360)","tan(θ*0|360)","T(θ*30|360)","T(θ*60|360)","T(θ*90|360)"]),
-#        ("TSF_calc和数列積数列:",["kM7","kM5~10","kM10~0","kP7","kP5~10","kP10~0","kP10~2","kM100","kP1~10","2P16"]),
-#        ("TSF_calc公約数公倍数:",["12&16G","12と16の公約数","12と16の最大公約数","12&16g","12と16の公倍数","12と16の最小公倍数"]),
+        ("TSF_calc小数分数パーセント:",["0.5|3.5","0.5/3.5","1|2/7|2","2|3|5|7","0/100","100/0","10000+%8", "10000-5%","7\\3","3.14\\1","9#6","3|2#1|3","-6","m6","-m6","-6!","m6!","-m6!"]),
+        ("TSF_calcゼロ比較演算子(三項演算子):",["m1Z1|1~0|1","0Z1|1~0|1","p1Z1|1~0|1","m1z1|1~0|1","0z1|1~0|1","p1z1|1~0|1"]),
+        ("TSF_calcゼロ以上演算子(三項演算子):",["m1O1|1~0|1","0O1|1~0|1","p1O1|1~0|1","m1o1|1~0|1","0o1|1~0|1","p1o1|1~0|1"]),
+        ("TSF_calcゼロ以下演算子(三項演算子):",["m1U1|1~0|1","0U1|1~0|1","p1U1|1~0|1","m1u1|1~0|1","0u1|1~0|1","p1u1|1~0|1"]),
+        ("TSF_calcゼロ除算演算子(三項演算子):",["n|0N1|1~0|1","0/1N1|1~0|1","1/0N1|1~0|1","1/0?1|1~0|1","n|0Z1|1~0|1","n|0z1|1~0|1","n|0O1|1~0|1","n|0o1|1~0|1","n|0U1|1~0|1","n|0u1|1~0|1"]),
+        ("TSF_calc max,min:",["0&0<","0&1<","1&0<","1&1<","0&0>","0&1>","1&0>","1&1>"]),
+        ("TSF_calc平方根atan2:",["√２","0&m9a","0&m9a","m9&m9A","m9&m9a","m9&0A","m9&0a","0&9A","0&9a","9&9A","9&9a","9&0A","9&0a","9&m9A","9&m9a","0&m9A","0&0A","0&0a"]),
+        ("TSF_calc対数乗数:",["E1","E2","Ee","E0","L10000","L256","E256/E2","L256/L2","E256+L256","256&2l","254&2l","10000&10l","81&3l","E(256-2)","E(254)","2&16^","2&1|2^","2&0^","2&0|0^","0&0^","2&2^+3&2^"]),
+        ("TSF_calc円周率:",["y","Y","π","θ","θ|2","θ*30|360","θ/360*30","30|360*θ","S(θ*30|360)","S(Y/360*30)"]),
+        ("TSF_calc三角関数sincostan:",["sin(θ*0|360)","S(θ*30|360)","S(θ*60|360)","S(θ*90|360)","cos(θ*0|360)","C(θ*30|360)","C(θ*60|360)","C(θ*90|360)","tan(θ*0|360)","T(θ*30|360)","T(θ*60|360)","T(θ*90|360)"]),
+        ("TSF_calc和数列積数列:",["kM7","kM5~10","kM10~0","kP7","kP5~10","kP10~0","kP10~2","kM100","kP1~10","2P16"]),
+        ("TSF_calc公約数公倍数:",["12&16G","12と16の公約数","12と16の最大公約数","12&16g","12と16の公倍数","12と16の最小公倍数"]),
     ])
     for TSF_QlistK,TSF_QlistV in LTsv_calcQlist.items():
         TSF_debug_log=TSF_io_printlog(TSF_QlistK,TSF_log=TSF_debug_log)
         for LTsv_calcQ in TSF_QlistV:
             TSF_debug_log=TSF_io_printlog("\t{0}⇔{1};{2};{3}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ,True),TSF_calc_decimalize(LTsv_calcQ,True),TSF_calc_decimalizeKN(TSF_calc(LTsv_calcQ,True))),TSF_debug_log)
+#    print(TSF_calcQQmemory)
     return TSF_debug_log
 
 if __name__=="__main__":
