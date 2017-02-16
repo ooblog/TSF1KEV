@@ -32,11 +32,11 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         "#TSF_lenthe":TSF_Forth_lenthe,  "のスタック個数":TSF_Forth_lenthe,
         "#TSF_lenthis":TSF_Forth_lenthis,  "実行中スタックの個数":TSF_Forth_lenthis,
         "#TSF_lenthat":TSF_Forth_lenthat,  "積込先スタックの個数":TSF_Forth_lenthat,
-# "TSF_lenthey "スタック一覧の個数"
+        "#TSF_lenthey":TSF_Forth_lenthey,  "スタック名一覧の個数":TSF_Forth_lenthey,
         "#TSF_pushthe":TSF_Forth_pushthe,  "のスタックを積む":TSF_Forth_pushthe,
         "#TSF_pushthis":TSF_Forth_pushthis,  "実行中スタックを自身に積む":TSF_Forth_pushthis,
         "#TSF_pushthat":TSF_Forth_pushthat,  "積込先スタックから積む":TSF_Forth_pushthat,
-# "TSF_pushthey" "スタック一覧を積む"
+        "#TSF_pushthey":TSF_Forth_pushthey,  "スタック名一覧を積む":TSF_Forth_pushthey,
 # "TSF_popthe" "スタックに積込元スタックを積み直す"
 # "TSF_popthis" "実行中スタックに積込元スタックを積み直す"
 # "TSF_popthat "スタックを積み下ろす"
@@ -252,6 +252,10 @@ def TSF_Forth_lenthat():   #TSF_doc:thatスタック(積み込み先スタック
     TSF_Forth_push(TSF_thatstack_name,str(len(TSF_stacks.get(TSF_thatstack_name,[]))))
     return TSF_thisstack_name
 
+def TSF_Forth_lenthey():   #TSF_doc:スタック名一覧の数を数える。1スタック積み上げ。
+    TSF_Forth_push(TSF_thatstack_name,str(len(TSF_stacks)))
+    return TSF_thisstack_name
+
 def TSF_Forth_pushthe():   #TSF_doc:[stack]指定したスタックを丸ごとthatスタック(積み込み先スタック)に積み上げ。
     TSF_thename=TSF_Forth_pop(TSF_thatstack_name)
     if TSF_thename in TSF_stacks:
@@ -269,6 +273,11 @@ def TSF_Forth_pushthat():   #TSF_doc:thatスタック(積み込み先スタッ�
     if TSF_thatstack_name in TSF_stacks:
         for TSF_tsv in reversed(TSF_stacks.get(TSF_thatstack_name,[])):
             TSF_Forth_push(TSF_thatstack_name,TSF_tsv)
+    return TSF_thisstack_name
+
+def TSF_Forth_pushthey():   #TSF_doc:スタック名一覧を丸ごとthatスタック(積み込み先スタック)に積み上げ。
+    for TSF_tsv in reversed(TSF_stacks):
+        TSF_Forth_push(TSF_thatstack_name,TSF_tsv)
     return TSF_thisstack_name
 
 def TSF_Forth_calcQQ():   #TSF_doc:[calc]スタック内容で分数電卓する。一度計算した値は暗記(九九)するので再計算しない。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
