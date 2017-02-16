@@ -64,7 +64,6 @@ def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサン�
         "数式と段取りの分離について(仮)。\n"
         ,TSF_style="N")
     print("-- TSF_Forth_viewprintlog() --")
-#    TSF_debug_log=TSF_Forth_stackview()
     TSF_debug_log=TSF_Forth_viewprintlog("")
     if save_about_mergefile:
         TSF_io_savetext(TSF_about_mergefile,TSF_debug_log)
@@ -72,12 +71,10 @@ def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサン�
     TSF_Forth_pushargv()
     TSF_Forth_run(TSF_Forth_1ststack())
     print("-- TSF_Forth_viewprintlog() --")
-#    TSF_debug_log=TSF_Forth_stackview()
     TSF_Forth_viewprintlog()
 
 def TSF_command_helloworld():    #TSF_doc:TSF_about.tsfより小さなサンプルプログラム。
     TSF_Forth_settext(TSF_Forth_1ststack(),"\t".join(["Hello world","1","#TSF_echoes"]))
-#    TSF_Forth_stackview()
     TSF_Forth_viewprintlog()
 
 def TSF_command_calc(TSF_calctype=None):    #TSF_doc:TSFのより小さなサンプルプログラム。

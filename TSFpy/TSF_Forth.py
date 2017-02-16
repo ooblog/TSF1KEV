@@ -31,7 +31,9 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         "#TSF_viewthis":TSF_Forth_viewthis,  "実行中スタックを表示する":TSF_Forth_viewthis,
         "#TSF_viewthe":TSF_Forth_viewthat,  "積込先スタックを表示する":TSF_Forth_viewthat,
         "#TSF_viewthey":TSF_Forth_viewthey,  "スタック一覧を表示する":TSF_Forth_viewthey,
-# "TSF_style" "で表示するスタイル"
+        "#TSF_stylethe":TSF_Forth_stylethe,  "スタイルをスタックに設定する":TSF_Forth_stylethe,
+        "#TSF_stylethis":TSF_Forth_stylethis,  "スタイルを実行中スタックに設定する":TSF_Forth_stylethis,
+        "#TSF_stylethat":TSF_Forth_stylethat,  "スタイルを積込先スタックに設定する":TSF_Forth_stylethat,
         "#TSF_echoes":TSF_Forth_echoes,  "行表示する":TSF_Forth_echoes,
         "#TSF_lenthe":TSF_Forth_lenthe,  "のスタック個数":TSF_Forth_lenthe,
         "#TSF_lenthis":TSF_Forth_lenthis,  "実行中スタックの個数":TSF_Forth_lenthis,
@@ -155,22 +157,6 @@ def TSF_Forth_merge(TSF_stack,TSF_ESCstack=[]):    #TSF_doc:「TSF_Forth_settext
                 TSF_styles[TSF_stackthat]="T" if len(TSF_stackL) >= 2 else "N"
 #    del TSF_stacks[TSF_stack]
 
-def TSF_Forth_stackview():    #TSF_doc:TSF_stacksの内容をテキスト取得する。
-    global TSF_stacks,TSF_styles
-    TSF_view_log=""
-    TSF_stacks=TSF_Forth_stacks()
-    TSF_stackK,TSF_stackV=TSF_Forth_1ststack(),TSF_stacks[TSF_Forth_1ststack()]
-    for TSF_stackK,TSF_stackV in TSF_stacks.items():
-        TSF_stackS=TSF_styles[TSF_stackK]
-        TSF_stackV=[TSF_txt_ESCdecode(TSF_stk) for TSF_stk in TSF_stackV]
-        if TSF_styles[TSF_stackK] == "O":
-            TSF_view_log=TSF_io_printlog("{0}\t{1}\n".format(TSF_stackK,"\t".join(TSF_stackV)),TSF_log=TSF_view_log)
-        elif TSF_styles[TSF_stackK] == "T":
-            TSF_view_log=TSF_io_printlog("{0}\n\t{1}\n".format(TSF_stackK,"\t".join(TSF_stackV)),TSF_log=TSF_view_log)
-        else:  # TSF_styles[TSF_stackK] == "N":
-            TSF_view_log=TSF_io_printlog("{0}\n\t{1}\n".format(TSF_stackK,"\n\t".join(TSF_stackV)),TSF_log=TSF_view_log)
-    return TSF_view_log
-
 def TSF_Forth_pop(TSF_that):    #TSF_doc:スタックを積み下ろす。
     TSF_popdata=""
     if TSF_that in TSF_stacks and len(TSF_stacks[TSF_that]):
@@ -237,13 +223,13 @@ def TSF_Forth_that():    #TSF_doc:[stack]thatスタック(積み込み先スタ�
     return TSF_thisstack_name
 
 def TSF_Forth_view(TSF_thename,TSF_view_log=""):    #TSF_doc:スタックの内容をテキスト表示する。
-    TSF_stackS=TSF_styles.get(TSF_thename,"N")
+    TSF_style=TSF_styles.get(TSF_thename,"N")
     TSF_stackV=[TSF_txt_ESCdecode(TSF_stk) for TSF_stk in TSF_stacks[TSF_thename]]
-    if TSF_stackS == "O":
+    if TSF_style == "O":
         TSF_view_log=TSF_io_printlog("{0}\t{1}\n".format(TSF_thename,"\t".join(TSF_stackV)),TSF_log=TSF_view_log)
-    elif TSF_stackS == "T":
+    elif TSF_style == "T":
         TSF_view_log=TSF_io_printlog("{0}\n\t{1}\n".format(TSF_thename,"\t".join(TSF_stackV)),TSF_log=TSF_view_log)
-    else:  # TSF_stackS == "N":
+    else:  # TSF_style == "N":
         TSF_view_log=TSF_io_printlog("{0}\n\t{1}\n".format(TSF_thename,"\n\t".join(TSF_stackV)),TSF_log=TSF_view_log)
     return TSF_view_log
 
@@ -268,6 +254,27 @@ def TSF_Forth_viewprintlog(TSF_view_log=""):    #TSF_doc:printlog用途でスタ
     for TSF_thename in TSF_stacks.keys():
         TSF_view_log=TSF_Forth_view(TSF_thename,TSF_view_log)
     return TSF_view_log
+
+def TSF_Forth_style(TSF_thename,TSF_style=None):    #TSF_doc:スタックの表示スタイルを指定する。
+    global TSF_styles
+    if TSF_style != None:
+        TSF_styles[TSF_thename]=TSF_style
+    elif TSF_thename in TSF_stacks:
+        del TSF_stacks[TSF_thename]
+
+def TSF_Forth_stylethe():    #TSF_doc:[stack]指定したスタックの表示スタイルを指定する。1スタック積み下ろし。
+    TSF_style=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_thename=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_Forth_style(TSF_thename,TSF_style)
+    return TSF_thisstack_name
+
+def TSF_Forth_stylethis():    #TSF_doc:[stack]指定したスタックの表示スタイルを指定する。1スタック積み下ろし。
+    TSF_Forth_style(TSF_thisstack_name,TSF_Forth_pop(TSF_thatstack_name))
+    return TSF_thisstack_name
+
+def TSF_Forth_stylethat():    #TSF_doc:[stack]指定したスタックの表示スタイルを指定する。1スタック積み下ろし。
+    TSF_Forth_style(TSF_thatstack_name,TSF_Forth_pop(TSF_thatstack_name))
+    return TSF_thisstack_name
 
 def TSF_Forth_echoes():    #TSF_doc:[…valueB,valueA,count]指定した個数スタック内容を端末で表示する。count分スタック積み下ろし。
     TSF_echoloopI=TSF_Forth_popdecimalize(TSF_thatstack_name)
@@ -431,7 +438,6 @@ def TSF_Forth_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_Forth.py」単体テス
     TSF_debug_readmeL="../README.md"
     TSF_debug_readmeS="/debug/README.txt"
     TSF_Forth_loadtext(TSF_debug_readmeL,TSF_debug_readmeL)
-#    TSF_debug_log+=TSF_Forth_stackview()
     TSF_debug_log=TSF_Forth_viewprintlog(TSF_debug_log)
     return TSF_debug_log
 
