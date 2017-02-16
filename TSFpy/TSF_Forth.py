@@ -171,7 +171,8 @@ def TSF_Forth_pop(TSF_that):    #TSF_doc:スタックを積み下ろす。
 
 def TSF_Forth_popdecimalize(TSF_that):    #TSF_doc:複数形のワードで最初のcountを数値として取得。
     TSF_decimalT=TSF_Forth_pop(TSF_that); 
-    TSF_decimalT=TSF_calc_decimalizeQQ(TSF_calcs.get(TSF_decimalT,TSF_calc(TSF_decimalT)))
+#    TSF_decimalT=TSF_calc_decimalizeQQ(TSF_calcs.get(TSF_decimalT,TSF_calc(TSF_decimalT)))
+    TSF_decimalT=TSF_calc_decimalize(TSF_calc(TSF_decimalT,True))
     TSF_decimalI=abs(int(float(TSF_decimalT if TSF_decimalT != "n|0" else "0")))
     return TSF_decimalI
 
@@ -271,44 +272,48 @@ def TSF_Forth_pushthat():   #TSF_doc:thatスタック(積み込み先スタッ�
             TSF_Forth_push(TSF_thatstack_name,TSF_tsv)
     return TSF_thisstack_name
 
-TSF_calcs={}
+#TSF_calcs={}
 def TSF_Forth_calcQQ():   #TSF_doc:[calc]スタック内容で分数電卓する。一度計算した値は暗記(九九)するので再計算しない。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
-    global TSF_calcs
+#    global TSF_calcs
     TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
-    if TSF_tsvQ in TSF_calcs:
-        TSF_tsvA=TSF_calcs[TSF_tsvQ]
-    else:
-        TSF_tsvA=TSF_calc(TSF_tsvQ); TSF_calcs[TSF_tsvQ]=TSF_tsvA
+#    if TSF_tsvQ in TSF_calcs:
+#        TSF_tsvA=TSF_calcs[TSF_tsvQ]
+#    else:
+#        TSF_tsvA=TSF_calc(TSF_tsvQ); TSF_calcs[TSF_tsvQ]=TSF_tsvA
+    TSF_tsvA=TSF_calc(TSF_tsvQ,True)
     TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
     return TSF_thisstack_name
 
 def TSF_Forth_calcFX():   #TSF_doc:[calc]スタック内容で分数電卓する。暗記はしないがQQを記憶をカンペする。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
     TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
-    TSF_tsvA=TSF_calcs.get(TSF_tsvQ,TSF_calc(TSF_tsvQ))
+#    TSF_tsvA=TSF_calcs.get(TSF_tsvQ,TSF_calc(TSF_tsvQ))
+    TSF_tsvA=TSF_calc(TSF_tsvQ,None)
     TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
     return TSF_thisstack_name
 
 def TSF_Forth_calcDC():   #TSF_doc:[calc]スタック内容で分数電卓する。計算結果を小数で求める過程で再計算になる。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
     TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
-    TSF_tsvA=TSF_calc_decimalizeQQ(TSF_calcs.get(TSF_tsvQ,TSF_calc(TSF_tsvQ)))
+#    TSF_tsvA=TSF_calc_decimalizeQQ(TSF_calcs.get(TSF_tsvQ,TSF_calc(TSF_tsvQ)))
+    TSF_tsvA=TSF_calc_decimalize(TSF_tsvQ,True)
     TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
     return TSF_thisstack_name
 
 def TSF_Forth_calcKN():   #TSF_doc:[calc]スタック内容で分数電卓する。計算結果を漢数字で求める過程で再計算になる。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
     TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
-    TSF_tsvA=TSF_calc_decimalizeKN(TSF_calcs.get(TSF_tsvQ,TSF_calc(TSF_tsvQ)))
+#    TSF_tsvA=TSF_calc_decimalizeKN(TSF_calcs.get(TSF_tsvQ,TSF_calc(TSF_tsvQ)))
+    TSF_tsvA=TSF_calc_decimalizeKN(TSF_calc(TSF_tsvQ,True))
     TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
     return TSF_thisstack_name
 
 def TSF_Forth_calcPR():   #TSF_doc:[prec]有効桁数を変更する。桁数が変わると同じ式でも値が変わるので暗記(九九)も初期化する。
-    global TSF_calcs
-    TSF_calcs={}
+#    global TSF_calcs
+#    TSF_calcs={}
     TSF_calc_precision(TSF_Forth_popdecimalize(TSF_thatstack_name))
     return TSF_thisstack_name
 
 def TSF_Forth_calcRO():   #TSF_doc:[round]端数処理を変更する。端数が変わると同じ式でも値が変わるので暗記(九九)も初期化する。
-    global TSF_calcs
-    TSF_calcs={}
+#    global TSF_calcs
+#    TSF_calcs={}
     TSF_calc_rounding(TSF_Forth_popdecimalize(TSF_thatstack_name))
     return TSF_thisstack_name
 
