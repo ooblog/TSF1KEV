@@ -47,9 +47,10 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         "#TSF_calcKN":TSF_Forth_calcKN,  "を単位付き計算する":TSF_Forth_calcKN,
         "#TSF_calcPR":TSF_Forth_calcPR,  "を有効桁数":TSF_Forth_calcPR,
         "#TSF_calcRO":TSF_Forth_calcRO,  "で端数処理":TSF_Forth_calcRO,
-        "#TSF_calc{}":TSF_Forth_calcCB,  "波括弧で数式に連結":TSF_Forth_calcCB,
-        "#TSF_calc[]":TSF_Forth_calcSB,  "角括弧で数式に連結":TSF_Forth_calcSB,
-        "#TSF_calc｢｣":TSF_Forth_calcCB,  "鉤括弧で数式に連結":TSF_Forth_calcCB,
+#        "#TSF_calc{}":TSF_Forth_calcCB,  "波括弧で数式に連結":TSF_Forth_calcCB,
+#        "#TSF_calc[]":TSF_Forth_calcSB,  "角括弧で数式に連結":TSF_Forth_calcSB,
+#        "#TSF_calc｢｣":TSF_Forth_calcCB,  "鉤括弧で数式に連結":TSF_Forth_calcCB,
+        "#TSF_brackets":TSF_Forth_brackets,  "括弧で数式に連結":TSF_Forth_brackets,
         "#TSF_join":TSF_Forth_join,  "個分連結":TSF_Forth_join,
         "#TSF_joinC":TSF_Forth_joinC,  "個分挟んで連結":TSF_Forth_joinC,
         "#TSF_split":TSF_Forth_split,  "の文字で分解":TSF_Forth_split,
@@ -312,26 +313,40 @@ def TSF_Forth_calcRO():   #TSF_doc:[round]端数処理を変更する。端数�
     TSF_calc_rounding(TSF_Forth_popdecimalize(TSF_thatstack_name))
     return TSF_thisstack_name
 
-def TSF_Forth_calcmarge(TSF_bracketL,TSF_bracketR):   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、指定された括弧の中の数値をスタック内容に置換。calc自身とcalc内の該当括弧分スタック積み下ろし。
+#def TSF_Forth_calcmarge(TSF_bracketL,TSF_bracketR):   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、指定された括弧の中の数値をスタック内容に置換。calc自身とcalc内の該当括弧分スタック積み下ろし。
+#    TSF_tsvA=TSF_Forth_pop(TSF_thatstack_name)
+#    for TSF_stackC,TSF_stackQ in enumerate(TSF_stacks[TSF_thatstack_name]):
+#        TSF_calcK="{0}{1}{2}".format(TSF_bracketL,TSF_stackC,TSF_bracketR)
+#        if TSF_calcK in TSF_tsvA:
+#            TSF_tsvA=TSF_tsvA.replace(TSF_calcK,"{0}".format(TSF_Forth_pop(TSF_thatstack_name)))
+#        else:
+#            break
+#    TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
+#
+#def TSF_Forth_calcBB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、波括弧【{n}】をスタック内容に置換。calc自身とcalc内の該当括弧分スタック積み下ろし。
+#    TSF_Forth_calcmarge('{','}')
+#    return TSF_thisstack_name
+#
+#def TSF_Forth_calcSB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、角括弧【[n]】をスタック内容に置換。calc自身とcalc内の該当括弧分スタック積み下ろし。
+#    TSF_Forth_calcmarge('[',']')
+#    return TSF_thisstack_name
+#
+#def TSF_Forth_calcCB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、鉤括弧【｢n｣】をスタック内容に置換。calc自身とcalc内の該当括弧分スタック積み下ろし。
+#    TSF_Forth_calcmarge('｢','｣')
+#    return TSF_thisstack_name
+
+def TSF_Forth_brackets():   #TSF_doc:[…stackB,stackA,calc,brackets]これ自体は計算はせず、括弧に囲まれたスタック番号をスタック内容に置換。bracketsとcalc自身とcalc内の該当括弧分スタック積み下ろし。
+    TSF_tsvB=TSF_Forth_pop(TSF_thatstack_name)
+    if len(TSF_tsvB) < 2: TSF_tsvB="[]"
+    TSF_tsvBL,TSF_tsvBR=TSF_tsvB[0],TSF_tsvB[-1]
     TSF_tsvA=TSF_Forth_pop(TSF_thatstack_name)
     for TSF_stackC,TSF_stackQ in enumerate(TSF_stacks[TSF_thatstack_name]):
-        TSF_calcK="{0}{1}{2}".format(TSF_bracketL,TSF_stackC,TSF_bracketR)
+        TSF_calcK="".join([TSF_tsvBL,str(TSF_stackC),TSF_tsvBR])
         if TSF_calcK in TSF_tsvA:
-            TSF_tsvA=TSF_tsvA.replace(TSF_calcK,"{0}".format(TSF_Forth_pop(TSF_thatstack_name)))
+            TSF_tsvA=TSF_tsvA.replace(TSF_calcK,TSF_Forth_pop(TSF_thatstack_name))
         else:
             break
     TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
-
-def TSF_Forth_calcBB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、波括弧【{n}】をスタック内容に置換。calc自身とcalc内の該当括弧分スタック積み下ろし。
-    TSF_Forth_calcmarge('{','}')
-    return TSF_thisstack_name
-
-def TSF_Forth_calcSB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、角括弧【[n]】をスタック内容に置換。calc自身とcalc内の該当括弧分スタック積み下ろし。
-    TSF_Forth_calcmarge('[',']')
-    return TSF_thisstack_name
-
-def TSF_Forth_calcCB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、鉤括弧【｢n｣】をスタック内容に置換。calc自身とcalc内の該当括弧分スタック積み下ろし。
-    TSF_Forth_calcmarge('｢','｣')
     return TSF_thisstack_name
 
 def TSF_Forth_join():   #TSF_doc:[…stackB,stackA,count]文字列に連結する。count自身とcount数値分スタック積み下ろし、連結した文字列を積み込み。
