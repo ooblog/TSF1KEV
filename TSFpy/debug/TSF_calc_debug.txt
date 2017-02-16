@@ -1,7 +1,7 @@
 TSF_Tab-Separated-Forth:
 	UTF-8	:TSF_encoding	0	:TSF_fin.
 TSF_argv:
-	TSF_calc.py
+	./TSF_calc.py
 TSF_py:
 	Python2.7.6	linux2	UTF-8
 TSF_calc漢数字:

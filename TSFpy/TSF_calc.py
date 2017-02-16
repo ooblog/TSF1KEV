@@ -105,7 +105,9 @@ def TSF_calc_bracketsbalance(TSF_calcQ):    #TSF_doc:括弧のバランスを整
     TSF_calcA='('*abs(TSF_calcbracketCAP)+TSF_calcA+')'*abs(TSF_calcbracketCAP)
     TSF_calcA=re.sub(re.compile("([0-9千百十]+?)銭"),"+(\\1)/100",TSF_calcA)
     for TSF_okusenK,TSF_okusenV in TSF_calc_okusendic.items():
-        TSF_calcA=re.sub(re.compile("([0-9千百十]+?){0}".format(TSF_okusenK)),"(\\1)*{0}+".format(TSF_okusenV),TSF_calcA)
+#        TSF_calcA=re.sub(re.compile("([0-9千百十]+?){0}".format(TSF_okusenK)),"(\\1)*{0}+".format(TSF_okusenV),TSF_calcA)
+#        TSF_calcA=re.sub(re.compile("([0-9千百十]+?){0}".format(TSF_okusenK)),"".join(["(\\1)*",TSF_okusenV,"+"]),TSF_calcA)
+        TSF_calcA=re.sub(re.compile("".join(["([0-9千百十]+?)",TSF_okusenK])),"".join(["(\\1)*",TSF_okusenV,"+"]),TSF_calcA)
     TSF_calcA=re.sub(re.compile("([0-9]+?)千"),"(\\1*1000)+",TSF_calcA)
     TSF_calcA=re.sub(re.compile("([0-9]+?)百"),"(\\1*100)+",TSF_calcA)
     TSF_calcA=re.sub(re.compile("([0-9]+?)十"),"(\\1*10)+",TSF_calcA)
@@ -114,10 +116,14 @@ def TSF_calc_bracketsbalance(TSF_calcQ):    #TSF_doc:括弧のバランスを整
     TSF_calcA=TSF_calcA.replace('百',"100+")
     TSF_calcA=TSF_calcA.replace('千',"1000+")
     for TSF_okusenK,TSF_okusenV in TSF_calc_okusendic.items():
-        TSF_calcA=TSF_calcA.replace(TSF_okusenK,"{0}+".format(TSF_okusenV))
-    TSF_calcA=TSF_calcA.replace('y',("{0}|1".format(TSF_calc_PI[:TSF_calc_precisionPI])+'0'*(TSF_calc_precisionPI-1)))
-    TSF_calcA=TSF_calcA.replace('Y',("{0}|1".format(TSF_calc_PI2[:TSF_calc_precisionPI])+'0'*(TSF_calc_precisionPI-1)))
-    TSF_calcA=TSF_calcA.replace('e',("{0}|1".format(TSF_calc_E[:TSF_calc_precisionPI])+'0'*(TSF_calc_precisionPI-1)))
+#        TSF_calcA=TSF_calcA.replace(TSF_okusenK,"{0}+".format(TSF_okusenV))
+        TSF_calcA=TSF_calcA.replace(TSF_okusenK,"".join([TSF_okusenV,"+"]))
+#    TSF_calcA=TSF_calcA.replace('y',("{0}|1".format(TSF_calc_PI[:TSF_calc_precisionPI])+'0'*(TSF_calc_precisionPI-1)))
+    TSF_calcA=TSF_calcA.replace('y',"".join([TSF_calc_PI[:TSF_calc_precisionPI],"|1",'0'*(TSF_calc_precisionPI-1)]))
+#    TSF_calcA=TSF_calcA.replace('Y',("{0}|1".format(TSF_calc_PI2[:TSF_calc_precisionPI])+'0'*(TSF_calc_precisionPI-1)))
+    TSF_calcA=TSF_calcA.replace('Y',"".join([TSF_calc_PI2[:TSF_calc_precisionPI],"|1",'0'*(TSF_calc_precisionPI-1)]))
+#    TSF_calcA=TSF_calcA.replace('e',("{0}|1".format(TSF_calc_E[:TSF_calc_precisionPI])+'0'*(TSF_calc_precisionPI-1)))
+    TSF_calcA=TSF_calcA.replace('e',"".join([TSF_calc_E[:TSF_calc_precisionPI],"|1",'0'*(TSF_calc_precisionPI-1)]))
     TSF_calcA=TSF_calcA.replace('f',str(TSF_calc_precisionMAX)).replace('n','(n|0)')
 #    TSF_io_printlog("TSF_calc_bracketsbalance:{0}".format(TSF_calcA))
     for TSF_calc_opecase in TSF_calc_opemark:
@@ -159,8 +165,10 @@ TSF_calc_NOZUs=OrderedDict([
     ('u',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:TSF_LimFirst if decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_calcSeq.replace('k',"0"))).replace("n|0","+Infinity")) < 0 else TSF_LimRest)),
     ('M',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:"+".join([TSF_calc_addition(TSF_calcSeq.replace('k',str(TSF_LimK))) for TSF_LimK in TSF_calc_function_limit(TSF_LimFirst,TSF_LimRest)]))),
     ('P',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:"*".join([TSF_calc_addition(TSF_calcSeq.replace('k',str(TSF_LimK))) for TSF_LimK in TSF_calc_function_limit(TSF_LimFirst,TSF_LimRest)]))),
-    ('$',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:str(TSF_calc_addition(TSF_LimFirst.replace('k',"0")))+"/"+str(TSF_calc_addition(TSF_calcSeq.replace('k',"0"))))),
+#    ('$',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:str(TSF_calc_addition(TSF_LimFirst.replace('k',"0")))+"/"+str(TSF_calc_addition(TSF_calcSeq.replace('k',"0"))))),
+    ('$',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:"/".join([str(TSF_calc_addition(TSF_LimFirst.replace('k',"0"))),str(TSF_calc_addition(TSF_calcSeq.replace('k',"0")))]))),
 ])
+
 def TSF_calc_function_limit(TSF_LimFirst,TSF_LimRest):    #TSF_doc:和集合積集合のrange作成。
     TSF_LimStart,TSF_LimGoal=decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_LimFirst))).to_integral_value(),decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_LimRest))).to_integral_value()
     if TSF_LimStart <= TSF_LimGoal:
@@ -182,11 +190,13 @@ def TSF_calc_function(TSF_calcQ):    #TSF_doc:分数電卓の和集合積集合�
         TSF_calcSeq,TSF_calcLim=TSF_calcQ.split('\t')
         if not '~' in TSF_calcLim:
             if TSF_calc_NOZUin in "MP":
-                TSF_calcLim="1~"+TSF_calcLim
+#                TSF_calcLim="1~"+TSF_calcLim
+                TSF_calcLim="~".join(["1",TSF_calcLim])
             elif TSF_calc_NOZUin in "$":
                 TSF_calcLim=TSF_calcLim
             else:
-                TSF_calcLim=TSF_calcLim+"~0"
+#                TSF_calcLim=TSF_calcLim+"~0"
+                TSF_calcLim="~".join([TSF_calcLim,"0"])
         if '~' in TSF_calcLim:
             TSF_LimFirst,TSF_LimRest=TSF_calcLim.split('~')[0],TSF_calcLim.split('~')[-1]
         else:
@@ -219,11 +229,13 @@ def TSF_calc_addition(TSF_calcQ):    #TSF_doc:分数電卓の足し算引き算�
             TSF_calcLN=TSF_calcLN//TSF_GCD
             TSF_calcLD=TSF_calcLD//TSF_GCD
             if TSF_calcLD < 0: TSF_calcLN,TSF_calcLD=-TSF_calcLN,-TSF_calcLD
-            TSF_calcA=str(TSF_calcLN)+"|"+str(TSF_calcLD)
+#            TSF_calcA=str(TSF_calcLN)+"|"+str(TSF_calcLD)
+            TSF_calcA="|".join([str(TSF_calcLN),str(TSF_calcLD)])
         except decimal.InvalidOperation:
             TSF_calcA="n|0"
     if TSF_calcA != "0|1" and TSF_calcA != "n|0":
-        TSF_calcA=TSF_calcA.replace('-','m') if TSF_calcA.startswith("-") else "p{0}".format(TSF_calcA)
+#        TSF_calcA=TSF_calcA.replace('-','m') if TSF_calcA.startswith("-") else "p{0}".format(TSF_calcA)
+        TSF_calcA=TSF_calcA.replace('-','m') if TSF_calcA.startswith("-") else "".join(["p",str(TSF_calcA)])
 #    print("TSF_calc_additionTSF_calcA=",TSF_calcA)
     return TSF_calcA
 
@@ -289,7 +301,8 @@ def TSF_calc_multiplication(TSF_calcQ):    #TSF_doc:分数電卓の掛け算割�
                         TSF_calcLND=decimal.Decimal(decimal.getcontext().divide(TSF_calcLND,TSF_calclogNR)); TSF_calclogNL+=1
                     if decimal.getcontext().power(TSF_calclogNR,TSF_calclogNL) == TSF_calcLN:
                         TSF_calcLN,TSF_calcLD=decimal.Decimal(TSF_calclogNL),decimal.Decimal(1)
-                        TSF_calcA=str(TSF_calcLN)+"|"+str(TSF_calcLD)
+#                        TSF_calcA=str(TSF_calcLN)+"|"+str(TSF_calcLD)
+                        TSF_calcA="|".join([str(TSF_calcLN),str(TSF_calcLD)])
             if TSF_calcA == "":
                 try:
                     TSF_calcLND=str(fractions.Fraction(decimal.getcontext().ln(TSF_calcLN/TSF_calcLD)/decimal.getcontext().ln(decimal.Decimal(TSF_calcRN)/decimal.Decimal(TSF_calcRD))))
@@ -342,7 +355,8 @@ def TSF_calc_multiplication(TSF_calcQ):    #TSF_doc:分数電卓の掛け算割�
             TSF_GCD=fractions.gcd(TSF_calcLN,TSF_calcLD)
             TSF_calcLN=TSF_calcLN//TSF_GCD
             TSF_calcLD=TSF_calcLD//TSF_GCD
-            TSF_calcA=str(TSF_calcLN)+"|"+str(TSF_calcLD)
+#            TSF_calcA=str(TSF_calcLN)+"|"+str(TSF_calcLD)
+            TSF_calcA="|".join([str(TSF_calcLN),str(TSF_calcLD)])
         except decimal.InvalidOperation:
             TSF_calcA="n|0"
     return TSF_calcA
@@ -361,7 +375,8 @@ TSF_calc_SCTs=OrderedDict([
 def TSF_calc_fractalize(TSF_calcQ):    #TSF_doc:分数電卓なので小数を分数に。ついでに平方根や三角関数も。0で割る、もしくは桁が限界越えたときなどは「n|0」を返す。
     TSF_calcQ=TSF_calcQ.replace('/','|').rstrip('.').rstrip('+')
     if not '|' in TSF_calcQ:
-        TSF_calcQ="{0}|1".format(TSF_calcQ)
+#        TSF_calcQ="{0}|1".format(TSF_calcQ)
+        TSF_calcQ="|".join([TSF_calcQ,"1"])
     TSF_calcM=TSF_calcQ.count('m')+TSF_calcQ.count('-') if not '!' in TSF_calcQ else 0
     TSF_calcQ=TSF_calcQ.replace('p','').replace('m','').replace('-','').replace('!','')
     TSF_calc_SCTin=""
@@ -429,25 +444,29 @@ def TSF_calc_decimalizeKN(TSF_calcQ):    #TSF_doc:分数(が入力されてる�
     TSF_calcF="マイナス" if TSF_calcQ.startswith('m') else ""
     TSF_calcRN,TSF_calcRD=TSF_calcQ.replace('m','').replace('p','').split('|')
     if float(TSF_calcRD) != 0.0:
-        TSF_calcA="{2}{1}分の{0}".format(TSF_calc_decimalizeKNcomma(TSF_calcRN),TSF_calc_decimalizeKNcomma(TSF_calcRD),TSF_calcF)
+#        TSF_calcA="{2}{1}分の{0}".format(TSF_calc_decimalizeKNcomma(TSF_calcRN),TSF_calc_decimalizeKNcomma(TSF_calcRD),TSF_calcF)
+        TSF_calcA="".join([TSF_calcF,TSF_calc_decimalizeKNcomma(TSF_calcRD),"分の",TSF_calc_decimalizeKNcomma(TSF_calcRN)])
         TSF_calcA=TSF_calcA.replace("1分の",'')
     else:
         TSF_calcA="n|0"
     TSF_calcA=TSF_calcA.replace('恒','恒河沙').replace('阿','阿僧祇').replace('那','那由他').replace('思','不可思議').replace('量','無量大数')
     return TSF_calcA
-    
+
 def TSF_calc_decimalizeKNcomma(TSF_calcQ):    #TSF_doc:整数を4桁で区切って漢数字を付ける。
     TSF_calcA=""
-    TSF_calcO=decimal.Decimal(TSF_calcQ); TSF_calcQ=TSF_calcO%decimal.Decimal(10000)
-    if TSF_calcQ:
-        TSF_calcA+=str(TSF_calcQ)
+    TSF_calcO=decimal.Decimal(TSF_calcQ); TSF_calcK=TSF_calcO%decimal.Decimal(10000)
+    if TSF_calcK:
+#        TSF_calcA+=str(TSF_calcK)
+        TSF_calcA="".join([TSF_calcA,str(TSF_calcK)])
     for TSF_okusenK in TSF_calc_okusenman:
-        TSF_calcO=TSF_calcO//decimal.Decimal(10000); TSF_calcQ=TSF_calcO%decimal.Decimal(10000)
-        if TSF_calcQ > decimal.Decimal(0):
-            TSF_calcA="{0}{1}{2}".format(TSF_calcQ,TSF_okusenK,TSF_calcA)
+        TSF_calcO=TSF_calcO//decimal.Decimal(10000); TSF_calcK=TSF_calcO%decimal.Decimal(10000)
+        if TSF_calcK > decimal.Decimal(0):
+#            TSF_calcA="{0}{1}{2}".format(TSF_calcK,TSF_okusenK,TSF_calcA)
+            TSF_calcA="".join([str(TSF_calcK),TSF_okusenK,TSF_calcA])
     if TSF_calcO > decimal.Decimal(10000):
         TSF_calcO=TSF_calcO//decimal.Decimal(10000)
-        TSF_calcA=str(TSF_calcO)+TSF_calcA
+#        TSF_calcA=str(TSF_calcO)+TSF_calcA
+        TSF_calcA="".join([str(TSF_calcO),TSF_calcA])
     return TSF_calcA
 
 

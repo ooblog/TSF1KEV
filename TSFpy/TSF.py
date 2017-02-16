@@ -79,11 +79,11 @@ def TSF_command_helloworld():    #TSF_doc:TSFのより小さなサンプルプ�
 def TSF_command_calc(TSF_calctype=None):    #TSF_doc:TSFのより小さなサンプルプログラム。
     TSF_calcQ=sys.argv[2].decode(sys.stdout.encoding) if len(sys.argv) > 2 else "n|0"
     if TSF_calctype == "--calcDC":
-        TSF_calcA=TSF_calc_decimalize(TSF_calcQ)
+        TSF_calcA=TSF_calc_decimalize(TSF_calcQ,False)
     elif TSF_calctype == "--calcKN":
-        TSF_calcA=TSF_calc_decimalizeKN(TSF_calc(TSF_calcQ))
+        TSF_calcA=TSF_calc_decimalizeKN(TSF_calc(TSF_calcQ,False))
     else:
-        TSF_calcA=TSF_calc(TSF_calcQ)
+        TSF_calcA=TSF_calc(TSF_calcQ,False)
     TSF_io_printlog(TSF_calcA)
 
 def TSF_command_help():    #TSF_doc:TSFのより小さなサンプルプログラム。
