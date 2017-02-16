@@ -19,6 +19,7 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
     TSF_words={
         "#TSF_fin.":TSF_Forth_fin,  "コードと共にTSFを終了。":TSF_Forth_fin,
         "#TSF_over":TSF_Forth_over,  "スタックを出る":TSF_Forth_over,  "スタックを出る(TSFも終了)":TSF_Forth_over,
+# "TSF_GUI" "をGUI処理"
 # "TSF_newword" "という言葉を作る"
 # "TSF_noword" "という言葉を忘れる"
 # "TSF_style" "で表示するスタイル"
@@ -27,8 +28,8 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
 # "TSF_casethis" "つ前のスタックに入る"
         "#TSF_that":TSF_Forth_that,  "スタックを積込先にする":TSF_Forth_that,
 # "TSF_casethat" "つ前のスタックを積込先にする"
-        "#TSF_echo":TSF_Forth_echo,  "を表示する":TSF_Forth_echo,
-        "#TSF_echoes":TSF_Forth_echoes,  "行分表示する":TSF_Forth_echoes,
+#        "#TSF_echo":TSF_Forth_echo,  "を表示する":TSF_Forth_echo,
+        "#TSF_echoes":TSF_Forth_echoes,  "行表示する":TSF_Forth_echoes,
         "#TSF_lenthe":TSF_Forth_lenthe,  "のスタック個数":TSF_Forth_lenthe,
         "#TSF_lenthis":TSF_Forth_lenthis,  "実行中スタックの個数":TSF_Forth_lenthis,
         "#TSF_lenthat":TSF_Forth_lenthat,  "積込先スタックの個数":TSF_Forth_lenthat,
@@ -47,14 +48,11 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         "#TSF_calcKN":TSF_Forth_calcKN,  "を単位付き計算する":TSF_Forth_calcKN,
         "#TSF_calcPR":TSF_Forth_calcPR,  "を有効桁数":TSF_Forth_calcPR,
         "#TSF_calcRO":TSF_Forth_calcRO,  "で端数処理":TSF_Forth_calcRO,
-#        "#TSF_calc{}":TSF_Forth_calcCB,  "波括弧で数式に連結":TSF_Forth_calcCB,
-#        "#TSF_calc[]":TSF_Forth_calcSB,  "角括弧で数式に連結":TSF_Forth_calcSB,
-#        "#TSF_calc｢｣":TSF_Forth_calcCB,  "鉤括弧で数式に連結":TSF_Forth_calcCB,
         "#TSF_brackets":TSF_Forth_brackets,  "括弧で数式に連結":TSF_Forth_brackets,
         "#TSF_join":TSF_Forth_join,  "個分連結":TSF_Forth_join,
-        "#TSF_joinC":TSF_Forth_joinC,  "個分挟んで連結":TSF_Forth_joinC,
-        "#TSF_split":TSF_Forth_split,  "の文字で分解":TSF_Forth_split,
-        "#TSF_chars":TSF_Forth_chars,  "一文字ずつに分解":TSF_Forth_chars,
+        "#TSF_joinC":TSF_Forth_joinC,  "で回数分挟んで連結":TSF_Forth_joinC,
+        "#TSF_split":TSF_Forth_split,  "の文字で分離":TSF_Forth_split,
+        "#TSF_chars":TSF_Forth_chars,  "一文字ずつに分離":TSF_Forth_chars,
 # "TSF_load" "ファイルをテキストとしてスタックに読み込む"
 # "TSF_marge" "スタックをTSFとしてスタックに混ぜる"
 # "TSF_nomarge" "スタックをテキスト化してスタックに読み込む"
@@ -229,15 +227,16 @@ def TSF_Forth_that():    #TSF_doc:[stack]thatスタック(積み込み先スタ�
     TSF_thatstack_name=TSF_Forth_pop(TSF_thatstack_name)
     return TSF_thisstack_name
 
-def TSF_Forth_echo():    #TSF_doc:[value]直近1つのスタック内容を端末で表示する。1スタック消費。
-    TSF_echotext=TSF_Forth_pop(TSF_thatstack_name)
-    TSF_io_printlog(TSF_echotext)
-    return TSF_thisstack_name
+#def TSF_Forth_echo():    #TSF_doc:[value]直近1つのスタック内容を端末で表示する。1スタック消費。
+#    TSF_echotext=TSF_Forth_pop(TSF_thatstack_name)
+#    TSF_io_printlog(TSF_echotext)
+#    return TSF_thisstack_name
 
 def TSF_Forth_echoes():    #TSF_doc:[…valueB,valueA,count]指定した個数スタック内容を端末で表示する。count分スタック消費。
     TSF_echoloopI=TSF_Forth_popdecimalize(TSF_thatstack_name)
     for TSF_echocount in range(TSF_echoloopI):
-        TSF_Forth_echo()
+#        TSF_Forth_echo()
+        TSF_io_printlog(TSF_Forth_pop(TSF_thatstack_name))
     return TSF_thisstack_name
 
 def TSF_Forth_lenthe():   #TSF_doc:[stack]指定したスタックの数を数える。1スタック積み上げ。
@@ -313,28 +312,6 @@ def TSF_Forth_calcRO():   #TSF_doc:[round]端数処理を変更する。端数�
     TSF_calc_rounding(TSF_Forth_popdecimalize(TSF_thatstack_name))
     return TSF_thisstack_name
 
-#def TSF_Forth_calcmarge(TSF_bracketL,TSF_bracketR):   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、指定された括弧の中の数値をスタック内容に置換。calc自身とcalc内の該当括弧分スタック積み下ろし。
-#    TSF_tsvA=TSF_Forth_pop(TSF_thatstack_name)
-#    for TSF_stackC,TSF_stackQ in enumerate(TSF_stacks[TSF_thatstack_name]):
-#        TSF_calcK="{0}{1}{2}".format(TSF_bracketL,TSF_stackC,TSF_bracketR)
-#        if TSF_calcK in TSF_tsvA:
-#            TSF_tsvA=TSF_tsvA.replace(TSF_calcK,"{0}".format(TSF_Forth_pop(TSF_thatstack_name)))
-#        else:
-#            break
-#    TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
-#
-#def TSF_Forth_calcBB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、波括弧【{n}】をスタック内容に置換。calc自身とcalc内の該当括弧分スタック積み下ろし。
-#    TSF_Forth_calcmarge('{','}')
-#    return TSF_thisstack_name
-#
-#def TSF_Forth_calcSB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、角括弧【[n]】をスタック内容に置換。calc自身とcalc内の該当括弧分スタック積み下ろし。
-#    TSF_Forth_calcmarge('[',']')
-#    return TSF_thisstack_name
-#
-#def TSF_Forth_calcCB():   #TSF_doc:[…stackB,stackA,calc,count]これ自体は計算はせず、鉤括弧【｢n｣】をスタック内容に置換。calc自身とcalc内の該当括弧分スタック積み下ろし。
-#    TSF_Forth_calcmarge('｢','｣')
-#    return TSF_thisstack_name
-
 def TSF_Forth_brackets():   #TSF_doc:[…stackB,stackA,calc,brackets]これ自体は計算はせず、括弧に囲まれたスタック番号をスタック内容に置換。bracketsとcalc自身とcalc内の該当括弧分スタック積み下ろし。
     TSF_tsvB=TSF_Forth_pop(TSF_thatstack_name)
     if len(TSF_tsvB) < 2: TSF_tsvB="[]"
@@ -357,9 +334,9 @@ def TSF_Forth_join():   #TSF_doc:[…stackB,stackA,count]文字列に連結す�
     TSF_Forth_push(TSF_thatstack_name,"".join(reversed(TSF_joinlist)))
     return TSF_thisstack_name
 
-def TSF_Forth_joinC():   #TSF_doc:[…stackB,stackA,joint,count]文字列に連結する。count自身とjointとcount数値分スタック積み下ろし、連結した文字列を積み込み。
-    TSF_joinloopI=TSF_Forth_popdecimalize(TSF_thatstack_name)
+def TSF_Forth_joinC():   #TSF_doc:[…stackB,stackA,count,joint]文字列に連結する。jointとcount自身の2つ+count数値分スタック積み下ろし、連結した文字列を積み込み。
     TSF_joinloopC=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_joinloopI=TSF_Forth_popdecimalize(TSF_thatstack_name)
     TSF_joinlist=[]
     for TSF_joincount in range(TSF_joinloopI):
         TSF_joinlist.append(TSF_Forth_pop(TSF_thatstack_name))
