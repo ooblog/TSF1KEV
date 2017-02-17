@@ -43,10 +43,15 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         "#TSF_pushthis":TSF_Forth_pushthis,  "実行中スタックを自身に積む":TSF_Forth_pushthis,
         "#TSF_pushthat":TSF_Forth_pushthat,  "積込先スタックから積む":TSF_Forth_pushthat,
         "#TSF_pushthey":TSF_Forth_pushthey,  "スタック名一覧を積む":TSF_Forth_pushthey,
-# "TSF_popthe" "スタックに積込元スタックを積み直す"
-# "TSF_popthis" "実行中スタックに積込元スタックを積み直す"
-# "TSF_popthat "スタックを積み下ろす"
-# "TSF_delthe" "スタックそのものを削除"
+        "#TSF_carbonthe":TSF_Forth_carbonthe,  "スタックの一番上を複製する":TSF_Forth_carbonthe,
+        "#TSF_carbonthis":TSF_Forth_carbonthis,  "実行中スタックの一番上を複製する":TSF_Forth_carbonthis,
+        "#TSF_carbonthat":TSF_Forth_carbonthat,  "積込先スタックの一番上を複製する":TSF_Forth_carbonthat,
+        "#TSF_popthe":TSF_Forth_popthe,  "スタックから拾う":TSF_Forth_popthe,
+        "#TSF_popthis":TSF_Forth_popthis,  "実行中スタックから拾う":TSF_Forth_popthis,
+        "#TSF_popthat":TSF_Forth_popthat,  "積込先スタックから除く":TSF_Forth_popthat,
+        "#TSF_delthe":TSF_Forth_delthe,  "のスタック削除":TSF_Forth_delthe,
+        "#TSF_delthis":TSF_Forth_delthat,  "実行中スタックを削除":TSF_Forth_delthis,
+        "#TSF_delthat":TSF_Forth_delthat,  "積込先スタックを削除":TSF_Forth_delthat,
         "#TSF_calcQQ":TSF_Forth_calcQQ,  "を計算して暗記もする":TSF_Forth_calcQQ,  "で九九る":TSF_Forth_calcQQ,
         "#TSF_calcFX":TSF_Forth_calcFX,  "を計算する":TSF_Forth_calcFX,
         "#TSF_calcDC":TSF_Forth_calcDC,  "を小数に計算する":TSF_Forth_calcDC,
@@ -287,15 +292,15 @@ def TSF_Forth_lenthe():   #TSF_doc:[stack]指定したスタックの数を数�
     TSF_Forth_push(TSF_thatstack_name,str(len(TSF_stacks.get(TSF_thename,[]))))
     return TSF_thisstack_name
 
-def TSF_Forth_lenthis():   #TSF_doc:thisスタック(実行中スタック)の数を数える。1スタック積み上げ。
+def TSF_Forth_lenthis():   #TSF_doc:[]thisスタック(実行中スタック)の数を数える。1スタック積み上げ。
     TSF_Forth_push(TSF_thatstack_name,str(len(TSF_stacks.get(TSF_thisstack_name,[]))))
     return TSF_thisstack_name
 
-def TSF_Forth_lenthat():   #TSF_doc:thatスタック(積み込み先スタック)の数を数える。1スタック積み上げ。
+def TSF_Forth_lenthat():   #TSF_doc:[]thatスタック(積み込み先スタック)の数を数える。1スタック積み上げ。
     TSF_Forth_push(TSF_thatstack_name,str(len(TSF_stacks.get(TSF_thatstack_name,[]))))
     return TSF_thisstack_name
 
-def TSF_Forth_lenthey():   #TSF_doc:スタック名一覧の数を数える。1スタック積み上げ。
+def TSF_Forth_lenthey():   #TSF_doc:[]スタック名一覧の数を数える。1スタック積み上げ。
     TSF_Forth_push(TSF_thatstack_name,str(len(TSF_stacks)))
     return TSF_thisstack_name
 
@@ -306,21 +311,65 @@ def TSF_Forth_pushthe():   #TSF_doc:[stack]指定したスタックを丸ごとt
             TSF_Forth_push(TSF_thatstack_name,TSF_tsv)
     return TSF_thisstack_name
 
-def TSF_Forth_pushthis():   #TSF_doc:thisスタック(実行中スタック)を丸ごとthatスタック(積み込み先スタック)に積み上げ。
+def TSF_Forth_pushthis():   #TSF_doc:[]実行中スタックを丸ごとthatスタック(積み込み先スタック)に積み上げ。
     if TSF_thisstack_name in TSF_stacks:
         for TSF_tsv in reversed(TSF_stacks.get(TSF_thisstack_name,[])):
             TSF_Forth_push(TSF_thatstack_name,TSF_tsv)
     return TSF_thisstack_name
 
-def TSF_Forth_pushthat():   #TSF_doc:thatスタック(積み込み先スタック)を丸ごとthatスタック(積み込み先スタック)に積み上げ。
+def TSF_Forth_pushthat():   #TSF_doc:[]thatスタック(積み込み先スタック)を丸ごとthatスタック(積み込み先スタック)に積み上げ。
     if TSF_thatstack_name in TSF_stacks:
         for TSF_tsv in reversed(TSF_stacks.get(TSF_thatstack_name,[])):
             TSF_Forth_push(TSF_thatstack_name,TSF_tsv)
     return TSF_thisstack_name
 
-def TSF_Forth_pushthey():   #TSF_doc:スタック名一覧を丸ごとthatスタック(積み込み先スタック)に積み上げ。
+def TSF_Forth_pushthey():   #TSF_doc:[]スタック名一覧を丸ごとthatスタック(積み込み先スタック)に積み上げ。
     for TSF_tsv in reversed(TSF_stacks):
         TSF_Forth_push(TSF_thatstack_name,TSF_tsv)
+    return TSF_thisstack_name
+
+def TSF_Forth_carbonthe():   #TSF_doc:[stack]スタックの一番上のスタックを複製する。
+    TSF_thename=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_carbon=TSF_stacks[TSF_thename][-1] if len(TSF_stacks[TSF_thename]) > 0 else ""
+    TSF_Forth_push(TSF_thatstack_name,TSF_carbon)
+    return TSF_thisstack_name
+
+def TSF_Forth_carbonthis():   #TSF_doc:[]実行中スタックの一番上のスタックを複製する。
+    TSF_carbon=TSF_stacks[TSF_thisstack_name][-1] if len(TSF_stacks[TSF_thisstack_name]) > 0 else ""
+    TSF_Forth_push(TSF_thatstack_name,TSF_carbon)
+    return TSF_thisstack_name
+
+def TSF_Forth_carbonthat():   #TSF_doc:[]積込先スタックの一番上のスタックを複製する。
+    TSF_carbon=TSF_stacks[TSF_thatstack_name][-1] if len(TSF_stacks[TSF_thatstack_name]) > 0 else ""
+    TSF_Forth_push(TSF_thatstack_name,TSF_carbon)
+    return TSF_thisstack_name
+
+def TSF_Forth_popthe():   #TSF_doc:[stack]スタックから積込先スタックに1スタック積み下ろす。
+    TSF_thename=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_tsv=TSF_Forth_pop(TSF_thename)
+    TSF_Forth_push(TSF_thatstack_name,TSF_tsv)
+    return TSF_thisstack_name
+
+def TSF_Forth_popthis():   #TSF_doc:[]実行中スタックから積込先スタックに1スタック積み下ろす。
+    TSF_tsv=TSF_Forth_pop(TSF_thisstack_name)
+    TSF_Forth_push(TSF_thatstack_name,TSF_tsv)
+    return TSF_thisstack_name
+
+def TSF_Forth_popthat():   #TSF_doc:[]積込先スタックから1スタック積み下ろす(削除)。
+    TSF_Forth_pop(TSF_thisstack_name)
+    return TSF_thisstack_name
+
+def TSF_Forth_delthe():   #TSF_doc:[stack]スタックを削除。
+    TSF_thename=TSF_Forth_pop(TSF_thatstack_name)
+    del TSF_stacks[TSF_thename]
+    return TSF_thisstack_name
+
+def TSF_Forth_delthis():   #TSF_doc:[]実行中スタックを削除。スタックも抜けてコールポインタを1つ減らす。
+    del TSF_stacks[TSF_thisstack_name]
+    return ""
+
+def TSF_Forth_delthat():   #TSF_doc:[]積込先スタックを削除。
+    del TSF_stacks[TSF_thatstack_name]
     return TSF_thisstack_name
 
 def TSF_Forth_calcQQ():   #TSF_doc:[calc]スタック内容で分数電卓する。一度計算した値は暗記(九九)するので再計算しない。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
