@@ -73,8 +73,20 @@ def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサン�
     print("-- TSF_Forth_viewprintlog() --")
     TSF_Forth_viewprintlog()
 
-def TSF_command_helloworld():    #TSF_doc:TSF_about.tsfより小さなサンプルプログラム。
+def TSF_command_Helloworld():    #TSF_doc:TSF_about.tsfより小さなサンプルHelloworldプログラム。
     TSF_Forth_settext(TSF_Forth_1ststack(),"\t".join(["Hello world","1","#TSF_echoes"]))
+    TSF_Forth_viewprintlog()
+
+def TSF_command_FizzBuzz():    #TSF_doc:TSF_about.tsfより小さなサンプルFizzBuzzプログラム。
+    TSF_Forth_settext(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","FizzBuzz:","#TSF_this","0","#TSF_fin."]))
+    TSF_Forth_settext("FizzBuzz:","\t".join([ \
+    "FZcount:","0","#TSF_peekthe","[0]+1","[]","#TSF_brackets","#TSF_calcFX","#TSF_carbonthat",
+    "1","#TSF_echoes",
+    "FZcount:","0","#TSF_pokethe",
+    "FZjunp:","FZcount:","0","#TSF_peekthe","[0]-10U","[]","#TSF_brackets","#TSF_calcFX","#TSF_peekthe","#TSF_viewthat",
+    ]))
+    TSF_Forth_settext("FZcount:","\t".join(["0"]))
+    TSF_Forth_settext("FZjunp:","\t".join(["FizzBuzz:",":"]))
     TSF_Forth_viewprintlog()
 
 def TSF_command_calc(TSF_calctype=None):    #TSF_doc:TSFのより小さなサンプルプログラム。
@@ -116,7 +128,9 @@ if os.path.isfile(TSF_mergefile):
 elif TSF_mergefile == "--about":
     TSF_command_about(True)
 elif TSF_mergefile == "--helloworld":
-    TSF_command_helloworld()
+    TSF_command_Helloworld()
+elif TSF_mergefile == "--fizzbuzz":
+    TSF_command_FizzBuzz()
 elif TSF_mergefile in ["--calc","--calcDC","--calcKN"]:
     TSF_command_calc(TSF_mergefile)
 elif TSF_mergefile == "--help":

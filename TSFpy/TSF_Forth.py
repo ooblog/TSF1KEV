@@ -24,12 +24,10 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
 # "TSF_noword" "という言葉を忘れる"
         "#TSF_encoding":TSF_Forth_encoding,  "でエンコード":TSF_Forth_encoding,
         "#TSF_this":TSF_Forth_this,  "のスタックに入る":TSF_Forth_this,  "スタックを実行":TSF_Forth_this,
-# "TSF_casethis" "つ前のスタックに入る"
         "#TSF_that":TSF_Forth_that,  "スタックを積込先にする":TSF_Forth_that,
-# "TSF_casethat" "つ前のスタックを積込先にする"
         "#TSF_viewthe":TSF_Forth_viewthe,  "を表示する":TSF_Forth_viewthe,
         "#TSF_viewthis":TSF_Forth_viewthis,  "実行中スタックを表示する":TSF_Forth_viewthis,
-        "#TSF_viewthe":TSF_Forth_viewthat,  "積込先スタックを表示する":TSF_Forth_viewthat,
+        "#TSF_viewthat":TSF_Forth_viewthat,  "積込先スタックを表示する":TSF_Forth_viewthat,
         "#TSF_viewthey":TSF_Forth_viewthey,  "スタック一覧を表示する":TSF_Forth_viewthey,
         "#TSF_stylethe":TSF_Forth_stylethe,  "スタイルをスタックに設定する":TSF_Forth_stylethe,
         "#TSF_stylethis":TSF_Forth_stylethis,  "スタイルを実行中スタックに設定する":TSF_Forth_stylethis,
@@ -49,6 +47,8 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         "#TSF_popthe":TSF_Forth_popthe,  "スタックから拾う":TSF_Forth_popthe,
         "#TSF_popthis":TSF_Forth_popthis,  "実行中スタックから拾う":TSF_Forth_popthis,
         "#TSF_popthat":TSF_Forth_popthat,  "積込先スタックから除く":TSF_Forth_popthat,
+        "#TSF_peekthe":TSF_Forth_peekthe,  "番目のスタックから読み込む":TSF_Forth_peekthe,
+        "#TSF_pokethe":TSF_Forth_pokethe,  "番目のスタックに上書き":TSF_Forth_pokethe,
         "#TSF_delthe":TSF_Forth_delthe,  "のスタック削除":TSF_Forth_delthe,
         "#TSF_delthis":TSF_Forth_delthat,  "実行中スタックを削除":TSF_Forth_delthis,
         "#TSF_delthat":TSF_Forth_delthat,  "積込先スタックを削除":TSF_Forth_delthat,
@@ -189,7 +189,7 @@ def TSF_Forth_peek(TSF_that,TSF_count):    #TSF_doc:スタックから読み取�
             TSF_peekdata=TSF_stacks[TSF_that][TSF_count]
     return TSF_peekdata
 
-def TSF_Forth_poke(TSF_that,TSF_poke,TSF_count):    #TSF_doc:スタックに書き込む。正常なら0。TSF_countの値がはみ出した場合1。スタック自体が無かったら2。
+def TSF_Forth_poke(TSF_that,TSF_count,TSF_poke):    #TSF_doc:スタックに書き込む。正常なら0。TSF_countの値がはみ出した場合1。スタック自体が無かったら2。
     TSF_pokeerr=0
     if TSF_that in TSF_stacks:
         if 0 <= TSF_count < len(TSF_stacks[TSF_that]):
@@ -228,14 +228,15 @@ def TSF_Forth_that():    #TSF_doc:[stack]thatスタック(積み込み先スタ�
     return TSF_thisstack_name
 
 def TSF_Forth_view(TSF_thename,TSF_view_log=""):    #TSF_doc:スタックの内容をテキスト表示する。
-    TSF_style=TSF_styles.get(TSF_thename,"N")
-    TSF_stackV=[TSF_txt_ESCdecode(TSF_stk) for TSF_stk in TSF_stacks[TSF_thename]]
-    if TSF_style == "O":
-        TSF_view_log=TSF_io_printlog("{0}\t{1}\n".format(TSF_thename,"\t".join(TSF_stackV)),TSF_log=TSF_view_log)
-    elif TSF_style == "T":
-        TSF_view_log=TSF_io_printlog("{0}\n\t{1}\n".format(TSF_thename,"\t".join(TSF_stackV)),TSF_log=TSF_view_log)
-    else:  # TSF_style == "N":
-        TSF_view_log=TSF_io_printlog("{0}\n\t{1}\n".format(TSF_thename,"\n\t".join(TSF_stackV)),TSF_log=TSF_view_log)
+    if TSF_thename in TSF_stacks:
+        TSF_stackV=[TSF_txt_ESCdecode(TSF_stk) for TSF_stk in TSF_stacks[TSF_thename]]
+        TSF_style=TSF_styles.get(TSF_thename,"N")
+        if TSF_style == "O":
+            TSF_view_log=TSF_io_printlog("{0}\t{1}\n".format(TSF_thename,"\t".join(TSF_stackV)),TSF_log=TSF_view_log)
+        elif TSF_style == "T":
+            TSF_view_log=TSF_io_printlog("{0}\n\t{1}\n".format(TSF_thename,"\t".join(TSF_stackV)),TSF_log=TSF_view_log)
+        else:  # TSF_style == "N":
+            TSF_view_log=TSF_io_printlog("{0}\n\t{1}\n".format(TSF_thename,"\n\t".join(TSF_stackV)),TSF_log=TSF_view_log)
     return TSF_view_log
 
 def TSF_Forth_viewthe():    #TSF_doc:[stack]指定したスタックの内容をテキスト取得する。1スタック積み下ろし。
@@ -364,6 +365,20 @@ def TSF_Forth_delthe():   #TSF_doc:[stack]スタックを削除。
     del TSF_stacks[TSF_thename]
     return TSF_thisstack_name
 
+def TSF_Forth_peekthe():   #TSF_doc:[stack,pointer]スタックから読み込む。2スタック積み下ろして、1スタック積み上げ。
+    TSF_peekcount=TSF_Forth_popdecimalize(TSF_thatstack_name)
+    TSF_thename=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_tsv=TSF_Forth_peek(TSF_thename,TSF_peekcount)
+    TSF_Forth_push(TSF_thatstack_name,TSF_tsv)
+    return TSF_thisstack_name
+
+def TSF_Forth_pokethe():   #TSF_doc:[data,stack,pointer]スタックに上書き。3スタック積み下ろす。
+    TSF_pokecount=TSF_Forth_popdecimalize(TSF_thatstack_name)
+    TSF_thename=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_tsv=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_Forth_poke(TSF_thename,TSF_pokecount,TSF_tsv)
+    return TSF_thisstack_name
+
 def TSF_Forth_delthis():   #TSF_doc:[]実行中スタックを削除。スタックも抜けてコールポインタを1つ減らす。
     del TSF_stacks[TSF_thisstack_name]
     return ""
@@ -458,7 +473,7 @@ def TSF_Forth_run(TSF_this=None,TSF_that=None):    #TSF_doc:TSFを実行して�
     TSF_thisstack_count=0
     TSF_nextstack=TSF_thisstack_name
     while True:
-        while TSF_thisstack_count < len(TSF_stacks[TSF_thisstack_name]) < 19:
+        while TSF_thisstack_count < len(TSF_stacks[TSF_thisstack_name]):
             if TSF_stacks[TSF_thisstack_name][TSF_thisstack_count] in TSF_words:
                 TSF_nextstack=TSF_words[TSF_stacks[TSF_thisstack_name][TSF_thisstack_count]]()
             else:
@@ -466,11 +481,13 @@ def TSF_Forth_run(TSF_this=None,TSF_that=None):    #TSF_doc:TSFを実行して�
             TSF_thisstack_count += 1
             if TSF_thisstack_name != TSF_nextstack:
                 if TSF_nextstack in TSF_stacks:
-                    if TSF_thisstack_name in TSF_callptrs:
-                        while TSF_thisstack_name in TSF_callptrs:
-                            TSF_callptrs.pop()
-                    else:
-                        TSF_callptrs[TSF_thisstack_name]=TSF_thisstack_count
+                    if TSF_nextstack in TSF_callptrs:
+#                        print("TSF_nextstack",TSF_nextstack,TSF_callptrs)
+                        while TSF_nextstack in TSF_callptrs:
+                            TSF_nextstack_count=TSF_callptrs.pop()
+                        TSF_callptrs[TSF_nextstack]=TSF_nextstack_count
+                    TSF_callptrs[TSF_thisstack_name]=TSF_thisstack_count
+#                    print("TSF_callptrs",TSF_callptrs)
                     TSF_thisstack_name = TSF_nextstack
                     TSF_thisstack_count = 0
                 else:
