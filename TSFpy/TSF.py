@@ -83,7 +83,7 @@ def TSF_command_FizzBuzz():    #TSF_doc:TSF_about.tsfより小さなサンプル
     "FZcount:","0","#TSF_peekthe","[0]+1","[]","#TSF_brackets","#TSF_calcFX","#TSF_carbonthat",
     "1","#TSF_echoes",
     "FZcount:","0","#TSF_pokethe",
-    "FZjunp:","FZcount:","0","#TSF_peekthe","[0]-10U","[]","#TSF_brackets","#TSF_calcFX","#TSF_peekthe","#TSF_viewthat",
+    "FZjunp:","FZcount:","0","#TSF_peekthe","[0]-10O1~0","[]","#TSF_brackets","#TSF_calcFX","#TSF_peekthe","#TSF_this",
     ]))
     TSF_Forth_settext("FZcount:","\t".join(["0"]))
     TSF_Forth_settext("FZjunp:","\t".join(["FizzBuzz:",":"]))
