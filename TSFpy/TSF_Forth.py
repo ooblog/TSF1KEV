@@ -170,7 +170,7 @@ def TSF_Forth_pop(TSF_that):    #TSF_doc:スタックを積み下ろす。
 
 def TSF_Forth_popdecimalize(TSF_that):    #TSF_doc:複数形のワードで最初のcountを数値として取得。
     TSF_decimalT=TSF_Forth_pop(TSF_that); 
-    TSF_decimalT=TSF_calc_decimalize(TSF_calc(TSF_decimalT,True))
+    TSF_decimalT=TSF_calc_decimalizeQQ(TSF_calc(TSF_decimalT,True))
     TSF_decimalI=abs(int(float(TSF_decimalT if TSF_decimalT != "n|0" else "0")))
     return TSF_decimalI
 
@@ -399,14 +399,12 @@ def TSF_Forth_calcbrackets(TSF_tsvBL,TSF_tsvBR):   #TSF_doc:括弧でスタッ�
     return TSF_tsvA
 
 def TSF_Forth_calcQQ():   #TSF_doc:[calc]スタック内容で分数電卓する。一度計算した値は暗記(九九)するので再計算しない。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
-#    TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
     TSF_tsvQ=TSF_Forth_calcbrackets("[","]")
     TSF_tsvA=TSF_calc(TSF_tsvQ,True)
     TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
     return None
 
 def TSF_Forth_calcFX():   #TSF_doc:[calc]スタック内容で分数電卓する。暗記はしないがQQを記憶をカンペする。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
-#    TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
     TSF_tsvQ=TSF_Forth_calcbrackets("[","]")
     TSF_tsvA=TSF_calc(TSF_tsvQ,None)
     TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
@@ -415,12 +413,11 @@ def TSF_Forth_calcFX():   #TSF_doc:[calc]スタック内容で分数電卓する
 def TSF_Forth_calcDC():   #TSF_doc:[calc]スタック内容で分数電卓する。計算結果を小数で求める過程で再計算になる。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
 #    TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
     TSF_tsvQ=TSF_Forth_calcbrackets("[","]")
-    TSF_tsvA=TSF_calc_decimalize(TSF_tsvQ,None)
+    TSF_tsvA=TSF_calc_decimalizeQQ(TSF_calc(TSF_tsvQ,None))
     TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
     return None
 
 def TSF_Forth_calcKN():   #TSF_doc:[calc]スタック内容で分数電卓する。計算結果を漢数字で求める過程で再計算になる。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
-#    TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
     TSF_tsvQ=TSF_Forth_calcbrackets("[","]")
     TSF_tsvA=TSF_calc_decimalizeKN(TSF_calc(TSF_tsvQ,None))
     TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
@@ -439,13 +436,6 @@ def TSF_Forth_brackets():   #TSF_doc:[…stackB,stackA,calc,brackets]これ自�
     if len(TSF_tsvB) < 2: TSF_tsvB="[]"
     TSF_tsvBL,TSF_tsvBR=TSF_tsvB[0],TSF_tsvB[-1]
     TSF_tsvA=TSF_Forth_calcbrackets(TSF_tsvBL,TSF_tsvBR)
-#    TSF_tsvA=TSF_Forth_pop(TSF_thatstack_name)
-#    for TSF_stackC,TSF_stackQ in enumerate(TSF_stacks[TSF_thatstack_name]):
-#        TSF_calcK="".join([TSF_tsvBL,str(TSF_stackC),TSF_tsvBR])
-#        if TSF_calcK in TSF_tsvA:
-#            TSF_tsvA=TSF_tsvA.replace(TSF_calcK,TSF_Forth_pop(TSF_thatstack_name))
-#        else:
-#            break
     TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
     return None
 
