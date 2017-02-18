@@ -388,12 +388,6 @@ def TSF_Forth_delthat():   #TSF_doc:[]積込先スタックを削除。
     del TSF_stacks[TSF_thatstack_name]
     return None
 
-def TSF_Forth_calcQQ():   #TSF_doc:[calc]スタック内容で分数電卓する。一度計算した値は暗記(九九)するので再計算しない。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
-    TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
-    TSF_tsvA=TSF_calc(TSF_tsvQ,True)
-    TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
-    return None
-
 def TSF_Forth_calcbrackets(TSF_tsvBL,TSF_tsvBR):   #TSF_doc:括弧でスタックを連結する。
     TSF_tsvA=TSF_Forth_pop(TSF_thatstack_name)
     for TSF_stackC,TSF_stackQ in enumerate(TSF_stacks[TSF_thatstack_name]):
@@ -404,21 +398,31 @@ def TSF_Forth_calcbrackets(TSF_tsvBL,TSF_tsvBR):   #TSF_doc:括弧でスタッ�
             break
     return TSF_tsvA
 
+def TSF_Forth_calcQQ():   #TSF_doc:[calc]スタック内容で分数電卓する。一度計算した値は暗記(九九)するので再計算しない。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
+#    TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_tsvQ=TSF_Forth_calcbrackets("[","]")
+    TSF_tsvA=TSF_calc(TSF_tsvQ,True)
+    TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
+    return None
+
 def TSF_Forth_calcFX():   #TSF_doc:[calc]スタック内容で分数電卓する。暗記はしないがQQを記憶をカンペする。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
-    TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
+#    TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_tsvQ=TSF_Forth_calcbrackets("[","]")
     TSF_tsvA=TSF_calc(TSF_tsvQ,None)
     TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
     return None
 
 def TSF_Forth_calcDC():   #TSF_doc:[calc]スタック内容で分数電卓する。計算結果を小数で求める過程で再計算になる。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
-    TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
-    TSF_tsvA=TSF_calc_decimalize(TSF_tsvQ,True)
+#    TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_tsvQ=TSF_Forth_calcbrackets("[","]")
+    TSF_tsvA=TSF_calc_decimalize(TSF_tsvQ,None)
     TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
     return None
 
 def TSF_Forth_calcKN():   #TSF_doc:[calc]スタック内容で分数電卓する。計算結果を漢数字で求める過程で再計算になる。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
-    TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
-    TSF_tsvA=TSF_calc_decimalizeKN(TSF_calc(TSF_tsvQ,True))
+#    TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_tsvQ=TSF_Forth_calcbrackets("[","]")
+    TSF_tsvA=TSF_calc_decimalizeKN(TSF_calc(TSF_tsvQ,None))
     TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
     return None
 
