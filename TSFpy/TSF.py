@@ -11,7 +11,7 @@ from TSF_Forth import *
 def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサンプルプログラム。
     TSF_Forth_settext(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","main1:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_settext("main1:","\t".join(["aboutTSF:","#TSF_pushthe","aboutTSF:","#TSF_lenthe","#TSF_echoes","main2:","#TSF_this"]))
-    TSF_Forth_settext("main2:","\t".join(["#分数電卓のテスト","1","#TSF_echoes","16","#TSF_calcPR","calcQQtest:","#TSF_this","calcFXtest:","#TSF_this","calcDCtest:","#TSF_this","calcKNテスト:","#TSF_this","#","1","#TSF_echoes","main3:","#TSF_this"]))
+    TSF_Forth_settext("main2:","\t".join(["#分数電卓のテスト","1","#TSF_echoes","16","#TSF_calcPR","calcFXtest:","#TSF_this","calcDCtest:","#TSF_this","calcKNテスト:","#TSF_this","#","1","#TSF_echoes","main3:","#TSF_this"]))
     TSF_Forth_settext("main3:","\t".join(["aboutCalc:","#TSF_pushthe","aboutCalc:","#TSF_lenthe","#TSF_echoes","main4:","#TSF_this"]))
     TSF_Forth_settext("main4:","\t".join(["aboutRPN:","#TSF_pushthe","aboutRPN:","#TSF_lenthe","#TSF_echoes","main5:","#TSF_this"]))
     TSF_Forth_settext("main5:","\t".join(["aboutCASE:","#TSF_pushthe","aboutCASE:","#TSF_lenthe","#TSF_echoes"]))
@@ -29,18 +29,15 @@ def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサン�
         "文字列連結は「#TSF_brackets」「#TSF_join」「#TSF_joinC」。文字列分解は「#TSF_split」「#TSF_chars」。\n"
         "「#TSF_brackets」などの文字列連結と「#TSF_calcFX」などの分数電卓を組み合わせれば逆ポーランド記法への数式変換は強いられないはず。\n"
         ,TSF_style="N")
-    TSF_Forth_settext("calcQQtest:","\t".join(["「1/3-m1|2」→","1/3-m1|2","#TSF_calcQQ","2","#TSF_join","1","#TSF_echoes"]))
-    TSF_Forth_settext("calcFXtest:","\t".join(["「1 3 m1|2」を数式風に「[2]/[1]-[0]」で連結→","1","3","m1|2","[2]/[1]-[0]","[]","#TSF_brackets","#TSF_calcFX","2","#TSF_join","1","#TSF_echoes"]))
-    TSF_Forth_settext("calcDCtest:","\t".join(["「1 / 3 - m1|2」まで分解して連結(ついでに小数デモ)→","1","/","3","-","m1|2","5","#TSF_join","#TSF_calcDC","2","#TSF_join","1","#TSF_echoes"]))
+    TSF_Forth_settext("calcFXtest:","\t".join(["「1 3 m1|2」を数式「[2]/[1]-[0]」で連結→","1","3","m1|2","[2]/[1]-[0]","#TSF_calcFX","2","#TSF_join","1","#TSF_echoes"]))
+    TSF_Forth_settext("calcDCtest:","\t".join(["「1 / 3 - m1|2」を数式に連結(ついでに小数デモ)→","1","/","3","-","m1|2","5","#TSF_join","#TSF_calcDC","2","#TSF_join","1","#TSF_echoes"]))
     TSF_Forth_settext("calcKNテスト:","\t".join(["「一割る三引く(マイナス二分の一)」(ついでに単位付き計算デモ)は","一割る三引く(マイナス二分の一)","を単位付き計算する","2","個分連結","1","行表示する"]))
     TSF_Forth_settext("aboutCalc:",
         "「calc」系ワード分数電卓の概要(暫定案)。\n"
-        "「#TSF_calcQQ」「#TSF_calcFX」「#TSF_calcDC」「#TSF_calcKN」と4種類の電卓用ワード(関数)があるが、基本的には分数計算。\n"
-        "「#TSF_calcDC」は小数表記。「#TSF_calcKN」億以上の単位を漢字表記。\n"
-        "「#TSF_calcQQ」は同じ数式は九九のように暗記(参照透過風)。「#TSF_calcFX」は逆に一度しかしないような計算は暗記しない用途。\n"
+        "「#TSF_calcFX」は分数表記。「#TSF_calcDC」は小数表記。「#TSF_calcKN」億以上の単位を漢字表記。全部基本的には分数計算。\n"
         "「#TSF_calcPR」は有効桁数の調整。初期値は72桁(千無量大数)。「π」(円周率)「θ」(2*π)「ｅ」(ネイピア数)などは桁溢れ予防で68桁(一無量大数)。\n"
         "「#TSF_calcRO」は端数処理の調整。初期値は「ROUND_DOWN」(0方向に丸める)。\n"
-        "有効桁数「#TSF_calcPR」や端数処理「#TSF_calcRO」など数式の計算結果に影響するので「#TSF_calcQQ」の九九を忘却。\n"
+        "有効桁数「#TSF_calcPR」や端数処理「#TSF_calcRO」など数式の計算結果に影響するので九九は忘却。\n"
         "「/」割り算と「|」分数は分けて表記。数値の「p」プラス「m」マイナスも演算子の「+」プラス「-」マイナスと分けて表記。\n"
         "通常の割り算の他に1未満を切り捨てる「\\」、余りを求める「#」、消費税計算用「%」演算子がある。掛け算は「*」演算子。\n"
         "自然対数(logｅ)は「E」。常用対数(log10)は「L」。無理数は分数に丸められるので「E256/E2」や「L256/L2」が8にならない。\n"

@@ -151,19 +151,19 @@ def TSF_calc_referential(TSF_calcQ,TSF_calcQQ=None):    #TSF_doc:分数電卓の
 
 TSF_calc_NOZUs=OrderedDict([
     ('N',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:TSF_LimFirst if TSF_calc_addition(TSF_calcSeq.replace('k',"0")) == "n|0" else TSF_LimRest)),
-    ('Z',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:TSF_LimFirst if decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_calcSeq.replace('k',"0"))).replace("n|0","NaN")) == 0 else TSF_LimRest)),
-    ('z',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:TSF_LimFirst if decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_calcSeq.replace('k',"0"))).replace("n|0","NaN")) != 0 else TSF_LimRest)),
-    ('O',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:TSF_LimFirst if decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_calcSeq.replace('k',"0"))).replace("n|0","-Infinity")) >= 0 else TSF_LimRest)),
-    ('o',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:TSF_LimFirst if decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_calcSeq.replace('k',"0"))).replace("n|0","-Infinity")) > 0 else TSF_LimRest)),
-    ('U',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:TSF_LimFirst if decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_calcSeq.replace('k',"0"))).replace("n|0","+Infinity")) <= 0 else TSF_LimRest)),
-    ('u',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:TSF_LimFirst if decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_calcSeq.replace('k',"0"))).replace("n|0","+Infinity")) < 0 else TSF_LimRest)),
+    ('Z',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:TSF_LimFirst if decimal.Decimal(TSF_calc_decimalizeDC(TSF_calc_addition(TSF_calcSeq.replace('k',"0"))).replace("n|0","NaN")) == 0 else TSF_LimRest)),
+    ('z',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:TSF_LimFirst if decimal.Decimal(TSF_calc_decimalizeDC(TSF_calc_addition(TSF_calcSeq.replace('k',"0"))).replace("n|0","NaN")) != 0 else TSF_LimRest)),
+    ('O',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:TSF_LimFirst if decimal.Decimal(TSF_calc_decimalizeDC(TSF_calc_addition(TSF_calcSeq.replace('k',"0"))).replace("n|0","-Infinity")) >= 0 else TSF_LimRest)),
+    ('o',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:TSF_LimFirst if decimal.Decimal(TSF_calc_decimalizeDC(TSF_calc_addition(TSF_calcSeq.replace('k',"0"))).replace("n|0","-Infinity")) > 0 else TSF_LimRest)),
+    ('U',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:TSF_LimFirst if decimal.Decimal(TSF_calc_decimalizeDC(TSF_calc_addition(TSF_calcSeq.replace('k',"0"))).replace("n|0","+Infinity")) <= 0 else TSF_LimRest)),
+    ('u',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:TSF_LimFirst if decimal.Decimal(TSF_calc_decimalizeDC(TSF_calc_addition(TSF_calcSeq.replace('k',"0"))).replace("n|0","+Infinity")) < 0 else TSF_LimRest)),
     ('M',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:"+".join([TSF_calc_addition(TSF_calcSeq.replace('k',str(TSF_LimK))) for TSF_LimK in TSF_calc_function_limit(TSF_LimFirst,TSF_LimRest)]))),
     ('P',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:"*".join([TSF_calc_addition(TSF_calcSeq.replace('k',str(TSF_LimK))) for TSF_LimK in TSF_calc_function_limit(TSF_LimFirst,TSF_LimRest)]))),
     ('$',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:"/".join([str(TSF_calc_addition(TSF_LimFirst.replace('k',"0"))),str(TSF_calc_addition(TSF_calcSeq.replace('k',"0")))]))),
 ])
 
 def TSF_calc_function_limit(TSF_LimFirst,TSF_LimRest):    #TSF_doc:和集合積集合のrange作成。
-    TSF_LimStart,TSF_LimGoal=decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_LimFirst))).to_integral_value(),decimal.Decimal(TSF_calc_decimalizeQQ(TSF_calc_addition(TSF_LimRest))).to_integral_value()
+    TSF_LimStart,TSF_LimGoal=decimal.Decimal(TSF_calc_decimalizeDC(TSF_calc_addition(TSF_LimFirst))).to_integral_value(),decimal.Decimal(TSF_calc_decimalizeDC(TSF_calc_addition(TSF_LimRest))).to_integral_value()
     if TSF_LimStart <= TSF_LimGoal:
         TSF_limstep=1; TSF_LimGoal+=1
     else:
@@ -411,9 +411,9 @@ def TSF_calc_LCM(TSF_calcN,TSF_calcD):    #TSF_doc:最小公倍数の計算。
 
 #def TSF_calc_decimalize(TSF_calcQ,TSF_calcQQ=False):    #TSF_doc:分数電卓だけど分数ではなく小数を返す(再計算)。ただし「n|0」の時は「n|0」を返す。
 #    TSF_calcA=TSF_calc(TSF_calcQ,TSF_calcQQ); 
-#    return TSF_calc_decimalizeQQ(TSF_calcA)
+#    return TSF_calc_decimalizeDC(TSF_calcA)
     
-def TSF_calc_decimalizeQQ(TSF_calcQ):    #TSF_doc:分数(が入力されてるものと信用して)を変換して小数を返す。ただし「n|0」の時は「n|0」を返す。
+def TSF_calc_decimalizeDC(TSF_calcQ):    #TSF_doc:分数(が入力されてるものと信用して)を変換して小数を返す。ただし「n|0」の時は「n|0」を返す。
     TSF_calcRN,TSF_calcRD=TSF_calcQ.replace('m','-').replace('p','').split('|')
     if float(TSF_calcRD) != 0.0:
         TSF_calcA=str(decimal.Decimal(TSF_calcRN)/decimal.Decimal(TSF_calcRD))
@@ -474,7 +474,7 @@ def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テス�
     for TSF_QlistK,TSF_QlistV in LTsv_calcQlist.items():
         TSF_debug_log=TSF_io_printlog(TSF_QlistK,TSF_log=TSF_debug_log)
         for LTsv_calcQ in TSF_QlistV:
-            TSF_debug_log=TSF_io_printlog("\t{0}⇔{1};{2};{3}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ,True),TSF_calc_decimalizeQQ(TSF_calc(LTsv_calcQ,True)),TSF_calc_decimalizeKN(TSF_calc(LTsv_calcQ,True))),TSF_debug_log)
+            TSF_debug_log=TSF_io_printlog("\t{0}⇔{1};{2};{3}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ,True),TSF_calc_decimalizeDC(TSF_calc(LTsv_calcQ,True)),TSF_calc_decimalizeKN(TSF_calc(LTsv_calcQ,True))),TSF_debug_log)
 #    print(TSF_calcQQmemory)
     return TSF_debug_log
 

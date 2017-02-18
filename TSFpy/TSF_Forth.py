@@ -52,10 +52,13 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         "#TSF_delthe":TSF_Forth_delthe,  "のスタック削除":TSF_Forth_delthe,
         "#TSF_delthis":TSF_Forth_delthat,  "実行中スタックを削除":TSF_Forth_delthis,
         "#TSF_delthat":TSF_Forth_delthat,  "積込先スタックを削除":TSF_Forth_delthat,
-        "#TSF_calcQQ":TSF_Forth_calcQQ,  "を計算して暗記もする":TSF_Forth_calcQQ,  "で九九る":TSF_Forth_calcQQ,
-        "#TSF_calcFX":TSF_Forth_calcFX,  "を計算する":TSF_Forth_calcFX,
-        "#TSF_calcDC":TSF_Forth_calcDC,  "を小数に計算する":TSF_Forth_calcDC,
+#        "#TSF_calcQQ":TSF_Forth_calcQQ,  "を計算して暗記もする":TSF_Forth_calcQQ,  "で九九る":TSF_Forth_calcQQ,
+        "#TSF_calcFX":TSF_Forth_calcFX,  "を分数する":TSF_Forth_calcFX,
+        "#TSF_calcFXQQ":TSF_Forth_calcFXQQ,  "を分数九九する":TSF_Forth_calcFXQQ,
+        "#TSF_calcDC":TSF_Forth_calcDC,  "を小数する":TSF_Forth_calcDC,
+        "#TSF_calcDCQQ":TSF_Forth_calcDCQQ,  "を小数九九する":TSF_Forth_calcDCQQ,
         "#TSF_calcKN":TSF_Forth_calcKN,  "を単位付き計算する":TSF_Forth_calcKN,
+        "#TSF_calcKNQQ":TSF_Forth_calcKNQQ,  "を単位付き九九する":TSF_Forth_calcKNQQ,
         "#TSF_calcPR":TSF_Forth_calcPR,  "を有効桁数":TSF_Forth_calcPR,
         "#TSF_calcRO":TSF_Forth_calcRO,  "で端数処理":TSF_Forth_calcRO,
         "#TSF_brackets":TSF_Forth_brackets,  "括弧で数式に連結":TSF_Forth_brackets,
@@ -160,7 +163,6 @@ def TSF_Forth_merge(TSF_stack,TSF_ESCstack=[]):    #TSF_doc:「TSF_Forth_settext
             TSF_stacks[TSF_stackthat].extend(TSF_stackL)
             if TSF_styles[TSF_stackthat] != "O":
                 TSF_styles[TSF_stackthat]="T" if len(TSF_stackL) >= 2 else "N"
-#    del TSF_stacks[TSF_stack]
 
 def TSF_Forth_pop(TSF_that):    #TSF_doc:スタックを積み下ろす。
     TSF_popdata=""
@@ -170,7 +172,7 @@ def TSF_Forth_pop(TSF_that):    #TSF_doc:スタックを積み下ろす。
 
 def TSF_Forth_popdecimalize(TSF_that):    #TSF_doc:複数形のワードで最初のcountを数値として取得。
     TSF_decimalT=TSF_Forth_pop(TSF_that); 
-    TSF_decimalT=TSF_calc_decimalizeQQ(TSF_calc(TSF_decimalT,True))
+    TSF_decimalT=TSF_calc_decimalizeDC(TSF_calc(TSF_decimalT,True))
     TSF_decimalI=abs(int(float(TSF_decimalT if TSF_decimalT != "n|0" else "0")))
     return TSF_decimalI
 
@@ -398,28 +400,39 @@ def TSF_Forth_calcbrackets(TSF_tsvBL,TSF_tsvBR):   #TSF_doc:括弧でスタッ�
             break
     return TSF_tsvA
 
-def TSF_Forth_calcQQ():   #TSF_doc:[calc]スタック内容で分数電卓する。一度計算した値は暗記(九九)するので再計算しない。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
-    TSF_tsvQ=TSF_Forth_calcbrackets("[","]")
-    TSF_tsvA=TSF_calc(TSF_tsvQ,True)
-    TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
-    return None
-
-def TSF_Forth_calcFX():   #TSF_doc:[calc]スタック内容で分数電卓する。暗記はしないがQQを記憶をカンペする。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
+def TSF_Forth_calcFX():   #TSF_doc:[calc]スタック内容で分数電卓する。calcと連結分スタック積み下ろし、1スタック積み上げ。
     TSF_tsvQ=TSF_Forth_calcbrackets("[","]")
     TSF_tsvA=TSF_calc(TSF_tsvQ,None)
     TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
     return None
 
-def TSF_Forth_calcDC():   #TSF_doc:[calc]スタック内容で分数電卓する。計算結果を小数で求める過程で再計算になる。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
-#    TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
+def TSF_Forth_calcFXQQ():   #TSF_doc:[calc]スタック内容で分数電卓する(暗記もする)。calcと連結分スタック積み下ろし、1スタック積み上げ。
     TSF_tsvQ=TSF_Forth_calcbrackets("[","]")
-    TSF_tsvA=TSF_calc_decimalizeQQ(TSF_calc(TSF_tsvQ,None))
+    TSF_tsvA=TSF_calc(TSF_tsvQ,True)
     TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
     return None
 
-def TSF_Forth_calcKN():   #TSF_doc:[calc]スタック内容で分数電卓する。計算結果を漢数字で求める過程で再計算になる。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
+def TSF_Forth_calcDC():   #TSF_doc:[calc]スタック内容で分数電卓して結果を小数または整数で表示。calcと連結分スタック積み下ろし、1スタック積み上げ。
+    TSF_tsvQ=TSF_Forth_calcbrackets("[","]")
+    TSF_tsvA=TSF_calc_decimalizeDC(TSF_calc(TSF_tsvQ,None))
+    TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
+    return None
+
+def TSF_Forth_calcDCQQ():   #TSF_doc:[calc]スタック内容で分数電卓して結果を小数または整数で表示(暗記もする)。calcと連結分スタック積み下ろし、1スタック積み上げ。
+    TSF_tsvQ=TSF_Forth_calcbrackets("[","]")
+    TSF_tsvA=TSF_calc_decimalizeDC(TSF_calc(TSF_tsvQ,True))
+    TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
+    return None
+
+def TSF_Forth_calcKN():   #TSF_doc:[calc]スタック内容で分数電卓して結果を漢数字を混ぜてで表示。calcと連結分スタック積み下ろし、1スタック積み上げ。
     TSF_tsvQ=TSF_Forth_calcbrackets("[","]")
     TSF_tsvA=TSF_calc_decimalizeKN(TSF_calc(TSF_tsvQ,None))
+    TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
+    return None
+
+def TSF_Forth_calcKNQQ():   #TSF_doc:[calc]スタック内容で分数電卓して結果を漢数字を混ぜてで表示(暗記もする)。calcと連結分スタック積み下ろし、1スタック積み上げ。
+    TSF_tsvQ=TSF_Forth_calcbrackets("[","]")
+    TSF_tsvA=TSF_calc_decimalizeKN(TSF_calc(TSF_tsvQ,True))
     TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
     return None
 
