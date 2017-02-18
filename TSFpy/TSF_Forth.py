@@ -65,12 +65,14 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         "#TSF_joinC":TSF_Forth_joinC,  "で回数分挟んで連結":TSF_Forth_joinC,
         "#TSF_split":TSF_Forth_split,  "の文字で分離":TSF_Forth_split,
         "#TSF_chars":TSF_Forth_chars,  "一文字ずつに分離":TSF_Forth_chars,
+        "#TSF_read":TSF_Forth_read,  "ファイルを読み込む":TSF_Forth_read,
 # "TSF_replace" "にそれを置換する"
 # "TSF_find" "がそのスタックで探す"
-# "TSF_load" "ファイルをテキストとしてスタックに読み込む"
+# "TSF_read" "ファイルをテキストとしてスタックに読み込む"
 # "TSF_marge" "スタックをTSFとしてスタックに混ぜる"
-# "TSF_nomarge" "スタックをテキスト化してスタックに読み込む"
-# "TSF_save" "スタックをテキストとしてファイルに書き込む"
+# "TSF_publish" "スタックをテキスト化してスタックに読み込む"
+# "TSF_write" "スタックをテキストファイルに追記する"
+# "TSF_new" "スタックをテキストとしてファイルに追記する"
     }
     return TSF_words
 
@@ -495,6 +497,10 @@ def TSF_Forth_chars():   #TSF_doc:[…stackB,stackA,string]文字列を一文字
         TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
     return None
 
+def TSF_Forth_read():   #TSF_doc:[stack,filename]ファイルをスタックに積む。1スタック積み下ろし。
+    TSF_path=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_Forth_loadtext(TSF_path,TSF_path)
+    return None
 
 def TSF_Forth_run(TSF_this=None,TSF_that=None):    #TSF_doc:TSFを実行していく。
     global TSF_thisstack_name,TSF_thatstack_name,TSF_thisstack_count

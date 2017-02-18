@@ -40,6 +40,7 @@ calcKNテスト:
 aboutCalc:
 	「calc」系ワード分数電卓の概要(暫定案)。
 	「#TSF_calcFX」は分数表記。「#TSF_calcDC」は小数表記。「#TSF_calcKN」億以上の単位を漢字表記。全部基本的には分数計算。
+	「#TSF_calcFXQQ」「#TSF_calcDCQQ」「#TSF_calcKNQQ」という演算結果をハッシュに追加する九九のような機能がある。
 	「#TSF_calcPR」は有効桁数の調整。初期値は72桁(千無量大数)。「π」(円周率)「θ」(2*π)「ｅ」(ネイピア数)などは桁溢れ予防で68桁(一無量大数)。
 	「#TSF_calcRO」は端数処理の調整。初期値は「ROUND_DOWN」(0方向に丸める)。
 	有効桁数「#TSF_calcPR」や端数処理「#TSF_calcRO」など数式の計算結果に影響するので九九は忘却。
