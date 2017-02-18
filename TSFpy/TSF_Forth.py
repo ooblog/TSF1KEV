@@ -205,10 +205,16 @@ def TSF_Forth_poke(TSF_that,TSF_count,TSF_poke):    #TSF_doc:スタックに書�
 
 
 TSF_exitcode="0"
+def TSF_Forth_exitcode(TSF_fincode=None):
+    global TSF_exitcode
+    if TSF_fincode != None:
+        TSF_exitcode=TSF_fincode
+    return TSF_exitcode
+
 def TSF_Forth_fin():    #TSF_doc:[errmsg]TSF終了時のオプションを指定する。1スタック積み下ろし。
-    global TSF_callptrs,TSF_exitcode
-    TSF_exitcode=TSF_Forth_pop(TSF_thatstack_name)
+    global TSF_callptrs
     TSF_callptrs={}
+    TSF_Forth_exitcode(TSF_Forth_pop(TSF_thatstack_name))
     return ""
 
 def TSF_Forth_over():    #TSF_doc:スタックを抜けてコールポインタを1つ減らす。コールポインタが0の時はTSF終了。スタック変化無し。

@@ -35,6 +35,7 @@ def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサン�
     TSF_Forth_settext("aboutCalc:",
         "「calc」系ワード分数電卓の概要(暫定案)。\n"
         "「#TSF_calcFX」は分数表記。「#TSF_calcDC」は小数表記。「#TSF_calcKN」億以上の単位を漢字表記。全部基本的には分数計算。\n"
+        "「#TSF_calcFXQQ」「#TSF_calcDCQQ」「#TSF_calcKNQQ」という演算結果をハッシュに追加する九九のような機能がある。\n"
         "「#TSF_calcPR」は有効桁数の調整。初期値は72桁(千無量大数)。「π」(円周率)「θ」(2*π)「ｅ」(ネイピア数)などは桁溢れ予防で68桁(一無量大数)。\n"
         "「#TSF_calcRO」は端数処理の調整。初期値は「ROUND_DOWN」(0方向に丸める)。\n"
         "有効桁数「#TSF_calcPR」や端数処理「#TSF_calcRO」など数式の計算結果に影響するので九九は忘却。\n"
@@ -105,7 +106,7 @@ def TSF_command_help():    #TSF_doc:TSFのより小さなサンプルプログ�
         '  --calc        fractions calculator "--calc 1/3-m1|2"-> p5|6 \n'
         '  --calcDC      fractions calculator "--calc 1/3-m1|2"-> 0.8333... \n'
         '  --calcKN      fractions calculator "--calc 1/3-m1|2"-> 6分の5 \n'
-        '  not exist     samplecode(UTF-8) view only (no save)\n'
+#        '  not exist     samplecode(UTF-8) view only (no save)\n'
         ,TSF_style="N")
     TSF_Forth_run(TSF_Forth_1ststack())
 
@@ -131,9 +132,9 @@ elif TSF_mergefile in ["--calc","--calcDC","--calcKN"]:
 elif TSF_mergefile == "--help":
     TSF_command_help()
 else:
-    TSF_command_about(False)
-#     TSF_command_help()
-sys.exit(0 if TSF_exitcode == "0" or TSF_exitcode == "0|1" else TSF_exitcode)
+#    TSF_command_about(False)
+    TSF_command_help()
+sys.exit(0 if TSF_Forth_exitcode() == "0" or TSF_Forth_exitcode() == "0|1" else TSF_Forth_exitcode())
 
 
 # Copyright (c) 2017 ooblog
