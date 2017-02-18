@@ -80,9 +80,9 @@ def TSF_command_Helloworld():    #TSF_doc:TSF_about.tsfより小さなサンプ�
 def TSF_command_FizzBuzz():    #TSF_doc:TSF_about.tsfより小さなサンプルFizzBuzzプログラム。
     TSF_Forth_settext(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","FizzBuzz:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_settext("FizzBuzz:","\t".join([ \
-    "FZcount:","0","#TSF_peekthe","[0]+1","[]","#TSF_brackets","#TSF_calcFX","FZcount:","0","#TSF_pokethe",
-    "FZcount:","FZcount:","0","#TSF_peekthe","([0]#3Z1~0)+([0]#5Z2~0)","[]","#TSF_brackets","#TSF_calcFX","#TSF_peekthe","1","#TSF_echoes",
-    "FZjunp:","FZcount:","0","#TSF_peekthe","[0]-20O1~0","[]","#TSF_brackets","#TSF_calcFX","#TSF_peekthe","#TSF_this",
+    "FZcount:","0","#TSF_peekthe","[0]+1","[]","#TSF_brackets","#TSF_calcDC","FZcount:","0","#TSF_pokethe",
+    "FZcount:","FZcount:","0","#TSF_peekthe","([0]#3Z1~0)+([0]#5Z2~0)","[]","#TSF_brackets","#TSF_calcDC","#TSF_peekthe","1","#TSF_echoes",
+    "FZjunp:","FZcount:","0","#TSF_peekthe","[0]-20O1~0","[]","#TSF_brackets","#TSF_calcDC","#TSF_peekthe","#TSF_this",
     ]))
     TSF_Forth_settext("FZcount:","\t".join(["0","Fizz","Buzz","Fizz&Buzz"]))
     TSF_Forth_settext("FZjunp:","\t".join(["FizzBuzz:",":exit:"]))
@@ -106,6 +106,7 @@ def TSF_command_help():    #TSF_doc:TSFのより小さなサンプルプログ�
         '  --help        this commands view\n'
         '  --about       samplecode(UTF-8) view and saveto "' +TSF_about_mergefile+ '" \n'
         '  --helloworld  "Hello world  1  #TSF_echoes" view\n'
+        '  --fizzbuzz    ([0]#3Z1~0)+([0]#5Z2~0) Fizz Buzz Fizz&Buzz view\n'
         '  --calc        fractions calculator "--calc 1/3-m1|2"-> p5|6 \n'
         '  --calcDC      fractions calculator "--calc 1/3-m1|2"-> 0.8333... \n'
         '  --calcKN      fractions calculator "--calc 1/3-m1|2"-> 6分の5 \n'

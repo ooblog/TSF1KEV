@@ -394,6 +394,16 @@ def TSF_Forth_calcQQ():   #TSF_doc:[calc]スタック内容で分数電卓する
     TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
     return None
 
+def TSF_Forth_calcbrackets(TSF_tsvBL,TSF_tsvBR):   #TSF_doc:括弧でスタックを連結する。
+    TSF_tsvA=TSF_Forth_pop(TSF_thatstack_name)
+    for TSF_stackC,TSF_stackQ in enumerate(TSF_stacks[TSF_thatstack_name]):
+        TSF_calcK="".join([TSF_tsvBL,str(TSF_stackC),TSF_tsvBR])
+        if TSF_calcK in TSF_tsvA:
+            TSF_tsvA=TSF_tsvA.replace(TSF_calcK,TSF_Forth_pop(TSF_thatstack_name))
+        else:
+            break
+    return TSF_tsvA
+
 def TSF_Forth_calcFX():   #TSF_doc:[calc]スタック内容で分数電卓する。暗記はしないがQQを記憶をカンペする。1スタック積み下ろし1スタック積み上げ(スタック内容の変化)。
     TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
     TSF_tsvA=TSF_calc(TSF_tsvQ,None)
@@ -420,17 +430,18 @@ def TSF_Forth_calcRO():   #TSF_doc:[round]端数処理を変更する。端数�
     TSF_calc_rounding(TSF_Forth_popdecimalize(TSF_thatstack_name))
     return None
 
-def TSF_Forth_brackets():   #TSF_doc:[…stackB,stackA,calc,brackets]これ自体は計算はせず、括弧に囲まれたスタック番号をスタック内容に置換。bracketsとcalc自身とcalc内の該当括弧分スタック積み下ろし。
+def TSF_Forth_brackets():   #TSF_doc:[…stackB,stackA,calc,brackets]これ自体は計算はせず、任意の括弧に囲まれたスタック番号をスタック内容に置換。bracketsとcalc自身とcalc内の該当括弧分スタック積み下ろし。
     TSF_tsvB=TSF_Forth_pop(TSF_thatstack_name)
     if len(TSF_tsvB) < 2: TSF_tsvB="[]"
     TSF_tsvBL,TSF_tsvBR=TSF_tsvB[0],TSF_tsvB[-1]
-    TSF_tsvA=TSF_Forth_pop(TSF_thatstack_name)
-    for TSF_stackC,TSF_stackQ in enumerate(TSF_stacks[TSF_thatstack_name]):
-        TSF_calcK="".join([TSF_tsvBL,str(TSF_stackC),TSF_tsvBR])
-        if TSF_calcK in TSF_tsvA:
-            TSF_tsvA=TSF_tsvA.replace(TSF_calcK,TSF_Forth_pop(TSF_thatstack_name))
-        else:
-            break
+    TSF_tsvA=TSF_Forth_calcbrackets(TSF_tsvBL,TSF_tsvBR)
+#    TSF_tsvA=TSF_Forth_pop(TSF_thatstack_name)
+#    for TSF_stackC,TSF_stackQ in enumerate(TSF_stacks[TSF_thatstack_name]):
+#        TSF_calcK="".join([TSF_tsvBL,str(TSF_stackC),TSF_tsvBR])
+#        if TSF_calcK in TSF_tsvA:
+#            TSF_tsvA=TSF_tsvA.replace(TSF_calcK,TSF_Forth_pop(TSF_thatstack_name))
+#        else:
+#            break
     TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
     return None
 
