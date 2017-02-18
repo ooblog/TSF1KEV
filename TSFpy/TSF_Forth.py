@@ -391,14 +391,13 @@ def TSF_Forth_delthat():   #TSF_doc:[]積込先スタックを削除。
 
 def TSF_Forth_calcbrackets(TSF_tsvBL,TSF_tsvBR):   #TSF_doc:括弧でスタックを連結する。
     TSF_tsvA=TSF_Forth_pop(TSF_thatstack_name)
-    if "{" in TSF_tsvA:
-        for TSF_stacksK,TSF_stacksV in TSF_stacks.items():
-            TSF_calcK="".join(["{",TSF_stacksK])
-            if TSF_calcK in TSF_tsvA:
-                for TSF_stackC,TSF_stackQ in enumerate(TSF_stacksV):
-                    TSF_calcK="".join(["{",TSF_stacksK,str(TSF_stackC),"}"])
-                    if TSF_calcK in TSF_tsvA:
-                        TSF_tsvA=TSF_tsvA.replace(TSF_calcK,TSF_stackQ)
+    for TSF_stacksK,TSF_stacksV in TSF_stacks.items():
+        TSF_calcK="".join([TSF_tsvBL,TSF_stacksK])
+        if TSF_calcK in TSF_tsvA:
+            for TSF_stackC,TSF_stackQ in enumerate(TSF_stacksV):
+                TSF_calcK="".join([TSF_tsvBL,TSF_stacksK,str(TSF_stackC),TSF_tsvBR])
+                if TSF_calcK in TSF_tsvA:
+                    TSF_tsvA=TSF_tsvA.replace(TSF_calcK,TSF_stackQ)
     for TSF_stackC,TSF_stackQ in enumerate(TSF_stacks[TSF_thatstack_name]):
         TSF_calcK="".join([TSF_tsvBL,str(TSF_stackC),TSF_tsvBR])
         if TSF_calcK in TSF_tsvA:

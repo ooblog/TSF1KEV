@@ -13,8 +13,7 @@ def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサン�
     TSF_Forth_settext("main1:","\t".join(["aboutTSF:","#TSF_pushthe","aboutTSF:","#TSF_lenthe","#TSF_echoes","main2:","#TSF_this"]))
     TSF_Forth_settext("main2:","\t".join(["#分数電卓のテスト","1","#TSF_echoes","16","#TSF_calcPR","calcFXtest:","#TSF_this","calcDCtest:","#TSF_this","calcKNテスト:","#TSF_this","#","1","#TSF_echoes","main3:","#TSF_this"]))
     TSF_Forth_settext("main3:","\t".join(["aboutCalc:","#TSF_pushthe","aboutCalc:","#TSF_lenthe","#TSF_echoes","main4:","#TSF_this"]))
-    TSF_Forth_settext("main4:","\t".join(["aboutRPN:","#TSF_pushthe","aboutRPN:","#TSF_lenthe","#TSF_echoes","main5:","#TSF_this"]))
-    TSF_Forth_settext("main5:","\t".join(["aboutCASE:","#TSF_pushthe","aboutCASE:","#TSF_lenthe","#TSF_echoes"]))
+    TSF_Forth_settext("main4:","\t".join(["aboutRPN+LISP:","#TSF_pushthe","aboutRPN+LISP:","#TSF_lenthe","#TSF_echoes"]))
     TSF_Forth_settext("aboutTSF:",
         "「TSF_Tab-Separated-Forth」の概要(暫定案)。\n"
         "積んだスタックをワード(関数)などで消化していくForth風インタプリタ。スタック単位はtsv文字列。\n"
@@ -25,9 +24,10 @@ def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサン�
         "そもそもスタックが複数ある。他言語で言う変数の代わりにスタックがある。他言語で言う関数の引数や返り値もスタック経由。\n"
         "存在しないthatスタックからの取得(存在するスタックのアンダーフロー含む)は0文字列を返却する。\n"
         "存在しないthisスタックの呼び出し(存在するスタックのオーバーフロー含む)は呼び出し元に戻って続きから再開。\n"
-        "末尾再帰はループ。深い階層で祖先を「#TSF_this」すると子孫コールスタックはまとめて破棄される(未テスト)。\n"
+        "ループは再帰で組む。深い階層で祖先を「#TSF_this」すると子孫コールスタックはまとめて破棄される。\n"
+        "分岐は配列で組む。電卓の比較演算子の結果と「#TSF_peekthe」を組み合わせて飛び先スタック名を変更。「fizzbuzz.tsf」も参考。\n"
         "文字列連結は「#TSF_brackets」「#TSF_join」「#TSF_joinC」。文字列分解は「#TSF_split」「#TSF_chars」。\n"
-        "「#TSF_brackets」などの文字列連結と「#TSF_calcFX」などの分数電卓を組み合わせれば逆ポーランド記法への数式変換は強いられないはず。\n"
+        "「#TSF_brackets」などの文字列連結と「#TSF_calcDC」などの電卓を組み合わせれば逆ポーランド記法への数式変換は強いられないはず。\n"
         ,TSF_style="N")
     TSF_Forth_settext("calcFXtest:","\t".join(["「1 3 m1|2」を数式「[2]/[1]-[0]」で連結→","1","3","m1|2","[2]/[1]-[0]","#TSF_calcFX","2","#TSF_join","1","#TSF_echoes"]))
     TSF_Forth_settext("calcDCtest:","\t".join(["「1 / 3 - m1|2」を数式に連結(ついでに小数デモ)→","1","/","3","-","m1|2","5","#TSF_join","#TSF_calcDC","2","#TSF_join","1","#TSF_echoes"]))
@@ -47,18 +47,16 @@ def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサン�
         "0で割るもしくは有効桁数溢れなど、何らかの事情で計算できない場合は便宜上「n|0」という事にする。「p」「m」は付かない。\n"
         "「tan(θ*90|360)」なども何かしらの巨大な数ではなく0で割った「n|0」と表記したいがとりあえず未着手。\n"
         "「2分の1を5乗」など日本語風表記で分数を扱う場合は「(2分の1)を5乗」と書かないと「2分の(1を5乗)」と解釈してしまう。\n"
-        "ゼロ比較演算子(条件演算子)は「Z」。「kZ1~0」の様な計算でkがゼロでない時は真なので1、ゼロの時は偽なので1。「n|0」の時は「n|0」。\n"
+        "ゼロ比較演算子(条件演算子)は「Z」。「kZ1~0」の様な計算でkがゼロの時は真なので1、ゼロでない時は偽なので0。「n|0」の時は「n|0」。\n"
         "条件演算子は0以上を調べる系「O」「o」、0以下を調べる系「U」「u」、0か調べる系「Z」「z」、「n|0」か調べる系「N」を用意。\n"
         ,TSF_style="N")
-    TSF_Forth_settext("aboutRPN:",
+    TSF_Forth_settext("aboutRPN+LISP:",
         "「RPN」系ワード逆ポーランド電卓の概要(暫定案)。\n"
         "逆ポーランド記法の数式計算は強いられないとは言ったが、括弧も日本語訳も分数も排除した速度優先の電卓も別途準備(予定)。状況に合わせて使い分け(予定)。\n"
         "「#TSF_calcFX」等に存在した演算優先順位(平方根常用対数など＞積商算公約公倍数任意底対数など＞加減算消費税など＞ゼロ比較演算子数列積和など)は存在しない。\n"
         "分数やdecimal系を用いないので少数の制度が保証できない。\n"
-        ,TSF_style="N")
-    TSF_Forth_settext("aboutCASE:",
-        "条件分岐について(未定)。\n"
-        "数式と段取りの分離について(仮)。\n"
+        "「LISP」系ワードポーランド電卓の概要(暫定案)。\n"
+        "RPNと大体同じだがこっちは括弧を必要。「(+ p1 p2 m3)」の様に引数の自由度が優先される(予定)。\n"
         ,TSF_style="N")
     print("-- TSF_Forth_viewprintlog() --")
     TSF_debug_log=TSF_Forth_viewprintlog("")
@@ -77,9 +75,9 @@ def TSF_command_Helloworld():    #TSF_doc:TSF_about.tsfより小さなサンプ�
 def TSF_command_FizzBuzz():    #TSF_doc:TSF_about.tsfより小さなサンプルFizzBuzzプログラム。
     TSF_Forth_settext(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","FizzBuzz:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_settext("FizzBuzz:","\t".join([ \
-    "{FZcount:0}+1","#TSF_calcDC","FZcount:","0","#TSF_pokethe",
-    "FZcount:","({FZcount:0}#3Z1~0)+({FZcount:0}#5Z2~0)","#TSF_calcDC","#TSF_peekthe","1","#TSF_echoes",
-    "FZjunp:","{FZcount:0}-20O1~0","#TSF_calcDC","#TSF_peekthe","#TSF_this",
+    "[FZcount:0]+1","#TSF_calcDC","FZcount:","0","#TSF_pokethe",
+    "FZcount:","([FZcount:0]#3Z1~0)+([FZcount:0]#5Z2~0)","#TSF_calcDC","#TSF_peekthe","1","#TSF_echoes",
+    "FZjunp:","[FZcount:0]-20O1~0","#TSF_calcDC","#TSF_peekthe","#TSF_this",
     ]))
     TSF_Forth_settext("FZcount:","\t".join(["0","Fizz","Buzz","Fizz&Buzz"]))
     TSF_Forth_settext("FZjunp:","\t".join(["FizzBuzz:",":exit:"]))
