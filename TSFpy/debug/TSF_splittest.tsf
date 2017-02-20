@@ -1,5 +1,6 @@
 TSF_Tab-Separated-Forth:
-	UTF-8	#TSF_encoding	stack1:	#TSF_that	main1:	#TSF_this	0	#TSF_fin.
+	UTF-8	#TSF_encoding	stack1:	#TSF_that	TSF_splittest:	#TSF_this	0	#TSF_fin.
 
-main1:
-	1,2,3,4,5	,	#TSF_split	#TSF_lenthat	#TSF_echoes	1,2,3,4,5	#TSF_chars	#TSF_lenthat	#TSF_echoes	O	#TSF_stylethis	#TSF_viewthis	T	#TSF_stylethis	#TSF_viewthis	N	#TSF_stylethis	#TSF_viewthis
+TSF_splittest:
+#	1,2,3,4,5	,	#TSF_split	#TSF_lenthat	#TSF_echoes	1,2,3,4,5	#TSF_chars	#TSF_lenthat	#TSF_echoes	O	#TSF_stylethis	#TSF_viewthis	T	#TSF_stylethis	#TSF_viewthis	N	#TSF_stylethis	#TSF_viewthis
+	1,2,3,4,5	,	#TSF_split	#TSF_lenthat	#TSF_echoes	1,2,3,4,5	#TSF_chars	#TSF_lenthat	#TSF_echoes

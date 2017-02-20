@@ -44,6 +44,10 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         "#TSF_carbonthe":TSF_Forth_carbonthe,  "スタックの一番上を複製する":TSF_Forth_carbonthe,
         "#TSF_carbonthis":TSF_Forth_carbonthis,  "実行中スタックの一番上を複製する":TSF_Forth_carbonthis,
         "#TSF_carbonthat":TSF_Forth_carbonthat,  "積込先スタックの一番上を複製する":TSF_Forth_carbonthat,
+# "TSF_findthe" "正規表現でスタックから探す"
+# "TSF_findthat" "正規表現で積み込み先スタックを探す"
+# "TSF_replacethe" "正規表現でスタックを置換する"
+# "TSF_replacethat" "正規表現で積み込み先スタックにて置換する"
         "#TSF_popthe":TSF_Forth_popthe,  "スタックから拾う":TSF_Forth_popthe,
         "#TSF_popthis":TSF_Forth_popthis,  "実行中スタックから拾う":TSF_Forth_popthis,
         "#TSF_popthat":TSF_Forth_popthat,  "積込先スタックから除く":TSF_Forth_popthat,
@@ -60,19 +64,21 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         "#TSF_calcKNQQ":TSF_Forth_calcKNQQ,  "を単位付き九九する":TSF_Forth_calcKNQQ,
         "#TSF_calcPR":TSF_Forth_calcPR,  "を有効桁数":TSF_Forth_calcPR,
         "#TSF_calcRO":TSF_Forth_calcRO,  "で端数処理":TSF_Forth_calcRO,
+# "TSF_RPN" "逆ポーランド電卓で計算する"
+# "TSF_RPNQQ" "逆ポーランド電卓で九九する"
+# "TSF_LISP" "ポーランド電卓で計算する"
+# "TSF_LISPQQ" "ポーランド電卓で九九する"
+# "TSF_CALENDER" "日時を取得する"
+# "TSF_TIMER" "時間をを測定する"
         "#TSF_brackets":TSF_Forth_brackets,  "括弧で数式に連結":TSF_Forth_brackets,
         "#TSF_join":TSF_Forth_join,  "個分連結":TSF_Forth_join,
         "#TSF_joinC":TSF_Forth_joinC,  "で回数分挟んで連結":TSF_Forth_joinC,
         "#TSF_split":TSF_Forth_split,  "の文字で分離":TSF_Forth_split,
         "#TSF_chars":TSF_Forth_chars,  "一文字ずつに分離":TSF_Forth_chars,
         "#TSF_read":TSF_Forth_read,  "ファイルを読み込む":TSF_Forth_read,
-# "TSF_replace" "にそれを置換する"
-# "TSF_find" "がそのスタックで探す"
-# "TSF_read" "ファイルをテキストとしてスタックに読み込む"
-# "TSF_marge" "スタックをTSFとしてスタックに混ぜる"
+        "#TSF_mergethe":TSF_Forth_mergethe,  "スタック上のTSFテキストを混ぜる":TSF_Forth_mergethe,
 # "TSF_publish" "スタックをテキスト化してスタックに読み込む"
 # "TSF_write" "スタックをテキストファイルに追記する"
-# "TSF_new" "スタックをテキストとしてファイルに追記する"
     }
     return TSF_words
 
@@ -136,34 +142,6 @@ def TSF_Forth_settext(TSF_stack,TSF_text,TSF_style="T"):    #TSF_doc:テキス�
     global TSF_stacks,TSF_styles
     TSF_stacks[TSF_stack]=TSF_text.rstrip('\n').replace('\t','\n').split('\n')
     TSF_styles[TSF_stack]=TSF_style
-
-def TSF_Forth_loadtext(TSF_stack,TSF_path):    #TSF_doc:テキストファイルを読み込んでTSF_stacksの一スタック扱いにする。
-    global TSF_stacks,TSF_styles
-    TSF_text=TSF_io_loadtext(TSF_path)
-    TSF_text=TSF_txt_ESCencode(TSF_text)
-    TSF_Forth_settext(TSF_stack,TSF_text)
-    TSF_styles[TSF_stack]="N"
-    return TSF_text
-
-def TSF_Forth_merge(TSF_stack,TSF_ESCstack=[]):    #TSF_doc:「TSF_Forth_settext()」で読み込んだテキストをスタックに変換する。
-    global TSF_stacks,TSF_styles
-    TSF_stackthat=TSF_Forth_1ststack()
-    TSF_styles[TSF_stackthat]="T"
-    for TSF_stackV in TSF_stacks[TSF_stack]:
-        if len(TSF_stackV) == 0: continue;
-        if TSF_stackV.startswith("#"): continue;
-        TSF_stackV=TSF_txt_ESCdecode(TSF_stackV)
-        if not TSF_stackV.startswith('\t'):
-            TSF_stackL=TSF_stackV.lstrip('\t').split('\t')
-            if not TSF_stackL[0] in TSF_ESCstack:
-                TSF_stackthat=TSF_stackL[0]
-                TSF_stacks[TSF_stackthat]=[]
-                TSF_styles[TSF_stackthat]="O" if len(TSF_stackL) >= 2 else ""
-        if not TSF_stackthat in TSF_ESCstack:
-            TSF_stackL=TSF_stackV.split('\t')[1:]
-            TSF_stacks[TSF_stackthat].extend(TSF_stackL)
-            if TSF_styles[TSF_stackthat] != "O":
-                TSF_styles[TSF_stackthat]="T" if len(TSF_stackL) >= 2 else "N"
 
 def TSF_Forth_pop(TSF_that):    #TSF_doc:スタックを積み下ろす。
     TSF_popdata=""
@@ -235,7 +213,7 @@ def TSF_Forth_this():    #TSF_doc:[stack]thisスタックを変更(スタック�
 def TSF_Forth_that():    #TSF_doc:[stack]thatスタック(積み込み先スタック)を変更。1スタック積み下ろし。
     global TSF_thatstack_name
     TSF_thatstack_name=TSF_Forth_pop(TSF_thatstack_name)
-    return TSF_thisstack_name
+    return None
 
 def TSF_Forth_view(TSF_thename,TSF_view_log=""):    #TSF_doc:スタックの内容をテキスト表示する。
     if TSF_thename in TSF_stacks:
@@ -497,10 +475,43 @@ def TSF_Forth_chars():   #TSF_doc:[…stackB,stackA,string]文字列を一文字
         TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
     return None
 
-def TSF_Forth_read():   #TSF_doc:[stack,filename]ファイルをスタックに積む。1スタック積み下ろし。
+def TSF_Forth_loadtext(TSF_stack,TSF_path):    #TSF_doc:テキストファイルを読み込んでTSF_stacksの一スタック扱いにする。
+    global TSF_stacks,TSF_styles
+    TSF_text=TSF_io_loadtext(TSF_path)
+    TSF_text=TSF_txt_ESCencode(TSF_text)
+    TSF_Forth_settext(TSF_stack,TSF_text)
+    TSF_styles[TSF_stack]="N"
+    return TSF_text
+
+def TSF_Forth_read():   #TSF_doc:[filename]ファイルをスタックに積む。1スタック積み下ろし。
     TSF_path=TSF_Forth_pop(TSF_thatstack_name)
     TSF_Forth_loadtext(TSF_path,TSF_path)
     return None
+
+def TSF_Forth_merge(TSF_stack,TSF_ESCstack=[]):    #TSF_doc:「TSF_Forth_settext()」で読み込んだテキストをスタックに変換する。
+    global TSF_stacks,TSF_styles
+    TSF_stackthat=TSF_Forth_1ststack()
+    TSF_styles[TSF_stackthat]="T"
+    for TSF_stackV in TSF_stacks[TSF_stack]:
+        if len(TSF_stackV) == 0: continue;
+        if TSF_stackV.startswith("#"): continue;
+        TSF_stackV=TSF_txt_ESCdecode(TSF_stackV)
+        if not TSF_stackV.startswith('\t'):
+            TSF_stackL=TSF_stackV.lstrip('\t').split('\t')
+            if not TSF_stackL[0] in TSF_ESCstack:
+                TSF_stackthat=TSF_stackL[0]
+                TSF_stacks[TSF_stackthat]=[]
+                TSF_styles[TSF_stackthat]="O" if len(TSF_stackL) >= 2 else ""
+        if not TSF_stackthat in TSF_ESCstack:
+            TSF_stackL=TSF_stackV.split('\t')[1:]
+            TSF_stacks[TSF_stackthat].extend(TSF_stackL)
+            if TSF_styles[TSF_stackthat] != "O":
+                TSF_styles[TSF_stackthat]="T" if len(TSF_stackL) >= 2 else "N"
+
+def TSF_Forth_mergethe():   #TSF_doc:[stack,filename]ファイルをスタックに積む。1スタック積み下ろし。
+    TSF_Forth_merge(TSF_Forth_pop(TSF_thatstack_name),TSF_ESCstack=[TSF_Forth_1ststack()])
+    return None
+
 
 def TSF_Forth_run(TSF_this=None,TSF_that=None):    #TSF_doc:TSFを実行していく。
     global TSF_thisstack_name,TSF_thatstack_name,TSF_thisstack_count
