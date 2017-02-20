@@ -77,7 +77,9 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         "#TSF_chars":TSF_Forth_chars,  "一文字ずつに分離":TSF_Forth_chars,
         "#TSF_read":TSF_Forth_read,  "ファイルを読み込む":TSF_Forth_read,
         "#TSF_mergethe":TSF_Forth_mergethe,  "スタック上のTSFテキストを混ぜる":TSF_Forth_mergethe,
-# "TSF_publish" "スタックをテキスト化してスタックに読み込む"
+        "#TSF_publishthe":TSF_Forth_publishthe,  "スタックをテキスト化して別スタックに読み込む":TSF_Forth_publishthe,
+        "#TSF_publishthis":TSF_Forth_publishthis,  "実行中スタックをテキスト化して別スタックに読み込む":TSF_Forth_publishthis,
+        "#TSF_publishthat":TSF_Forth_publishthat,  "積込先スタックをテキスト化して別スタックに読み込む":TSF_Forth_publishthat,
 # "TSF_write" "スタックをテキストファイルに追記する"
     }
     return TSF_words
@@ -215,21 +217,31 @@ def TSF_Forth_that():    #TSF_doc:[stack]thatスタック(積み込み先スタ�
     TSF_thatstack_name=TSF_Forth_pop(TSF_thatstack_name)
     return None
 
-def TSF_Forth_view(TSF_thename,TSF_view_log=""):    #TSF_doc:スタックの内容をテキスト表示する。
+def TSF_Forth_view(TSF_thename,TSF_view_io=True,TSF_view_log=""):    #TSF_doc:スタックの内容をテキスト表示する。
     if TSF_thename in TSF_stacks:
         TSF_stackV=[TSF_txt_ESCdecode(TSF_stk) for TSF_stk in TSF_stacks[TSF_thename]]
         TSF_style=TSF_styles.get(TSF_thename,"N")
+#        if TSF_style == "O":
+#            TSF_view_log=TSF_io_printlog("{0}\t{1}\n".format(TSF_thename,"\t".join(TSF_stackV)),TSF_log=TSF_view_log)
+#        elif TSF_style == "T":
+#            TSF_view_log=TSF_io_printlog("{0}\n\t{1}\n".format(TSF_thename,"\t".join(TSF_stackV)),TSF_log=TSF_view_log)
+#        else:  # TSF_style == "N":
+#            TSF_view_log=TSF_io_printlog("{0}\n\t{1}\n".format(TSF_thename,"\n\t".join(TSF_stackV)),TSF_log=TSF_view_log)
         if TSF_style == "O":
-            TSF_view_log=TSF_io_printlog("{0}\t{1}\n".format(TSF_thename,"\t".join(TSF_stackV)),TSF_log=TSF_view_log)
+            TSF_view_logline="{0}\t{1}\n".format(TSF_thename,"\t".join(TSF_stackV))
         elif TSF_style == "T":
-            TSF_view_log=TSF_io_printlog("{0}\n\t{1}\n".format(TSF_thename,"\t".join(TSF_stackV)),TSF_log=TSF_view_log)
+            TSF_view_logline="{0}\n\t{1}\n".format(TSF_thename,"\t".join(TSF_stackV))
         else:  # TSF_style == "N":
-            TSF_view_log=TSF_io_printlog("{0}\n\t{1}\n".format(TSF_thename,"\n\t".join(TSF_stackV)),TSF_log=TSF_view_log)
+            TSF_view_logline="{0}\n\t{1}\n".format(TSF_thename,"\n\t".join(TSF_stackV))
+        if TSF_view_io == True:
+            TSF_view_log=TSF_io_printlog(TSF_view_logline,TSF_log=TSF_view_log)
+        else:
+            TSF_view_log+=TSF_view_logline
     return TSF_view_log
 
 def TSF_Forth_viewprintlog(TSF_view_log=""):    #TSF_doc:printlog用途でスタック一覧を表示する"。
     for TSF_thename in TSF_stacks.keys():
-        TSF_view_log=TSF_Forth_view(TSF_thename,TSF_view_log)
+        TSF_view_log=TSF_Forth_view(TSF_thename,True,TSF_view_log)
     return TSF_view_log
 
 def TSF_Forth_viewthe():    #TSF_doc:[stack]指定したスタックの内容をテキスト取得する。1スタック積み下ろし。
@@ -510,6 +522,21 @@ def TSF_Forth_merge(TSF_stack,TSF_ESCstack=[]):    #TSF_doc:「TSF_Forth_settext
 
 def TSF_Forth_mergethe():   #TSF_doc:[stack,filename]ファイルをスタックに積む。1スタック積み下ろし。
     TSF_Forth_merge(TSF_Forth_pop(TSF_thatstack_name),TSF_ESCstack=[TSF_Forth_1ststack()])
+    return None
+
+def TSF_Forth_publishthe():   #TSF_doc:[stack,filename]スタックをテキスト化してスタックに読み込む。1スタック積み下ろし。
+    TSF_publish_log=TSF_Forth_view(TSF_Forth_pop(TSF_thatstack_name),False,"")
+    TSF_Forth_settext(TSF_Forth_pop(TSF_thatstack_name),TSF_publish_log)
+    return None
+
+def TSF_Forth_publishthis():   #TSF_doc:[stack,filename]スタックをテキスト化してスタックに読み込む。1スタック積み下ろし。
+    TSF_publish_log=TSF_Forth_view(TSF_thisstack_name,False,"")
+    TSF_Forth_settext(TSF_Forth_pop(TSF_thatstack_name),TSF_publish_log)
+    return None
+
+def TSF_Forth_publishthat():   #TSF_doc:[stack,filename]スタックをテキスト化してスタックに読み込む。1スタック積み下ろし。
+    TSF_publish_log=TSF_Forth_view(TSF_thatstack_name,False,"")
+    TSF_Forth_settext(TSF_Forth_pop(TSF_thatstack_name),TSF_publish_log)
     return None
 
 
