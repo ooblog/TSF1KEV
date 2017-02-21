@@ -80,7 +80,9 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         "#TSF_publishthe":TSF_Forth_publishthe,  "スタックをテキスト化して別スタックに読み込む":TSF_Forth_publishthe,
         "#TSF_publishthis":TSF_Forth_publishthis,  "実行中スタックをテキスト化して別スタックに読み込む":TSF_Forth_publishthis,
         "#TSF_publishthat":TSF_Forth_publishthat,  "積込先スタックをテキスト化して別スタックに読み込む":TSF_Forth_publishthat,
-# "TSF_write" "スタックをテキストファイルに追記する"
+        "#TSF_remove":TSF_Forth_remove,  "テキストファイルを削除する":TSF_Forth_remove,
+        "#TSF_savethe":TSF_Forth_savethe,  "スタックをテキストファイルに上書きする":TSF_Forth_savethe,
+        "#TSF_writethe":TSF_Forth_writethe,  "スタックをテキストファイルに追記する":TSF_Forth_writethe,
     }
     return TSF_words
 
@@ -524,19 +526,28 @@ def TSF_Forth_mergethe():   #TSF_doc:[stack,filename]ファイルをスタック
     TSF_Forth_merge(TSF_Forth_pop(TSF_thatstack_name),TSF_ESCstack=[TSF_Forth_1ststack()])
     return None
 
-def TSF_Forth_publishthe():   #TSF_doc:[stack,filename]スタックをテキスト化してスタックに読み込む。1スタック積み下ろし。
+def TSF_Forth_publishthe():   #TSF_doc:[stack,filename]スタックをテキスト化してスタックに読み込む。2スタック積み下ろし。
     TSF_publish_log=TSF_Forth_view(TSF_Forth_pop(TSF_thatstack_name),False,"")
     TSF_Forth_settext(TSF_Forth_pop(TSF_thatstack_name),TSF_publish_log)
     return None
 
-def TSF_Forth_publishthis():   #TSF_doc:[stack,filename]スタックをテキスト化してスタックに読み込む。1スタック積み下ろし。
+def TSF_Forth_publishthis():   #TSF_doc:[stack]実行中スタックをテキスト化してスタックに読み込む。1スタック積み下ろし。
     TSF_publish_log=TSF_Forth_view(TSF_thisstack_name,False,"")
     TSF_Forth_settext(TSF_Forth_pop(TSF_thatstack_name),TSF_publish_log)
     return None
 
-def TSF_Forth_publishthat():   #TSF_doc:[stack,filename]スタックをテキスト化してスタックに読み込む。1スタック積み下ろし。
+def TSF_Forth_publishthat():   #TSF_doc:[stack]積込先スタックをテキスト化してスタックに読み込む。1スタック積み下ろし。
     TSF_publish_log=TSF_Forth_view(TSF_thatstack_name,False,"")
     TSF_Forth_settext(TSF_Forth_pop(TSF_thatstack_name),TSF_publish_log)
+    return None
+
+def TSF_Forth_remove():
+    return None
+
+def TSF_Forth_savethe():
+    return None
+
+def TSF_Forth_writethe():
     return None
 
 
@@ -574,8 +585,8 @@ def TSF_Forth_run(TSF_this=None,TSF_that=None):    #TSF_doc:TSFを実行して�
             break
 
 
-def TSF_Forth_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_Forth.py」単体テスト風デバッグ関数。
-    TSF_Forth_Init(sys.argv)
+def TSF_Forth_debug():    #TSF_doc:「TSF/TSF_Forth.py」単体テスト風デバッグ関数。
+    TSF_Forth_Init(TSF_argvs)
     TSF_debug_log=""
     TSF_debug_readmeL="../README.md"
     TSF_debug_readmeS="/debug/README.txt"
@@ -585,9 +596,10 @@ def TSF_Forth_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_Forth.py」単体テス
 
 if __name__=="__main__":
     print("")
-    print("--- {0} ---".format(sys.argv[0]))
+    TSF_argvs=TSF_io_argvs()
+    print("--- {0} ---".format(TSF_argvs[0]))
     TSF_debug_savefilename="debug/TSF_Forth_debug.txt"
-    TSF_debug_log=TSF_Forth_debug(sys.argv)
+    TSF_debug_log=TSF_Forth_debug()
     TSF_io_savetext(TSF_debug_savefilename,TSF_debug_log)
     print("")
     try:

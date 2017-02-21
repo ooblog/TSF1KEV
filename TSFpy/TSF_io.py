@@ -55,6 +55,12 @@ def TSF_io_printlog(TSF_text,TSF_log=None):    #TSF_doc:TSF_textをターミナ�
     TSF_log=TSF_log+"{0}\n".format(TSF_text) if TSF_log != None else ""
     return TSF_log
 
+def TSF_io_argvs():
+    TSF_argvs=[]
+    for TSF_argv in sys.argv:
+        TSF_argvs.append(TSF_argv.decode(TSF_io_stdout))
+    return TSF_argvs
+
 def TSF_io_intstr0x(TSF_io_codestr):    #TSF_doc:テキストを数値に変換する(整数10進か16進数)。
     TSF_io_codestr="{0}".format(TSF_io_codestr)
     TSF_io_codeint=0
@@ -120,7 +126,7 @@ def TSF_io_savedirs(TSF_path):    #TSF_doc:「TSF_io_savetext()」でファイ�
     TSF_io_workdir=os.path.dirname(os.path.normpath(TSF_path))
     if not os.path.exists(TSF_io_workdir) and not os.path.isdir(TSF_io_workdir) and len(TSF_io_workdir): os.makedirs(TSF_io_workdir)
 
-def TSF_io_savetext(TSF_path,TSF_text):    #TSF_doc:TSF_pathにTSF_textを保存する。TSF_textを省略した場合ファイルを削除する。空のファイルを作る場合はTSF_textに文字列長さ0の文字列変数を用意する。
+def TSF_io_savetext(TSF_path,TSF_text=None):    #TSF_doc:TSF_pathにTSF_textを保存する。TSF_textを省略した場合ファイルを削除する。空のファイルを作る場合はTSF_textに文字列長さ0の文字列変数を用意する。
     if TSF_text != None:
         TSF_io_savedir(TSF_path)
         if sys.version_info.major == 2:
@@ -132,22 +138,33 @@ def TSF_io_savetext(TSF_path,TSF_text):    #TSF_doc:TSF_pathにTSF_textを保存
     else:
         os.remove(TSF_text)
 
+def TSF_io_writetext(TSF_path,TSF_text):    #TSF_doc:TSF_pathにTSF_textを追記する。
+    if TSF_text != None:
+        TSF_io_savedir(TSF_path)
+        if sys.version_info.major == 2:
+            with open(TSF_path,'ab') as TSF_io_fileobj:
+                TSF_io_fileobj.write(TSF_text.encode("UTF-8"))
+        if sys.version_info.major == 3:
+            with open(TSF_path,mode="a",encoding="UTF-8",errors="xmlcharrefreplace",newline='\n') as TSF_io_fileobj:
+                TSF_io_fileobj.write(TSF_text)
 
-def TSF_io_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_io.py」単体テスト風デバッグ関数。
+
+def TSF_io_debug():    #TSF_doc:「TSF/TSF_io.py」単体テスト風デバッグ関数。
     TSF_debug_log=""
     TSF_debug_log=TSF_io_printlog("TSF_Tab-Separated-Forth:",TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["UTF-8",":TSF_encoding","0",":TSF_fin."])),TSF_log=TSF_debug_log)
-    TSF_debug_log=TSF_io_printlog("TSF_argv:",TSF_log=TSF_debug_log)
-    TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(TSF_argv)),TSF_log=TSF_debug_log)
+    TSF_debug_log=TSF_io_printlog("TSF_argvs:",TSF_log=TSF_debug_log)
+    TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(TSF_argvs)),TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("TSF_py:",TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout])),TSF_log=TSF_debug_log)
     return TSF_debug_log
 
 if __name__=="__main__":
     print("")
-    print("--- {0} ---".format(sys.argv[0]))
+    TSF_argvs=TSF_io_argvs()
+    print("--- {0} ---".format(TSF_argvs[0]))
     TSF_debug_savefilename="debug/TSF_io_debug.txt"
-    TSF_debug_log=TSF_io_debug(sys.argv)
+    TSF_debug_log=TSF_io_debug()
     TSF_io_savetext(TSF_debug_savefilename,TSF_debug_log)
     print("")
     try:

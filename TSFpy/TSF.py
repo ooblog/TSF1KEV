@@ -85,7 +85,8 @@ def TSF_command_FizzBuzz():    #TSF_doc:TSF_about.tsfより小さなサンプル
     TSF_Forth_viewprintlog()
 
 def TSF_command_calc(TSF_calctype=None):    #TSF_doc:TSFのより小さなサンプルプログラム。
-    TSF_calcQ=sys.argv[2].decode(sys.stdout.encoding) if len(sys.argv) > 2 else "n|0"
+#    TSF_calcQ=sys.argv[2].decode(sys.stdout.encoding) if len(sys.argv) > 2 else "n|0"
+    TSF_calcQ=TSF_argvs[2] if len(TSF_argvs) > 2 else "n|0"
     if TSF_calctype == "--calcDC":
         TSF_calcA=TSF_calc_decimalize(TSF_calcQ,False)
     elif TSF_calctype == "--calcKN":
@@ -103,9 +104,9 @@ def TSF_command_help():    #TSF_doc:TSFのより小さなサンプルプログ�
         '  --about       samplecode(UTF-8) view and saveto "' +TSF_about_mergefile+ '" \n'
         '  --helloworld  "Hello world  1  #TSF_echoes" view\n'
         '  --fizzbuzz    ([0]#3Z1~0)+([0]#5Z2~0) Fizz Buzz Fizz&Buzz view\n'
-        '  --calc        fractions calculator "--calc 1/3-m1|2"-> p5|6 \n'
-        '  --calcDC      fractions calculator "--calc 1/3-m1|2"-> 0.8333... \n'
-        '  --calcKN      fractions calculator "--calc 1/3-m1|2"-> 6分の5 \n'
+        '  --calc        fractions calculator --calc "1/3-m1|2"-> p5|6 \n'
+        '  --calcDC      fractions calculator --calc "1/3-m1|2"-> 0.8333... \n'
+        '  --calcKN      fractions calculator --calc "1/3-m1|2"-> 6分の5 \n'
 #        '  not exist     samplecode(UTF-8) view only (no save)\n'
         ,TSF_style="N")
     TSF_Forth_run(TSF_Forth_1ststack())
@@ -113,9 +114,13 @@ def TSF_command_help():    #TSF_doc:TSFのより小さなサンプルプログ�
 
 TSF_about_mergefile="TSF_about.tsf"
 TSF_mergefile=""
-TSF_Forth_Init(sys.argv)
-if len(sys.argv) >= 2:
-    TSF_mergefile=sys.argv[1]
+TSF_argvs=TSF_io_argvs()
+#TSF_Forth_Init(sys.argv)
+TSF_Forth_Init(TSF_argvs)
+#if len(sys.argv) >= 2:
+if len(TSF_argvs) >= 2:
+#    TSF_mergefile=sys.argv[1]
+    TSF_mergefile=TSF_argvs[1]
 if os.path.isfile(TSF_mergefile):
     if len(TSF_Forth_loadtext(TSF_mergefile,TSF_mergefile)):
         TSF_Forth_merge(TSF_mergefile,[])
