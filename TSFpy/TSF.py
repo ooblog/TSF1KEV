@@ -85,7 +85,6 @@ def TSF_command_FizzBuzz():    #TSF_doc:TSF_about.tsfより小さなサンプル
     TSF_Forth_viewprintlog()
 
 def TSF_command_calc(TSF_calctype=None):    #TSF_doc:TSFのより小さなサンプルプログラム。
-#    TSF_calcQ=sys.argv[2].decode(sys.stdout.encoding) if len(sys.argv) > 2 else "n|0"
     TSF_calcQ=TSF_argvs[2] if len(TSF_argvs) > 2 else "n|0"
     if TSF_calctype == "--calcDC":
         TSF_calcA=TSF_calc_decimalize(TSF_calcQ,False)
@@ -115,11 +114,8 @@ def TSF_command_help():    #TSF_doc:TSFのより小さなサンプルプログ�
 TSF_about_mergefile="TSF_about.tsf"
 TSF_mergefile=""
 TSF_argvs=TSF_io_argvs()
-#TSF_Forth_Init(sys.argv)
 TSF_Forth_Init(TSF_argvs)
-#if len(sys.argv) >= 2:
 if len(TSF_argvs) >= 2:
-#    TSF_mergefile=sys.argv[1]
     TSF_mergefile=TSF_argvs[1]
 if os.path.isfile(TSF_mergefile):
     if len(TSF_Forth_loadtext(TSF_mergefile,TSF_mergefile)):
