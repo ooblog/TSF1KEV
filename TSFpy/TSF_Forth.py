@@ -539,17 +539,23 @@ def TSF_Forth_publishthat():   #TSF_doc:[stack]積込先スタックをテキス
     TSF_Forth_settext(TSF_Forth_pop(TSF_thatstack_name),TSF_publish_log,TSF_style="N")
     return None
 
-def TSF_Forth_remove():
+def TSF_Forth_remove():   #TSF_doc:[filename]ファイルを削除する。1スタック積み下ろし。
+    TSF_path=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_io_savetext(TSF_path,TSF_text=None)
     return None
 
-def TSF_Forth_savethe():
+def TSF_Forth_savethe():   #TSF_doc:[filename,stack]スタック内容をテキストとみなしてファイルに保存する。2スタック積み下ろし。
     TSF_thename=TSF_Forth_pop(TSF_thatstack_name)
     TSF_path=TSF_Forth_pop(TSF_thatstack_name)
     TSF_text=TSF_txt_ESCdecode("\n".join(TSF_stacks[TSF_thename])) if TSF_thename in TSF_stacks else ""
     TSF_io_savetext(TSF_path,TSF_text=TSF_text)
     return None
 
-def TSF_Forth_writethe():
+def TSF_Forth_writethe():   #TSF_doc:[filename,stack]スタック内容をテキストとみなしてファイルに追記する。2スタック積み下ろし。
+    TSF_thename=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_path=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_text=TSF_txt_ESCdecode("\n".join(TSF_stacks[TSF_thename])) if TSF_thename in TSF_stacks else ""
+    TSF_io_writetext(TSF_path,TSF_text=TSF_text)
     return None
 
 

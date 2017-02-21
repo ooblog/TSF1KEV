@@ -129,6 +129,8 @@ def TSF_io_savedirs(TSF_path):    #TSF_doc:「TSF_io_savetext()」でファイ�
 def TSF_io_savetext(TSF_path,TSF_text=None):    #TSF_doc:TSF_pathにTSF_textを保存する。TSF_textを省略した場合ファイルを削除する。空のファイルを作る場合はTSF_textに文字列長さ0の文字列変数を用意する。
     if TSF_text != None:
         TSF_io_savedir(TSF_path)
+        if not TSF_text.endswith('\n'):
+            TSF_text+='\n'
         if sys.version_info.major == 2:
             with open(TSF_path,'wb') as TSF_io_fileobj:
                 TSF_io_fileobj.write(TSF_text.encode("UTF-8"))
@@ -141,6 +143,8 @@ def TSF_io_savetext(TSF_path,TSF_text=None):    #TSF_doc:TSF_pathにTSF_textを�
 def TSF_io_writetext(TSF_path,TSF_text):    #TSF_doc:TSF_pathにTSF_textを追記する。
     if TSF_text != None:
         TSF_io_savedir(TSF_path)
+        if not TSF_text.endswith('\n'):
+            TSF_text+='\n'
         if sys.version_info.major == 2:
             with open(TSF_path,'ab') as TSF_io_fileobj:
                 TSF_io_fileobj.write(TSF_text.encode("UTF-8"))

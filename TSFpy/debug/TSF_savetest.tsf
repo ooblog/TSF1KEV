@@ -1,2 +1,6 @@
 TSF_splittest:
 	1,2,3,4,5	,	#TSF_split	#TSF_lenthat	#TSF_echoes	1,2,3,4,5	#TSF_chars	#TSF_lenthat	#TSF_echoes
+TSF_splittest:
+	1,2,3,4,5	,	#TSF_split	#TSF_lenthat	#TSF_echoes	1,2,3,4,5	#TSF_chars	#TSF_lenthat	#TSF_echoes
+TSF_splittest:
+	1,2,3,4,5	,	#TSF_split	#TSF_lenthat	#TSF_echoes	1,2,3,4,5	#TSF_chars	#TSF_lenthat	#TSF_echoes

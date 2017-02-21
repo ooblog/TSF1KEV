@@ -5,4 +5,4 @@ TSF_mergetest:
 	debug/TSF_splittest.tsf	#TSF_carbonthat	#TSF_read	#TSF_mergethe	TSF_splittest:	#TSF_this
 
 TSF_publishtest:
-	TSF_publishdata:	TSF_splittest:	#TSF_publishthe	debug/TSF_savetest.tsf	TSF_publishdata:	#TSF_savethe	#TSF_viewthey
+	TSF_publishdata:	TSF_splittest:	#TSF_publishthe	debug/TSF_savetest.tsf	TSF_publishdata:	#TSF_writethe	#TSF_viewthey
