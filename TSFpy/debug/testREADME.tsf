@@ -1,5 +1,5 @@
 TSF_Tab-Separated-Forth:
-	UTF-8	#TSF_encoding	TSFdocs_that:	#TSF_that	TSFdocs_setup:	#TSF_this	0	#TSF_fin.
+	UTF-8	#TSF_encoding	TSFdocs_that:	#TSF_that	TSFdocs_setup:	#TSF_this	#TSF_viewthey	0	#TSF_fin.
 
 TSFdocs_setup:
 	TSFdocs_files:	#TSF_lenthe	TSFdocs_filecount:	0	#TSF_pokethe	TSFdocs_filename:	#TSF_this
@@ -8,7 +8,8 @@ TSFdocs_filename:
 	[TSFdocs_filecount:0]-1	#TSF_calcDC	TSFdocs_filecount:	0	#TSF_pokethe	TSFdocs_files:	[TSFdocs_filecount:0]	#TSF_calcDC	#TSF_peekthe	TSFdocs_main:	#TSF_this
 
 TSFdocs_main:
-	1	#TSF_echoes	TSFdocs_filenameloop:	#TSF_this
+	#TSF_carbonthat	1	#TSF_echoes	#TSF_clonethey	TSFdocs_filenameloop:	#TSF_this
+##TSF_publishthe
 
 TSFdocs_filenameloop:
 	TSFdocs_filecount:	[TSFdocs_filecount:0]z1~2	#TSF_calcDC	#TSF_peekthe	#TSF_this

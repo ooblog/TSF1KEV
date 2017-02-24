@@ -5,7 +5,7 @@ from __future__ import division,print_function,absolute_import,unicode_literals
 from TSF_io import *
 from TSF_calc import *
 from TSF_time import *
-
+import copy
 
 def TSF_Forth_1ststack():    #TSF_doc:TSF_初期化に使う1ststack名
     return "TSF_Tab-Separated-Forth:"
@@ -44,10 +44,10 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         "#TSF_carbonthe":TSF_Forth_carbonthe,  "スタックの一番上を複製する":TSF_Forth_carbonthe,
         "#TSF_carbonthis":TSF_Forth_carbonthis,  "実行中スタックの一番上を複製する":TSF_Forth_carbonthis,
         "#TSF_carbonthat":TSF_Forth_carbonthat,  "積込先スタックの一番上を複製する":TSF_Forth_carbonthat,
-# "TSF_findthe" "正規表現でスタックから探す"
-# "TSF_findthat" "正規表現で積み込み先スタックを探す"
-# "TSF_replacethe" "正規表現でスタックを置換する"
-# "TSF_replacethat" "正規表現で積み込み先スタックにて置換する"
+        "#TSF_clonethe":TSF_Forth_clonethe,  "スタックを複製する":TSF_Forth_clonethe,
+        "#TSF_clonethis":TSF_Forth_clonethis,  "実行中スタックを複製する":TSF_Forth_clonethis,
+        "#TSF_clonethat":TSF_Forth_clonethat,  "積込先スタック複製する":TSF_Forth_clonethat,
+        "#TSF_clonethey":TSF_Forth_clonethey,  "スタック名一覧をスタックとして複製する":TSF_Forth_clonethey,
         "#TSF_popthe":TSF_Forth_popthe,  "スタックから拾う":TSF_Forth_popthe,
         "#TSF_popthis":TSF_Forth_popthis,  "実行中スタックから拾う":TSF_Forth_popthis,
         "#TSF_popthat":TSF_Forth_popthat,  "積込先スタックから除く":TSF_Forth_popthat,
@@ -80,6 +80,12 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         "#TSF_publishthe":TSF_Forth_publishthe,  "スタックをテキスト化して別スタックに読み込む":TSF_Forth_publishthe,
         "#TSF_publishthis":TSF_Forth_publishthis,  "実行中スタックをテキスト化して別スタックに読み込む":TSF_Forth_publishthis,
         "#TSF_publishthat":TSF_Forth_publishthat,  "積込先スタックをテキスト化して別スタックに読み込む":TSF_Forth_publishthat,
+# "TSF_findthe" "正規表現でスタックから探す"
+        "#TSF_replacethe":TSF_Forth_replacethe,  "スタックをテキストとみなして置換する":TSF_Forth_replacethe,
+        "#TSF_resubthe":TSF_Forth_resubthe,  "スタックをテキストとみなして正規表現で置換する":TSF_Forth_resubthe,
+# "TSF_findthat" "正規表現で積み込み先スタックを探す"
+# "TSF_replacethe" "正規表現でスタックを置換する"
+# "TSF_replacethat" "正規表現で積み込み先スタックにて置換する"
         "#TSF_remove":TSF_Forth_remove,  "テキストファイルを削除する":TSF_Forth_remove,
         "#TSF_savethe":TSF_Forth_savethe,  "スタックをテキストファイルに上書きする":TSF_Forth_savethe,
         "#TSF_writethe":TSF_Forth_writethe,  "スタックをテキストファイルに追記する":TSF_Forth_writethe,
@@ -341,6 +347,26 @@ def TSF_Forth_carbonthat():   #TSF_doc:[]積込先スタックの一番上のス
     TSF_Forth_push(TSF_thatstack_name,TSF_carbon)
     return None
 
+def TSF_Forth_clonethe():   #TSF_doc:[stackC,stack]スタックを複製する
+    TSF_clonename=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_clone=TSF_stacks[TSF_clonename] if TSF_clonename in TSF_stacks else []
+    TSF_stacks[TSF_Forth_pop(TSF_thatstack_name)]=list(tuple(TSF_clone))
+    return None
+
+def TSF_Forth_clonethis():   #TSF_doc:[stackC]実行中スタックを複製する
+    TSF_clone=TSF_stacks[TSF_thisstack_name] if TSF_thisstack_name in TSF_stacks else []
+    TSF_stacks[TSF_Forth_pop(TSF_thatstack_name)]=list(tuple(TSF_clone))
+    return None
+
+def TSF_Forth_clonethat():   #TSF_doc:[stackC]積込先スタック複製する
+    TSF_clone=TSF_stacks[TSF_thatstack_name] if TSF_thatstack_name in TSF_stacks else []
+    TSF_stacks[TSF_Forth_pop(TSF_thatstack_name)]=list(tuple(TSF_clone))
+    return None
+
+def TSF_Forth_clonethey():   #TSF_doc:[stackC]スタック名一覧をスタックとして複製する
+    TSF_stacks[TSF_Forth_pop(TSF_thatstack_name)]=list(TSF_stacks.keys())
+    return None
+
 def TSF_Forth_popthe():   #TSF_doc:[stack]スタックから積込先スタックに1スタック積み下ろす。
     TSF_thename=TSF_Forth_pop(TSF_thatstack_name)
     TSF_tsv=TSF_Forth_pop(TSF_thename)
@@ -538,6 +564,22 @@ def TSF_Forth_publishthat():   #TSF_doc:[stack]積込先スタックをテキス
     TSF_publish_log=TSF_txt_ESCencode(TSF_publish_log)
     TSF_Forth_settext(TSF_Forth_pop(TSF_thatstack_name),TSF_publish_log,TSF_style="N")
     return None
+
+def TSF_Forth_replacethe():   #TSF_doc:[stack,old,new]スタックを一時的にテキスト化して文字列置換をする。3スタック積み下ろし。
+    TSF_tsvO=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_tsvN=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_thename=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_text=TSF_txt_ESCdecode("\n".join(TSF_stacks[TSF_thename])) if TSF_thename in TSF_stacks else ""
+    TSF_text=TSF_text.replace(TSF_tsvO,TSF_tsvN)
+    TSF_Forth_settext(TSF_Forth_pop(TSF_thatstack_name),TSF_text,TSF_style="N")
+
+def TSF_Forth_resubthe():   #TSF_doc:[stack,old,new]スタックを一時的にテキスト化して正規表現で文字列置換をする。3スタック積み下ろし。
+    TSF_tsvO=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_tsvN=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_thename=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_text=TSF_txt_ESCdecode("\n".join(TSF_stacks[TSF_thename])) if TSF_thename in TSF_stacks else ""
+#    TSF_text=TSF_text.replace(TSF_tsvO,TSF_tsvN)
+    TSF_Forth_settext(TSF_Forth_pop(TSF_thatstack_name),TSF_text,TSF_style="N")
 
 def TSF_Forth_remove():   #TSF_doc:[filename]ファイルを削除する。1スタック積み下ろし。
     TSF_path=TSF_Forth_pop(TSF_thatstack_name)
