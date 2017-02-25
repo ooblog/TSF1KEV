@@ -19,11 +19,8 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
     TSF_words={
         "#TSF_fin.":TSF_Forth_fin,  "コードと共にTSFを終了。":TSF_Forth_fin,
         "#TSF_over":TSF_Forth_over,  "スタックを出る":TSF_Forth_over,  "スタックを出る(TSFも終了)":TSF_Forth_over,
-# "TSF_GUI" "をGUI処理"
-# "TSF_newword" "という言葉を作る"
-# "TSF_noword" "という言葉を忘れる"
         "#TSF_encoding":TSF_Forth_encoding,  "でエンコード":TSF_Forth_encoding,
-        "#TSF_this":TSF_Forth_this,  "のスタックに入る":TSF_Forth_this,  "スタックを実行":TSF_Forth_this,
+        "#TSF_this":TSF_Forth_this,  "スタックに入る":TSF_Forth_this,  "スタックを実行":TSF_Forth_this,
         "#TSF_that":TSF_Forth_that,  "スタックを積込先にする":TSF_Forth_that,
         "#TSF_viewthe":TSF_Forth_viewthe,  "を表示する":TSF_Forth_viewthe,
         "#TSF_viewthis":TSF_Forth_viewthis,  "実行中スタックを表示する":TSF_Forth_viewthis,
@@ -33,14 +30,17 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         "#TSF_stylethis":TSF_Forth_stylethis,  "スタイルを実行中スタックに設定する":TSF_Forth_stylethis,
         "#TSF_stylethat":TSF_Forth_stylethat,  "スタイルを積込先スタックに設定する":TSF_Forth_stylethat,
         "#TSF_echoes":TSF_Forth_echoes,  "行表示する":TSF_Forth_echoes,
-        "#TSF_lenthe":TSF_Forth_lenthe,  "のスタック個数":TSF_Forth_lenthe,
+        "#TSF_lenthe":TSF_Forth_lenthe,  "スタック個数":TSF_Forth_lenthe,
         "#TSF_lenthis":TSF_Forth_lenthis,  "実行中スタックの個数":TSF_Forth_lenthis,
         "#TSF_lenthat":TSF_Forth_lenthat,  "積込先スタックの個数":TSF_Forth_lenthat,
         "#TSF_lenthey":TSF_Forth_lenthey,  "スタック名一覧の個数":TSF_Forth_lenthey,
-        "#TSF_pushthe":TSF_Forth_pushthe,  "のスタックを積む":TSF_Forth_pushthe,
+        "#TSF_pushthe":TSF_Forth_pushthe,  "スタックを積む":TSF_Forth_pushthe,
         "#TSF_pushthis":TSF_Forth_pushthis,  "実行中スタックを自身に積む":TSF_Forth_pushthis,
         "#TSF_pushthat":TSF_Forth_pushthat,  "積込先スタックから積む":TSF_Forth_pushthat,
         "#TSF_pushthey":TSF_Forth_pushthey,  "スタック名一覧を積む":TSF_Forth_pushthey,
+        "#TSF_swapBAthat":TSF_Forth_swapBAthat,  "実行中スタックBA交換":TSF_Forth_swapBAthat,
+        "#TSF_swapCAthat":TSF_Forth_swapCAthat,  "実行中スタックCA交換":TSF_Forth_swapCAthat,
+        "#TSF_swapCBthat":TSF_Forth_swapCBthat,  "実行中スタックCB交換":TSF_Forth_swapCBthat,
         "#TSF_carbonthe":TSF_Forth_carbonthe,  "スタックの一番上を複製する":TSF_Forth_carbonthe,
         "#TSF_carbonthis":TSF_Forth_carbonthis,  "実行中スタックの一番上を複製する":TSF_Forth_carbonthis,
         "#TSF_carbonthat":TSF_Forth_carbonthat,  "積込先スタックの一番上を複製する":TSF_Forth_carbonthat,
@@ -64,12 +64,6 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         "#TSF_calcKNQQ":TSF_Forth_calcKNQQ,  "を単位付き九九する":TSF_Forth_calcKNQQ,
         "#TSF_calcPR":TSF_Forth_calcPR,  "を有効桁数":TSF_Forth_calcPR,
         "#TSF_calcRO":TSF_Forth_calcRO,  "で端数処理":TSF_Forth_calcRO,
-# "TSF_RPN" "逆ポーランド電卓で計算する"
-# "TSF_RPNQQ" "逆ポーランド電卓で九九する"
-# "TSF_LISP" "ポーランド電卓で計算する"
-# "TSF_LISPQQ" "ポーランド電卓で九九する"
-# "TSF_CALENDER" "日時を取得する"
-# "TSF_TIMER" "時間をを測定する"
         "#TSF_brackets":TSF_Forth_brackets,  "括弧で数式に連結":TSF_Forth_brackets,
         "#TSF_join":TSF_Forth_join,  "個分連結":TSF_Forth_join,
         "#TSF_joinC":TSF_Forth_joinC,  "で回数分挟んで連結":TSF_Forth_joinC,
@@ -80,20 +74,29 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         "#TSF_publishthe":TSF_Forth_publishthe,  "スタックをテキスト化して別スタックに読み込む":TSF_Forth_publishthe,
         "#TSF_publishthis":TSF_Forth_publishthis,  "実行中スタックをテキスト化して別スタックに読み込む":TSF_Forth_publishthis,
         "#TSF_publishthat":TSF_Forth_publishthat,  "積込先スタックをテキスト化して別スタックに読み込む":TSF_Forth_publishthat,
-# "TSF_findthe" "正規表現でスタックから探す"
         "#TSF_replacethe":TSF_Forth_replacethe,  "スタックをテキストとみなして置換する":TSF_Forth_replacethe,
         "#TSF_resubthe":TSF_Forth_resubthe,  "スタックをテキストとみなして正規表現で置換する":TSF_Forth_resubthe,
+# "TSF_findthe" "正規表現でスタックから探す"
 # "TSF_findthat" "正規表現で積み込み先スタックを探す"
-# "TSF_replacethe" "正規表現でスタックを置換する"
-# "TSF_replacethat" "正規表現で積み込み先スタックにて置換する"
         "#TSF_remove":TSF_Forth_remove,  "テキストファイルを削除する":TSF_Forth_remove,
         "#TSF_savethe":TSF_Forth_savethe,  "スタックをテキストファイルに上書きする":TSF_Forth_savethe,
         "#TSF_writethe":TSF_Forth_writethe,  "スタックをテキストファイルに追記する":TSF_Forth_writethe,
     }
     return TSF_words
 
-def TSF_Forth_words(TSF_word=None):    #TSF_doc:TSF_words(ワード)を取得する
+def TSF_Forth_words(TSF_newwords=None):    #TSF_doc:TSF_words(ワード)を取得する
+#言語拡張関連
+# "TSF_RPN" "逆ポーランド電卓で計算する"
+# "TSF_RPNQQ" "逆ポーランド電卓で九九する"
+# "TSF_LISP" "ポーランド電卓で計算する"
+# "TSF_LISPQQ" "ポーランド電卓で九九する"
+# "TSF_CALENDER" "日時を取得する"
+# "TSF_TIMER" "時間をを測定する"
+# "TSF_DEV" "マウス・キーボード・PADから直に取得"
+# "TSF_GUI" "をGUI処理"
     global TSF_words
+    if TSF_newwords != None:
+        TSF_Forth_words=TSF_newwords
     return TSF_words
 
 def TSF_Forth_pushargv():    #TSF_doc:sys.argv(コマンドライン引数)を「TSF_Tab-Separated-Forth:」に追加。
@@ -330,6 +333,28 @@ def TSF_Forth_pushthey():   #TSF_doc:[]スタック名一覧を丸ごとthatス�
     for TSF_tsv in reversed(TSF_stacks):
         TSF_Forth_push(TSF_thatstack_name,TSF_tsv)
     return None
+
+def TSF_Forth_swapBAthat():   #TSF_doc:[stackB,stackA]スタックAとスタックBを交換する。
+    TSF_tsvA=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_tsvB=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
+    TSF_Forth_push(TSF_thatstack_name,TSF_tsvB)
+
+def TSF_Forth_swapCAthat():   #TSF_doc:[stackC,stackB,stackA]スタックAとスタックCを交換する。
+    TSF_tsvA=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_tsvB=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_tsvC=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
+    TSF_Forth_push(TSF_thatstack_name,TSF_tsvB)
+    TSF_Forth_push(TSF_thatstack_name,TSF_tsvC)
+
+def TSF_Forth_swapCBthat():   #TSF_doc:[stackC,stackB,stackA]スタックBとスタックCを交換する。
+    TSF_tsvA=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_tsvB=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_tsvC=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_Forth_push(TSF_thatstack_name,TSF_tsvB)
+    TSF_Forth_push(TSF_thatstack_name,TSF_tsvC)
+    TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
 
 def TSF_Forth_carbonthe():   #TSF_doc:[stack]スタックの一番上のスタックを複製する。
     TSF_thename=TSF_Forth_pop(TSF_thatstack_name)

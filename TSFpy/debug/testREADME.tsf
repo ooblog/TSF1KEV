@@ -8,7 +8,7 @@ TSFdocs_filename:
 	[TSFdocs_filecount:0]-1	#TSF_calcDC	TSFdocs_filecount:	0	#TSF_pokethe	TSFdocs_files:	[TSFdocs_filecount:0]	#TSF_calcDC	#TSF_peekthe	TSFdocs_main:	#TSF_this
 
 TSFdocs_main:
-	#TSF_carbonthat	1	#TSF_echoes	#TSF_clonethey	TSFdocs_filenameloop:	#TSF_this
+	#TSF_carbonthat	1	#TSF_echoes	TSFdocs_text:	#TSF_clonethe	TSFdocs_filenameloop:	#TSF_this
 ##TSF_publishthe
 
 TSFdocs_filenameloop:
