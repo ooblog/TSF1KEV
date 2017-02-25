@@ -5,11 +5,13 @@ TSFdocs_setup:
 	TSFdocs_files:	#TSF_lenthe	TSFdocs_filecount:	0	#TSF_pokethe	TSFdocs_filename:	#TSF_this
 
 TSFdocs_filename:
-	[TSFdocs_filecount:0]-1	#TSF_calcDC	TSFdocs_filecount:	0	#TSF_pokethe	TSFdocs_files:	[TSFdocs_filecount:0]	#TSF_calcDC	#TSF_peekthe	TSFdocs_main:	#TSF_this
+	[TSFdocs_filecount:0]-1	#TSF_calcDC	TSFdocs_filecount:	0	#TSF_pokethe	TSFdocs_files:	[TSFdocs_filecount:0]	#TSF_calcDC	#TSF_peekthe	TSFdocs_textset:	#TSF_this
 
-TSFdocs_main:
-	#TSF_carbonthat	1	#TSF_echoes	TSFdocs_text:	#TSF_clonethe	TSFdocs_filenameloop:	#TSF_this
-##TSF_publishthe
+TSFdocs_textset:
+	#TSF_carbonthat	TSFdocs_text:	#TSF_clonethe	TSFdocs_textreplace:	#TSF_this
+
+TSFdocs_textreplace:
+	#TSF_carbonthat	1	#TSF_echoes	TSFdocs_text:	TSF1KEV	TEST	#TSF_replacethe	TSFdocs_filenameloop:	#TSF_this
 
 TSFdocs_filenameloop:
 	TSFdocs_filecount:	[TSFdocs_filecount:0]z1~2	#TSF_calcDC	#TSF_peekthe	#TSF_this
@@ -23,7 +25,10 @@ TSFdocs_files:
 TSFdocs_text:
 	<？TSF_MD_H1:TSF1KEV>
 
-TSF_tags:
+TSFdocs_tagcount:
+	-	TSFdocs_textreplace:	#exit
+
+TSFdocs_tags:
 	<？TSF_MD_H1:TSF1KEV>	<＄TSF_MD_H1:0>	<？P>	<？BR>
 
 <？TSF_MD_H1:TSF1KEV>

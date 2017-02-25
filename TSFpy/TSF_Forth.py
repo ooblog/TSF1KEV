@@ -76,8 +76,6 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         "#TSF_publishthat":TSF_Forth_publishthat,  "積込先スタックをテキスト化して別スタックに読み込む":TSF_Forth_publishthat,
         "#TSF_replacethe":TSF_Forth_replacethe,  "スタックをテキストとみなして置換する":TSF_Forth_replacethe,
         "#TSF_resubthe":TSF_Forth_resubthe,  "スタックをテキストとみなして正規表現で置換する":TSF_Forth_resubthe,
-# "TSF_findthe" "正規表現でスタックから探す"
-# "TSF_findthat" "正規表現で積み込み先スタックを探す"
         "#TSF_remove":TSF_Forth_remove,  "テキストファイルを削除する":TSF_Forth_remove,
         "#TSF_savethe":TSF_Forth_savethe,  "スタックをテキストファイルに上書きする":TSF_Forth_savethe,
         "#TSF_writethe":TSF_Forth_writethe,  "スタックをテキストファイルに追記する":TSF_Forth_writethe,
@@ -591,8 +589,8 @@ def TSF_Forth_publishthat():   #TSF_doc:[stack]積込先スタックをテキス
     return None
 
 def TSF_Forth_replacethe():   #TSF_doc:[stack,old,new]スタックを一時的にテキスト化して文字列置換をする。3スタック積み下ろし。
-    TSF_tsvO=TSF_Forth_pop(TSF_thatstack_name)
     TSF_tsvN=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_tsvO=TSF_Forth_pop(TSF_thatstack_name)
     TSF_thename=TSF_Forth_pop(TSF_thatstack_name)
     TSF_text=TSF_txt_ESCdecode("\n".join(TSF_stacks[TSF_thename])) if TSF_thename in TSF_stacks else ""
     TSF_text=TSF_text.replace(TSF_tsvO,TSF_tsvN)
@@ -603,7 +601,7 @@ def TSF_Forth_resubthe():   #TSF_doc:[stack,old,new]スタックを一時的に�
     TSF_tsvN=TSF_Forth_pop(TSF_thatstack_name)
     TSF_thename=TSF_Forth_pop(TSF_thatstack_name)
     TSF_text=TSF_txt_ESCdecode("\n".join(TSF_stacks[TSF_thename])) if TSF_thename in TSF_stacks else ""
-#    TSF_text=TSF_text.replace(TSF_tsvO,TSF_tsvN)
+    TSF_text=re.sub(re.compile(TSF_tsvO,re.MULTILINE),TSF_tsvN,TSF_text)
     TSF_Forth_settext(TSF_Forth_pop(TSF_thatstack_name),TSF_text,TSF_style="N")
 
 def TSF_Forth_remove():   #TSF_doc:[filename]ファイルを削除する。1スタック積み下ろし。
