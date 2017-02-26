@@ -409,10 +409,6 @@ def TSF_calc_fractalize(TSF_calcQ):    #TSF_doc:分数電卓なので小数を�
 def TSF_calc_LCM(TSF_calcN,TSF_calcD):    #TSF_doc:最小公倍数の計算。
     return decimal.Decimal(TSF_calcN*TSF_calcD)//decimal.Decimal(fractions.gcd(TSF_calcN,TSF_calcD))
 
-#def TSF_calc_decimalize(TSF_calcQ,TSF_calcQQ=False):    #TSF_doc:分数電卓だけど分数ではなく小数を返す(再計算)。ただし「n|0」の時は「n|0」を返す。
-#    TSF_calcA=TSF_calc(TSF_calcQ,TSF_calcQQ); 
-#    return TSF_calc_decimalizeDC(TSF_calcA)
-    
 def TSF_calc_decimalizeDC(TSF_calcQ):    #TSF_doc:分数(が入力されてるものと信用して)を変換して小数を返す。ただし「n|0」の時は「n|0」を返す。
     TSF_calcRN,TSF_calcRD=TSF_calcQ.replace('m','-').replace('p','').split('|')
     if float(TSF_calcRD) != 0.0:
@@ -447,12 +443,12 @@ def TSF_calc_decimalizeKNcomma(TSF_calcQ):    #TSF_doc:整数を4桁で区切っ
     return TSF_calcA
 
 
-def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テスト風デバッグ関数。
+def TSF_calc_debug():    #TSF_doc:「TSF/TSF_calc.py」単体テスト風デバッグ関数。
     TSF_debug_log=""
     TSF_debug_log=TSF_io_printlog("TSF_Tab-Separated-Forth:",TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["UTF-8",":TSF_encoding","0",":TSF_fin."])),TSF_log=TSF_debug_log)
-    TSF_debug_log=TSF_io_printlog("TSF_argv:",TSF_log=TSF_debug_log)
-    TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(TSF_argv)),TSF_log=TSF_debug_log)
+    TSF_debug_log=TSF_io_printlog("TSF_argvs:",TSF_log=TSF_debug_log)
+    TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(TSF_argvs)),TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("TSF_py:",TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout])),TSF_log=TSF_debug_log)
     TSF_calc_precision(50)
@@ -479,11 +475,11 @@ def TSF_calc_debug(TSF_argv=[]):    #TSF_doc:「TSF/TSF_calc.py」単体テス�
     return TSF_debug_log
 
 if __name__=="__main__":
-    from TSF_io import *
     print("")
-    print("--- {0} ---".format(sys.argv[0]))
+    TSF_argvs=TSF_io_argvs()
+    print("--- {0} ---".format(TSF_argvs[0]))
     TSF_debug_savefilename="debug/TSF_calc_debug.txt"
-    TSF_debug_log=TSF_calc_debug(sys.argv)
+    TSF_debug_log=TSF_calc_debug()
     TSF_io_savetext(TSF_debug_savefilename,TSF_debug_log)
     print("")
     try:
