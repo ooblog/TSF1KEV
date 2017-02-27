@@ -5,4 +5,8 @@ TSF_argvs:
 TSF_py:
 	Python2.7.6	linux2	UTF-8
 TSF_time:
-	@000y@0m@0dm@wdec@0h@0n@0s⇔2017@0m@0dm@wdec@0h@0n@0s
+	@000y@0m@0dm@wdec@0h@0n@0s⇔20170227@wdec@0h@0n@0s
+	@000Y@0M@0Dm@Wdec@0H@0N@0S⇔20180328@Wdec@0H@0N@0S
+TSF_time-09:00:
+	@000y-@0m-@0dmT@0h:@0n:@0s-09:00⇔2017-02-27T@0h:@0n:@0s-09:00
+	@000Y-@0M-@0DmT@0H:@0N:@0S-09:00⇔2018-03-28T@0H:@0N:@0S-09:00
