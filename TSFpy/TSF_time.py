@@ -41,7 +41,7 @@ TSF_allnight_Month,TSF_allnight_Monthdays,TSF_allnight_carryMonth=None,None,None
 TSF_meridian_Daymonth,TSF_meridian_Dayyear=None,None
 TSF_allnight_Daymonth,TSF_allnight_Dayyear,TSF_allnight_carryDay=None,None,None
 TSF_meridian_Hour,TSF_meridian_HourAP=None,None
-TSF_allnight_Hour,TSF_allnight_HourAP=None,None
+TSF_allnight_Hour,TSF_allnight_HourAP,TSF_allnight_carryHour=None,None,None
 def TSF_time_setdaytime(TSF_diffminute=0,TSF_overhour=24):    #TSF_doc:時刻の初期化。実際の年月日等の取得は遅延処理で行う。
     global TSF_time_diffminute,TSF_time_overhour
     TSF_time_diffminute,TSF_time_overhour=TSF_diffminute,min(max(TSF_overhour,24),48)
@@ -65,8 +65,8 @@ def TSF_time_setdaytime(TSF_diffminute=0,TSF_overhour=24):    #TSF_doc:時刻の
     global TSF_meridian_Hour,TSF_meridian_HourAP
     if TSF_meridian_Hour != TSF_earlier_now.day:
         TSF_meridian_Hour,TSF_meridian_HourAP=None,None
-        global TSF_allnight_Hour,TSF_allnight_HourAP
-        TSF_allnight_Hour,TSF_allnight_HourAP=None,None
+        global TSF_allnight_Hour,TSF_allnight_HourAP,TSF_allnight_carryHour
+        TSF_allnight_Hour,TSF_allnight_HourAP,TSF_allnight_carryHour=None,None,None
 
 def TSF_time_earlier_now():    #TSF_doc:現在時刻(時差を含まない)の遅延処理。
     global TSF_earlier_now
@@ -91,7 +91,7 @@ def TSF_time_allnight_Year():    #TSF_doc:徹夜時刻年4桁の遅延処理。
     return TSF_allnight_Year
 def TSF_time_allnight_carryYear():    #TSF_doc:徹夜時刻年の位上がり処理。
     global TSF_allnight_carryYear
-    TSF_allnight_carryYear=TSF_allnight_carryYear if TSF_allnight_carryYear != None else 1
+    TSF_allnight_carryYear=TSF_allnight_carryYear if TSF_allnight_carryYear != None else  -1 if TSF_time_meridian_Year()+TSF_time_allnight_carryMonth() < 1 else 0
     return TSF_allnight_carryYear
 
 def TSF_time_meridian_Yearlower():    #TSF_doc:現在時刻年2桁の遅延処理。
@@ -109,11 +109,11 @@ def TSF_time_meridian_Month():    #TSF_doc:現在時刻月2桁の遅延処理。
     return TSF_meridian_Month
 def TSF_time_allnight_Month():    #TSF_doc:徹夜時刻月2桁の遅延処理。
     global TSF_allnight_Month
-    TSF_allnight_Month=TSF_allnight_Month if TSF_allnight_Month != None else TSF_time_meridian_Month()+TSF_time_allnight_carryMonth()
+    TSF_allnight_Month=TSF_allnight_Month if TSF_allnight_Month != None else TSF_time_meridian_Month()+TSF_time_allnight_carryDay()
     return TSF_allnight_Month
 def TSF_time_allnight_carryMonth():    #TSF_doc:徹夜時刻年の位上がり処理。
     global TSF_allnight_carryMonth
-    TSF_allnight_carryMonth=TSF_allnight_carryMonth if TSF_allnight_carryMonth != None else 1
+    TSF_allnight_carryMonth=TSF_allnight_carryMonth if TSF_allnight_carryMonth != None else -1 if TSF_time_meridian_Month()+TSF_time_allnight_carryDay() < 1 else 0
     return TSF_allnight_carryMonth
 
 def TSF_time_meridian_Daymonth():    #TSF_doc:現在時刻日2桁の遅延処理。
@@ -122,17 +122,25 @@ def TSF_time_meridian_Daymonth():    #TSF_doc:現在時刻日2桁の遅延処理
     return TSF_meridian_Daymonth
 def TSF_time_allnight_Daymonth():    #TSF_doc:徹夜時刻日2桁の遅延処理。
     global TSF_allnight_Daymonth
-    TSF_allnight_Daymonth=TSF_allnight_Daymonth if TSF_allnight_Daymonth != None else TSF_time_meridian_Daymonth()+TSF_time_allnight_carryDay()
+    TSF_allnight_Daymonth=TSF_allnight_Daymonth if TSF_allnight_Daymonth != None else TSF_time_meridian_Daymonth()+TSF_time_allnight_carryHour()
     return TSF_allnight_Daymonth
 def TSF_time_allnight_carryDay():    #TSF_doc:徹夜時刻年の位上がり処理。
     global TSF_allnight_carryDay
-    TSF_allnight_carryDay=TSF_allnight_carryDay if TSF_allnight_carryDay != None else 1
+    TSF_allnight_carryDay=TSF_allnight_carryDay if TSF_allnight_carryDay != None else -1 if TSF_time_meridian_Daymonth()+TSF_time_allnight_carryHour() < 1 else 0
     return TSF_allnight_carryDay
 
 def TSF_time_meridian_Hour():    #TSF_doc:現在時刻時2桁の遅延処理。
     global TSF_meridian_Hour
     TSF_meridian_Hour=TSF_meridian_Hour if TSF_meridian_Hour != None else TSF_time_meridian_now().hour
     return TSF_meridian_Hour
+def TSF_time_allnight_Hour():    #TSF_doc:徹夜時刻時2桁の遅延処理。
+    global TSF_allnight_Hour
+    TSF_allnight_Hour=TSF_allnight_Hour if TSF_allnight_Hour != None else 24+TSF_time_meridian_Hour() if TSF_time_allnight_carryHour() < 0 else TSF_time_meridian_Hour()
+    return TSF_allnight_Hour
+def TSF_time_allnight_carryHour():    #TSF_doc:徹夜時刻年の位上がり処理。
+    global TSF_allnight_carryHour
+    TSF_allnight_carryHour=TSF_allnight_carryHour if TSF_allnight_carryHour != None else -1 if 24+TSF_time_meridian_Hour() < TSF_time_overhour else 0
+    return TSF_allnight_carryHour
 
 
 def TSF_time_getdaytime(TSF_timeformat="@000y@0m@0dm@wdec@0h@0n@0s",TSF_diffminute=None):    #TSF_doc:「TSF/TSF_time.py」単体テスト風デバッグ関数。
@@ -171,6 +179,13 @@ def TSF_time_getdaytime(TSF_timeformat="@000y@0m@0dm@wdec@0h@0n@0s",TSF_diffminu
         TSF_tf=TSF_tf if not "@_Dm" in TSF_tf else TSF_tf.replace("@_Dm","{0: >2}".format(TSF_time_allnight_Daymonth()))
         TSF_tf=TSF_tf if not "@Dm" in TSF_tf else TSF_tf.replace("@Dm","{0:2}".format(TSF_time_allnight_Daymonth()))
 
+        TSF_tf=TSF_tf if not "@0h" in TSF_tf else TSF_tf.replace("@0h","{0:2}".format(TSF_time_meridian_Hour()))
+        TSF_tf=TSF_tf if not "@_h" in TSF_tf else TSF_tf.replace("@_h","{0: >2}".format(TSF_time_meridian_Hour()))
+        TSF_tf=TSF_tf if not "@h" in TSF_tf else TSF_tf.replace("@h","{0:2}".format(TSF_time_meridian_Hour()))
+        TSF_tf=TSF_tf if not "@0H" in TSF_tf else TSF_tf.replace("@0H","{0:2}".format(TSF_time_allnight_Hour()))
+        TSF_tf=TSF_tf if not "@_H" in TSF_tf else TSF_tf.replace("@_H","{0: >2}".format(TSF_time_allnight_Hour()))
+        TSF_tf=TSF_tf if not "@H" in TSF_tf else TSF_tf.replace("@H","{0:2}".format(TSF_time_allnight_Hour()))
+
         TSF_tf=TSF_tf if not "@T" in TSF_tf else TSF_tf.replace("@T"  ,"\t")
         TSF_tf=TSF_tf if not "@E" in TSF_tf else TSF_tf.replace("@E"  ,"\n")
         TSF_tf=TSF_tf if not "@Z" in TSF_tf else TSF_tf.replace("@Z"  ,"")
@@ -193,7 +208,7 @@ def TSF_time_debug():    #TSF_doc:「TSF/TSF_time.py」単体テスト風デバ�
     ])
     for TSF_QlistK,TSF_QlistV in LTsv_timeQlist.items():
         TSF_debug_log=TSF_io_printlog(TSF_QlistK,TSF_log=TSF_debug_log)
-#        TSF_time_setdaytime(0)
+        TSF_time_setdaytime(0,47)
         for LTsv_timeQ in TSF_QlistV:
             TSF_debug_log=TSF_io_printlog("\t{0}⇔{1}".format(LTsv_timeQ,TSF_time_getdaytime(LTsv_timeQ)),TSF_debug_log)
     return TSF_debug_log
