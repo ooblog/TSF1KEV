@@ -6,6 +6,7 @@ from TSF_io import *
 from TSF_calc import *
 from TSF_time import *
 import copy
+import random
 
 def TSF_Forth_1ststack():    #TSF_doc:TSF_初期化に使う1ststack名
     return "TSF_Tab-Separated-Forth:"
@@ -52,6 +53,9 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         "#TSF_popthis":TSF_Forth_popthis,  "実行中スタックから拾う":TSF_Forth_popthis,
         "#TSF_popthat":TSF_Forth_popthat,  "積込先スタックから除く":TSF_Forth_popthat,
         "#TSF_peekthe":TSF_Forth_peekthe,  "番目のスタックから読み込む":TSF_Forth_peekthe,
+        "#TSF_rndseed":TSF_Forth_rndseed,  "を乱数の種":TSF_Forth_rndseed,
+        "#TSF_shuffle":TSF_Forth_shuffle,  "をシャッフル":TSF_Forth_shuffle,
+        "#TSF_rndpeekthe":TSF_Forth_rndpeekthe,  "からランダムに読み込む":TSF_Forth_rndpeekthe,
         "#TSF_pokethe":TSF_Forth_pokethe,  "番目のスタックに上書き":TSF_Forth_pokethe,
         "#TSF_delthe":TSF_Forth_delthe,  "のスタック削除":TSF_Forth_delthe,
         "#TSF_delthis":TSF_Forth_delthat,  "実行中スタックを削除":TSF_Forth_delthis,
@@ -89,8 +93,6 @@ def TSF_Forth_words(TSF_newwords=None):    #TSF_doc:TSF_words(ワード)を取�
 #言語拡張関連
 # "TSF_RPN" "逆ポーランド電卓で計算する"
 # "TSF_RPNQQ" "逆ポーランド電卓で九九する"
-# "TSF_LISP" "ポーランド電卓で計算する"
-# "TSF_LISPQQ" "ポーランド電卓で九九する"
 # "TSF_TIMER" "時間をを測定する"
 # "TSF_DEV" "マウス・キーボード・PADから直に取得"
 # "TSF_GUI" "をGUI処理"
@@ -419,6 +421,21 @@ def TSF_Forth_peekthe():   #TSF_doc:[stack,pointer]スタックから読み込�
     TSF_Forth_push(TSF_thatstack_name,TSF_tsv)
     return None
 
+def TSF_Forth_rndseed():   #TSF_doc:[seed]乱数の種を指定。1スタック積み下ろし。
+    TSF_rndseed=TSF_Forth_pop(TSF_thatstack_name)
+    random.seed(TSF_rndseed if len(TSF_rndseed) else None)
+
+def TSF_Forth_shuffle():   #TSF_doc:[stack,pointer]スタックをシャッフルする。1スタック積み下ろし。
+    TSF_thename=TSF_Forth_pop(TSF_thatstack_name)
+    if TSF_thename in TSF_stacks:
+        random.shuffle(TSF_stacks[TSF_thename])
+
+def TSF_Forth_rndpeekthe():   #TSF_doc:[stack]スタックからランダムに読み込む。1スタック積み下ろして、1スタック積み上げ。
+    TSF_thename=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_tsv=random.choice(TSF_stacks[TSF_thename]) if TSF_thename in TSF_stacks else 0
+    TSF_Forth_push(TSF_thatstack_name,TSF_tsv)
+    return None
+
 def TSF_Forth_pokethe():   #TSF_doc:[data,stack,pointer]スタックに上書き。3スタック積み下ろす。
     TSF_pokecount=TSF_Forth_popdecimalize(TSF_thatstack_name)
     TSF_thename=TSF_Forth_pop(TSF_thatstack_name)
@@ -443,7 +460,7 @@ def TSF_Forth_calcbrackets(TSF_tsvBL,TSF_tsvBR):   #TSF_doc:括弧でスタッ�
                 TSF_calcK="".join([TSF_tsvBL,TSF_stacksK,str(TSF_stackC),TSF_tsvBR])
                 if TSF_calcK in TSF_tsvA:
                     TSF_tsvA=TSF_tsvA.replace(TSF_calcK,TSF_stackQ)
-    for TSF_stackC,TSF_stackQ in enumerate(TSF_stacks[TSF_thatstack_name]):
+    for TSF_stackC in range(len(TSF_stacks[TSF_thatstack_name])):
         TSF_calcK="".join([TSF_tsvBL,str(TSF_stackC),TSF_tsvBR])
         if TSF_calcK in TSF_tsvA:
             TSF_tsvA=TSF_tsvA.replace(TSF_calcK,TSF_Forth_pop(TSF_thatstack_name))

@@ -2,4 +2,10 @@ TSF_Tab-Separated-Forth:
 	UTF-8	#TSF_encoding	stack1:	#TSF_that	TSF_timetest:	#TSF_this	0	#TSF_fin.
 
 TSF_timetest:
-	@000y-@0m-@0dmT@0h:@0n:@0s.@00000rs	#TSF_calender	1	#TSF_echoes
+	@000y-@0m-@0dmT@0h:@0n:@0s.@00000rs	#TSF_calender	1	#TSF_echoes	TSF_randomtest:	#TSF_this	
+
+TSF_randomtest:
+	TSF_dice:	#TSF_shuffle	TSF_dice:	#TSF_rndpeekthe	1	#TSF_echoes
+
+TSF_dice:
+	⚀	⚁	⚂	⚃	⚄	⚅

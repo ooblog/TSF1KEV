@@ -49,6 +49,7 @@ TSF_allnight_Daymonth,TSF_allnight_Dayyear,TSF_allnight_Weekday,TSF_allnight_Wee
 TSF_meridian_Hour,TSF_meridian_HourAP=None,None
 TSF_allnight_Hour,TSF_allnight_HourAP,TSF_allnight_carryHour=None,None,None
 TSF_meridian_miNute,TSF_meridian_Second,TSF_meridian_miLlisecond,TSF_meridian_micRosecond=None,None,None,None
+TSF_time_Counter=0
 
 def TSF_time_setdaytime(TSF_diffminute=0,TSF_overhour=30):    #TSF_doc:時刻の初期化。実際の年月日等の取得は遅延処理で行う。
     global TSF_time_diffminute,TSF_time_overhour
@@ -79,6 +80,8 @@ def TSF_time_setdaytime(TSF_diffminute=0,TSF_overhour=30):    #TSF_doc:時刻の
     global TSF_meridian_miNute,TSF_meridian_Second,TSF_meridian_miLlisecond,TSF_meridian_micRosecond
     TSF_meridian_miNute,TSF_meridian_Second,TSF_meridian_micRosecond=TSF_earlier_now.minute,TSF_earlier_now.second,TSF_earlier_now.microsecond
     TSF_meridian_miLlisecond=TSF_meridian_micRosecond//1000
+    global TSF_time_Counter
+    TSF_time_Counter=0
 
 def TSF_time_earlier_now():    #TSF_doc:現在時刻(時差を含まない)の遅延処理。
     global TSF_earlier_now
@@ -164,6 +167,7 @@ def TSF_time_allnight_carryHour():    #TSF_doc:徹夜時刻年の位上がり処
     return TSF_allnight_carryHour
 
 def TSF_time_getdaytime(TSF_timeformat="@000y@0m@0dm@wdec@0h@0n@0s",TSF_diffminute=None,TSF_overhour=None):    #TSF_doc:「TSF/TSF_time.py」単体テスト風デバッグ関数。
+    global TSF_time_Counter
     if TSF_earlier_now == None or TSF_diffminute != None or TSF_overhour != None:
         TSF_time_setdaytime(TSF_diffminute if TSF_diffminute != None else TSF_time_diffminute,TSF_overhour if TSF_overhour != None else TSF_time_overhour)
     TSF_tfList=TSF_timeformat.split("@@")
@@ -238,11 +242,23 @@ def TSF_time_getdaytime(TSF_timeformat="@000y@0m@0dm@wdec@0h@0n@0s",TSF_diffminu
         TSF_tf=TSF_tf if not "@_____Rs" in TSF_tf else TSF_tf.replace("@_____Rs","{0: >6}".format(TSF_meridian_micRosecond))
         TSF_tf=TSF_tf if not "@Rs" in TSF_tf else TSF_tf.replace("@Rs","{0:6}".format(TSF_meridian_micRosecond))
 
-        TSF_tf=TSF_tf if not "@T" in TSF_tf else TSF_tf.replace("@T"  ,"\t")
-        TSF_tf=TSF_tf if not "@E" in TSF_tf else TSF_tf.replace("@E"  ,"\n")
-        TSF_tf=TSF_tf if not "@Z" in TSF_tf else TSF_tf.replace("@Z"  ,"")
+        TSF_tf=TSF_tf if not "@T" in TSF_tf else TSF_tf.replace("@T","\t")
+        TSF_tf=TSF_tf if not "@E" in TSF_tf else TSF_tf.replace("@E","\n")
+        TSF_tf=TSF_tf if not "@Z" in TSF_tf else TSF_tf.replace("@Z","")
+        TSF_tf=TSF_tf if not "@00000c" in TSF_tf else TSF_tf.replace("@00000c","{0:0>6}".format(TSF_time_Counter))
+        TSF_tf=TSF_tf if not "@_____c" in TSF_tf else TSF_tf.replace("@_____c","{0: >6}".format(TSF_time_Counter))
+        TSF_tf=TSF_tf if not "@0000c" in TSF_tf else TSF_tf.replace("@0000c","{0:0>5}".format(TSF_time_Counter))
+        TSF_tf=TSF_tf if not "@____c" in TSF_tf else TSF_tf.replace("@____c","{0: >5}".format(TSF_time_Counter))
+        TSF_tf=TSF_tf if not "@000c" in TSF_tf else TSF_tf.replace("@000c","{0:0>4}".format(TSF_time_Counter))
+        TSF_tf=TSF_tf if not "@___c" in TSF_tf else TSF_tf.replace("@___c","{0: >4}".format(TSF_time_Counter))
+        TSF_tf=TSF_tf if not "@00c" in TSF_tf else TSF_tf.replace("@00c","{0:0>3}".format(TSF_time_Counter))
+        TSF_tf=TSF_tf if not "@__c" in TSF_tf else TSF_tf.replace("@__c","{0: >3}".format(TSF_time_Counter))
+        TSF_tf=TSF_tf if not "@0c" in TSF_tf else TSF_tf.replace("@0c","{0:0>2}".format(TSF_time_Counter))
+        TSF_tf=TSF_tf if not "@_c" in TSF_tf else TSF_tf.replace("@_c","{0: >2}".format(TSF_time_Counter))
+        TSF_tf=TSF_tf if not "@c" in TSF_tf else TSF_tf.replace("@c","{0}".format(TSF_time_Counter))
         TSF_tfList[TSF_tfcount]=TSF_tf
 
+    TSF_time_Counter+=1
     TSF_timeformat="@".join(TSF_tfList)
     return TSF_timeformat
 
@@ -258,6 +274,7 @@ def TSF_time_debug():    #TSF_doc:「TSF/TSF_time.py」単体テスト風デバ�
         ("TSF_time:",["@000y@0m@0dm@wdec@0h@0n@0s","@000Y@0M@0Dm@Wdec@0H@0N@0S"]),
         ("TSF_time-09:00:",["@000y-@0m-@0dmT@0h:@0n:@0s-09:00","@000Y-@0M-@0DmT@0H:@0N:@0S-09:00"]),
         ("TSF_time.@0ls:",["@000y-@0m-@0dmT@0h:@0n:@0s.@00ls","@000Y-@0M-@0DmT@0H:@0N:@0S.@00Ls"]),
+        ("TSF_time.@c:",["@c"]),
     ])
     TSF_time_setdaytime(0,47)
     for TSF_QlistK,TSF_QlistV in LTsv_timeQlist.items():
