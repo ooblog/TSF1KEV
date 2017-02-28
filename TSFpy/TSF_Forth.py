@@ -81,6 +81,7 @@ def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
         "#TSF_remove":TSF_Forth_remove,  "テキストファイルを削除する":TSF_Forth_remove,
         "#TSF_savethe":TSF_Forth_savethe,  "スタックをテキストファイルに上書きする":TSF_Forth_savethe,
         "#TSF_writethe":TSF_Forth_writethe,  "スタックをテキストファイルに追記する":TSF_Forth_writethe,
+        "#TSF_calender":TSF_Forth_calender,  "日時に置換する":TSF_Forth_calender,
     }
     return TSF_words
 
@@ -90,7 +91,6 @@ def TSF_Forth_words(TSF_newwords=None):    #TSF_doc:TSF_words(ワード)を取�
 # "TSF_RPNQQ" "逆ポーランド電卓で九九する"
 # "TSF_LISP" "ポーランド電卓で計算する"
 # "TSF_LISPQQ" "ポーランド電卓で九九する"
-# "TSF_CALENDER" "日時を取得する"
 # "TSF_TIMER" "時間をを測定する"
 # "TSF_DEV" "マウス・キーボード・PADから直に取得"
 # "TSF_GUI" "をGUI処理"
@@ -643,6 +643,11 @@ def TSF_Forth_writethe():   #TSF_doc:[filename,stack]スタック内容をテキ
     TSF_io_writetext(TSF_path,TSF_text=TSF_text)
     return None
 
+def TSF_Forth_calender():   #TSF_doc:[timeformat]スタック内容を日時に置換する。1スタック上書き。
+    TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
+    TSF_tsvA=TSF_time_getdaytime(TSF_tsvQ)
+    TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
+    return None
 
 def TSF_Forth_run(TSF_this=None,TSF_that=None):    #TSF_doc:TSFを実行していく。
     global TSF_thisstack_name,TSF_thatstack_name,TSF_thisstack_count
