@@ -131,12 +131,15 @@ def TSF_Forth_Initwords(TSF_words):    #TSF_doc:TSF_words(ワード)を初期化
     TSF_words["#TSF_viewthis"]=TSF_Forth_viewthis; TSF_words["#実行中スタックを表示"]=TSF_Forth_viewthis
     TSF_words["#TSF_viewthat"]=TSF_Forth_viewthat; TSF_words["#積込先スタックを表示"]=TSF_Forth_viewthat
     TSF_words["#TSF_viewthey"]=TSF_Forth_viewthey; TSF_words["#スタック一覧を表示"]=TSF_Forth_viewthey
-    TSF_words["#TSF_stylethe"]=TSF_Forth_viewthey; TSF_words["#スタックにスタイル指定"]=TSF_Forth_viewthey
+    TSF_words["#TSF_stylethe"]=TSF_Forth_stylethe; TSF_words["#スタックにスタイル指定"]=TSF_Forth_stylethe
     TSF_words["#TSF_stylethis"]=TSF_Forth_stylethis; TSF_words["#実行中スタックにスタイル指定"]=TSF_Forth_stylethis
     TSF_words["#TSF_stylethat"]=TSF_Forth_stylethat; TSF_words["#積込先スタックにスタイル指定"]=TSF_Forth_stylethat
-    TSF_words["#TSF_mergethe"]=TSF_Forth_stylethe; TSF_words["#TSFに合成する"]=TSF_Forth_stylethe
+    TSF_words["#TSF_readtext"]=TSF_Forth_readtext; TSF_words["#ファイルを読み込む"]=TSF_Forth_readtext
+    TSF_words["#TSF_mergethe"]=TSF_Forth_mergethe; TSF_words["#TSFに合成する"]=TSF_Forth_mergethe
+    TSF_words["#TSF_publishthe"]=TSF_Forth_publishthe; TSF_words["#スタックをテキスト化"]=TSF_Forth_publishthe
+    TSF_words["#TSF_publishthis"]=TSF_Forth_publishthis; TSF_words["#実行中スタックをテキスト化"]=TSF_Forth_publishthis
+    TSF_words["#TSF_publishthat"]=TSF_Forth_publishthat; TSF_words["#積込先スタックをテキスト化"]=TSF_Forth_publishthat
     return TSF_words
-#        "#TSF_read":TSF_Forth_read,  "ファイルを読み込む":TSF_Forth_read,
 #        "#TSF_remove":TSF_Forth_remove,  "テキストファイルを削除する":TSF_Forth_remove,
 #        "#TSF_savethe":TSF_Forth_savethe,  "スタックをテキストファイルに上書きする":TSF_Forth_savethe,
 #        "#TSF_writethe":TSF_Forth_writethe,  "スタックをテキストファイルに追記する":TSF_Forth_writethe,
@@ -228,10 +231,22 @@ def TSF_Forth_stylethat():    #TSF_doc:[stack]積込先スタックの表示ス�
     TSF_Forth_style(TSF_stackthat,TSF_Forth_popthat())
     return None
 
-def TSF_Forth_setTSF(TSF_stack,TSF_text,TSF_style="T"):    #TSF_doc:スタックにTSFを読み込む(TSFAPI)。
+def TSF_Forth_setTSF(TSF_the,TSF_text,TSF_style="T"):    #TSF_doc:スタックにTSFを読み込む(TSFAPI)。
     global TSF_stacks,TSF_styles
-    TSF_stacks[TSF_stack]=TSF_text.rstrip('\n').replace('\t','\n').split('\n')
-    TSF_styles[TSF_stack]=TSF_style
+    TSF_stacks[TSF_the]=TSF_text.rstrip('\n').replace('\t','\n').split('\n')
+    TSF_styles[TSF_the]=TSF_style
+
+def TSF_Forth_loadtext(TSF_the,TSF_path):    #TSF_doc:テキストファイルを読み込んでTSF_stacksの一スタック扱いにする(TSFAPI)。
+    TSF_text=TSF_io_loadtext(TSF_path)
+    TSF_text=TSF_txt_ESCencode(TSF_text)
+    TSF_Forth_setTSF(TSF_the,TSF_text)
+    TSF_Forth_style(TSF_the,"N")
+    return TSF_text
+
+def TSF_Forth_readtext():   #TSF_doc:[filename]ファイルをスタックに積む。1スタック積み下ろし。
+    TSF_path=TSF_Forth_popthat()
+    TSF_Forth_loadtext(TSF_path,TSF_path)
+    return None
 
 def TSF_Forth_merge(TSF_stack,TSF_ESCstack=[]):    #TSF_doc:テキストをTSFとして読み込む(TSFAPI)。
     global TSF_stacks,TSF_styles
@@ -253,8 +268,23 @@ def TSF_Forth_merge(TSF_stack,TSF_ESCstack=[]):    #TSF_doc:テキストをTSF�
             if TSF_styles[TSF_that] != "O":
                 TSF_styles[TSF_that]="T" if len(TSF_stackL) >= 2 else "N"
 
-def TSF_Forth_mergethe():   #TSF_doc:[stack,filename]テキストをTSFとして読み込む。1スタック積み下ろし。
+def TSF_Forth_mergethe():   #TSF_doc:[stack]テキストをTSFとして読み込む。1スタック積み下ろし。
     TSF_Forth_merge(TSF_Forth_popthat(),TSF_ESCstack=[TSF_Forth_1ststack()])
+    return None
+
+def TSF_Forth_publishthe():   #TSF_doc:[filename,stack]スタックをテキスト化。2スタック積み下ろし。
+    TSF_publish_log=TSF_Forth_view(TSF_Forth_popthat(),False,"")
+    TSF_Forth_settext(TSF_Forth_popthat(),TSF_txt_ESCencode(TSF_publish_log),TSF_style="N")
+    return None
+
+def TSF_Forth_publishthis():   #TSF_doc:[filename]実行中スタックをテキスト化。1スタック積み下ろし。
+    TSF_publish_log=TSF_Forth_view(TSF_stackthis,False,"")
+    TSF_Forth_settext(TSF_Forth_popthat(),TSF_txt_ESCencode(TSF_publish_log),TSF_style="N")
+    return None
+
+def TSF_Forth_publishthat():   #TSF_doc:[filename]積込先スタックをテキスト化。1スタック積み下ろし。
+    TSF_publish_log=TSF_Forth_view(TSF_stackthat,False,"")
+    TSF_Forth_settext(TSF_Forth_popthat(),TSF_txt_ESCencode(TSF_publish_log),TSF_style="N")
     return None
 
 def TSF_Forth_debug(TSF_argvs):    #TSF_doc:「TSF/TSF_Forth.py」単体テスト風デバッグ関数。

@@ -15,6 +15,13 @@ def TSF_shuffle_Initwords(TSF_words):    #TSF_doc:TSF_words(ワード)を初期�
     TSF_words["#TSF_swapCAthat"]=TSF_Forth_swapCAthat; TSF_words["#スタックCA交換"]=TSF_Forth_swapCAthat
     TSF_words["#TSF_swapCBthat"]=TSF_Forth_swapCBthat; TSF_words["#スタックCB交換"]=TSF_Forth_swapCBthat
     return TSF_words
+#        "#TSF_peekthe":TSF_Forth_peekthe,  "番目のスタックから読み込む":TSF_Forth_peekthe,
+#        "#TSF_pokethe":TSF_Forth_pokethe,  "番目のスタックに上書き":TSF_Forth_pokethe,
+#        "#TSF_peekthe":TSF_Forth_peekthe,  "番目のスタックから読み込む":TSF_Forth_peekthe,
+#        "#TSF_pokethe":TSF_Forth_pokethe,  "番目のスタックに上書き":TSF_Forth_pokethe,
+#        "#TSF_rndseed":TSF_Forth_rndseed,  "を乱数の種":TSF_Forth_rndseed,
+#        "#TSF_shuffle":TSF_Forth_shuffle,  "をシャッフル":TSF_Forth_shuffle,
+#        "#TSF_rndpeekthe":TSF_Forth_rndpeekthe,  "からランダムに読み込む":TSF_Forth_rndpeekthe,
 #        "#TSF_lenthe":TSF_Forth_lenthe,  "スタック個数":TSF_Forth_lenthe,
 #        "#TSF_lenthis":TSF_Forth_lenthis,  "実行中スタックの個数":TSF_Forth_lenthis,
 #        "#TSF_lenthat":TSF_Forth_lenthat,  "積込先スタックの個数":TSF_Forth_lenthat,
@@ -33,11 +40,6 @@ def TSF_shuffle_Initwords(TSF_words):    #TSF_doc:TSF_words(ワード)を初期�
 #        "#TSF_popthe":TSF_Forth_popthe,  "スタックから拾う":TSF_Forth_popthe,
 #        "#TSF_popthis":TSF_Forth_popthis,  "実行中スタックから拾う":TSF_Forth_popthis,
 #        "#TSF_popthat":TSF_Forth_popthat,  "積込先スタックから除く":TSF_Forth_popthat,
-#        "#TSF_peekthe":TSF_Forth_peekthe,  "番目のスタックから読み込む":TSF_Forth_peekthe,
-#        "#TSF_rndseed":TSF_Forth_rndseed,  "を乱数の種":TSF_Forth_rndseed,
-#        "#TSF_shuffle":TSF_Forth_shuffle,  "をシャッフル":TSF_Forth_shuffle,
-#        "#TSF_rndpeekthe":TSF_Forth_rndpeekthe,  "からランダムに読み込む":TSF_Forth_rndpeekthe,
-#        "#TSF_pokethe":TSF_Forth_pokethe,  "番目のスタックに上書き":TSF_Forth_pokethe,
 #        "#TSF_delthe":TSF_Forth_delthe,  "のスタック削除":TSF_Forth_delthe,
 #        "#TSF_delthis":TSF_Forth_delthat,  "実行中スタックを削除":TSF_Forth_delthis,
 #        "#TSF_delthat":TSF_Forth_delthat,  "積込先スタックを削除":TSF_Forth_delthat,
