@@ -7,7 +7,8 @@ import fractions
 import re
 from collections import OrderedDict
 
-from TSF_io import *
+#from TSF_io import *
+from TSF_Forth import *
 
 TSF_calc_opewide="f1234567890.pm!|$ELRSsCcTtyYen+-*/\\#%(MPZzOoUuN~k)&GglAa^><" \
                 "銭十百千万億兆京垓𥝱穣溝澗正載極恒阿那思量" \

@@ -6,7 +6,8 @@ import datetime
 import os
 from collections import OrderedDict
 
-from TSF_io import *
+#from TSF_io import *
+from TSF_Forth import *
 
 #TSF_earlier_now=datetime.datetime.now()
 #TSF_meridian_now=TSF_earlier_now

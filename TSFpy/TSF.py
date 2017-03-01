@@ -2,9 +2,12 @@
 # -*- coding: UTF-8 -*-
 from __future__ import division,print_function,absolute_import,unicode_literals
 
+#from TSF_io import *
+#from TSF_calc import *
+#from TSF_time import *
+#from TSF_Forth import *
+
 from TSF_io import *
-from TSF_calc import *
-from TSF_time import *
 from TSF_Forth import *
 
 
@@ -114,7 +117,8 @@ def TSF_command_help():    #TSF_doc:TSFのより小さなサンプルプログ�
 TSF_about_mergefile="TSF_about.tsf"
 TSF_mergefile=""
 TSF_argvs=TSF_io_argvs()
-TSF_Forth_Init(TSF_argvs)
+#TSF_Forth_Init(TSF_argvs)
+#TSF_Forth_Init(TSF_argvs,[])
 if len(TSF_argvs) >= 2:
     TSF_mergefile=TSF_argvs[1]
 if os.path.isfile(TSF_mergefile):
@@ -135,7 +139,7 @@ elif TSF_mergefile == "--help":
 else:
 #    TSF_command_about(False)
     TSF_command_help()
-sys.exit(0 if TSF_Forth_exitcode() == "0" or TSF_Forth_exitcode() == "0|1" else TSF_Forth_exitcode())
+#sys.exit(0 if TSF_Forth_exitcode() == "0" or TSF_Forth_exitcode() == "0|1" else TSF_Forth_exitcode())
 
 
 # Copyright (c) 2017 ooblog
