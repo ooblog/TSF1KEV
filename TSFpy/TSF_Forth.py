@@ -14,29 +14,30 @@ def TSF_Forth_version():    #TSF_doc:TSF_初期化に使うバージョン(ブ�
 TSF_Initcalls=[]
 TSF_stacks,TSF_styles,TSF_callptrs,TSF_words=OrderedDict(),OrderedDict(),OrderedDict(),OrderedDict()
 TSF_stackthis,TSF_stackthat,TSF_stackcount=TSF_Forth_1ststack(),TSF_Forth_1ststack(),0
-def TSF_Forth_run(TSF_argvs=[],TSF_addcalls=[]):    #TSF_doc:TSF_stacks,TSF_styles,TSF_callptrs,TSF_wordsなどをまとめて初期化する(TSFAPI)。
+def TSF_Forth_init(TSF_argvs=[],TSF_addcalls=[]):    #TSF_doc:TSF_stacks,TSF_styles,TSF_callptrs,TSF_wordsなどをまとめて初期化する(TSFAPI)。
     global TSF_stacks,TSF_styles,TSF_callptrs,TSF_words,TSF_Initcalls,TSF_stackthat,TSF_stackthis,TSF_stackcount
     TSF_stacks,TSF_styles,TSF_callptrs,TSF_words=OrderedDict(),OrderedDict(),OrderedDict(),OrderedDict()
     TSF_stackthis,TSF_stackthat,TSF_stackcount=TSF_Forth_1ststack(),TSF_Forth_1ststack(),0
     TSF_stacks[TSF_stackthis]=["UTF-8","#TSF_encoding","0","#TSF_fin."]
-    for TSF_argv in TSF_argvs:
-        TSF_Forth_pushthis(TSF_argv)
+    TSF_Forth_pushargvs(TSF_argvs)
+#    for TSF_argv in TSF_argvs:
+#        TSF_Forth_pushthis(TSF_argv)
     TSF_Forth_pushthis(str(len(TSF_argvs)))
     TSF_Initcalls=[TSF_Forth_Initwords]+TSF_addcalls
     for TSF_Initcall in TSF_Initcalls:
         TSF_words=TSF_Initcall(TSF_words)
-    TSF_stacknext=None
+
+def TSF_Forth_run():    #TSF_doc:TSF_stacks,TSF_styles,TSF_callptrs,TSF_wordsなどをまとめて初期化する(TSFAPI)。
+    global TSF_stacks,TSF_styles,TSF_callptrs,TSF_words,TSF_Initcalls,TSF_stackthat,TSF_stackthis,TSF_stackcount
     while True:
         while TSF_stackcount < len(TSF_stacks[TSF_stackthis]):
-            print("TSF_stacks[TSF_stackthis][TSF_stackcount]",TSF_stacks[TSF_stackthis][TSF_stackcount])
-            if TSF_stacks[TSF_stackthis][TSF_stackcount] in TSF_words:
-                TSF_stacknext=TSF_words[TSF_stacks[TSF_stackthis][TSF_stackcount]]()
+            TSF_stacknow,TSF_stacknext=TSF_stacks[TSF_stackthis][TSF_stackcount],None
+            if TSF_stacknow in TSF_words:
+                TSF_stacknext=TSF_words[TSF_stacknow]()
             else:
-                TSF_Forth_pushthat(TSF_stacks[TSF_stackthis][TSF_stackcount])
+                TSF_Forth_pushthat(TSF_stacknow)
             TSF_stackcount+=1
-            print(TSF_stackcount,TSF_stacks[TSF_stackthis],len(TSF_stacks[TSF_stackthis]))
             if TSF_stacknext != None:
-                print("TSF_stacknext",TSF_stacknext)
                 if TSF_stacknext == "":
                     if len(TSF_callptrs) > 0:
                         TSF_stackthis,TSF_stackcount=TSF_callptrs.popitem(True)
@@ -48,13 +49,11 @@ def TSF_Forth_run(TSF_argvs=[],TSF_addcalls=[]):    #TSF_doc:TSF_stacks,TSF_styl
                            TSF_callptrs.popitem(True)
                     TSF_callptrs[TSF_stackthis]=TSF_stackcount
                     TSF_stackthis=TSF_stacknext
-                    TSF_stacknext=None
                     TSF_stackcount=0
                 else:
                     break
         if len(TSF_callptrs) > 0:
             TSF_stackthis,TSF_stackcount=TSF_callptrs.popitem(True)
-            TSF_stacknext=None
         else:
             break
 
@@ -83,12 +82,29 @@ def TSF_Forth_popthe(TSF_that):    #TSF_doc:スタックを積み下ろす(TSFAP
         TSF_popdata=TSF_stacks[TSF_that].pop()
     return TSF_popdata
 
-def TSF_Forth_popthat():    #TSF_doc:thatにスタックを積み下ろす(TSFAPI)。
+def TSF_Forth_popthat():    #TSF_doc:thatからスタックを積み下ろす(TSFAPI)。
     TSF_popdata=TSF_Forth_popthe(TSF_stackthat)
     return TSF_popdata
 
-def TSF_Forth_popthis():    #TSF_doc:thisにスタックを積み下ろす(TSFAPI)。
+def TSF_Forth_popthis():    #TSF_doc:thisからスタックを積み下ろす(TSFAPI)。
     TSF_popdata=TSF_Forth_popthe(TSF_stackthis)
+    return TSF_popdata
+
+def TSF_Forth_pintthe(TSF_that):    #TSF_doc:スタックを数値として積み下ろす(TSFAPI)。
+    TSF_popdata=TSF_Forth_popthat()
+    if '|' in TSF_popdata:
+        TSF_calcN,TSF_calcD=TSF_calcQ.replace('m','-').replace('p','').split('|')
+        TSF_popdata=TSF_io_intstr0x(TSF_calcN)//TSF_io_intstr0x(TSF_calcD)
+    else:
+        TSF_popdata=TSF_io_intstr0x(TSF_popdata)
+    return TSF_popdata
+
+def TSF_Forth_pintthat():    #TSF_doc:thatからスタックを数値として積み下ろす(TSFAPI)。
+    TSF_popdata=TSF_Forth_pintthe(TSF_stackthat)
+    return TSF_popdata
+
+def TSF_Forth_pintthis():    #TSF_doc:thisからスタックを数値として積み下ろす(TSFAPI)。
+    TSF_popdata=TSF_Forth_pintthe(TSF_stackthis)
     return TSF_popdata
 
 def TSF_Forth_pushthe(TSF_that,TSF_pushdata):    #TSF_doc:スタックを積み上げる(TSFAPI)。
@@ -104,12 +120,22 @@ def TSF_Forth_pushthat(TSF_pushdata):    #TSF_doc:thatにスタックを積み�
 def TSF_Forth_pushthis(TSF_pushdata):    #TSF_doc:thisにスタックを積み上げる(TSFAPI)。
    TSF_Forth_pushthe(TSF_stackthis,TSF_pushdata)
 
+def TSF_Forth_pushargvs(TSF_argvs):    #TSF_doc:thisにスタックを積み上げる(TSFAPI)。
+    for TSF_argv in TSF_argvs:
+        TSF_Forth_pushthis(TSF_argv)
+
 def TSF_Forth_Initwords(TSF_words):    #TSF_doc:TSF_words(ワード)を初期化する(TSFAPI)。
     TSF_words["#TSF_fin."]=TSF_Forth_fin; TSF_words["#TSFを終了。"]=TSF_Forth_fin
-    TSF_words["#TSF_over."]=TSF_Forth_over; TSF_words["#スタックを終了"]=TSF_Forth_over
+    TSF_words["#TSF_over"]=TSF_Forth_over; TSF_words["#スタックを終了"]=TSF_Forth_over
     TSF_words["#TSF_encoding"]=TSF_Forth_encoding; TSF_words["#文字コード"]=TSF_Forth_encoding
     TSF_words["#TSF_this"]=TSF_Forth_this; TSF_words["#スタックに入る"]=TSF_Forth_this
     TSF_words["#TSF_that"]=TSF_Forth_that; TSF_words["#スタックに積み込む"]=TSF_Forth_that
+    TSF_words["#TSF_echoes"]=TSF_Forth_echoes; TSF_words["#N行表示する"]=TSF_Forth_echoes
+    TSF_words["#TSF_viewthe"]=TSF_Forth_viewthe; TSF_words["#スタックを表示する"]=TSF_Forth_viewthe
+    TSF_words["#TSF_viewthis"]=TSF_Forth_viewthis; TSF_words["#実行中スタックを表示する"]=TSF_Forth_viewthis
+    TSF_words["#TSF_viewthat"]=TSF_Forth_viewthat; TSF_words["#積込先スタックを表示する"]=TSF_Forth_viewthat
+    TSF_words["#TSF_viewthey"]=TSF_Forth_viewthey; TSF_words["#スタック一覧を表示する"]=TSF_Forth_viewthey
+    TSF_words["#TSF_mergethe"]=TSF_Forth_mergethe; TSF_words["#TSFに合成する"]=TSF_Forth_mergethe
     return TSF_words
 
 TSF_exitcode="0"
@@ -135,30 +161,97 @@ def TSF_Forth_encoding():    #TSF_doc:[encode]TSFの文字コード宣言。極�
     return None
 
 def TSF_Forth_that():    #TSF_doc:thatスタックの変更。1スタック積み下ろし。
-   TSF_Forth_stackthat(TSF_Forth_popthat())
+    TSF_Forth_stackthat(TSF_Forth_popthat())
+    return None
 
 def TSF_Forth_this():    #TSF_doc:thatスタックの変更。1スタック積み下ろし。
-   TSF_Forth_stackthat(TSF_Forth_popthat())
+    return TSF_Forth_popthat()
 
+def TSF_Forth_echoes():    #TSF_doc:[…valueB,valueA,count]スタック内容をstdout表示する。count自身とcount分スタック積み下ろし。
+    TSF_loop=TSF_Forth_pintthat()
+    for TSF_echocount in range(TSF_loop):
+        TSF_io_printlog(TSF_Forth_popthat())
+    return None
 
-def TSF_Forth_debug():    #TSF_doc:「TSF/TSF_Forth.py」単体テスト風デバッグ関数。
+def TSF_Forth_view(TSF_the,TSF_view_io=True,TSF_view_log=""):    #TSF_doc:スタックの内容をテキスト表示(TSFAPI)。
+    if TSF_the in TSF_stacks:
+        TSF_stackV=[TSF_txt_ESCdecode(TSF_stk) for TSF_stk in TSF_stacks[TSF_the]]
+        TSF_style=TSF_styles.get(TSF_the,"T")
+        if TSF_style == "O":
+            TSF_view_logline="{0}\t{1}\n".format(TSF_thename,"\t".join(TSF_stackV))
+        elif TSF_style == "T":
+            TSF_view_logline="{0}\n\t{1}\n".format(TSF_the,"\t".join(TSF_stackV))
+        else:  # TSF_style == "N":
+            TSF_view_logline="{0}\n\t{1}\n".format(TSF_the,"\n\t".join(TSF_stackV))
+        if TSF_view_io == True:
+            TSF_view_log=TSF_io_printlog(TSF_view_logline,TSF_log=TSF_view_log)
+        else:
+            TSF_view_log+=TSF_view_logline
+    return TSF_view_log
+
+def TSF_Forth_viewthe():    #TSF_doc:[stack]指定したスタックを表示する。1スタック積み下ろし。
+    TSF_Forth_view(TSF_Forth_popthat())
+    return None
+
+def TSF_Forth_viewthis():    #TSF_doc:[]実行中スタックを表示する。0スタック積み下ろし。
+    TSF_Forth_view(TSF_stackthis)
+    return None
+
+def TSF_Forth_viewthat():    #TSF_doc:[]積込先スタックを表示する。0スタック積み下ろし。
+    TSF_Forth_view(TSF_stackthat)
+    return None
+
+def TSF_Forth_viewthey():    #TSF_doc:[]スタック一覧を表示する。0スタック積み下ろし。
+    for TSF_thename in TSF_stacks.keys():
+        TSF_Forth_view(TSF_thename)
+    return None
+
+def TSF_Forth_setTSF(TSF_stack,TSF_text,TSF_style="T"):    #TSF_doc:スタックにTSFを読み込む(TSFAPI)。
+    global TSF_stacks,TSF_styles
+    TSF_stacks[TSF_stack]=TSF_text.rstrip('\n').replace('\t','\n').split('\n')
+    TSF_styles[TSF_stack]=TSF_style
+
+def TSF_Forth_merge(TSF_stack,TSF_ESCstack=[]):    #TSF_doc:テキストをTSFとして読み込む(TSFAPI)。
+    global TSF_stacks,TSF_styles
+    TSF_that=TSF_Forth_1ststack()
+    TSF_styles[TSF_that]="T"
+    for TSF_stackV in TSF_stacks[TSF_stack]:
+        if len(TSF_stackV) == 0: continue;
+        if TSF_stackV.startswith("#"): continue;
+        TSF_stackV=TSF_txt_ESCdecode(TSF_stackV)
+        if not TSF_stackV.startswith('\t'):
+            TSF_stackL=TSF_stackV.lstrip('\t').split('\t')
+            if not TSF_stackL[0] in TSF_ESCstack:
+                TSF_that=TSF_stackL[0]
+                TSF_stacks[TSF_that]=[]
+                TSF_styles[TSF_that]="O" if len(TSF_stackL) >= 2 else ""
+        if not TSF_that in TSF_ESCstack:
+            TSF_stackL=TSF_stackV.split('\t')[1:]
+            TSF_stacks[TSF_that].extend(TSF_stackL)
+            if TSF_styles[TSF_that] != "O":
+                TSF_styles[TSF_that]="T" if len(TSF_stackL) >= 2 else "N"
+
+def TSF_Forth_mergethe():   #TSF_doc:[stack,filename]テキストをTSFとして読み込む。1スタック積み下ろし。
+    TSF_Forth_merge(TSF_Forth_popthat(),TSF_ESCstack=[TSF_Forth_1ststack()])
+    return None
+
+def TSF_Forth_debug(TSF_argvs):    #TSF_doc:「TSF/TSF_Forth.py」単体テスト風デバッグ関数。
     TSF_debug_log=""
-    TSF_debug_log=TSF_io_printlog("TSF_Tab-Separated-Forth:",TSF_log=TSF_debug_log)
-    TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["UTF-8",":TSF_encoding","0",":TSF_fin."])),TSF_log=TSF_debug_log)
-    TSF_debug_log=TSF_io_printlog("TSF_argvs:",TSF_log=TSF_debug_log)
-    TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(TSF_argvs)),TSF_log=TSF_debug_log)
+    TSF_Forth_init(TSF_argvs,[])
+    TSF_Forth_viewthey()
     TSF_debug_log=TSF_io_printlog("TSF_py:",TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout])),TSF_log=TSF_debug_log)
-    TSF_Forth_run(TSF_argvs,[])
+    TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(TSF_argvs)),TSF_log=TSF_debug_log)
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","about:","#TSF_this","0","#TSF_fin."]))
     TSF_timeQlist=OrderedDict([
         ("TSF_Initcalls:",TSF_Initcalls),
         ("TSF_words:",TSF_words),
-        ("TSF_stacks:",TSF_stacks),
     ])
     for TSF_QlistK,TSF_QlistV in TSF_timeQlist.items():
         TSF_debug_log=TSF_io_printlog(TSF_QlistK,TSF_log=TSF_debug_log)
         for LTsv_timeQ in TSF_QlistV:
             TSF_debug_log=TSF_io_printlog("\t{0}⇔{1}".format(LTsv_timeQ,TSF_QlistV),TSF_debug_log)
+    TSF_Forth_run()
     return TSF_debug_log
 
 if __name__=="__main__":
@@ -166,7 +259,7 @@ if __name__=="__main__":
     TSF_argvs=TSF_io_argvs()
     print("--- {0} ---".format(TSF_argvs[0]))
     TSF_debug_savefilename="debug/TSF_Forth_debug.txt"
-    TSF_debug_log=TSF_Forth_debug()
+    TSF_debug_log=TSF_Forth_debug(TSF_argvs)
     TSF_io_savetext(TSF_debug_savefilename,TSF_debug_log)
     print("")
     try:

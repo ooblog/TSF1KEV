@@ -97,21 +97,38 @@ def TSF_command_calc(TSF_calctype=None):    #TSF_doc:TSFのより小さなサン
         TSF_calcA=TSF_calc(TSF_calcQ,False)
     TSF_io_printlog(TSF_calcA)
 
-def TSF_command_help():    #TSF_doc:TSFのより小さなサンプルプログラム。
-    TSF_Forth_settext(TSF_Forth_1ststack(),"\t".join(["about:","#TSF_pushthe","about:","#TSF_lenthe","#TSF_echoes","0","#TSF_fin."]))
-    TSF_Forth_settext("about:",
-        'usage: ./TSF.py [command|file.tsf] [argv] ...\n'
-        'command:\n'
-        '  --help        this commands view\n'
-        '  --about       samplecode(UTF-8) view and saveto "' +TSF_about_mergefile+ '" \n'
-        '  --helloworld  "Hello world  1  #TSF_echoes" view\n'
-        '  --fizzbuzz    ([0]#3Z1~0)+([0]#5Z2~0) Fizz Buzz Fizz&Buzz view\n'
-        '  --calc        fractions calculator --calc "1/3-m1|2"-> p5|6 \n'
-        '  --calcDC      fractions calculator --calc "1/3-m1|2"-> 0.8333... \n'
+def TSF_command_help(TSF_argvs):    #TSF_doc:TSFのより小さなサンプルプログラム。
+    TSF_Forth_init(TSF_argvs,[])
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["about:","#TSF_this","0","#TSF_fin."]))
+    TSF_Forth_setTSF("about:",
+        '  not exist     samplecode(UTF-8) view only (no save)\n'
         '  --calcKN      fractions calculator --calc "1/3-m1|2"-> 6分の5 \n'
-#        '  not exist     samplecode(UTF-8) view only (no save)\n'
+        '  --calcDC      fractions calculator --calc "1/3-m1|2"-> 0.8333... \n'
+        '  --calc        fractions calculator --calc "1/3-m1|2"-> p5|6 \n'
+        '  --fizzbuzz    ([0]#3Z1~0)+([0]#5Z2~0) Fizz Buzz Fizz&Buzz view\n'
+        '  --helloworld  "Hello world  1  #TSF_echoes" view\n'
+        '  --about       samplecode(UTF-8) view and saveto "' +TSF_about_mergefile+ '" \n'
+        '  --help        this commands view\n'
+        'command:\n'
+        'usage: ./TSF.py [command|file.tsf] [argv] ...\n'
+        '10\n#TSF_echoes'
         ,TSF_style="N")
-    TSF_Forth_run(TSF_Forth_1ststack())
+#    TSF_Forth_settext(TSF_Forth_1ststack(),"\t".join(["about:","#TSF_pushthe","about:","#TSF_lenthe","#TSF_echoes","0","#TSF_fin."]))
+#    TSF_Forth_settext("about:",
+#        'usage: ./TSF.py [command|file.tsf] [argv] ...\n'
+#        'command:\n'
+#        '  --help        this commands view\n'
+#        '  --about       samplecode(UTF-8) view and saveto "' +TSF_about_mergefile+ '" \n'
+#        '  --helloworld  "Hello world  1  #TSF_echoes" view\n'
+#        '  --fizzbuzz    ([0]#3Z1~0)+([0]#5Z2~0) Fizz Buzz Fizz&Buzz view\n'
+#        '  --calc        fractions calculator --calc "1/3-m1|2"-> p5|6 \n'
+#        '  --calcDC      fractions calculator --calc "1/3-m1|2"-> 0.8333... \n'
+#        '  --calcKN      fractions calculator --calc "1/3-m1|2"-> 6分の5 \n'
+#        '  not exist     samplecode(UTF-8) view only (no save)\n'
+#        ,TSF_style="N")
+#    TSF_Forth_run(TSF_Forth_1ststack())
+#    TSF_Forth_debug(TSF_argvs)
+    TSF_Forth_run()
 
 
 TSF_about_mergefile="TSF_about.tsf"
@@ -119,6 +136,7 @@ TSF_mergefile=""
 TSF_argvs=TSF_io_argvs()
 #TSF_Forth_Init(TSF_argvs)
 #TSF_Forth_Init(TSF_argvs,[])
+#TSF_Forth_init(TSF_argvs,[])
 if len(TSF_argvs) >= 2:
     TSF_mergefile=TSF_argvs[1]
 if os.path.isfile(TSF_mergefile):
@@ -126,19 +144,19 @@ if os.path.isfile(TSF_mergefile):
         TSF_Forth_merge(TSF_mergefile,[])
         TSF_Forth_pushargv()
     TSF_Forth_run(TSF_Forth_1ststack())
-elif TSF_mergefile == "--about":
-    TSF_command_about(True)
-elif TSF_mergefile == "--helloworld":
-    TSF_command_Helloworld()
-elif TSF_mergefile == "--fizzbuzz":
-    TSF_command_FizzBuzz()
-elif TSF_mergefile in ["--calc","--calcDC","--calcKN"]:
-    TSF_command_calc(TSF_mergefile)
+#elif TSF_mergefile == "--about":
+#    TSF_command_about(True)
+#elif TSF_mergefile == "--helloworld":
+#    TSF_command_Helloworld()
+#elif TSF_mergefile == "--fizzbuzz":
+#    TSF_command_FizzBuzz()
+#elif TSF_mergefile in ["--calc","--calcDC","--calcKN"]:
+#    TSF_command_calc(TSF_mergefile)
 elif TSF_mergefile == "--help":
-    TSF_command_help()
+    TSF_command_help(TSF_argvs)
 else:
 #    TSF_command_about(False)
-    TSF_command_help()
+    TSF_command_help(TSF_argvs)
 #sys.exit(0 if TSF_Forth_exitcode() == "0" or TSF_Forth_exitcode() == "0|1" else TSF_Forth_exitcode())
 
 
