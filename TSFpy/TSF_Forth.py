@@ -18,11 +18,7 @@ def TSF_Forth_init(TSF_argvs=[],TSF_addcalls=[]):    #TSF_doc:TSF_stacks,TSF_sty
     global TSF_stacks,TSF_styles,TSF_callptrs,TSF_words,TSF_Initcalls,TSF_stackthat,TSF_stackthis,TSF_stackcount
     TSF_stacks,TSF_styles,TSF_callptrs,TSF_words=OrderedDict(),OrderedDict(),OrderedDict(),OrderedDict()
     TSF_stackthis,TSF_stackthat,TSF_stackcount=TSF_Forth_1ststack(),TSF_Forth_1ststack(),0
-    TSF_stacks[TSF_stackthis]=["UTF-8","#TSF_encoding","0","#TSF_fin."]
-    TSF_Forth_pushargvs(TSF_argvs)
-#    for TSF_argv in TSF_argvs:
-#        TSF_Forth_pushthis(TSF_argv)
-    TSF_Forth_pushthis(str(len(TSF_argvs)))
+    TSF_stacks[TSF_stackthis]=["UTF-8","#TSF_encoding","0","#TSF_fin."]; TSF_Forth_pushargvs(TSF_argvs)
     TSF_Initcalls=[TSF_Forth_Initwords]+TSF_addcalls
     for TSF_Initcall in TSF_Initcalls:
         TSF_words=TSF_Initcall(TSF_words)
@@ -117,26 +113,33 @@ def TSF_Forth_pushthe(TSF_that,TSF_pushdata):    #TSF_doc:スタックを積み�
 def TSF_Forth_pushthat(TSF_pushdata):    #TSF_doc:thatにスタックを積み上げる(TSFAPI)。
    TSF_Forth_pushthe(TSF_stackthat,TSF_pushdata)
 
-def TSF_Forth_pushthis(TSF_pushdata):    #TSF_doc:thisにスタックを積み上げる(TSFAPI)。
-   TSF_Forth_pushthe(TSF_stackthis,TSF_pushdata)
-
 def TSF_Forth_pushargvs(TSF_argvs):    #TSF_doc:thisにスタックを積み上げる(TSFAPI)。
     for TSF_argv in TSF_argvs:
-        TSF_Forth_pushthis(TSF_argv)
+        TSF_Forth_pushthat(TSF_argv)
+
+def TSF_Forth_pushthis(TSF_pushdata):    #TSF_doc:thisにスタックを積み上げる(TSFAPI)。
+   TSF_Forth_pushthe(TSF_stackthis,TSF_pushdata)
 
 def TSF_Forth_Initwords(TSF_words):    #TSF_doc:TSF_words(ワード)を初期化する(TSFAPI)。
     TSF_words["#TSF_fin."]=TSF_Forth_fin; TSF_words["#TSFを終了。"]=TSF_Forth_fin
     TSF_words["#TSF_over"]=TSF_Forth_over; TSF_words["#スタックを終了"]=TSF_Forth_over
     TSF_words["#TSF_encoding"]=TSF_Forth_encoding; TSF_words["#文字コード"]=TSF_Forth_encoding
     TSF_words["#TSF_this"]=TSF_Forth_this; TSF_words["#スタックに入る"]=TSF_Forth_this
-    TSF_words["#TSF_that"]=TSF_Forth_that; TSF_words["#スタックに積み込む"]=TSF_Forth_that
-    TSF_words["#TSF_echoes"]=TSF_Forth_echoes; TSF_words["#N行表示する"]=TSF_Forth_echoes
-    TSF_words["#TSF_viewthe"]=TSF_Forth_viewthe; TSF_words["#スタックを表示する"]=TSF_Forth_viewthe
-    TSF_words["#TSF_viewthis"]=TSF_Forth_viewthis; TSF_words["#実行中スタックを表示する"]=TSF_Forth_viewthis
-    TSF_words["#TSF_viewthat"]=TSF_Forth_viewthat; TSF_words["#積込先スタックを表示する"]=TSF_Forth_viewthat
-    TSF_words["#TSF_viewthey"]=TSF_Forth_viewthey; TSF_words["#スタック一覧を表示する"]=TSF_Forth_viewthey
-    TSF_words["#TSF_mergethe"]=TSF_Forth_mergethe; TSF_words["#TSFに合成する"]=TSF_Forth_mergethe
+    TSF_words["#TSF_that"]=TSF_Forth_that; TSF_words["#スタックに積込"]=TSF_Forth_that
+    TSF_words["#TSF_echoes"]=TSF_Forth_echoes; TSF_words["#N行表示"]=TSF_Forth_echoes
+    TSF_words["#TSF_viewthe"]=TSF_Forth_viewthe; TSF_words["#スタックを表示"]=TSF_Forth_viewthe
+    TSF_words["#TSF_viewthis"]=TSF_Forth_viewthis; TSF_words["#実行中スタックを表示"]=TSF_Forth_viewthis
+    TSF_words["#TSF_viewthat"]=TSF_Forth_viewthat; TSF_words["#積込先スタックを表示"]=TSF_Forth_viewthat
+    TSF_words["#TSF_viewthey"]=TSF_Forth_viewthey; TSF_words["#スタック一覧を表示"]=TSF_Forth_viewthey
+    TSF_words["#TSF_stylethe"]=TSF_Forth_viewthey; TSF_words["#スタックにスタイル指定"]=TSF_Forth_viewthey
+    TSF_words["#TSF_stylethis"]=TSF_Forth_stylethis; TSF_words["#実行中スタックにスタイル指定"]=TSF_Forth_stylethis
+    TSF_words["#TSF_stylethat"]=TSF_Forth_stylethat; TSF_words["#積込先スタックにスタイル指定"]=TSF_Forth_stylethat
+    TSF_words["#TSF_mergethe"]=TSF_Forth_stylethe; TSF_words["#TSFに合成する"]=TSF_Forth_stylethe
     return TSF_words
+#        "#TSF_read":TSF_Forth_read,  "ファイルを読み込む":TSF_Forth_read,
+#        "#TSF_remove":TSF_Forth_remove,  "テキストファイルを削除する":TSF_Forth_remove,
+#        "#TSF_savethe":TSF_Forth_savethe,  "スタックをテキストファイルに上書きする":TSF_Forth_savethe,
+#        "#TSF_writethe":TSF_Forth_writethe,  "スタックをテキストファイルに追記する":TSF_Forth_writethe,
 
 TSF_exitcode="0"
 def TSF_Forth_exitcode(TSF_fincode=None):
@@ -204,6 +207,25 @@ def TSF_Forth_viewthat():    #TSF_doc:[]積込先スタックを表示する。0
 def TSF_Forth_viewthey():    #TSF_doc:[]スタック一覧を表示する。0スタック積み下ろし。
     for TSF_thename in TSF_stacks.keys():
         TSF_Forth_view(TSF_thename)
+    return None
+
+def TSF_Forth_style(TSF_the,TSF_style=None):    #TSF_doc:スタックの表示スタイルを指定する(TSFAPI)。
+    global TSF_styles
+    if TSF_style != None:
+        TSF_styles[TSF_the]=TSF_style
+    return TSF_styles[TSF_the]
+
+def TSF_Forth_stylethe():    #TSF_doc:[style,stack]スタックの表示スタイルを指定する。2スタック積み下ろし。
+    TSF_the=TSF_Forth_popthat()
+    TSF_Forth_style(TSF_the,TSF_Forth_popthat())
+    return None
+
+def TSF_Forth_stylethis():    #TSF_doc:[stack]実行中スタックの表示スタイルを指定する。1スタック積み下ろし。
+    TSF_Forth_style(TSF_stackthis,TSF_Forth_popthis())
+    return None
+
+def TSF_Forth_stylethat():    #TSF_doc:[stack]積込先スタックの表示スタイルを指定する。1スタック積み下ろし。
+    TSF_Forth_style(TSF_stackthat,TSF_Forth_popthat())
     return None
 
 def TSF_Forth_setTSF(TSF_stack,TSF_text,TSF_style="T"):    #TSF_doc:スタックにTSFを読み込む(TSFAPI)。

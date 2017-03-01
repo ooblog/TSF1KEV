@@ -9,6 +9,7 @@ from __future__ import division,print_function,absolute_import,unicode_literals
 
 from TSF_io import *
 from TSF_Forth import *
+from TSF_time import *
 
 
 def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサンプルプログラム。
@@ -97,22 +98,29 @@ def TSF_command_calc(TSF_calctype=None):    #TSF_doc:TSFのより小さなサン
         TSF_calcA=TSF_calc(TSF_calcQ,False)
     TSF_io_printlog(TSF_calcA)
 
+def TSF_command_time(TSF_argvs):    #TSF_doc:TSFのより小さなサンプルプログラム。
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["time:","#TSF_this","0","#TSF_fin."]))
+    TSF_calender=TSF_argvs[2] if len(TSF_argvs) >2 else "@000y@0m@0dm@wdec@0h@0n@0s"
+    TSF_Forth_setTSF("time:",TSF_calender+'\t#TSF_calender\t1\t#TSF_echoes',TSF_style="N")
+    TSF_Forth_run()
+
 def TSF_command_help(TSF_argvs):    #TSF_doc:TSFのより小さなサンプルプログラム。
-    TSF_Forth_init(TSF_argvs,[])
-    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["about:","#TSF_this","0","#TSF_fin."]))
-    TSF_Forth_setTSF("about:",
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["help:","#TSF_this","0","#TSF_fin."]))
+    TSF_Forth_setTSF("help:",
         '  not exist     samplecode(UTF-8) view only (no save)\n'
+        '  --calender    "@000y@0m@0dm@wdec@0h@0n@0s"-> '+TSF_time_getdaytime()+'\n'
         '  --calcKN      fractions calculator --calc "1/3-m1|2"-> 6分の5 \n'
         '  --calcDC      fractions calculator --calc "1/3-m1|2"-> 0.8333... \n'
         '  --calc        fractions calculator --calc "1/3-m1|2"-> p5|6 \n'
         '  --fizzbuzz    ([0]#3Z1~0)+([0]#5Z2~0) Fizz Buzz Fizz&Buzz view\n'
         '  --helloworld  "Hello world  1  #TSF_echoes" view\n'
-        '  --about       samplecode(UTF-8) view and saveto "' +TSF_about_mergefile+ '" \n'
+        '  --about       samplecode(UTF-8) view and saveto "'+TSF_about_mergefile+'" \n'
         '  --help        this commands view\n'
         'command:\n'
         'usage: ./TSF.py [command|file.tsf] [argv] ...\n'
         '10\n#TSF_echoes'
         ,TSF_style="N")
+    TSF_Forth_run()
 #    TSF_Forth_settext(TSF_Forth_1ststack(),"\t".join(["about:","#TSF_pushthe","about:","#TSF_lenthe","#TSF_echoes","0","#TSF_fin."]))
 #    TSF_Forth_settext("about:",
 #        'usage: ./TSF.py [command|file.tsf] [argv] ...\n'
@@ -128,12 +136,12 @@ def TSF_command_help(TSF_argvs):    #TSF_doc:TSFのより小さなサンプル�
 #        ,TSF_style="N")
 #    TSF_Forth_run(TSF_Forth_1ststack())
 #    TSF_Forth_debug(TSF_argvs)
-    TSF_Forth_run()
 
 
 TSF_about_mergefile="TSF_about.tsf"
 TSF_mergefile=""
 TSF_argvs=TSF_io_argvs()
+TSF_Forth_init(TSF_argvs,[TSF_time_Initwords,TSF_shuffle_Initwords])
 #TSF_Forth_Init(TSF_argvs)
 #TSF_Forth_Init(TSF_argvs,[])
 #TSF_Forth_init(TSF_argvs,[])
@@ -152,6 +160,8 @@ if os.path.isfile(TSF_mergefile):
 #    TSF_command_FizzBuzz()
 #elif TSF_mergefile in ["--calc","--calcDC","--calcKN"]:
 #    TSF_command_calc(TSF_mergefile)
+elif TSF_mergefile == "--time":
+    TSF_command_time(TSF_argvs)
 elif TSF_mergefile == "--help":
     TSF_command_help(TSF_argvs)
 else:

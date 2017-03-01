@@ -4,10 +4,19 @@ from __future__ import division,print_function,absolute_import,unicode_literals
 import sys
 import datetime
 import os
-from collections import OrderedDict
 
 #from TSF_io import *
 from TSF_Forth import *
+
+def TSF_time_Initwords(TSF_words):    #TSF_doc:TSF_words(ワード)を初期化する(TSFAPI)。
+    TSF_words["#TSF_calender"]=TSF_time_calender; TSF_words["#日時に置換する"]=TSF_time_calender
+    return TSF_words
+
+def TSF_time_calender():   #TSF_doc:[timeformat]スタック内容を日時に置換する。1スタック上書き。
+    TSF_tsvQ=TSF_Forth_popthat()
+    TSF_tsvA=TSF_time_getdaytime(TSF_tsvQ)
+    TSF_Forth_pushthat(TSF_tsvA)
+    return None
 
 #TSF_earlier_now=datetime.datetime.now()
 #TSF_meridian_now=TSF_earlier_now
@@ -287,6 +296,7 @@ def TSF_time_debug():    #TSF_doc:「TSF/TSF_time.py」単体テスト風デバ�
     return TSF_debug_log
 
 if __name__=="__main__":
+    from collections import OrderedDict
     print("")
     TSF_argvs=TSF_io_argvs()
     print("--- {0} ---".format(TSF_argvs[0]))
