@@ -12,7 +12,7 @@ def TSF_Forth_1ststack():    #TSF_doc:TSF_初期化に使う1ststack名
     return "TSF_Tab-Separated-Forth:"
 
 def TSF_Forth_version():    #TSF_doc:TSF_初期化に使うバージョン(ブランチ)名
-    return "20170108U045559"
+    return "20170301W224954"
 
 TSF_words={}
 def TSF_Forth_Initwords():    #TSF_doc:TSF_words(ワード)を初期化する
