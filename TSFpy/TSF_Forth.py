@@ -134,15 +134,15 @@ def TSF_Forth_Initwords(TSF_words):    #TSF_doc:TSF_words(ワード)を初期化
     TSF_words["#TSF_stylethe"]=TSF_Forth_stylethe; TSF_words["#スタックにスタイル指定"]=TSF_Forth_stylethe
     TSF_words["#TSF_stylethis"]=TSF_Forth_stylethis; TSF_words["#実行中スタックにスタイル指定"]=TSF_Forth_stylethis
     TSF_words["#TSF_stylethat"]=TSF_Forth_stylethat; TSF_words["#積込先スタックにスタイル指定"]=TSF_Forth_stylethat
-    TSF_words["#TSF_readtext"]=TSF_Forth_readtext; TSF_words["#ファイルを読み込む"]=TSF_Forth_readtext
+    TSF_words["#TSF_readtext"]=TSF_Forth_readtext; TSF_words["#テキストファイルを読み込む"]=TSF_Forth_readtext
     TSF_words["#TSF_mergethe"]=TSF_Forth_mergethe; TSF_words["#TSFに合成する"]=TSF_Forth_mergethe
     TSF_words["#TSF_publishthe"]=TSF_Forth_publishthe; TSF_words["#スタックをテキスト化"]=TSF_Forth_publishthe
     TSF_words["#TSF_publishthis"]=TSF_Forth_publishthis; TSF_words["#実行中スタックをテキスト化"]=TSF_Forth_publishthis
     TSF_words["#TSF_publishthat"]=TSF_Forth_publishthat; TSF_words["#積込先スタックをテキスト化"]=TSF_Forth_publishthat
+    TSF_words["#TSF_remove"]=TSF_Forth_remove; TSF_words["#ファイルを削除する"]=TSF_Forth_remove
+    TSF_words["#TSF_savetext"]=TSF_Forth_savetext; TSF_words["#テキストファイルに上書きする"]=TSF_Forth_savetext
+    TSF_words["#TSF_writetext"]=TSF_Forth_writetext; TSF_words["#テキストファイルに追記きする"]=TSF_Forth_writetext
     return TSF_words
-#        "#TSF_remove":TSF_Forth_remove,  "テキストファイルを削除する":TSF_Forth_remove,
-#        "#TSF_savethe":TSF_Forth_savethe,  "スタックをテキストファイルに上書きする":TSF_Forth_savethe,
-#        "#TSF_writethe":TSF_Forth_writethe,  "スタックをテキストファイルに追記する":TSF_Forth_writethe,
 
 TSF_exitcode="0"
 def TSF_Forth_exitcode(TSF_fincode=None):
@@ -285,6 +285,22 @@ def TSF_Forth_publishthis():   #TSF_doc:[filename]実行中スタックをテキ
 def TSF_Forth_publishthat():   #TSF_doc:[filename]積込先スタックをテキスト化。1スタック積み下ろし。
     TSF_publish_log=TSF_Forth_view(TSF_stackthat,False,"")
     TSF_Forth_settext(TSF_Forth_popthat(),TSF_txt_ESCencode(TSF_publish_log),TSF_style="N")
+    return None
+
+def TSF_Forth_remove():   #TSF_doc:[filename]ファイルを削除する。1スタック積み下ろし。
+    TSF_io_savetext(TSF_Forth_popthat(),TSF_text=None)
+    return None
+
+def TSF_Forth_savetext():   #TSF_doc:[filename,stack]スタック内容をテキストとみなしてファイルに保存する。2スタック積み下ろし。
+    TSF_the=TSF_Forth_popthat()
+    TSF_text=TSF_txt_ESCdecode("\n".join(TSF_stacks[TSF_the])) if TSF_the in TSF_stacks else ""
+    TSF_io_savetext(TSF_Forth_popthat(),TSF_text=TSF_text)
+    return None
+
+def TSF_Forth_writetext():   #TSF_doc:[filename,stack]スタック内容をテキストとみなしてファイルに追記する。2スタック積み下ろし。
+    TSF_the=TSF_Forth_popthat()
+    TSF_text=TSF_txt_ESCdecode("\n".join(TSF_stacks[TSF_the])) if TSF_the in TSF_stacks else ""
+    TSF_io_writetext(TSF_Forth_popthat(),TSF_text=TSF_text)
     return None
 
 def TSF_Forth_debug(TSF_argvs):    #TSF_doc:「TSF/TSF_Forth.py」単体テスト風デバッグ関数。

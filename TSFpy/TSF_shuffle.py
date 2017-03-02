@@ -11,9 +11,9 @@ from TSF_Forth import *
 
 
 def TSF_shuffle_Initwords(TSF_words):    #TSF_doc:TSF_words(ワード)を初期化する(TSFAPI)。
-    TSF_words["#TSF_swapBAthat"]=TSF_Forth_swapBAthat; TSF_words["#スタックBA交換"]=TSF_Forth_swapBAthat
-    TSF_words["#TSF_swapCAthat"]=TSF_Forth_swapCAthat; TSF_words["#スタックCA交換"]=TSF_Forth_swapCAthat
-    TSF_words["#TSF_swapCBthat"]=TSF_Forth_swapCBthat; TSF_words["#スタックCB交換"]=TSF_Forth_swapCBthat
+    TSF_words["#TSF_swapBAthat"]=TSF_shuffle_swapBAthat; TSF_words["#スタックBA交換"]=TSF_shuffle_swapBAthat
+    TSF_words["#TSF_swapCAthat"]=TSF_shuffle_swapCAthat; TSF_words["#スタックCA交換"]=TSF_shuffle_swapCAthat
+    TSF_words["#TSF_swapCBthat"]=TSF_shuffle_swapCBthat; TSF_words["#スタックCB交換"]=TSF_shuffle_swapCBthat
     return TSF_words
 #        "#TSF_peekthe":TSF_Forth_peekthe,  "番目のスタックから読み込む":TSF_Forth_peekthe,
 #        "#TSF_pokethe":TSF_Forth_pokethe,  "番目のスタックに上書き":TSF_Forth_pokethe,
