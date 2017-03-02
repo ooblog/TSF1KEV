@@ -2,15 +2,11 @@
 # -*- coding: UTF-8 -*-
 from __future__ import division,print_function,absolute_import,unicode_literals
 
-#from TSF_io import *
-#from TSF_calc import *
-#from TSF_time import *
-#from TSF_Forth import *
-
 from TSF_io import *
 from TSF_Forth import *
 from TSF_shuffle import *
 from TSF_time import *
+from TSF_calc import *
 
 
 def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサンプルプログラム。
@@ -69,7 +65,7 @@ def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサン�
     if save_about_mergefile:
         TSF_io_savetext(TSF_about_mergefile,TSF_debug_log)
     print("-- TSF_Forth_run() --")
-    TSF_Forth_pushargv()
+    TSF_Forth_pushargvs()
     TSF_Forth_run(TSF_Forth_1ststack())
     print("-- TSF_Forth_viewprintlog() --")
     TSF_Forth_viewprintlog()
@@ -99,24 +95,42 @@ def TSF_command_calc(TSF_calctype=None):    #TSF_doc:TSFのより小さなサン
         TSF_calcA=TSF_calc(TSF_calcQ,False)
     TSF_io_printlog(TSF_calcA)
 
-def TSF_command_time(TSF_argvs):    #TSF_doc:TSFのより小さなサンプルプログラム。
+def TSF_command_calcKN(TSF_argvs):    #TSF_doc:TSFのより小さなサンプルプログラム。
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["calcKN:","#TSF_this","0","#TSF_fin."]))
+    TSF_calc=TSF_argvs[2] if len(TSF_argvs) > 2 else "1/3-m1|2"
+    TSF_Forth_setTSF("calcKN:",TSF_calc+'\t#TSF_calcKN\t1\t#TSF_echoes',TSF_style="N")
+    TSF_Forth_run()
+
+def TSF_command_calcDC(TSF_argvs):    #TSF_doc:TSFのより小さなサンプルプログラム。
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["calcDC:","#TSF_this","0","#TSF_fin."]))
+    TSF_calc=TSF_argvs[2] if len(TSF_argvs) > 2 else "1/3-m1|2"
+    TSF_Forth_setTSF("calcDC:",TSF_calc+'\t#TSF_calcDC\t1\t#TSF_echoes',TSF_style="N")
+    TSF_Forth_run()
+
+def TSF_command_calcFX(TSF_argvs):    #TSF_doc:TSFの電卓(分数)テスト。
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["calcFX:","#TSF_this","0","#TSF_fin."]))
+    TSF_calc=TSF_argvs[2] if len(TSF_argvs) > 2 else "1/3-m1|2"
+    TSF_Forth_setTSF("calcFX:",TSF_calc+'\t#TSF_calcFX\t1\t#TSF_echoes',TSF_style="N")
+    TSF_Forth_run()
+
+def TSF_command_time(TSF_argvs):    #TSF_doc:TSFの日時関連テスト。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["time:","#TSF_this","0","#TSF_fin."]))
     TSF_calender=TSF_argvs[2] if len(TSF_argvs) >2 else "@000y@0m@0dm@wdec@0h@0n@0s"
     TSF_Forth_setTSF("time:",TSF_calender+'\t#TSF_calender\t1\t#TSF_echoes',TSF_style="N")
     TSF_Forth_run()
 
-def TSF_command_help(TSF_argvs):    #TSF_doc:TSFのより小さなサンプルプログラム。
+def TSF_command_help(TSF_argvs):    #TSF_doc:TSFコマンド一覧。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["help:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("help:",
         '  --calender    "@000y@0m@0dm@wdec@0h@0n@0s"-> '+TSF_time_getdaytime()+'\n'
-        '  --calcKN      fractions calculator --calc "1/3-m1|2"-> 6分の5 \n'
-        '  --calcDC      fractions calculator --calc "1/3-m1|2"-> 0.8333... \n'
-        '  --calc        fractions calculator --calc "1/3-m1|2"-> p5|6 \n'
+        '  --calcKN      fractions calculator "1/3-m1|2"-> 6分の5 \n'
+        '  --calcDC      fractions calculator "1/3-m1|2"-> 0.8333... \n'
+        '  --calcFX      fractions calculator "1/3-m1|2"-> p5|6 \n'
         '  --fizzbuzz    ([0]#3Z1~0)+([0]#5Z2~0) Fizz Buzz Fizz&Buzz view\n'
         '  --helloworld  "Hello world  1  #TSF_echoes" view\n'
         '  --about       samplecode(UTF-8) view and saveto "'+TSF_about_mergefile+'" \n'
         '  --help        this commands view\n'
-        'command:\n'
+        'commands:\n'
         'usage: ./TSF.py [command|file.tsf] [argv] ...\n'
         '10\n#TSF_echoes'
         ,TSF_style="N")
@@ -125,10 +139,7 @@ def TSF_command_help(TSF_argvs):    #TSF_doc:TSFのより小さなサンプル�
 TSF_about_mergefile="TSF_about.tsf"
 TSF_mergefile=""
 TSF_argvs=TSF_io_argvs()
-TSF_Forth_init(TSF_argvs,[TSF_time_Initwords,TSF_shuffle_Initwords])
-#TSF_Forth_Init(TSF_argvs)
-#TSF_Forth_Init(TSF_argvs,[])
-#TSF_Forth_init(TSF_argvs,[])
+TSF_Forth_init(TSF_argvs,[TSF_time_Initwords,TSF_shuffle_Initwords,TSF_calc_Initwords])
 if len(TSF_argvs) >= 2:
     TSF_mergefile=TSF_argvs[1]
 if os.path.isfile(TSF_mergefile):
@@ -142,11 +153,15 @@ elif TSF_mergefile == "--helloworld":
     TSF_command_Helloworld()
 elif TSF_mergefile == "--fizzbuzz":
     TSF_command_FizzBuzz()
-#elif TSF_mergefile in ["--calc","--calcDC","--calcKN"]:
-#    TSF_command_calc(TSF_mergefile)
-elif TSF_mergefile == "--time":
+elif TSF_mergefile in ["--calcKN"]:
+    TSF_command_calcKN(TSF_argvs)
+elif TSF_mergefile in ["--calcDC"]:
+    TSF_command_calcDC(TSF_argvs)
+elif TSF_mergefile in ["--calc","--calcFX"]:
+    TSF_command_calcFX(TSF_argvs)
+elif TSF_mergefile in ["--time","--calender"]:
     TSF_command_time(TSF_argvs)
-elif TSF_mergefile == "--help":
+elif TSF_mergefile in ["--help"]:
     TSF_command_help(TSF_argvs)
 else:
     TSF_command_help(TSF_argvs)

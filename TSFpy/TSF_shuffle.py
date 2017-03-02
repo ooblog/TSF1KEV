@@ -6,15 +6,18 @@ import datetime
 import os
 import copy
 import random
-
 from TSF_Forth import *
 
 
-def TSF_shuffle_Initwords(TSF_words):    #TSF_doc:TSF_words(ワード)を初期化する(TSFAPI)。
+def TSF_shuffle_Initwords(TSF_words):    #TSF_doc:スタック並び替え関連のワードを追加する(TSFAPI)。
     TSF_words["#TSF_swapBAthat"]=TSF_shuffle_swapBAthat; TSF_words["#スタックBA交換"]=TSF_shuffle_swapBAthat
     TSF_words["#TSF_swapCAthat"]=TSF_shuffle_swapCAthat; TSF_words["#スタックCA交換"]=TSF_shuffle_swapCAthat
     TSF_words["#TSF_swapCBthat"]=TSF_shuffle_swapCBthat; TSF_words["#スタックCB交換"]=TSF_shuffle_swapCBthat
     return TSF_words
+#        "#TSF_lenthe":TSF_Forth_lenthe,  "スタック個数":TSF_Forth_lenthe,
+#        "#TSF_lenthis":TSF_Forth_lenthis,  "実行中スタックの個数":TSF_Forth_lenthis,
+#        "#TSF_lenthat":TSF_Forth_lenthat,  "積込先スタックの個数":TSF_Forth_lenthat,
+#        "#TSF_lenthey":TSF_Forth_lenthey,  "スタック名一覧の個数":TSF_Forth_lenthey,
 #        "#TSF_peekthe":TSF_Forth_peekthe,  "番目のスタックから読み込む":TSF_Forth_peekthe,
 #        "#TSF_pokethe":TSF_Forth_pokethe,  "番目のスタックに上書き":TSF_Forth_pokethe,
 #        "#TSF_peekthe":TSF_Forth_peekthe,  "番目のスタックから読み込む":TSF_Forth_peekthe,
@@ -22,10 +25,6 @@ def TSF_shuffle_Initwords(TSF_words):    #TSF_doc:TSF_words(ワード)を初期�
 #        "#TSF_rndseed":TSF_Forth_rndseed,  "を乱数の種":TSF_Forth_rndseed,
 #        "#TSF_shuffle":TSF_Forth_shuffle,  "をシャッフル":TSF_Forth_shuffle,
 #        "#TSF_rndpeekthe":TSF_Forth_rndpeekthe,  "からランダムに読み込む":TSF_Forth_rndpeekthe,
-#        "#TSF_lenthe":TSF_Forth_lenthe,  "スタック個数":TSF_Forth_lenthe,
-#        "#TSF_lenthis":TSF_Forth_lenthis,  "実行中スタックの個数":TSF_Forth_lenthis,
-#        "#TSF_lenthat":TSF_Forth_lenthat,  "積込先スタックの個数":TSF_Forth_lenthat,
-#        "#TSF_lenthey":TSF_Forth_lenthey,  "スタック名一覧の個数":TSF_Forth_lenthey,
 #        "#TSF_pushthe":TSF_Forth_pushthe,  "スタックを積む":TSF_Forth_pushthe,
 #        "#TSF_pushthis":TSF_Forth_pushthis,  "実行中スタックを自身に積む":TSF_Forth_pushthis,
 #        "#TSF_pushthat":TSF_Forth_pushthat,  "積込先スタックから積む":TSF_Forth_pushthat,

@@ -6,9 +6,78 @@ import decimal
 import fractions
 import re
 from collections import OrderedDict
-
-#from TSF_io import *
 from TSF_Forth import *
+
+def TSF_calc_Initwords(TSF_words):    #TSF_doc:電卓関連のワードを追加する(TSFAPI)。
+    TSF_words["#TSF_brackets"]=TSF_calc_brackets; TSF_words["#数式に連結"]=TSF_calc_brackets
+    TSF_words["#TSF_calcFX"]=TSF_calc_calcFX; TSF_words["#分数計算"]=TSF_calc_calcFX
+    TSF_words["#TSF_calcFXQQ"]=TSF_calc_calcFXQQ; TSF_words["#分数九九"]=TSF_calc_calcFXQQ
+    TSF_words["#TSF_calcDC"]=TSF_calc_calcDC; TSF_words["#分数計算"]=TSF_calc_calcDC
+    TSF_words["#TSF_calcDCQQ"]=TSF_calc_calcDCQQ; TSF_words["#分数九九"]=TSF_calc_calcDCQQ
+    TSF_words["#TSF_calcKN"]=TSF_calc_calcKN; TSF_words["#分数計算"]=TSF_calc_calcKN
+    TSF_words["#TSF_calcKNQQ"]=TSF_calc_calcKNQQ; TSF_words["#分数九九"]=TSF_calc_calcKNQQ
+    TSF_words["#TSF_calcPR"]=TSF_calc_calcPR; TSF_words["#有効桁数"]=TSF_calc_calcPR
+    TSF_words["#TSF_calcRO"]=TSF_calc_calcRO; TSF_words["#端数処理"]=TSF_calc_calcRO
+    return TSF_words
+
+def TSF_calc_calcbrackets(TSF_tsvBL,TSF_tsvBR):   #TSF_doc:括弧でスタックを連結する。
+    TSF_tsvA=TSF_Forth_popthat()
+#    for TSF_stacksK,TSF_stacksV in TSF_stacks.items():  #items?
+    for TSF_stacksK,TSF_stacksV in TSF_Forth_stacksitems():
+        TSF_calcK="".join([TSF_tsvBL,TSF_stacksK])
+        if TSF_calcK in TSF_tsvA:
+            for TSF_stackC,TSF_stackQ in enumerate(TSF_stacksV):
+                TSF_calcK="".join([TSF_tsvBL,TSF_stacksK,str(TSF_stackC),TSF_tsvBR])
+                if TSF_calcK in TSF_tsvA:
+                    TSF_tsvA=TSF_tsvA.replace(TSF_calcK,TSF_stackQ)
+#    for TSF_stackC in range(len(TSF_stacks[TSF_thatstack_name])):  #len?
+    for TSF_stackC in range(TSF_Forth_stackslen()):
+        TSF_calcK="".join([TSF_tsvBL,str(TSF_stackC),TSF_tsvBR])
+        if TSF_calcK in TSF_tsvA:
+            TSF_tsvA=TSF_tsvA.replace(TSF_calcK,TSF_Forth_popthat())
+        else:
+            break
+    return TSF_tsvA
+
+def TSF_calc_brackets():   #TSF_doc:[…stackB,stackA,calc,brackets]これ自体は計算はせず、任意の括弧に囲まれたスタック番号をスタック内容に置換。bracketsとcalc自身とcalc内の該当括弧分スタック積み下ろし。
+    TSF_tsvB=TSF_Forth_popthat()
+    if len(TSF_tsvB) < 2: TSF_tsvB="[]"
+    TSF_tsvBL,TSF_tsvBR=TSF_tsvB[0],TSF_tsvB[-1]
+    TSF_Forth_pushthat(TSF_calc_calcbrackets(TSF_tsvBL,TSF_tsvBR))
+    return None
+
+def TSF_calc_calcFX():   #TSF_doc:[calc]分数電卓する。calcと連結分スタック積み下ろし、1スタック積み上げ。
+    TSF_Forth_pushthat(TSF_calc(TSF_calc_calcbrackets("[","]"),None))
+    return None
+
+def TSF_calc_calcFXQQ():   #TSF_doc:[calc]分数電卓する(暗記もする)。calcと連結分スタック積み下ろし、1スタック積み上げ。
+    TSF_Forth_pushthat(TSF_calc(TSF_calc_calcbrackets("[","]"),True))
+    return None
+
+def TSF_calc_calcDC():   #TSF_doc:[calc]分数電卓して結果を小数または整数で表示。calcと連結分スタック積み下ろし、1スタック積み上げ。
+    TSF_Forth_pushthat(TSF_calc_decimalizeDC(TSF_calc(TSF_calc_calcbrackets("[","]"),None)))
+    return None
+
+def TSF_calc_calcDCQQ():   #TSF_doc:[calc]分数電卓して結果を小数または整数で表示(暗記もする)。calcと連結分スタック積み下ろし、1スタック積み上げ。
+    TSF_Forth_pushthat(TSF_calc_decimalizeDC(TSF_calc(TSF_calc_calcbrackets("[","]"),True)))
+    return None
+
+def TSF_calc_calcKN():   #TSF_doc:[calc]分数電卓して結果を漢数字を混ぜてで表示。calcと連結分スタック積み下ろし、1スタック積み上げ。
+    TSF_Forth_pushthat(TSF_calc_decimalizeKN(TSF_calc(TSF_calc_calcbrackets("[","]"),None)))
+    return None
+
+def TSF_calc_calcKNQQ():   #TSF_doc:[calc]分数電卓して結果を漢数字を混ぜてで表示(暗記もする)。calcと連結分スタック積み下ろし、1スタック積み上げ。
+    TSF_Forth_pushthat(TSF_calc_decimalizeKN(TSF_calc(TSF_calc_calcbrackets("[","]"),True)))
+    return None
+
+def TSF_calc_calcPR():   #TSF_doc:[prec]有効桁数を変更する。桁数が変わると同じ式でも値が変わるので暗記(九九)も初期化する。
+    TSF_calc_precision(TSF_Forth_popdecimalize(TSF_thatstack_name))
+    return None
+
+def TSF_calc_calcRO():   #TSF_doc:[round]端数処理を変更する。端数が変わると同じ式でも値が変わるので暗記(九九)も初期化する。
+    TSF_calc_rounding(TSF_Forth_popdecimalize(TSF_thatstack_name))
+    return None
+
 
 TSF_calc_opewide="f1234567890.pm!|$ELRSsCcTtyYen+-*/\\#%(MPZzOoUuN~k)&GglAa^><" \
                 "銭十百千万億兆京垓𥝱穣溝澗正載極恒阿那思量" \
@@ -452,7 +521,7 @@ def TSF_calc_debug():    #TSF_doc:「TSF/TSF_calc.py」単体テスト風デバ�
     TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(TSF_argvs)),TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("TSF_py:",TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout])),TSF_log=TSF_debug_log)
-    TSF_calc_precision(50)
+    TSF_calc_precision(10)
     LTsv_calcQlist=OrderedDict([
         ("TSF_calc漢数字:",["一割る三引く(マイナス二分の一)","2分の1を5乗","(2分の1)を5乗","2分の(1を5乗)","(100分の1)を5乗","(8万分の1)を5乗","(478万分の1)を5乗","億","二百万円","十億百二十円","十億と飛んで百二十円","百二十円","3.14","円周率","ネイピア数","∞","√２","√m2","２の平方根","256を二進対数","２を16乗","無量大数"]),
         ("TSF_calc小数分数パーセント:",["0.5|3.5","0.5/3.5","1|2/7|2","2|3|5|7","0/100","100/0","10000+%8", "10000-5%","7\\3","3.14\\1","9#6","3|2#1|3","-6","m6","-m6","-6!","m6!","-m6!"]),
@@ -468,7 +537,7 @@ def TSF_calc_debug():    #TSF_doc:「TSF/TSF_calc.py」単体テスト風デバ�
         ("TSF_calc和数列積数列:",["kM7","kM5~10","kM10~0","kP7","kP5~10","kP10~0","kP10~2","kM100","kP1~10","2P16"]),
         ("TSF_calc公約数公倍数:",["12&16G","12と16の公約数","12と16の最大公約数","12&16g","12と16の公倍数","12と16の最小公倍数"]),
     ])
-    for TSF_QlistK,TSF_QlistV in LTsv_calcQlist.items():
+    for TSF_QlistK,TSF_QlistV in iter(LTsv_calcQlist.items()):
         TSF_debug_log=TSF_io_printlog(TSF_QlistK,TSF_log=TSF_debug_log)
         for LTsv_calcQ in TSF_QlistV:
             TSF_debug_log=TSF_io_printlog("\t{0}⇔{1};{2};{3}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ,True),TSF_calc_decimalizeDC(TSF_calc(LTsv_calcQ,True)),TSF_calc_decimalizeKN(TSF_calc(LTsv_calcQ,True))),TSF_debug_log)

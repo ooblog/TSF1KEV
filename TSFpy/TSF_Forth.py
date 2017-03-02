@@ -1,9 +1,7 @@
 #! /usr/bin/env python
 # -*- coding: UTF-8 -*-
 from __future__ import division,print_function,absolute_import,unicode_literals
-
 from TSF_io import *
-
 
 def TSF_Forth_1ststack():    #TSF_doc:TSF_初期化に使う1ststack名(TSFAPI)。
     return "TSF_Tab-Separated-Forth:"
@@ -53,23 +51,53 @@ def TSF_Forth_run():    #TSF_doc:TSF_stacks,TSF_styles,TSF_callptrs,TSF_wordsな
         else:
             break
 
-def TSF_Forth_stackthat(TSF_that):    #TSF_doc:thatスタックの変更(TSFAPI)。
-    global TSF_stackthat
-    if TSF_that != None:
-        TSF_stackthat=TSF_that
-    return TSF_stackthat
-
 def TSF_Forth_stackthis(TSF_this):    #TSF_doc:thisスタックの変更(TSFAPI)。
     global TSF_stackthis
     if TSF_this != None:
         TSF_stackthis=TSF_this
     return TSF_stackthis
 
-def TSF_Forth_stackcount(TSF_count):    #TSF_doc:thisスタックの変更(TSFAPI)。
+def TSF_Forth_stackcount(TSF_count):    #TSF_doc:thisカウントの変更(TSFAPI)。
     global TSF_stackcount
     if TSF_count != None:
         TSF_stackcount=TSF_count
     return TSF_stackcount
+
+def TSF_Forth_stackthat(TSF_that):    #TSF_doc:thatスタックの変更(TSFAPI)。
+    global TSF_stackthat
+    if TSF_that != None:
+        TSF_stackthat=TSF_that
+    return TSF_stackthat
+
+def TSF_Forth_stacklen(TSF_the):    #TSF_doc:thisスタックの個数(TSFAPI)。
+    return len(TSF_stacks.get(TSF_the,[]))
+
+def TSF_Forth_stacklenthis():    #TSF_doc:スタックの個数(TSFAPI)。
+    return len(TSF_stacks.get(TSF_stackthis,[]))
+
+def TSF_Forth_stacklenthat():    #TSF_doc:thatスタックの個数(TSFAPI)。
+    return len(TSF_stacks.get(TSF_stackthat,[]))
+
+def TSF_Forth_stackvalue(TSF_the):    #TSF_doc:スタックのデータ(TSFAPI)。
+    return TSF_stacks[TSF_the] if TSF_the in TSF_stacks else []
+
+def TSF_Forth_stackvaluethis():    #TSF_doc:thisスタックの個数(TSFAPI)。
+    return TSF_stacks[TSF_stackthis] if TSF_the in TSF_stacks else []
+
+def TSF_Forth_stackvaluethat():    #TSF_doc:thatスタックの個数(TSFAPI)。
+    return TSF_stacks[TSF_stackthat] if TSF_the in TSF_stacks else []
+
+def TSF_Forth_stackslen():    #TSF_doc:スタック一覧の個数(TSFAPI)。
+    return len(TSF_stacks)
+
+def TSF_Forth_stackskeys():    #TSF_doc:スタック一覧の鍵のイテレータ(TSFAPI)。
+    return TSF_stacks.keys()
+
+def TSF_Forth_stacksvalues():    #TSF_doc:スタック一覧の値のイテレータ(TSFAPI)。
+    return TSF_stacks.values()
+
+def TSF_Forth_stacksitems():    #TSF_doc:スタック一覧の鍵値タプルのイテレータ(TSFAPI)。
+    return TSF_stacks.items()
 
 def TSF_Forth_popthe(TSF_that):    #TSF_doc:スタックを積み下ろす(TSFAPI)。
     global TSF_stacks
@@ -120,12 +148,13 @@ def TSF_Forth_pushargvs(TSF_argvs):    #TSF_doc:thisにスタックを積み上�
 def TSF_Forth_pushthis(TSF_pushdata):    #TSF_doc:thisにスタックを積み上げる(TSFAPI)。
    TSF_Forth_pushthe(TSF_stackthis,TSF_pushdata)
 
-def TSF_Forth_Initwords(TSF_words):    #TSF_doc:TSF_words(ワード)を初期化する(TSFAPI)。
+def TSF_Forth_Initwords(TSF_words):    #TSF_doc:ワードを初期化する(TSFAPI)。
     TSF_words["#TSF_fin."]=TSF_Forth_fin; TSF_words["#TSFを終了。"]=TSF_Forth_fin
     TSF_words["#TSF_over"]=TSF_Forth_over; TSF_words["#スタックを終了"]=TSF_Forth_over
     TSF_words["#TSF_encoding"]=TSF_Forth_encoding; TSF_words["#文字コード"]=TSF_Forth_encoding
     TSF_words["#TSF_this"]=TSF_Forth_this; TSF_words["#スタックに入る"]=TSF_Forth_this
     TSF_words["#TSF_that"]=TSF_Forth_that; TSF_words["#スタックに積込"]=TSF_Forth_that
+    TSF_words["#TSF_lenthe"]=TSF_Forth_lenthe; TSF_words["#スタックの個数"]=TSF_Forth_lenthe
     TSF_words["#TSF_echoes"]=TSF_Forth_echoes; TSF_words["#N行表示"]=TSF_Forth_echoes
     TSF_words["#TSF_viewthe"]=TSF_Forth_viewthe; TSF_words["#スタックを表示"]=TSF_Forth_viewthe
     TSF_words["#TSF_viewthis"]=TSF_Forth_viewthis; TSF_words["#実行中スタックを表示"]=TSF_Forth_viewthis
@@ -172,6 +201,11 @@ def TSF_Forth_that():    #TSF_doc:thatスタックの変更。1スタック積�
 
 def TSF_Forth_this():    #TSF_doc:thatスタックの変更。1スタック積み下ろし。
     return TSF_Forth_popthat()
+
+def TSF_Forth_lenthe():   #TSF_doc:[stack]指定したスタックの数を数える。1スタック積み上げ。
+    return None
+
+
 
 def TSF_Forth_echoes():    #TSF_doc:[…valueB,valueA,count]スタック内容をstdout表示する。count自身とcount分スタック積み下ろし。
     TSF_loop=TSF_Forth_pintthat()
