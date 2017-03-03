@@ -4,6 +4,7 @@ from __future__ import division,print_function,absolute_import,unicode_literals
 import sys
 import datetime
 import os
+import random
 from TSF_Forth import *
 
 def TSF_time_Initwords(TSF_words):    #TSF_doc:日時関連のワードを追加する(TSFAPI)。
@@ -58,7 +59,7 @@ TSF_allnight_Daymonth,TSF_allnight_Dayyear,TSF_allnight_Weekday,TSF_allnight_Wee
 TSF_meridian_Hour,TSF_meridian_HourAP=None,None
 TSF_allnight_Hour,TSF_allnight_HourAP,TSF_allnight_carryHour=None,None,None
 TSF_meridian_miNute,TSF_meridian_Second,TSF_meridian_miLlisecond,TSF_meridian_micRosecond=None,None,None,None
-TSF_time_Counter=0
+TSF_time_Counter,TSF_time_rAndom=0,random.random()
 
 def TSF_time_setdaytime(TSF_diffminute=0,TSF_overhour=30):    #TSF_doc:時刻の初期化。実際の年月日等の取得は遅延処理で行う。
     global TSF_time_diffminute,TSF_time_overhour
@@ -89,8 +90,8 @@ def TSF_time_setdaytime(TSF_diffminute=0,TSF_overhour=30):    #TSF_doc:時刻の
     global TSF_meridian_miNute,TSF_meridian_Second,TSF_meridian_miLlisecond,TSF_meridian_micRosecond
     TSF_meridian_miNute,TSF_meridian_Second,TSF_meridian_micRosecond=TSF_earlier_now.minute,TSF_earlier_now.second,TSF_earlier_now.microsecond
     TSF_meridian_miLlisecond=TSF_meridian_micRosecond//1000
-    global TSF_time_Counter
-    TSF_time_Counter=0
+    global TSF_time_Counter,TSF_time_rAndom
+    random.seed(TSF_earlier_now); TSF_time_Counter,TSF_time_rAndom=0,random.random()
 
 def TSF_time_earlier_now():    #TSF_doc:現在時刻(時差を含まない)の遅延処理。
     global TSF_earlier_now
@@ -252,7 +253,6 @@ def TSF_time_getdaytime(TSF_timeformat="@000y@0m@0dm@wdec@0h@0n@0s",TSF_diffminu
         TSF_tf=TSF_tf if not "@Rs" in TSF_tf else TSF_tf.replace("@Rs","{0:6}".format(TSF_meridian_micRosecond))
 
         TSF_tf=TSF_tf if not "@JST" in TSF_tf else TSF_tf.replace("@JST","+09:00")
-
         TSF_tf=TSF_tf if not "@T" in TSF_tf else TSF_tf.replace("@T","\t")
         TSF_tf=TSF_tf if not "@E" in TSF_tf else TSF_tf.replace("@E","\n")
         TSF_tf=TSF_tf if not "@Z" in TSF_tf else TSF_tf.replace("@Z","")
@@ -267,6 +267,7 @@ def TSF_time_getdaytime(TSF_timeformat="@000y@0m@0dm@wdec@0h@0n@0s",TSF_diffminu
         TSF_tf=TSF_tf if not "@0c" in TSF_tf else TSF_tf.replace("@0c","{0:0>2}".format(TSF_time_Counter))
         TSF_tf=TSF_tf if not "@_c" in TSF_tf else TSF_tf.replace("@_c","{0: >2}".format(TSF_time_Counter))
         TSF_tf=TSF_tf if not "@c" in TSF_tf else TSF_tf.replace("@c","{0}".format(TSF_time_Counter))
+        TSF_tf=TSF_tf if not "@a" in TSF_tf else TSF_tf.replace("@a","{0}".format(TSF_time_rAndom))
         TSF_tfList[TSF_tfcount]=TSF_tf
 
     TSF_time_Counter+=1
@@ -282,16 +283,18 @@ def TSF_time_debug():    #TSF_doc:「TSF/TSF_time.py」単体テスト風デバ�
     TSF_debug_log=TSF_io_printlog("TSF_py:",TSF_log=TSF_debug_log)
     TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout])),TSF_log=TSF_debug_log)
     LTsv_timeQlist=OrderedDict([
+        ("TSF_time.test@c@a1:",["@c,@a"]),
         ("TSF_time.TSF/LTSV:",["@000y@0m@0dm@wdec@0h@0n@0s","@000Y@0M@0Dm@Wdec@0H@0N@0S"]),
         ("TSF_time.ISO8601_JST:",["@000y-@0m-@0dmT@0h:@0n:@0s@JST","@000Y-@0M-@0DmT@0H:@0N:@0S@JST"]),
         ("TSF_time.test@0ls:",["@000y-@0m-@0dmT@0h:@0n:@0s.@00ls","@000Y-@0M-@0DmT@0H:@0N:@0S.@00Ls"]),
-        ("TSF_time.test@c:",["@c"]),
+        ("TSF_time.test@c@a2:",["@c,@a"]),
     ])
-    TSF_time_setdaytime(0,47)
-    for TSF_QlistK,TSF_QlistV in LTsv_timeQlist.items():
-        TSF_debug_log=TSF_io_printlog(TSF_QlistK,TSF_log=TSF_debug_log)
-        for LTsv_timeQ in TSF_QlistV:
-            TSF_debug_log=TSF_io_printlog("\t{0}⇔{1}".format(LTsv_timeQ,TSF_time_getdaytime(LTsv_timeQ)),TSF_debug_log)
+    for repeat in range(2):
+        TSF_time_setdaytime(0,47)
+        for TSF_QlistK,TSF_QlistV in LTsv_timeQlist.items():
+            TSF_debug_log=TSF_io_printlog(TSF_QlistK,TSF_log=TSF_debug_log)
+            for LTsv_timeQ in TSF_QlistV:
+                TSF_debug_log=TSF_io_printlog("\t{0}⇔{1}".format(LTsv_timeQ,TSF_time_getdaytime(LTsv_timeQ)),TSF_debug_log)
     return TSF_debug_log
 
 if __name__=="__main__":

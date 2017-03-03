@@ -4,7 +4,6 @@ from __future__ import division,print_function,absolute_import,unicode_literals
 import sys
 import datetime
 import os
-import copy
 import random
 from TSF_Forth import *
 
@@ -29,10 +28,9 @@ def TSF_shuffle_Initwords(TSF_words):    #TSF_doc:スタック並び替え関連
 #    TSF_words["#TSF_carbonthis"]=TSF_shuffle_carbonthis; TSF_words["#実行中スタックの表面を複製"]=TSF_shuffle_carbonthis
 #    TSF_words["#TSF_carbonthat"]=TSF_shuffle_carbonthat; TSF_words["#積込先スタックの表面を複製"]=TSF_shuffle_carbonthat
     return TSF_words
+#        "#TSF_pokerndthe":TSF_Forth_pokerndthe,  "random.sample(range, k)":TSF_Forth_pokethe,
 #        "#TSF_pokethe":TSF_Forth_pokethe,  "番目のスタックに上書き":TSF_Forth_pokethe,
 #        "#TSF_rndseed":TSF_Forth_rndseed,  "を乱数の種":TSF_Forth_rndseed,
-#        "#TSF_shuffle":TSF_Forth_shuffle,  "をシャッフル":TSF_Forth_shuffle,
-#        "#TSF_rndpeekthe":TSF_Forth_rndpeekthe,  "からランダムに読み込む":TSF_Forth_rndpeekthe,
 #        "#TSF_pushthe":TSF_Forth_pushthe,  "スタックを積む":TSF_Forth_pushthe,
 #        "#TSF_pushthis":TSF_Forth_pushthis,  "実行中スタックを自身に積む":TSF_Forth_pushthis,
 #        "#TSF_pushthat":TSF_Forth_pushthat,  "積込先スタックから積む":TSF_Forth_pushthat,
@@ -45,7 +43,6 @@ def TSF_shuffle_Initwords(TSF_words):    #TSF_doc:スタック並び替え関連
 #        "#TSF_popthis":TSF_Forth_popthis,  "実行中スタックから拾う":TSF_Forth_popthis,
 #        "#TSF_popthat":TSF_Forth_popthat,  "積込先スタックから除く":TSF_Forth_popthat,
 #        "#TSF_delthe":TSF_Forth_delthe,  "のスタック削除":TSF_Forth_delthe,
-#        "#TSF_delthis":TSF_Forth_delthat,  "実行中スタックを削除":TSF_Forth_delthis,
 #        "#TSF_delthat":TSF_Forth_delthat,  "積込先スタックを削除":TSF_Forth_delthat,
 #        "#TSF_join":TSF_Forth_join,  "個分連結":TSF_Forth_join,
 #        "#TSF_joinC":TSF_Forth_joinC,  "で回数分挟んで連結":TSF_Forth_joinC,
@@ -150,13 +147,21 @@ def TSF_shuffle_carbonthat():   #TSF_doc:[]積込先スタックの一番上の�
 #    TSF_Forth_push(TSF_thatstack_name,TSF_carbon)
     return None
 
+
+def TSF_shuffle_debug():    #TSF_doc:「TSF/TSF_shuffle.py」単体テスト風デバッグ関数。
+    TSF_debug_log=""
+    TSF_shuffletet=random.sample(range(100),10)
+    TSF_debug_log=TSF_io_printlog("TSF_shuffletet:"+"{0}".format(TSF_shuffletet),TSF_log=TSF_debug_log)
+    TSF_shuffletet=random.random()
+    TSF_debug_log=TSF_io_printlog("TSF_shuffletet:"+"{0}".format(TSF_shuffletet),TSF_log=TSF_debug_log)
+
 if __name__=="__main__":
     from collections import OrderedDict
     print("")
     TSF_argvs=TSF_io_argvs()
     print("--- {0} ---".format(TSF_argvs[0]))
     TSF_debug_savefilename="debug/TSF_shuffle_debug.txt"
-#    TSF_debug_log=TSF_shuffle_debug()
+    TSF_debug_log=TSF_shuffle_debug()
 #    TSF_io_savetext(TSF_debug_savefilename,TSF_debug_log)
     print("")
     try:

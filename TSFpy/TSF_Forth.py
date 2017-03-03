@@ -2,6 +2,7 @@
 # -*- coding: UTF-8 -*-
 from __future__ import division,print_function,absolute_import,unicode_literals
 import random
+import copy
 from TSF_io import *
 
 def TSF_Forth_1ststack():    #TSF_doc:TSF_初期化に使う1ststack名(TSFAPI)。
