@@ -1,44 +1,30 @@
 TSF_Tab-Separated-Forth:
 	UTF-8	#TSF_encoding	TSFdocs_that:	#TSF_that	TSFdocs_setup:	#TSF_this	#TSF_viewthey	0	#TSF_fin.
-
 TSFdocs_setup:
 	TSFdocs_files:	#TSF_lenthe	TSFdocs_filecount:	0	#TSF_pokethe	TSFdocs_filename:	#TSF_this
-
 TSFdocs_filename:
 	[TSFdocs_filecount:0]-1	#TSF_calcDC	TSFdocs_filecount:	0	#TSF_pokethe	TSFdocs_files:	[TSFdocs_filecount:0]	#TSF_calcDC	#TSF_peekthe	TSFdocs_textset:	#TSF_this
-
 TSFdocs_textset:
 	#TSF_carbonthat	TSFdocs_text:	#TSF_clonethe	TSFdocs_textreplace:	#TSF_this
-
 TSFdocs_textreplace:
 	#TSF_carbonthat	1	#TSF_echoes	TSFdocs_text:	TSF1KEV	TEST	#TSF_replacethe	TSFdocs_filenameloop:	#TSF_this
-
 TSFdocs_filenameloop:
 	TSFdocs_filecount:	[TSFdocs_filecount:0]z1~2	#TSF_calcDC	#TSF_peekthe	#TSF_this
-
 TSFdocs_filecount:
 	-	TSFdocs_filename:	#exit
-
 TSFdocs_files:
 	debug/README.md	debug/README.html
-
 TSFdocs_text:
 	<？TSF_MD_H1:TSF1KEV>
-
 TSFdocs_tagcount:
 	-	TSFdocs_textreplace:	#exit
-
 TSFdocs_tags:
 	<？TSF_MD_H1:TSF1KEV>	<＄TSF_MD_H1:0>	<？P>	<？BR>
-
 <？TSF_MD_H1:TSF1KEV>
 	<h1><＄TSF_MD_H1:@c></h1>	# <＄TSF_MD_H1:@c>
-
 <＄TSF_MD_H1:0>
 	プログラミング言語「TSF_Tab-Separated-Forth」開発中。
-
 <？P>
 		<p>@E
-
 <？BR>
 		<br />

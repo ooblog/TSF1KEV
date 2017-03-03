@@ -65,7 +65,7 @@ def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサン�
     if save_about_mergefile:
         TSF_io_savetext(TSF_about_mergefile,TSF_debug_log)
     print("-- TSF_Forth_run() --")
-    TSF_Forth_pushargvs()
+    TSF_Forth_pushargvs(TSF_argvs)
     TSF_Forth_run(TSF_Forth_1ststack())
     print("-- TSF_Forth_viewprintlog() --")
     TSF_Forth_viewprintlog()
@@ -139,14 +139,14 @@ def TSF_command_help(TSF_argvs):    #TSF_doc:TSFコマンド一覧。
 TSF_about_mergefile="TSF_about.tsf"
 TSF_mergefile=""
 TSF_argvs=TSF_io_argvs()
-TSF_Forth_init(TSF_argvs,[TSF_time_Initwords,TSF_shuffle_Initwords,TSF_calc_Initwords])
+TSF_Forth_init(TSF_argvs,[TSF_shuffle_Initwords,TSF_calc_Initwords,TSF_time_Initwords])
 if len(TSF_argvs) >= 2:
     TSF_mergefile=TSF_argvs[1]
 if os.path.isfile(TSF_mergefile):
     if len(TSF_Forth_loadtext(TSF_mergefile,TSF_mergefile)):
         TSF_Forth_merge(TSF_mergefile,[])
-        TSF_Forth_pushargv()
-    TSF_Forth_run(TSF_Forth_1ststack())
+        TSF_Forth_pushargvs(TSF_argvs)
+    TSF_Forth_run()
 #elif TSF_mergefile == "--about":
 #    TSF_command_about(True)
 elif TSF_mergefile == "--helloworld":

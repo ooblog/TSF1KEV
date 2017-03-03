@@ -51,8 +51,12 @@ def TSF_io_loadtext(TSF_path,TSF_encoding="UTF-8"):    #TSF_doc:TSF_pathからTS
 TSF_io_stdout=sys.stdout.encoding if sys.stdout.encoding != None else locale.getpreferredencoding()
 def TSF_io_printlog(TSF_text,TSF_log=None):    #TSF_doc:TSF_textをターミナル(stdout)に表示する。TSF_logに追記もできる。
     TSF_io_printf=TSF_text.encode(TSF_io_stdout,"xmlcharrefreplace")
-    TSF_libc.printf(b"%s\n",TSF_io_printf)
-    TSF_log=TSF_log+"{0}\n".format(TSF_text) if TSF_log != None else ""
+    if TSF_text.endswith('\n'):
+        TSF_libc.printf(b"%s",TSF_io_printf)
+        TSF_log="".join([TSF_log,TSF_text]) if TSF_log != None else ""
+    else:
+        TSF_libc.printf(b"%s\n",TSF_io_printf)
+        TSF_log="".join([TSF_log,TSF_text,'\n']) if TSF_log != None else ""
     return TSF_log
 
 def TSF_io_argvs():
