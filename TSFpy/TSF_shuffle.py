@@ -24,13 +24,12 @@ def TSF_shuffle_Initwords(TSF_words):    #TSF_doc:スタック並び替え関連
     TSF_words["#TSF_peekrndthat"]=TSF_shuffle_peekrndthat; TSF_words["#積込先スタック乱択"]=TSF_shuffle_peekrndthat
     TSF_words["#TSF_shufflethe"]=TSF_shuffle_shufflethe; TSF_words["#スタックシャッフル"]=TSF_shuffle_shufflethe
     TSF_words["#TSF_shufflethat"]=TSF_shuffle_shufflethat; TSF_words["#積込先スタックシャッフル"]=TSF_shuffle_shufflethat
-#    TSF_words["#TSF_carbonthe"]=TSF_shuffle_carbonthe; TSF_words["#スタックの表面を複製"]=TSF_shuffle_carbonthe
-#    TSF_words["#TSF_carbonthis"]=TSF_shuffle_carbonthis; TSF_words["#実行中スタックの表面を複製"]=TSF_shuffle_carbonthis
-#    TSF_words["#TSF_carbonthat"]=TSF_shuffle_carbonthat; TSF_words["#積込先スタックの表面を複製"]=TSF_shuffle_carbonthat
+    TSF_words["#TSF_carbonthe"]=TSF_shuffle_carbonthe; TSF_words["#スタックの表面を複製"]=TSF_shuffle_carbonthe
+    TSF_words["#TSF_carbonthis"]=TSF_shuffle_carbonthis; TSF_words["#実行中スタックの表面を複製"]=TSF_shuffle_carbonthis
+    TSF_words["#TSF_carbonthat"]=TSF_shuffle_carbonthat; TSF_words["#積込先スタックの表面を複製"]=TSF_shuffle_carbonthat
     return TSF_words
 #        "#TSF_pokerndthe":TSF_Forth_pokerndthe,  "random.sample(range, k)":TSF_Forth_pokethe,
 #        "#TSF_pokethe":TSF_Forth_pokethe,  "番目のスタックに上書き":TSF_Forth_pokethe,
-#        "#TSF_rndseed":TSF_Forth_rndseed,  "を乱数の種":TSF_Forth_rndseed,
 #        "#TSF_pushthe":TSF_Forth_pushthe,  "スタックを積む":TSF_Forth_pushthe,
 #        "#TSF_pushthis":TSF_Forth_pushthis,  "実行中スタックを自身に積む":TSF_Forth_pushthis,
 #        "#TSF_pushthat":TSF_Forth_pushthat,  "積込先スタックから積む":TSF_Forth_pushthat,
@@ -130,21 +129,16 @@ def TSF_shuffle_shufflethat():   #TSF_doc:[]積込先スタックをシャッフ
     TSF_Forth_shufflethe(TSF_Forth_stacklenthat())
     return None
 
-def TSF_shuffle_carbonthe():   #TSF_doc:[stack]スタックの一番上のスタックを複製する。
-#    TSF_peekdata=TSF_Forth_peekthe(TSF_Forth_popthat(),-1)
-#    TSF_thename=TSF_Forth_pop(TSF_thatstack_name)
-#    TSF_carbon=TSF_stacks[TSF_thename][-1] if len(TSF_stacks[TSF_thename]) > 0 else ""
-#    TSF_Forth_push(TSF_thatstack_name,TSF_carbon)
+def TSF_shuffle_carbonthe():   #TSF_doc:[stack]スタックの一番上のスタックを複製する。0スタック積み下ろし。
+    TSF_Forth_pushthat(TSF_Forth_peekthe(TSF_Forth_popthat(),-1))
     return None
 
-def TSF_shuffle_carbonthis():   #TSF_doc:[]実行中スタックの一番上のスタックを複製する。
-#    TSF_carbon=TSF_stacks[TSF_thisstack_name][-1] if len(TSF_stacks[TSF_thisstack_name]) > 0 else ""
-#    TSF_Forth_push(TSF_thatstack_name,TSF_carbon)
+def TSF_shuffle_carbonthis():   #TSF_doc:[]実行中スタックの一番上のスタックを複製する。0スタック積み下ろし。
+    TSF_Forth_pushthat(TSF_Forth_peekthis(-1))
     return None
 
-def TSF_shuffle_carbonthat():   #TSF_doc:[]積込先スタックの一番上のスタックを複製する。
-#    TSF_carbon=TSF_stacks[TSF_thatstack_name][-1] if len(TSF_stacks[TSF_thatstack_name]) > 0 else ""
-#    TSF_Forth_push(TSF_thatstack_name,TSF_carbon)
+def TSF_shuffle_carbonthat():   #TSF_doc:[]積込先スタックの一番上のスタックを複製する。0スタック積み下ろし。
+    TSF_Forth_pushthat(TSF_Forth_peekthat(-1))
     return None
 
 

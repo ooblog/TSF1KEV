@@ -9,14 +9,28 @@ from TSF_Forth import *
 
 def TSF_time_Initwords(TSF_words):    #TSF_doc:日時関連のワードを追加する(TSFAPI)。
     TSF_words["#TSF_calender"]=TSF_time_calender; TSF_words["#日時に置換する"]=TSF_time_calender
+    TSF_words["#TSF_diffminute"]=TSF_time_diffminute; TSF_words["#日時に置換する"]=TSF_time_diffminute
+    TSF_words["#TSF_overhour"]=TSF_time_overhour; TSF_words["#日時に置換する"]=TSF_time_overhour
+    TSF_words["#TSF_nowset"]=TSF_time_nowset; TSF_words["#日時に置換する"]=TSF_time_nowset
     return TSF_words
 
-def TSF_time_calender():   #TSF_doc:[timeformat]スタック内容を日時に置換する。1スタック上書き。
+def TSF_time_calender():   #TSF_doc:[timeformat]スタック内容を日時に置換する。1スタック積み下ろして、1スタック積み上げ。
     TSF_tsvQ=TSF_Forth_popthat()
     TSF_tsvA=TSF_time_getdaytime(TSF_tsvQ)
     TSF_Forth_pushthat(TSF_tsvA)
     return None
 
+def TSF_time_diffminute():   #TSF_doc:[diffminute]時差を設定する。現在時刻も更新。1スタック積み下ろして、1スタック積み上げ。
+    TSF_time_setdaytime(TSF_diffminute=TSF_Forth_pintthat())
+    return None
+
+def TSF_time_overhour():   #TSF_doc:[overhour]徹夜時間を設定する。現在時刻も更新。1スタック積み下ろして、1スタック積み上げ。
+    TSF_time_setdaytime(TSF_overhour=TSF_Forth_pintthat())
+    return None
+
+def TSF_time_nowset():   #TSF_doc:[]設定を変えずに現在時刻のみを取得する。0スタック積み下ろし。
+    TSF_time_setdaytime()
+    return None
 
 #TSF_earlier_now=datetime.datetime.now()
 #TSF_meridian_now=TSF_earlier_now
@@ -48,7 +62,7 @@ TSF_weekdayenl=("Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","S
 TSF_weekdayenc=("M",     "T",      "W",           "R",    "F",     "S",        "U")
 TSF_weekdayenh=("Monday","Tuesday","Wednesday","thuRsday","Friday","Saturday","sUnday")
 
-TSF_time_diffminute,TSF_time_overhour=0,24
+TSF_earlier_diffminute,TSF_earlier_overhour=0,24
 TSF_earlier_now,TSF_meridian_now,TSF_allnight_now=None,None,None
 TSF_meridian_Year,TSF_meridian_Yearlower,TSF_meridian_YearZodiac,TSF_meridian_YearDays,TSF_meridian_YearIso,TSF_meridian_WeekNumberYearIso,TSF_meridian_WeekDayIso=None,None,None,None,None,None,None
 TSF_allnight_Year,TSF_allnight_Yearlower,TSF_allnight_YearZodiac,TSF_allnight_YearDays,TSF_allnight_YearIso,TSF_allnight_WeekNumberYearIso,TSF_allnight_WeekDayIso,TSF_allnight_carryYear=None,None,None,None,None,None,None,None
@@ -62,9 +76,9 @@ TSF_meridian_miNute,TSF_meridian_Second,TSF_meridian_miLlisecond,TSF_meridian_mi
 TSF_time_Counter,TSF_time_rAndom=0,random.random()
 
 def TSF_time_setdaytime(TSF_diffminute=0,TSF_overhour=30):    #TSF_doc:時刻の初期化。実際の年月日等の取得は遅延処理で行う。
-    global TSF_time_diffminute,TSF_time_overhour
-    TSF_time_diffminute=TSF_diffminute if TSF_diffminute != None else TSF_time_diffminute
-    TSF_time_overhour=min(max(TSF_overhour,24),48) if TSF_overhour != None else TSF_time_overhour
+    global TSF_earlier_diffminute,TSF_earlier_overhour
+    TSF_earlier_diffminute=TSF_diffminute if TSF_diffminute != None else TSF_earlier_diffminute
+    TSF_earlier_overhour=min(max(TSF_overhour,24),48) if TSF_overhour != None else TSF_earlier_overhour
     global TSF_earlier_now,TSF_meridian_now,TSF_allnight_now
     TSF_earlier_now,TSF_meridian_now,TSF_allnight_now=datetime.datetime.now(),None,None
     global TSF_meridian_Year,TSF_meridian_Yearlower,TSF_meridian_YearZodiac,TSF_meridian_YearDays,TSF_meridian_YearIso,TSF_meridian_WeekNumberYearIso,TSF_meridian_WeekDayIso
@@ -99,7 +113,7 @@ def TSF_time_earlier_now():    #TSF_doc:現在時刻(時差を含まない)の�
     return TSF_earlier_now
 def TSF_time_meridian_now():    #TSF_doc:時差を加味した現在時刻の遅延処理。
     global TSF_meridian_now
-    TSF_meridian_now=TSF_meridian_now if TSF_meridian_now != None else TSF_time_earlier_now()+datetime.timedelta(minutes=TSF_time_diffminute)
+    TSF_meridian_now=TSF_meridian_now if TSF_meridian_now != None else TSF_time_earlier_now()+datetime.timedelta(minutes=TSF_earlier_diffminute)
     return TSF_meridian_now
 def TSF_time_allnight_now():    #TSF_doc:時差を加味した徹夜時刻の遅延処理。
     global TSF_allnight_now
@@ -173,13 +187,13 @@ def TSF_time_allnight_Hour():    #TSF_doc:徹夜時刻時2桁の遅延処理。
     return TSF_allnight_Hour
 def TSF_time_allnight_carryHour():    #TSF_doc:徹夜時刻年の位上がり処理。
     global TSF_allnight_carryHour
-    TSF_allnight_carryHour=TSF_allnight_carryHour if TSF_allnight_carryHour != None else -1 if 24+TSF_time_meridian_Hour() < TSF_time_overhour else 0
+    TSF_allnight_carryHour=TSF_allnight_carryHour if TSF_allnight_carryHour != None else -1 if 24+TSF_time_meridian_Hour() < TSF_earlier_overhour else 0
     return TSF_allnight_carryHour
 
 def TSF_time_getdaytime(TSF_timeformat="@000y@0m@0dm@wdec@0h@0n@0s",TSF_diffminute=None,TSF_overhour=None):    #TSF_doc:「TSF/TSF_time.py」単体テスト風デバッグ関数。
     global TSF_time_Counter
     if TSF_earlier_now == None or TSF_diffminute != None or TSF_overhour != None:
-        TSF_time_setdaytime(TSF_diffminute if TSF_diffminute != None else TSF_time_diffminute,TSF_overhour if TSF_overhour != None else TSF_time_overhour)
+        TSF_time_setdaytime(TSF_diffminute if TSF_diffminute != None else TSF_earlier_diffminute,TSF_overhour if TSF_overhour != None else TSF_earlier_overhour)
     TSF_tfList=TSF_timeformat.split("@@")
     for TSF_tfcount,TSF_tf in enumerate(TSF_tfList):
 
