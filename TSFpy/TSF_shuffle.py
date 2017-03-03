@@ -33,20 +33,22 @@ def TSF_shuffle_Initwords(TSF_words):    #TSF_doc:スタック並び替え関連
     TSF_words["#TSF_pokethe"]=TSF_shuffle_pokethe; TSF_words["#スタックに上書き"]=TSF_shuffle_pokethe
     TSF_words["#TSF_pokethis"]=TSF_shuffle_pokethis; TSF_words["#実行中スタックに上書き"]=TSF_shuffle_pokethis
     TSF_words["#TSF_pokethat"]=TSF_shuffle_pokethat; TSF_words["#積込先スタックに上書き"]=TSF_shuffle_pokethat
-    TSF_words["#TSF_pokerndthe"]=TSF_shuffle_pokerndthe; TSF_words["#スタックへランダムに上書き"]=TSF_shuffle_pokerndthe
-    TSF_words["#TSF_pokerndthis"]=TSF_shuffle_pokerndthis; TSF_words["#実行中スタックへランダムに上書き"]=TSF_shuffle_pokerndthis
-    TSF_words["#TSF_pokerndthat"]=TSF_shuffle_pokerndthat; TSF_words["#積込先スタックへランダムに上書き"]=TSF_shuffle_pokerndthat
+    TSF_words["#TSF_pokerndthe"]=TSF_shuffle_pokerndthe; TSF_words["#スタックのどこかに上書き"]=TSF_shuffle_pokerndthe
+    TSF_words["#TSF_pokerndthis"]=TSF_shuffle_pokerndthis; TSF_words["#実行中スタックのどこかに上書き"]=TSF_shuffle_pokerndthis
+    TSF_words["#TSF_pokerndthat"]=TSF_shuffle_pokerndthat; TSF_words["#積込先スタックのどこかに上書き"]=TSF_shuffle_pokerndthat
 #    TSF_words["#TSF_pokecyclethe"]=TSF_shuffle_pokecyclethe; TSF_words["#スタック周択"]=TSF_shuffle_pokecyclethe
 #    TSF_words["#TSF_pokecyclethis"]=TSF_shuffle_pokecyclethis; TSF_words["#実行中スタック周択"]=TSF_shuffle_pokecyclethis
 #    TSF_words["#TSF_pokecyclethat"]=TSF_shuffle_pokecyclethat; TSF_words["#積込先スタック周択"]=TSF_shuffle_pokecyclethat
-    TSF_words["#TSF_delthe"]=TSF_shuffle_delthe; TSF_words["#スタック削除"]=TSF_shuffle_delthe
+    TSF_words["#TSF_delthe"]=TSF_shuffle_delthe; TSF_words["#スタックを削除"]=TSF_shuffle_delthe
     TSF_words["#TSF_delthis"]=TSF_shuffle_delthis; TSF_words["#実行中スタックを削除"]=TSF_shuffle_delthis
     TSF_words["#TSF_delthat"]=TSF_shuffle_delthat; TSF_words["#積込先スタックを削除"]=TSF_shuffle_delthat
+    TSF_words["#TSF_clonethe"]=TSF_shuffle_clonethe; TSF_words["#スタックの複製"]=TSF_shuffle_clonethe
+    TSF_words["#TSF_clonethis"]=TSF_shuffle_clonethis; TSF_words["#実行中スタックの複製"]=TSF_shuffle_clonethis
+    TSF_words["#TSF_clonethat"]=TSF_shuffle_clonethat; TSF_words["#積込先スタックの複製"]=TSF_shuffle_clonethat
+    TSF_words["#TSF_clonethey"]=TSF_shuffle_clonethey; TSF_words["#スタック名一覧の複製"]=TSF_shuffle_clonethey
     return TSF_words
-#        "#TSF_clonethe":TSF_Forth_clonethe,  "スタックを複製する":TSF_Forth_clonethe,
-#        "#TSF_clonethis":TSF_Forth_clonethis,  "実行中スタックを複製する":TSF_Forth_clonethis,
-#        "#TSF_clonethat":TSF_Forth_clonethat,  "積込先スタック複製する":TSF_Forth_clonethat,
-#        "#TSF_clonethey":TSF_Forth_clonethey,  "スタック名一覧をスタックとして複製する":TSF_Forth_clonethey,
+#def TSF_Forth_stackvalue(TSF_the):    #TSF_doc:スタックのデータ(TSFAPI)。
+#def TSF_Forth_pushargvs(TSF_argvs):    #TSF_doc:積込先スタックにargvsを積み上げる(TSFAPI)。
 #        "#TSF_pushthe":TSF_Forth_pushthe,  "スタックを積む":TSF_Forth_pushthe,
 #        "#TSF_pushthis":TSF_Forth_pushthis,  "実行中スタックを自身に積む":TSF_Forth_pushthis,
 #        "#TSF_pushthat":TSF_Forth_pushthat,  "積込先スタックから積む":TSF_Forth_pushthat,
@@ -193,7 +195,22 @@ def TSF_shuffle_delthis():   #TSF_doc:[]実行中スタックを削除。スタ�
 def TSF_shuffle_delthat():   #TSF_doc:[]積込先スタックを削除。実行中スタックも抜けてコールポインタを1つ減らす。
     return TSF_Forth_delthat()
 
+def TSF_shuffle_clonethe():   #TSF_doc:[stackC,stack]スタックを複製する
+    TSF_the=TSF_Forth_popthat()
+    TSF_Forth_clonethe(TSF_Forth_popthat(),TSF_the)
+    return None
 
+def TSF_shuffle_clonethis():   #TSF_doc:[stackC]実行中スタックを複製する
+    TSF_Forth_clonethis(TSF_Forth_popthat())
+    return None
+
+def TSF_shuffle_clonethat():   #TSF_doc:[stackC]積込先スタック複製する
+    TSF_Forth_clonethat(TSF_Forth_popthat())
+    return None
+
+def TSF_shuffle_clonethey():   #TSF_doc:[stackC]スタック名一覧をスタックとして複製する
+    TSF_Forth_clonethey(TSF_Forth_popthat())
+    return None
 
 def TSF_shuffle_debug():    #TSF_doc:「TSF/TSF_shuffle.py」単体テスト風デバッグ関数。
     TSF_debug_log=""

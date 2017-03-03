@@ -285,22 +285,22 @@ def TSF_Forth_stacksvalues():    #TSF_doc:スタック一覧の値のイテレ�
 def TSF_Forth_stacksitems():    #TSF_doc:スタック一覧の鍵値タプルのイテレータ(TSFAPI)。
     return TSF_stacks.items()
 
-def TSF_Forth_popthe(TSF_that):    #TSF_doc:スタックを積み下ろす(TSFAPI)。
+def TSF_Forth_popthe(TSF_that):    #TSF_doc:スタックから積み下ろす(TSFAPI)。
     global TSF_stacks
     TSF_popdata=""
     if TSF_that in TSF_stacks and len(TSF_stacks[TSF_that]):
         TSF_popdata=TSF_stacks[TSF_that].pop()
     return TSF_popdata
 
-def TSF_Forth_popthat():    #TSF_doc:thatからスタックを積み下ろす(TSFAPI)。
+def TSF_Forth_popthat():    #TSF_doc:thatからスタックから積み下ろす(TSFAPI)。
     TSF_popdata=TSF_Forth_popthe(TSF_stackthat)
     return TSF_popdata
 
-def TSF_Forth_popthis():    #TSF_doc:thisからスタックを積み下ろす(TSFAPI)。
+def TSF_Forth_popthis():    #TSF_doc:thisからスタックから積み下ろす(TSFAPI)。
     TSF_popdata=TSF_Forth_popthe(TSF_stackthis)
     return TSF_popdata
 
-def TSF_Forth_pintthe(TSF_that):    #TSF_doc:スタックを数値として積み下ろす(TSFAPI)。
+def TSF_Forth_pintthe(TSF_that):    #TSF_doc:スタックから数値として積み下ろす(TSFAPI)。
     TSF_popdata=TSF_Forth_popthat()
     if '|' in TSF_popdata:
         TSF_calcN,TSF_calcD=TSF_calcQ.replace('m','-').replace('p','').split('|')
@@ -309,30 +309,30 @@ def TSF_Forth_pintthe(TSF_that):    #TSF_doc:スタックを数値として積�
         TSF_popdata=TSF_io_intstr0x(TSF_popdata)
     return TSF_popdata
 
-def TSF_Forth_pintthat():    #TSF_doc:thatからスタックを数値として積み下ろす(TSFAPI)。
-    TSF_popdata=TSF_Forth_pintthe(TSF_stackthat)
-    return TSF_popdata
-
-def TSF_Forth_pintthis():    #TSF_doc:thisからスタックを数値として積み下ろす(TSFAPI)。
+def TSF_Forth_pintthis():    #TSF_doc:実行中スタックから数値として積み下ろす(TSFAPI)。
     TSF_popdata=TSF_Forth_pintthe(TSF_stackthis)
     return TSF_popdata
 
-def TSF_Forth_pushthe(TSF_that,TSF_pushdata):    #TSF_doc:スタックを積み上げる(TSFAPI)。
+def TSF_Forth_pintthat():    #TSF_doc:積込先スタックから数値として積み下ろす(TSFAPI)。
+    TSF_popdata=TSF_Forth_pintthe(TSF_stackthat)
+    return TSF_popdata
+
+def TSF_Forth_pushthe(TSF_that,TSF_pushdata):    #TSF_doc:スタックに積み上げる(TSFAPI)。
     global TSF_stacks
     if TSF_that in TSF_stacks:
         TSF_stacks[TSF_that].append(TSF_pushdata)
     else:
         TSF_stacks[TSF_that]=[TSF_pushdata]
 
-def TSF_Forth_pushthat(TSF_pushdata):    #TSF_doc:thatにスタックを積み上げる(TSFAPI)。
+def TSF_Forth_pushthis(TSF_pushdata):    #TSF_doc:実行中スタックに積み上げる(TSFAPI)。
+   TSF_Forth_pushthe(TSF_stackthis,TSF_pushdata)
+
+def TSF_Forth_pushthat(TSF_pushdata):    #TSF_doc:積込先スタックに積み上げる(TSFAPI)。
    TSF_Forth_pushthe(TSF_stackthat,TSF_pushdata)
 
-def TSF_Forth_pushargvs(TSF_argvs):    #TSF_doc:thisにスタックを積み上げる(TSFAPI)。
+def TSF_Forth_pushargvs(TSF_argvs):    #TSF_doc:積込先スタックにargvsを積み上げる(TSFAPI)。
     for TSF_argv in TSF_argvs:
         TSF_Forth_pushthat(TSF_argv)
-
-def TSF_Forth_pushthis(TSF_pushdata):    #TSF_doc:thisにスタックを積み上げる(TSFAPI)。
-   TSF_Forth_pushthe(TSF_stackthis,TSF_pushdata)
 
 def TSF_Forth_peekthe(TSF_the,TSF_count):    #TSF_doc:スタックの読込(TSFAPI)。
     TSF_peekdata=""
@@ -343,11 +343,11 @@ def TSF_Forth_peekthe(TSF_the,TSF_count):    #TSF_doc:スタックの読込(TSFA
             TSF_peekdata=TSF_stacks[TSF_the][TSF_count]
     return TSF_peekdata
 
-def TSF_Forth_peekthis(TSF_count):    #TSF_doc:thisスタックの読込(TSFAPI)。
+def TSF_Forth_peekthis(TSF_count):    #TSF_doc:実行中スタックの読込(TSFAPI)。
     TSF_peekdata=TSF_Forth_peekthe(TSF_stackthis,TSF_count)
     return TSF_peekdata
 
-def TSF_Forth_peekthat(TSF_count):    #TSF_doc:thatスタックの読込(TSFAPI)。
+def TSF_Forth_peekthat(TSF_count):    #TSF_doc:積込先スタックの読込(TSFAPI)。
     TSF_peekdata=TSF_Forth_peekthe(TSF_stackthat,TSF_count)
     return TSF_peekdata
 
@@ -368,26 +368,41 @@ def TSF_Forth_pokethe(TSF_the,TSF_count,TSF_poke):    #TSF_doc:スタックへ�
         TSF_pokeerr=2
     return TSF_pokeerr
 
-def TSF_Forth_pokethis(TSF_count,TSF_poke):    #TSF_doc:thatスタックの読込(TSFAPI)。
+def TSF_Forth_pokethis(TSF_count,TSF_poke):    #TSF_doc:実行中スタックの読込(TSFAPI)。
     TSF_pokeerr=TSF_Forth_peekthe(TSF_stackthis,TSF_count,TSF_poke)
     return TSF_pokeerr
 
-def TSF_Forth_pokethat(TSF_count,TSF_poke):    #TSF_doc:thatスタックの読込(TSFAPI)。
+def TSF_Forth_pokethat(TSF_count,TSF_poke):    #TSF_doc:積込先スタックの読込(TSFAPI)。
     TSF_pokeerr=TSF_Forth_peekthe(TSF_stackthat,TSF_count,TSF_poke)
     return TSF_pokeerr
 
-def TSF_Forth_delthe(TSF_the):   #TSF_doc:[stack]スタックを削除。
+def TSF_Forth_delthe(TSF_the):   #TSF_doc:スタックを削除(TSFAPI)。
     if TSF_the in TSF_stacks:
         del TSF_stacks[TSF_the]
     return None if TSF_stackthis != TSF_the else ""
 
-def TSF_Forth_delthis():   #TSF_doc:[]実行中スタックを削除。スタックも抜けてコールポインタを1つ減らす。
+def TSF_Forth_delthis():   #TSF_doc:実行中スタックを削除(TSFAPI)。
     TSF_Forth_delthe(TSF_stackthis)
     return None if TSF_stackthis != TSF_stackthis else ""
 
-def TSF_Forth_delthat():   #TSF_doc:[]積込先スタックを削除。
+def TSF_Forth_delthat():   #TSF_doc:積込先スタックを削除(TSFAPI)。
     TSF_Forth_delthe(TSF_stackthat)
     return None if TSF_stackthis != TSF_stackthat else ""
+
+def TSF_Forth_clonethe(TSF_clone,TSF_the):   #TSF_doc:スタックを複製する(TSFAPI)
+    if TSF_clone in TSF_stacks:
+        TSF_stacks[TSF_clone]=list(tuple(TSF_stacks[TSF_the] if TSF_the in TSF_stacks else []))
+
+def TSF_Forth_clonethis(TSF_clone):   #TSF_doc:実行中スタックを複製する(TSFAPI)
+    TSF_Forth_clonethe(TSF_clone,TSF_stackthis)
+
+def TSF_Forth_clonethat(TSF_clone):   #TSF_doc:積込先スタックを複製する(TSFAPI)
+    TSF_Forth_clonethe(TSF_clone,TSF_stackthat)
+
+def TSF_Forth_clonethey(TSF_clone):   #TSF_doc:(TSFAPI)
+    if TSF_clone in TSF_stacks:
+        TSF_stacks[TSF_clone]=list(tuple(TSF_stacks.keys()))
+
 
 def TSF_Forth_debug(TSF_argvs):    #TSF_doc:「TSF/TSF_Forth.py」単体テスト風デバッグ関数。
     TSF_debug_log=""
