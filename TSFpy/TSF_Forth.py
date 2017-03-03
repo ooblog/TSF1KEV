@@ -355,6 +355,26 @@ def TSF_Forth_shufflethe(TSF_the):    #TSF_doc:スタックのシャッフル(TS
     if TSF_the in TSF_stacks:
         random.shuffle(TSF_stacks[TSF_the])
 
+def TSF_Forth_pokethe(TSF_the,TSF_count,TSF_poke):    #TSF_doc:スタックへの書込(TSFAPI)。
+    TSF_pokeerr=0
+    if TSF_the in TSF_stacks:
+        if 0 <= TSF_count < len(TSF_stacks[TSF_the]):
+            TSF_stacks[TSF_the][TSF_count]=TSF_poke
+        elif len(TSF_stacks[TSF_that]) <= -TSF_count < 0:
+            TSF_stacks[TSF_the][TSF_count]=TSF_poke
+        else:
+            TSF_pokeerr=1
+    else:
+        TSF_pokeerr=2
+    return TSF_pokeerr
+
+def TSF_Forth_pokethis(TSF_count,TSF_poke):    #TSF_doc:thatスタックの読込(TSFAPI)。
+    TSF_pokeerr=TSF_Forth_peekthe(TSF_stackthis,TSF_count,TSF_poke)
+    return TSF_pokeerr
+
+def TSF_Forth_pokethat(TSF_count,TSF_poke):    #TSF_doc:thatスタックの読込(TSFAPI)。
+    TSF_pokeerr=TSF_Forth_peekthe(TSF_stackthat,TSF_count,TSF_poke)
+    return TSF_pokeerr
 
 def TSF_Forth_debug(TSF_argvs):    #TSF_doc:「TSF/TSF_Forth.py」単体テスト風デバッグ関数。
     TSF_debug_log=""

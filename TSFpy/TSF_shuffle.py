@@ -27,9 +27,18 @@ def TSF_shuffle_Initwords(TSF_words):    #TSF_doc:スタック並び替え関連
     TSF_words["#TSF_carbonthe"]=TSF_shuffle_carbonthe; TSF_words["#スタックの表面を複製"]=TSF_shuffle_carbonthe
     TSF_words["#TSF_carbonthis"]=TSF_shuffle_carbonthis; TSF_words["#実行中スタックの表面を複製"]=TSF_shuffle_carbonthis
     TSF_words["#TSF_carbonthat"]=TSF_shuffle_carbonthat; TSF_words["#積込先スタックの表面を複製"]=TSF_shuffle_carbonthat
+    TSF_words["#TSF_pokethe"]=TSF_shuffle_pokethe; TSF_words["#スタックに上書き"]=TSF_shuffle_pokethe
+    TSF_words["#TSF_pokethis"]=TSF_shuffle_pokethis; TSF_words["#実行中スタックに上書き"]=TSF_shuffle_pokethis
+    TSF_words["#TSF_pokethat"]=TSF_shuffle_pokethat; TSF_words["#積込先スタックに上書き"]=TSF_shuffle_pokethat
+    TSF_words["#TSF_pokerndthe"]=TSF_shuffle_pokerndthe; TSF_words["#スタックへランダムに上書き"]=TSF_shuffle_pokerndthe
+    TSF_words["#TSF_pokerndthis"]=TSF_shuffle_pokerndthis; TSF_words["#実行中スタックへランダムに上書き"]=TSF_shuffle_pokerndthis
+    TSF_words["#TSF_pokerndthat"]=TSF_shuffle_pokerndthat; TSF_words["#積込先スタックへランダムに上書き"]=TSF_shuffle_pokerndthat
     return TSF_words
-#        "#TSF_pokerndthe":TSF_Forth_pokerndthe,  "random.sample(range, k)":TSF_Forth_pokethe,
-#        "#TSF_pokethe":TSF_Forth_pokethe,  "番目のスタックに上書き":TSF_Forth_pokethe,
+#    TSF_words["#TSF_iterthe"]=TSF_shuffle_iterthe; TSF_words["#スタックを数列で固める"]=TSF_shuffle_iterthe
+#    TSF_words["#TSF_iterthat"]=TSF_shuffle_iterthat; TSF_words["#積込先スタックを数列で固める"]=TSF_shuffle_iterthat
+#    TSF_words["#TSF_delthe"]=TSF_shuffle_nullthe; TSF_words["#スタック削除"]=TSF_shuffle_nullthe
+#    TSF_words["#TSF_delthis"]=TSF_shuffle_nullthat; TSF_words["#実行中スタックを削除"]=TSF_shuffle_nullthat
+#    TSF_words["#TSF_delthat"]=TSF_shuffle_nullthat; TSF_words["#積込先スタックを削除"]=TSF_shuffle_nullthat
 #        "#TSF_pushthe":TSF_Forth_pushthe,  "スタックを積む":TSF_Forth_pushthe,
 #        "#TSF_pushthis":TSF_Forth_pushthis,  "実行中スタックを自身に積む":TSF_Forth_pushthis,
 #        "#TSF_pushthat":TSF_Forth_pushthat,  "積込先スタックから積む":TSF_Forth_pushthat,
@@ -41,8 +50,6 @@ def TSF_shuffle_Initwords(TSF_words):    #TSF_doc:スタック並び替え関連
 #        "#TSF_popthe":TSF_Forth_popthe,  "スタックから拾う":TSF_Forth_popthe,
 #        "#TSF_popthis":TSF_Forth_popthis,  "実行中スタックから拾う":TSF_Forth_popthis,
 #        "#TSF_popthat":TSF_Forth_popthat,  "積込先スタックから除く":TSF_Forth_popthat,
-#        "#TSF_delthe":TSF_Forth_delthe,  "のスタック削除":TSF_Forth_delthe,
-#        "#TSF_delthat":TSF_Forth_delthat,  "積込先スタックを削除":TSF_Forth_delthat,
 #        "#TSF_join":TSF_Forth_join,  "個分連結":TSF_Forth_join,
 #        "#TSF_joinC":TSF_Forth_joinC,  "で回数分挟んで連結":TSF_Forth_joinC,
 #        "#TSF_split":TSF_Forth_split,  "の文字で分離":TSF_Forth_split,
@@ -139,6 +146,38 @@ def TSF_shuffle_carbonthis():   #TSF_doc:[]実行中スタックの一番上の�
 
 def TSF_shuffle_carbonthat():   #TSF_doc:[]積込先スタックの一番上のスタックを複製する。0スタック積み下ろし。
     TSF_Forth_pushthat(TSF_Forth_peekthat(-1))
+    return None
+
+def TSF_shuffle_pokethe():   #TSF_doc:[poke,stack,counter]積込先スタックに上書き。3スタック積み下ろし。
+    TSF_count=TSF_Forth_pintthat()
+    TSF_the=TSF_Forth_popthat()
+    TSF_Forth_pokethe(TSF_the,TSF_count,TSF_Forth_popthat())
+    return None
+
+def TSF_shuffle_pokethis():   #TSF_doc:[stack,counter]実行中スタックに上書き。2スタック積み下ろし。
+    TSF_count=TSF_Forth_pintthat()
+    TSF_Forth_pokethis(TSF_count,TSF_Forth_popthat())
+    return None
+
+def TSF_shuffle_pokethat():   #TSF_doc:[stack,counter]積込先スタックに上書き。2スタック積み下ろし。
+    TSF_count=TSF_Forth_pintthat()
+    TSF_Forth_pokethat(TSF_count,TSF_Forth_popthat())
+    return None
+
+def TSF_shuffle_pokerndthe():   #TSF_doc:[poke,stack]積込先スタックに上書き。2スタック積み下ろし。
+    TSF_count=random.randint(1,TSF_Forth_stacklen(TSF_the))-1
+    TSF_the=TSF_Forth_popthat()
+    TSF_Forth_pokethe(TSF_the,TSF_count,TSF_Forth_popthat())
+    return None
+
+def TSF_shuffle_pokerndthis():   #TSF_doc:[poke]実行中スタックに上書き。1スタック積み下ろし。
+    TSF_count=random.randint(1,TSF_Forth_stacklenthis())-1
+    TSF_Forth_pokethis(TSF_count,TSF_Forth_popthat())
+    return None
+
+def TSF_shuffle_pokerndthat():   #TSF_doc:[poke]積込先スタックに上書き。1スタック積み下ろし。
+    TSF_count=random.randint(1,TSF_Forth_stacklenthat())-1
+    TSF_Forth_pokethat(TSF_count,TSF_Forth_popthat())
     return None
 
 
