@@ -376,6 +376,19 @@ def TSF_Forth_pokethat(TSF_count,TSF_poke):    #TSF_doc:thatスタックの読�
     TSF_pokeerr=TSF_Forth_peekthe(TSF_stackthat,TSF_count,TSF_poke)
     return TSF_pokeerr
 
+def TSF_Forth_delthe(TSF_the):   #TSF_doc:[stack]スタックを削除。
+    if TSF_the in TSF_stacks:
+        del TSF_stacks[TSF_the]
+    return None if TSF_stackthis != TSF_the else ""
+
+def TSF_Forth_delthis():   #TSF_doc:[]実行中スタックを削除。スタックも抜けてコールポインタを1つ減らす。
+    TSF_Forth_delthe(TSF_stackthis)
+    return None if TSF_stackthis != TSF_stackthis else ""
+
+def TSF_Forth_delthat():   #TSF_doc:[]積込先スタックを削除。
+    TSF_Forth_delthe(TSF_stackthat)
+    return None if TSF_stackthis != TSF_stackthat else ""
+
 def TSF_Forth_debug(TSF_argvs):    #TSF_doc:「TSF/TSF_Forth.py」単体テスト風デバッグ関数。
     TSF_debug_log=""
     TSF_Forth_init(TSF_argvs,[])

@@ -19,6 +19,9 @@ def TSF_calc_Initwords(TSF_words):    #TSF_doc:電卓関連のワードを追加
     TSF_words["#TSF_calcPR"]=TSF_calc_calcPR; TSF_words["#有効桁数"]=TSF_calc_calcPR
     TSF_words["#TSF_calcRO"]=TSF_calc_calcRO; TSF_words["#端数処理"]=TSF_calc_calcRO
     return TSF_words
+#    TSF_words["#TSF_iterthe"]=TSF_shuffle_iterthe; TSF_words["#スタックに数列"]=TSF_shuffle_iterthe
+#    TSF_words["#TSF_iterthis"]=TSF_shuffle_iterthis; TSF_words["#実行中スタック数列"]=TSF_shuffle_iterthis
+#    TSF_words["#TSF_iterthat"]=TSF_shuffle_iterthat; TSF_words["#積込先スタック数列"]=TSF_shuffle_iterthat
 
 def TSF_calc_calcbrackets(TSF_tsvBL,TSF_tsvBR):   #TSF_doc:括弧でスタックを連結する。
     TSF_tsvA=TSF_Forth_popthat()
