@@ -25,7 +25,6 @@ def TSF_calc_Initwords(TSF_words):    #TSF_doc:電卓関連のワードを追加
 
 def TSF_calc_calcbrackets(TSF_tsvBL,TSF_tsvBR):   #TSF_doc:括弧でスタックを連結する。
     TSF_tsvA=TSF_Forth_popthat()
-#    for TSF_stacksK,TSF_stacksV in TSF_stacks.items():  #items?
     for TSF_stacksK,TSF_stacksV in TSF_Forth_stacksitems():
         TSF_calcK="".join([TSF_tsvBL,TSF_stacksK])
         if TSF_calcK in TSF_tsvA:
@@ -33,7 +32,6 @@ def TSF_calc_calcbrackets(TSF_tsvBL,TSF_tsvBR):   #TSF_doc:括弧でスタック
                 TSF_calcK="".join([TSF_tsvBL,TSF_stacksK,str(TSF_stackC),TSF_tsvBR])
                 if TSF_calcK in TSF_tsvA:
                     TSF_tsvA=TSF_tsvA.replace(TSF_calcK,TSF_stackQ)
-#    for TSF_stackC in range(len(TSF_stacks[TSF_thatstack_name])):  #len?
     for TSF_stackC in range(TSF_Forth_stackslen()):
         TSF_calcK="".join([TSF_tsvBL,str(TSF_stackC),TSF_tsvBR])
         if TSF_calcK in TSF_tsvA:

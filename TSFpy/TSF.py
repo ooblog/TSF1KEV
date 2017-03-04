@@ -124,9 +124,16 @@ def TSF_command_calcFX(TSF_argvs):    #TSF_doc:TSFの電卓(分数)テスト。
     TSF_Forth_run()
 
 def TSF_command_time(TSF_argvs):    #TSF_doc:TSFの日時関連テスト。
+#    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["time:","#TSF_this","0","#TSF_fin."]))
+#    TSF_calender=TSF_argvs[2] if len(TSF_argvs) >2 else "@000y@0m@0dm@wdec@0h@0n@0s"
+#    TSF_Forth_setTSF("time:",TSF_calender+'\t#TSF_calender\t1\t#TSF_echoes',TSF_style="N")
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["time:","#TSF_this","0","#TSF_fin."]))
-    TSF_calender=TSF_argvs[2] if len(TSF_argvs) >2 else "@000y@0m@0dm@wdec@0h@0n@0s"
-    TSF_Forth_setTSF("time:",TSF_calender+'\t#TSF_calender\t1\t#TSF_echoes',TSF_style="N")
+    TSF_Forth_setTSF("time:","\t".join([
+#    "@000y@0m@0dm@wdec@0h@0n@0s","#TSF_swapBAthat","m1","#TSF_peekthat","0-[0]","#TSF_calcDC","#TSF_peekthat",
+#    "#TSF_calender","1","#TSF_echoes"])
+    "@000y@0m@0dm@wdec@0h@0n@0s","#TSF_swapBAthat","m1","#TSF_peekthat","0-[0]","#TSF_calcDC","#TSF_peekthat",
+    "#TSF_calender","1","#TSF_echoes"])
+    ,TSF_style="T")
     TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
     TSF_Forth_viewthey()
     print("-- TSF_command_FizzBuzz() --")
@@ -163,7 +170,7 @@ if os.path.isfile(TSF_mergefile):
         TSF_Forth_merge(TSF_mergefile,[])
         TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
         TSF_Forth_run()
-elif TSF_mergefile in ["--about]":
+elif TSF_mergefile in ["--about"]:
     TSF_command_about(False)
 elif TSF_mergefile in ["--helloworld","--Helloworld"]:
     TSF_command_Helloworld()

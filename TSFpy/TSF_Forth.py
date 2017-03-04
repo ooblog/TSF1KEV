@@ -301,12 +301,13 @@ def TSF_Forth_popthis():    #TSF_doc:thisからスタックから積み下ろす
     return TSF_popdata
 
 def TSF_Forth_pintthe(TSF_that):    #TSF_doc:スタックから数値として積み下ろす(TSFAPI)。
-    TSF_popdata=TSF_Forth_popthat()
-    if '|' in TSF_popdata:
+    TSF_calcQ=TSF_Forth_popthat()
+    if '|' in TSF_calcQ:
         TSF_calcN,TSF_calcD=TSF_calcQ.replace('m','-').replace('p','').split('|')
         TSF_popdata=TSF_io_intstr0x(TSF_calcN)//TSF_io_intstr0x(TSF_calcD)
     else:
-        TSF_popdata=TSF_io_intstr0x(TSF_popdata)
+        TSF_calcN=TSF_calcQ.replace('m','-').replace('p','')
+        TSF_popdata=TSF_io_intstr0x(TSF_calcN)
     return TSF_popdata
 
 def TSF_Forth_pintthis():    #TSF_doc:実行中スタックから数値として積み下ろす(TSFAPI)。
@@ -342,8 +343,9 @@ def TSF_Forth_peekthe(TSF_the,TSF_count):    #TSF_doc:スタックの読込(TSFA
     if TSF_the in TSF_stacks:
         if 0 <= TSF_count < len(TSF_stacks[TSF_the]):
             TSF_peekdata=TSF_stacks[TSF_the][TSF_count]
-        elif len(TSF_stacks[TSF_that]) <= -TSF_count < 0:
+        elif -len(TSF_stacks[TSF_the]) <= TSF_count < 0:
             TSF_peekdata=TSF_stacks[TSF_the][TSF_count]
+#    print("TSF_Forth_peekthe",TSF_peekdata,TSF_count)
     return TSF_peekdata
 
 def TSF_Forth_peekthis(TSF_count):    #TSF_doc:実行中スタックの読込(TSFAPI)。
@@ -363,7 +365,7 @@ def TSF_Forth_pokethe(TSF_the,TSF_count,TSF_poke):    #TSF_doc:スタックへ�
     if TSF_the in TSF_stacks:
         if 0 <= TSF_count < len(TSF_stacks[TSF_the]):
             TSF_stacks[TSF_the][TSF_count]=TSF_poke
-        elif len(TSF_stacks[TSF_that]) <= -TSF_count < 0:
+        elif -len(TSF_stacks[TSF_the]) <= TSF_count < 0:
             TSF_stacks[TSF_the][TSF_count]=TSF_poke
         else:
             TSF_pokeerr=1
