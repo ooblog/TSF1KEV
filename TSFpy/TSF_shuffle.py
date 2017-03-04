@@ -12,6 +12,7 @@ def TSF_shuffle_Initwords(TSF_words):    #TSF_doc:スタック並び替え関連
     TSF_words["#TSF_swapBAthat"]=TSF_shuffle_swapBAthat; TSF_words["#スタックBA交換"]=TSF_shuffle_swapBAthat
     TSF_words["#TSF_swapCAthat"]=TSF_shuffle_swapCAthat; TSF_words["#スタックCA交換"]=TSF_shuffle_swapCAthat
     TSF_words["#TSF_swapCBthat"]=TSF_shuffle_swapCBthat; TSF_words["#スタックCB交換"]=TSF_shuffle_swapCBthat
+    TSF_words["#TSF_Nreverse"]=TSF_shuffle_reverse; TSF_words["#スタックN個逆順"]=TSF_shuffle_reverse
     TSF_words["#TSF_lenthe"]=TSF_shuffle_lenthe; TSF_words["#スタック個数"]=TSF_shuffle_lenthe
     TSF_words["#TSF_lenthis"]=TSF_shuffle_lenthis; TSF_words["#実行中スタック個数"]=TSF_shuffle_lenthis
     TSF_words["#TSF_lenthat"]=TSF_shuffle_lenthat; TSF_words["#積込先スタック個数"]=TSF_shuffle_lenthat
@@ -84,6 +85,14 @@ def TSF_shuffle_swapCBthat():   #TSF_doc:[stackC,stackB,stackA]スタックBと�
     TSF_Forth_pushthat(TSF_tsvB)
     TSF_Forth_pushthat(TSF_tsvC)
     TSF_Forth_pushthat(TSF_tsvA)
+
+def TSF_shuffle_reverse():   #TSF_doc:[stackD,stackC,stackB,stackA,count]スタックを逆順にする。
+    TSF_countlen=TSF_Forth_pintthat()
+    TSF_reverse=[""]*TSF_countlen
+    for TSF_count in range(TSF_countlen):
+        TSF_reverse[TSF_count]=TSF_Forth_popthat()
+    for TSF_count in range(TSF_countlen):
+        TSF_Forth_pushthat(TSF_reverse[TSF_count])
 
 def TSF_shuffle_lenthe():   #TSF_doc:[stack]指定したスタックの数を数える。1スタック積み上げ。
     TSF_Forth_pushthat(str(TSF_Forth_stacklen(TSF_Forth_popthat())))

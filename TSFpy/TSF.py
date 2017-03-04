@@ -132,19 +132,18 @@ def TSF_command_calender(TSF_argvs):    #TSF_doc:TSFの日時関連テスト。
     TSF_Forth_run()
 
 def TSF_command_help():    #TSF_doc:TSFコマンド一覧。
-    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["help:","#TSF_this","0","#TSF_fin."]))
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","help:","#TSF_pushthe","help:","#TSF_lenthe","#TSF_Nreverse","help:","#TSF_lenthe","#TSF_echoes","0","#TSF_fin."]))
     TSF_Forth_setTSF("help:",
-        '  --calender    "@000y@0m@0dm@wdec@0h@0n@0s"-> '+TSF_time_getdaytime()+'\n'
-        '  --calcKN      fractions calculator "1/3-m1|2"-> 6分の5 \n'
-        '  --calcDC      fractions calculator "1/3-m1|2"-> 0.8333... \n'
-        '  --calcFX      fractions calculator "1/3-m1|2"-> p5|6 \n'
-        '  --fizzbuzz    ([0]#3Z1~0)+([0]#5Z2~0) Fizz Buzz Fizz&Buzz view\n'
-        '  --helloworld  "Hello world  1  #TSF_echoes" view\n'
-        '  --about       samplecode(UTF-8) view and saveto "'+TSF_about_mergefile+'" \n'
-        '  --help        this commands view\n'
-        'commands:\n'
         'usage: ./TSF.py [command|file.tsf] [argv] ...\n'
-        '10\n#TSF_echoes'
+        'commands:\n'
+        '  --help        this commands view\n'
+        '  --about       samplecode(UTF-8) view and saveto "'+TSF_about_mergefile+'" \n'
+        '  --helloworld  "Hello world  1  #TSF_echoes" view\n'
+        '  --fizzbuzz    ([0]#3Z1~0)+([0]#5Z2~0) Fizz Buzz Fizz&Buzz view\n'
+        '  --calcFX      fractions calculator "1/3-m1|2"-> p5|6 \n'
+        '  --calcDC      fractions calculator "1/3-m1|2"-> 0.8333... \n'
+        '  --calcKN      fractions calculator "1/3-m1|2"-> 6分の5 \n'
+        '  --calender    "@000y@0m@0dm@wdec@0h@0n@0s"-> '+TSF_time_getdaytime()+'\n'
         ,TSF_style="N")
     TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
     TSF_Forth_viewthey()
