@@ -9,13 +9,14 @@ from TSF_time import *
 from TSF_calc import *
 
 
-def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサンプルプログラム。
-    TSF_Forth_settext(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","main1:","#TSF_this","0","#TSF_fin."]))
-    TSF_Forth_settext("main1:","\t".join(["aboutTSF:","#TSF_pushthe","aboutTSF:","#TSF_lenthe","#TSF_echoes","main2:","#TSF_this"]))
-    TSF_Forth_settext("main2:","\t".join(["#分数電卓のテスト","1","#TSF_echoes","16","#TSF_calcPR","calcFXtest:","#TSF_this","calcDCtest:","#TSF_this","calcKNテスト:","#TSF_this","#","1","#TSF_echoes","main3:","#TSF_this"]))
-    TSF_Forth_settext("main3:","\t".join(["aboutCalc:","#TSF_pushthe","aboutCalc:","#TSF_lenthe","#TSF_echoes","main4:","#TSF_this"]))
-    TSF_Forth_settext("main4:","\t".join(["aboutRPN+LISP:","#TSF_pushthe","aboutRPN+LISP:","#TSF_lenthe","#TSF_echoes"]))
-    TSF_Forth_settext("aboutTSF:",
+def TSF_command_about():    #TSF_doc:TSFの概要とサンプルプログラム。
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","main1:","#TSF_this","0","#TSF_fin."]))
+    TSF_Forth_setTSF("main1:","\t".join(["aboutTSF:","#TSF_pushthe","aboutTSF:","#TSF_lenthe","#TSF_echoes"]))
+#    TSF_Forth_setTSF("main1:","\t".join(["aboutTSF:","#TSF_pushthe","aboutTSF:","#TSF_lenthe","#TSF_echoes","main2:","#TSF_this"]))
+    TSF_Forth_setTSF("main2:","\t".join(["#分数電卓のテスト","1","#TSF_echoes","16","#TSF_calcPR","calcFXtest:","#TSF_this","calcDCtest:","#TSF_this","calcKNテスト:","#TSF_this","#","1","#TSF_echoes","main3:","#TSF_this"]))
+    TSF_Forth_setTSF("main3:","\t".join(["aboutCalc:","#TSF_pushthe","aboutCalc:","#TSF_lenthe","#TSF_echoes","main4:","#TSF_this"]))
+    TSF_Forth_setTSF("main4:","\t".join(["aboutRPN+LISP:","#TSF_pushthe","aboutRPN+LISP:","#TSF_lenthe","#TSF_echoes"]))
+    TSF_Forth_setTSF("aboutTSF:",
         "「TSF_Tab-Separated-Forth」の概要(暫定案)。\n"
         "積んだスタックをワード(関数)などで消化していくForth風インタプリタ。スタック単位はtsv文字列。\n"
         "文字から始まる行はスタック名、タブで始まる行はスタック内容。改行のみもしくは「#」で始まる行は読み飛ばし。\n"
@@ -30,10 +31,10 @@ def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサン�
         "文字列連結は「#TSF_brackets」「#TSF_join」「#TSF_joinC」。文字列分解は「#TSF_split」「#TSF_chars」。\n"
         "「#TSF_brackets」などの文字列連結と「#TSF_calcDC」などの電卓を組み合わせれば逆ポーランド記法への数式変換は強いられないはず。\n"
         ,TSF_style="N")
-    TSF_Forth_settext("calcFXtest:","\t".join(["「1 3 m1|2」を数式「[2]/[1]-[0]」で連結→","1","3","m1|2","[2]/[1]-[0]","#TSF_calcFX","2","#TSF_join","1","#TSF_echoes"]))
-    TSF_Forth_settext("calcDCtest:","\t".join(["「1 / 3 - m1|2」を数式に連結(ついでに小数デモ)→","1","/","3","-","m1|2","5","#TSF_join","#TSF_calcDC","2","#TSF_join","1","#TSF_echoes"]))
-    TSF_Forth_settext("calcKNテスト:","\t".join(["「一割る三引く(マイナス二分の一)」(ついでに単位付き計算デモ)は","一割る三引く(マイナス二分の一)","を単位付き計算する","2","個分連結","1","行表示する"]))
-    TSF_Forth_settext("aboutCalc:",
+    TSF_Forth_setTSF("calcFXtest:","\t".join(["「1 3 m1|2」を数式「[2]/[1]-[0]」で連結→","1","3","m1|2","[2]/[1]-[0]","#TSF_calcFX","2","#TSF_join","1","#TSF_echoes"]))
+    TSF_Forth_setTSF("calcDCtest:","\t".join(["「1 / 3 - m1|2」を数式に連結(ついでに小数デモ)→","1","/","3","-","m1|2","5","#TSF_join","#TSF_calcDC","2","#TSF_join","1","#TSF_echoes"]))
+    TSF_Forth_setTSF("calcKNテスト:","\t".join(["「一割る三引く(マイナス二分の一)」(ついでに単位付き計算デモ)は","一割る三引く(マイナス二分の一)","を単位付き計算する","2","個分連結","1","行表示する"]))
+    TSF_Forth_setTSF("aboutCalc:",
         "「calc」系ワード分数電卓の概要(暫定案)。\n"
         "「#TSF_calcFX」は分数表記。「#TSF_calcDC」は小数表記。「#TSF_calcKN」億以上の単位を漢字表記。全部基本的には分数計算。\n"
         "「#TSF_calcFXQQ」「#TSF_calcDCQQ」「#TSF_calcKNQQ」という演算結果をハッシュに追加する九九のような機能がある。\n"
@@ -52,7 +53,7 @@ def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサン�
         "ゼロ比較演算子(条件演算子)は「Z」。「kZ1~0」の様な計算でkがゼロの時は真なので1、ゼロでない時は偽なので0。「n|0」の時は「n|0」。\n"
         "条件演算子は0以上を調べる系「O」「o」、0以下を調べる系「U」「u」、0か調べる系「Z」「z」、「n|0」か調べる系「N」を用意。\n"
         ,TSF_style="N")
-    TSF_Forth_settext("aboutRPN+LISP:",
+    TSF_Forth_setTSF("aboutRPN+LISP:",
         "「RPN」系ワード逆ポーランド電卓の概要(暫定案)。\n"
         "逆ポーランド記法の数式計算は強いられないとは言ったが、括弧も日本語訳も分数も排除した速度優先の電卓も別途準備(予定)。状況に合わせて使い分け(予定)。\n"
         "「#TSF_calcFX」等に存在した演算優先順位(平方根常用対数など＞積商算公約公倍数任意底対数など＞加減算消費税など＞ゼロ比較演算子数列積和など)は存在しない。\n"
@@ -60,19 +61,25 @@ def TSF_command_about(save_about_mergefile):    #TSF_doc:TSFの概要とサン�
         "「LISP」系ワードポーランド電卓の概要(暫定案)。\n"
         "RPNと大体同じだがこっちは括弧を必要。「(+ p1 p2 m3)」の様に引数の自由度が優先される(予定)。\n"
         ,TSF_style="N")
-    print("-- TSF_Forth_viewprintlog() --")
-    TSF_debug_log=TSF_Forth_viewprintlog("")
-    if save_about_mergefile:
-        TSF_io_savetext(TSF_about_mergefile,TSF_debug_log)
-    print("-- TSF_Forth_run() --")
-    TSF_Forth_pushargvs(TSF_argvs)
-    TSF_Forth_run(TSF_Forth_1ststack())
-    print("-- TSF_Forth_viewprintlog() --")
-    TSF_Forth_viewprintlog()
+#    print("-- TSF_Forth_viewprintlog() --")
+#    TSF_debug_log=TSF_Forth_viewprintlog("")
+#    if save_about_mergefile:
+#        TSF_io_savetext(TSF_about_mergefile,TSF_debug_log)
+#    print("-- TSF_Forth_run() --")
+#    TSF_Forth_pushargvs(TSF_argvs)
+#    TSF_Forth_run()
+#    print("-- TSF_Forth_viewprintlog() --")
+    TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
+    TSF_Forth_viewthey()
+    print("-- TSF_command_about() --")
+    TSF_Forth_run()
 
 def TSF_command_Helloworld():    #TSF_doc:TSF_about.tsfより小さなサンプルHelloworldプログラム。
-    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["Hello world","1","#TSF_echoes"]))
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["Hello world","1","#TSF_echoes","0","#TSF_fin."]))
+    TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
     TSF_Forth_viewthey()
+    print("-- TSF_command_Helloworld() --")
+    TSF_Forth_run()
 
 def TSF_command_FizzBuzz():    #TSF_doc:TSF_about.tsfより小さなサンプルFizzBuzzプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","FizzBuzz:","#TSF_this","0","#TSF_fin."]))
@@ -83,7 +90,10 @@ def TSF_command_FizzBuzz():    #TSF_doc:TSF_about.tsfより小さなサンプル
     ]))
     TSF_Forth_setTSF("FZcount:","\t".join(["0","Fizz","Buzz","Fizz&Buzz"]))
     TSF_Forth_setTSF("FZjump:","\t".join(["FizzBuzz:","#exit"]))
+    TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
     TSF_Forth_viewthey()
+    print("-- TSF_command_FizzBuzz() --")
+    TSF_Forth_run()
 
 def TSF_command_calc(TSF_calctype=None):    #TSF_doc:TSFのより小さなサンプルプログラム。
     TSF_calcQ=TSF_argvs[2] if len(TSF_argvs) > 2 else "n|0"
@@ -117,9 +127,12 @@ def TSF_command_time(TSF_argvs):    #TSF_doc:TSFの日時関連テスト。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["time:","#TSF_this","0","#TSF_fin."]))
     TSF_calender=TSF_argvs[2] if len(TSF_argvs) >2 else "@000y@0m@0dm@wdec@0h@0n@0s"
     TSF_Forth_setTSF("time:",TSF_calender+'\t#TSF_calender\t1\t#TSF_echoes',TSF_style="N")
+    TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
+    TSF_Forth_viewthey()
+    print("-- TSF_command_FizzBuzz() --")
     TSF_Forth_run()
 
-def TSF_command_help(TSF_argvs):    #TSF_doc:TSFコマンド一覧。
+def TSF_command_help():    #TSF_doc:TSFコマンド一覧。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["help:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("help:",
         '  --calender    "@000y@0m@0dm@wdec@0h@0n@0s"-> '+TSF_time_getdaytime()+'\n'
@@ -134,6 +147,9 @@ def TSF_command_help(TSF_argvs):    #TSF_doc:TSFコマンド一覧。
         'usage: ./TSF.py [command|file.tsf] [argv] ...\n'
         '10\n#TSF_echoes'
         ,TSF_style="N")
+    TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
+    TSF_Forth_viewthey()
+    print("-- TSF_command_help() --")
     TSF_Forth_run()
 
 TSF_about_mergefile="TSF_about.tsf"
@@ -145,13 +161,13 @@ if len(TSF_argvs) >= 2:
 if os.path.isfile(TSF_mergefile):
     if len(TSF_Forth_loadtext(TSF_mergefile,TSF_mergefile)):
         TSF_Forth_merge(TSF_mergefile,[])
-        TSF_Forth_pushargvs(TSF_argvs)
-    TSF_Forth_run()
-#elif TSF_mergefile == "--about":
-#    TSF_command_about(True)
-elif TSF_mergefile == "--helloworld":
+        TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
+        TSF_Forth_run()
+elif TSF_mergefile in ["--about]":
+    TSF_command_about(False)
+elif TSF_mergefile in ["--helloworld","--Helloworld"]:
     TSF_command_Helloworld()
-elif TSF_mergefile == "--fizzbuzz":
+elif TSF_mergefile in ["--fizzbuzz","--FizzBuzz"]:
     TSF_command_FizzBuzz()
 elif TSF_mergefile in ["--calcKN"]:
     TSF_command_calcKN(TSF_argvs)
@@ -162,9 +178,9 @@ elif TSF_mergefile in ["--calc","--calcFX"]:
 elif TSF_mergefile in ["--time","--calender"]:
     TSF_command_time(TSF_argvs)
 elif TSF_mergefile in ["--help"]:
-    TSF_command_help(TSF_argvs)
+    TSF_command_help()
 else:
-    TSF_command_help(TSF_argvs)
+    TSF_command_help()
 #sys.exit(0 if TSF_Forth_exitcode() == "0" or TSF_Forth_exitcode() == "0|1" else TSF_Forth_exitcode())
 
 

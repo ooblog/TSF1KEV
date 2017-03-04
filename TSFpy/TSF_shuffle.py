@@ -46,13 +46,11 @@ def TSF_shuffle_Initwords(TSF_words):    #TSF_doc:スタック並び替え関連
     TSF_words["#TSF_clonethis"]=TSF_shuffle_clonethis; TSF_words["#実行中スタックの複製"]=TSF_shuffle_clonethis
     TSF_words["#TSF_clonethat"]=TSF_shuffle_clonethat; TSF_words["#積込先スタックの複製"]=TSF_shuffle_clonethat
     TSF_words["#TSF_clonethey"]=TSF_shuffle_clonethey; TSF_words["#スタック名一覧の複製"]=TSF_shuffle_clonethey
+    TSF_words["#TSF_pushthe"]=TSF_shuffle_pushthe; TSF_words["#スタックを積む"]=TSF_shuffle_pushthe
+    TSF_words["#TSF_pushthis"]=TSF_shuffle_pushthis; TSF_words["#実行中スタックを積む"]=TSF_shuffle_pushthis
+    TSF_words["#TSF_pushthat"]=TSF_shuffle_pushthat; TSF_words["#積込先スタックを積む"]=TSF_shuffle_pushthat
+    TSF_words["#TSF_pushthey"]=TSF_shuffle_pushthey; TSF_words["#スタック名一覧を積む"]=TSF_shuffle_pushthey
     return TSF_words
-#def TSF_Forth_stackvalue(TSF_the):    #TSF_doc:スタックのデータ(TSFAPI)。
-#def TSF_Forth_pushargvs(TSF_argvs):    #TSF_doc:積込先スタックにargvsを積み上げる(TSFAPI)。
-#        "#TSF_pushthe":TSF_Forth_pushthe,  "スタックを積む":TSF_Forth_pushthe,
-#        "#TSF_pushthis":TSF_Forth_pushthis,  "実行中スタックを自身に積む":TSF_Forth_pushthis,
-#        "#TSF_pushthat":TSF_Forth_pushthat,  "積込先スタックから積む":TSF_Forth_pushthat,
-#        "#TSF_pushthey":TSF_Forth_pushthey,  "スタック名一覧を積む":TSF_Forth_pushthey,
 #        "#TSF_popthe":TSF_Forth_popthe,  "スタックから拾う":TSF_Forth_popthe,
 #        "#TSF_popthis":TSF_Forth_popthis,  "実行中スタックから拾う":TSF_Forth_popthis,
 #        "#TSF_popthat":TSF_Forth_popthat,  "積込先スタックから除く":TSF_Forth_popthat,
@@ -211,6 +209,25 @@ def TSF_shuffle_clonethat():   #TSF_doc:[stackC]積込先スタック複製す�
 def TSF_shuffle_clonethey():   #TSF_doc:[stackC]スタック名一覧をスタックとして複製する
     TSF_Forth_clonethey(TSF_Forth_popthat())
     return None
+
+def TSF_shuffle_pushthe():   #TSF_doc:[stack]指定したスタックを積み上げ。
+    TSF_the=TSF_Forth_popthat()
+    TSF_Forth_pushargvs(TSF_Forth_stackvalue(TSF_the))
+    return None
+
+def TSF_shuffle_pushthis():   #TSF_doc:[]実行中スタックを丸ごとthatスタック(積み込み先スタック)に積み上げ。
+    TSF_Forth_pushargvs(TSF_Forth_stackvalue(TSF_Forth_stackthis()))
+    return None
+
+def TSF_shuffle_pushthat():   #TSF_doc:[]thatスタック(積み込み先スタック)を丸ごとthatスタック(積み込み先スタック)に積み上げ。
+    TSF_Forth_pushargvs(TSF_Forth_stackvalue(TSF_Forth_stackthat()))
+    return None
+
+def TSF_shuffle_pushthey():   #TSF_doc:[]スタック名一覧を丸ごとthatスタック(積み込み先スタック)に積み上げ。
+    TSF_Forth_pushargvs(list(TSF_Forth_stackskeys()))
+    return None
+
+
 
 def TSF_shuffle_debug():    #TSF_doc:「TSF/TSF_shuffle.py」単体テスト風デバッグ関数。
     TSF_debug_log=""
