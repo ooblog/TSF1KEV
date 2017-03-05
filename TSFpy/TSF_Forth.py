@@ -65,9 +65,13 @@ def TSF_Forth_this():    #TSF_doc:thatスタックの変更。1スタック積�
     return TSF_Forth_popthat()
 
 def TSF_Forth_echoes():    #TSF_doc:[…valueB,valueA,count]スタック内容をstdout表示する。count自身とcount分スタック積み下ろし。
-    TSF_loop=TSF_Forth_pintthat()
-    for TSF_echocount in range(TSF_loop):
+#    TSF_loop=TSF_Forth_pintthat()
+#    TSF_countlen=TSF_Forth_pintthat()
+    TSF_countlen=TSF_Forth_pintthe(TSF_stackthat)
+    for TSF_count in range(TSF_countlen):
         TSF_io_printlog(TSF_Forth_popthat())
+#    for TSF_echocount in range(TSF_loop):
+#        TSF_io_printlog(TSF_Forth_popthat())
     return None
 
 def TSF_Forth_view(TSF_the,TSF_view_io=True,TSF_view_log=""):    #TSF_doc:スタックの内容をテキスト表示(TSFAPI)。
@@ -258,20 +262,8 @@ def TSF_Forth_stackthat(TSF_that=None):    #TSF_doc:thatスタックの変更(TS
 def TSF_Forth_stacklen(TSF_the):    #TSF_doc:thisスタックの個数(TSFAPI)。
     return len(TSF_stacks.get(TSF_the,[]))
 
-#def TSF_Forth_stacklenthis():    #TSF_doc:スタックの個数(TSFAPI)。
-#    return len(TSF_stacks.get(TSF_stackthis,[]))
-
-#def TSF_Forth_stacklenthat():    #TSF_doc:thatスタックの個数(TSFAPI)。
-#    return len(TSF_stacks.get(TSF_stackthat,[]))
-
 def TSF_Forth_stackvalue(TSF_the):    #TSF_doc:スタックのデータ(TSFAPI)。
     return TSF_stacks[TSF_the] if TSF_the in TSF_stacks else []
-
-#def TSF_Forth_stackvaluethis():    #TSF_doc:thisスタックの個数(TSFAPI)。
-#    return TSF_stacks[TSF_stackthis] if TSF_the in TSF_stacks else []
-
-#def TSF_Forth_stackvaluethat():    #TSF_doc:thatスタックの個数(TSFAPI)。
-#    return TSF_stacks[TSF_stackthat] if TSF_the in TSF_stacks else []
 
 def TSF_Forth_stackslen():    #TSF_doc:スタック一覧の個数(TSFAPI)。
     return len(TSF_stacks)
@@ -304,19 +296,20 @@ def TSF_Forth_pintthe(TSF_that):    #TSF_doc:スタックから数値として�
     TSF_calcQ=TSF_Forth_popthat()
     if '|' in TSF_calcQ:
         TSF_calcN,TSF_calcD=TSF_calcQ.replace('m','-').replace('p','').split('|')
+        print("TSF_calcN,TSF_calcD=",TSF_calcQ,TSF_calcN,TSF_calcD)
         TSF_popdata=TSF_io_intstr0x(TSF_calcN)//TSF_io_intstr0x(TSF_calcD)
     else:
         TSF_calcN=TSF_calcQ.replace('m','-').replace('p','')
         TSF_popdata=TSF_io_intstr0x(TSF_calcN)
     return TSF_popdata
 
-def TSF_Forth_pintthis():    #TSF_doc:実行中スタックから数値として積み下ろす(TSFAPI)。
-    TSF_popdata=TSF_Forth_pintthe(TSF_stackthis)
-    return TSF_popdata
+#def TSF_Forth_pintthis():    #TSF_doc:実行中スタックから数値として積み下ろす(TSFAPI)。
+#    TSF_popdata=TSF_Forth_pintthe(TSF_stackthis)
+#    return TSF_popdata
 
-def TSF_Forth_pintthat():    #TSF_doc:積込先スタックから数値として積み下ろす(TSFAPI)。
-    TSF_popdata=TSF_Forth_pintthe(TSF_stackthat)
-    return TSF_popdata
+#def TSF_Forth_pintthat():    #TSF_doc:積込先スタックから数値として積み下ろす(TSFAPI)。
+#    TSF_popdata=TSF_Forth_pintthe(TSF_stackthat)
+#    return TSF_popdata
 
 def TSF_Forth_pushthe(TSF_that,TSF_pushdata):    #TSF_doc:スタックに積み上げる(TSFAPI)。
     global TSF_stacks
@@ -345,16 +338,7 @@ def TSF_Forth_peekthe(TSF_the,TSF_count):    #TSF_doc:スタックの読込(TSFA
             TSF_peekdata=TSF_stacks[TSF_the][TSF_count]
         elif -len(TSF_stacks[TSF_the]) <= TSF_count < 0:
             TSF_peekdata=TSF_stacks[TSF_the][TSF_count]
-#    print("TSF_Forth_peekthe",TSF_peekdata,TSF_count)
     return TSF_peekdata
-
-#def TSF_Forth_peekthis(TSF_count):    #TSF_doc:実行中スタックの読込(TSFAPI)。
-#    TSF_peekdata=TSF_Forth_peekthe(TSF_stackthis,TSF_count)
-#    return TSF_peekdata
-
-#def TSF_Forth_peekthat(TSF_count):    #TSF_doc:積込先スタックの読込(TSFAPI)。
-#    TSF_peekdata=TSF_Forth_peekthe(TSF_stackthat,TSF_count)
-#    return TSF_peekdata
 
 def TSF_Forth_shufflethe(TSF_the):    #TSF_doc:スタックのシャッフル(TSFAPI)。
     if TSF_the in TSF_stacks:
@@ -373,36 +357,14 @@ def TSF_Forth_pokethe(TSF_the,TSF_count,TSF_poke):    #TSF_doc:スタックへ�
         TSF_pokeerr=2
     return TSF_pokeerr
 
-#def TSF_Forth_pokethis(TSF_count,TSF_poke):    #TSF_doc:実行中スタックの読込(TSFAPI)。
-#    TSF_pokeerr=TSF_Forth_peekthe(TSF_stackthis,TSF_count,TSF_poke)
-#    return TSF_pokeerr
-
-#def TSF_Forth_pokethat(TSF_count,TSF_poke):    #TSF_doc:積込先スタックの読込(TSFAPI)。
-#    TSF_pokeerr=TSF_Forth_peekthe(TSF_stackthat,TSF_count,TSF_poke)
-#    return TSF_pokeerr
-
 def TSF_Forth_delthe(TSF_the):   #TSF_doc:スタックを削除(TSFAPI)。
     if TSF_the in TSF_stacks:
         del TSF_stacks[TSF_the]
     return None if TSF_stackthis != TSF_the else ""
 
-#def TSF_Forth_delthis():   #TSF_doc:実行中スタックを削除(TSFAPI)。
-#    TSF_Forth_delthe(TSF_stackthis)
-#    return None if TSF_stackthis != TSF_stackthis else ""
-
-#def TSF_Forth_delthat():   #TSF_doc:積込先スタックを削除(TSFAPI)。
-#    TSF_Forth_delthe(TSF_stackthat)
-#    return None if TSF_stackthis != TSF_stackthat else ""
-
 def TSF_Forth_clonethe(TSF_clone,TSF_the):   #TSF_doc:スタックを複製する(TSFAPI)
     if TSF_clone in TSF_stacks:
         TSF_stacks[TSF_clone]=list(tuple(TSF_stacks[TSF_the] if TSF_the in TSF_stacks else []))
-
-#def TSF_Forth_clonethis(TSF_clone):   #TSF_doc:実行中スタックを複製する(TSFAPI)
-#    TSF_Forth_clonethe(TSF_clone,TSF_stackthi)
-
-#def TSF_Forth_clonethat(TSF_clone):   #TSF_doc:積込先スタックを複製する(TSFAPI)
-#    TSF_Forth_clonethe(TSF_clone,TSF_stackthat)
 
 def TSF_Forth_clonethey(TSF_clone):   #TSF_doc:(TSFAPI)
     if TSF_clone in TSF_stacks:
