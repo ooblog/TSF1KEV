@@ -258,11 +258,11 @@ def TSF_Forth_stackthat(TSF_that=None):    #TSF_doc:thatスタックの変更(TS
 def TSF_Forth_stacklen(TSF_the):    #TSF_doc:thisスタックの個数(TSFAPI)。
     return len(TSF_stacks.get(TSF_the,[]))
 
-def TSF_Forth_stacklenthis():    #TSF_doc:スタックの個数(TSFAPI)。
-    return len(TSF_stacks.get(TSF_stackthis,[]))
+#def TSF_Forth_stacklenthis():    #TSF_doc:スタックの個数(TSFAPI)。
+#    return len(TSF_stacks.get(TSF_stackthis,[]))
 
-def TSF_Forth_stacklenthat():    #TSF_doc:thatスタックの個数(TSFAPI)。
-    return len(TSF_stacks.get(TSF_stackthat,[]))
+#def TSF_Forth_stacklenthat():    #TSF_doc:thatスタックの個数(TSFAPI)。
+#    return len(TSF_stacks.get(TSF_stackthat,[]))
 
 def TSF_Forth_stackvalue(TSF_the):    #TSF_doc:スタックのデータ(TSFAPI)。
     return TSF_stacks[TSF_the] if TSF_the in TSF_stacks else []
