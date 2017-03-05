@@ -12,10 +12,10 @@ def TSF_calc_Initwords(TSF_words):    #TSF_doc:電卓関連のワードを追加
     TSF_words["#TSF_brackets"]=TSF_calc_brackets; TSF_words["#数式に連結"]=TSF_calc_brackets
     TSF_words["#TSF_calcFX"]=TSF_calc_calcFX; TSF_words["#分数計算"]=TSF_calc_calcFX
     TSF_words["#TSF_calcFXQQ"]=TSF_calc_calcFXQQ; TSF_words["#分数九九"]=TSF_calc_calcFXQQ
-    TSF_words["#TSF_calcDC"]=TSF_calc_calcDC; TSF_words["#分数計算"]=TSF_calc_calcDC
-    TSF_words["#TSF_calcDCQQ"]=TSF_calc_calcDCQQ; TSF_words["#分数九九"]=TSF_calc_calcDCQQ
-    TSF_words["#TSF_calcKN"]=TSF_calc_calcKN; TSF_words["#分数計算"]=TSF_calc_calcKN
-    TSF_words["#TSF_calcKNQQ"]=TSF_calc_calcKNQQ; TSF_words["#分数九九"]=TSF_calc_calcKNQQ
+    TSF_words["#TSF_calcDC"]=TSF_calc_calcDC; TSF_words["#小数計算"]=TSF_calc_calcDC
+    TSF_words["#TSF_calcDCQQ"]=TSF_calc_calcDCQQ; TSF_words["#小数九九"]=TSF_calc_calcDCQQ
+    TSF_words["#TSF_calcKN"]=TSF_calc_calcKN; TSF_words["#単位計算"]=TSF_calc_calcKN
+    TSF_words["#TSF_calcKNQQ"]=TSF_calc_calcKNQQ; TSF_words["#単位九九"]=TSF_calc_calcKNQQ
     TSF_words["#TSF_calcPR"]=TSF_calc_calcPR; TSF_words["#有効桁数"]=TSF_calc_calcPR
     TSF_words["#TSF_calcRO"]=TSF_calc_calcRO; TSF_words["#端数処理"]=TSF_calc_calcRO
     return TSF_words

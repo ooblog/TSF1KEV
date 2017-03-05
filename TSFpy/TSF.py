@@ -5,8 +5,9 @@ from __future__ import division,print_function,absolute_import,unicode_literals
 from TSF_io import *
 from TSF_Forth import *
 from TSF_shuffle import *
-from TSF_time import *
+from TSF_replace import *
 from TSF_calc import *
+from TSF_time import *
 
 
 def TSF_command_about():    #TSF_doc:TSFの概要とサンプルプログラム。
@@ -32,8 +33,8 @@ def TSF_command_about():    #TSF_doc:TSFの概要とサンプルプログラム�
         "「#TSF_brackets」などの文字列連結と「#TSF_calcDC」などの電卓を組み合わせれば逆ポーランド記法への数式変換は強いられないはず。\n"
         ,TSF_style="N")
     TSF_Forth_setTSF("calcFXtest:","\t".join(["「1 3 m1|2」を数式「[2]/[1]-[0]」で連結→","1","3","m1|2","[2]/[1]-[0]","#TSF_calcFX","2","#TSF_join","1","#TSF_echoes"]))
-    TSF_Forth_setTSF("calcDCtest:","\t".join(["「1 / 3 - m1|2」を数式に連結(ついでに小数デモ)→","1","/","3","-","m1|2","5","#TSF_join","#TSF_calcDC","2","#TSF_join","1","#TSF_echoes"]))
-    TSF_Forth_setTSF("calcKNテスト:","\t".join(["「一割る三引く(マイナス二分の一)」(ついでに単位付き計算デモ)は","一割る三引く(マイナス二分の一)","を単位付き計算する","2","個分連結","1","行表示する"]))
+    TSF_Forth_setTSF("calcDCtest:","\t".join(["「1 / 3 - m1|2」を数式に連結(ついでに小数デモ)→","1","/","3","-","m1|2","5","#TSF_joinN","#TSF_calcDC","2","#TSF_joinN","1","#TSF_echoes"]))
+    TSF_Forth_setTSF("calcKNテスト:","\t".join(["「一割る三引く(マイナス二分の一)」(ついでに単位付き計算デモ)は","一割る三引く(マイナス二分の一)","#単位計算","2","#N個連結","1","#N行表示"]))
     TSF_Forth_setTSF("aboutCalc:",
         "「calc」系ワード分数電卓の概要(暫定案)。\n"
         "「#TSF_calcFX」は分数表記。「#TSF_calcDC」は小数表記。「#TSF_calcKN」億以上の単位を漢字表記。全部基本的には分数計算。\n"
@@ -154,7 +155,7 @@ def TSF_command_help():    #TSF_doc:TSFコマンド一覧。
 TSF_about_mergefile="TSF_about.tsf"
 TSF_mergefile=""
 TSF_argvs=TSF_io_argvs()
-TSF_Forth_init(TSF_argvs,[TSF_shuffle_Initwords,TSF_calc_Initwords,TSF_time_Initwords])
+TSF_Forth_init(TSF_argvs,[TSF_shuffle_Initwords,TSF_replace_Initwords,TSF_calc_Initwords,TSF_time_Initwords])
 if len(TSF_argvs) >= 2:
     TSF_mergefile=TSF_argvs[1]
 if os.path.isfile(TSF_mergefile):
