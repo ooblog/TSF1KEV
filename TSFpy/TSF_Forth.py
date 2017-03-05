@@ -386,23 +386,23 @@ def TSF_Forth_delthe(TSF_the):   #TSF_doc:スタックを削除(TSFAPI)。
         del TSF_stacks[TSF_the]
     return None if TSF_stackthis != TSF_the else ""
 
-def TSF_Forth_delthis():   #TSF_doc:実行中スタックを削除(TSFAPI)。
-    TSF_Forth_delthe(TSF_stackthis)
-    return None if TSF_stackthis != TSF_stackthis else ""
+#def TSF_Forth_delthis():   #TSF_doc:実行中スタックを削除(TSFAPI)。
+#    TSF_Forth_delthe(TSF_stackthis)
+#    return None if TSF_stackthis != TSF_stackthis else ""
 
-def TSF_Forth_delthat():   #TSF_doc:積込先スタックを削除(TSFAPI)。
-    TSF_Forth_delthe(TSF_stackthat)
-    return None if TSF_stackthis != TSF_stackthat else ""
+#def TSF_Forth_delthat():   #TSF_doc:積込先スタックを削除(TSFAPI)。
+#    TSF_Forth_delthe(TSF_stackthat)
+#    return None if TSF_stackthis != TSF_stackthat else ""
 
 def TSF_Forth_clonethe(TSF_clone,TSF_the):   #TSF_doc:スタックを複製する(TSFAPI)
     if TSF_clone in TSF_stacks:
         TSF_stacks[TSF_clone]=list(tuple(TSF_stacks[TSF_the] if TSF_the in TSF_stacks else []))
 
-def TSF_Forth_clonethis(TSF_clone):   #TSF_doc:実行中スタックを複製する(TSFAPI)
-    TSF_Forth_clonethe(TSF_clone,TSF_stackthi)
+#def TSF_Forth_clonethis(TSF_clone):   #TSF_doc:実行中スタックを複製する(TSFAPI)
+#    TSF_Forth_clonethe(TSF_clone,TSF_stackthi)
 
-def TSF_Forth_clonethat(TSF_clone):   #TSF_doc:積込先スタックを複製する(TSFAPI)
-    TSF_Forth_clonethe(TSF_clone,TSF_stackthat)
+#def TSF_Forth_clonethat(TSF_clone):   #TSF_doc:積込先スタックを複製する(TSFAPI)
+#    TSF_Forth_clonethe(TSF_clone,TSF_stackthat)
 
 def TSF_Forth_clonethey(TSF_clone):   #TSF_doc:(TSFAPI)
     if TSF_clone in TSF_stacks:
