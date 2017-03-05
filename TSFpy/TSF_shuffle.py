@@ -29,9 +29,9 @@ def TSF_shuffle_Initwords(TSF_words):    #TSF_doc:スタック並び替え関連
     TSF_words["#TSF_peekrndthe"]=TSF_shuffle_peekrndthe; TSF_words["#スタック乱択"]=TSF_shuffle_peekrndthe
     TSF_words["#TSF_peekrndthis"]=TSF_shuffle_peekrndthis; TSF_words["#実行中スタック乱択"]=TSF_shuffle_peekrndthis
     TSF_words["#TSF_peekrndthat"]=TSF_shuffle_peekrndthat; TSF_words["#積込先スタック乱択"]=TSF_shuffle_peekrndthat
-#    TSF_words["#TSF_peekcyclethe"]=TSF_shuffle_peekcyclethe; TSF_words["#スタック周択"]=TSF_shuffle_peekcyclethe
-#    TSF_words["#TSF_peekcyclethis"]=TSF_shuffle_peekcyclethis; TSF_words["#実行中スタック周択"]=TSF_shuffle_peekcyclethis
-#    TSF_words["#TSF_peekcyclethat"]=TSF_shuffle_peekcyclethat; TSF_words["#積込先スタック周択"]=TSF_shuffle_peekcyclethat
+    TSF_words["#TSF_peekcyclethe"]=TSF_shuffle_peekcyclethe; TSF_words["#スタック周択"]=TSF_shuffle_peekcyclethe
+    TSF_words["#TSF_peekcyclethis"]=TSF_shuffle_peekcyclethis; TSF_words["#実行中スタック周択"]=TSF_shuffle_peekcyclethis
+    TSF_words["#TSF_peekcyclethat"]=TSF_shuffle_peekcyclethat; TSF_words["#積込先スタック周択"]=TSF_shuffle_peekcyclethat
     TSF_words["#TSF_shufflethe"]=TSF_shuffle_shufflethe; TSF_words["#スタックシャッフル"]=TSF_shuffle_shufflethe
     TSF_words["#TSF_shufflethat"]=TSF_shuffle_shufflethat; TSF_words["#積込先スタックシャッフル"]=TSF_shuffle_shufflethat
     TSF_words["#TSF_carbonthe"]=TSF_shuffle_carbonthe; TSF_words["#スタックの表面を複製"]=TSF_shuffle_carbonthe
@@ -43,9 +43,9 @@ def TSF_shuffle_Initwords(TSF_words):    #TSF_doc:スタック並び替え関連
     TSF_words["#TSF_pokerndthe"]=TSF_shuffle_pokerndthe; TSF_words["#スタックのどこかに上書き"]=TSF_shuffle_pokerndthe
     TSF_words["#TSF_pokerndthis"]=TSF_shuffle_pokerndthis; TSF_words["#実行中スタックのどこかに上書き"]=TSF_shuffle_pokerndthis
     TSF_words["#TSF_pokerndthat"]=TSF_shuffle_pokerndthat; TSF_words["#積込先スタックのどこかに上書き"]=TSF_shuffle_pokerndthat
-#    TSF_words["#TSF_pokecyclethe"]=TSF_shuffle_pokecyclethe; TSF_words["#スタック周択"]=TSF_shuffle_pokecyclethe
-#    TSF_words["#TSF_pokecyclethis"]=TSF_shuffle_pokecyclethis; TSF_words["#実行中スタック周択"]=TSF_shuffle_pokecyclethis
-#    TSF_words["#TSF_pokecyclethat"]=TSF_shuffle_pokecyclethat; TSF_words["#積込先スタック周択"]=TSF_shuffle_pokecyclethat
+    TSF_words["#TSF_pokecyclethe"]=TSF_shuffle_pokecyclethe; TSF_words["#スタックに周択上書き"]=TSF_shuffle_pokecyclethe
+    TSF_words["#TSF_pokecyclethis"]=TSF_shuffle_pokecyclethis; TSF_words["#実行中スタックに周択上書き"]=TSF_shuffle_pokecyclethis
+    TSF_words["#TSF_pokecyclethat"]=TSF_shuffle_pokecyclethat; TSF_words["#積込先スタックに周択上書き"]=TSF_shuffle_pokecyclethat
     TSF_words["#TSF_delthe"]=TSF_shuffle_delthe; TSF_words["#スタックを削除"]=TSF_shuffle_delthe
     TSF_words["#TSF_delthis"]=TSF_shuffle_delthis; TSF_words["#実行中スタックを削除"]=TSF_shuffle_delthis
     TSF_words["#TSF_delthat"]=TSF_shuffle_delthat; TSF_words["#積込先スタックを削除"]=TSF_shuffle_delthat
@@ -145,6 +145,21 @@ def TSF_shuffle_peekrndthat():   #TSF_doc:[]積込先スタックから読み込
     TSF_Forth_pushthat(TSF_Forth_peekthe(TSF_the,TSF_count))
     return None
 
+def TSF_shuffle_peekcyclethe():   #TSF_doc:[stack,counter]スタックから読み込む(counterループ丸め)。2スタック積み下ろして、1スタック積み上げ。
+    TSF_count=TSF_Forth_popintthe(TSF_Forth_popthat())
+    TSF_Forth_pushthat(TSF_Forth_peekcyclethe(TSF_Forth_popthat(),TSF_count))
+    return None
+
+def TSF_shuffle_peekcyclethis():   #TSF_doc:[counter]実行中スタックから読み込む(counterループ丸め)。1スタック積み下ろして、1スタック積み上げ。
+    TSF_count=TSF_Forth_popintthe(TSF_Forth_stackthis())
+    TSF_Forth_pushthat(TSF_Forth_peekcyclethe(TSF_Forth_popthat(),TSF_count))
+    return None
+
+def TSF_shuffle_peekcyclethat():   #TSF_doc:[counter]積込先スタックから読み込む(counterループ丸め)。1スタック積み下ろして、1スタック積み上げ。
+    TSF_count=TSF_Forth_popintthe(TSF_Forth_stackthat())
+    TSF_Forth_pushthat(TSF_Forth_peekcyclethe(TSF_Forth_popthat(),TSF_count))
+    return None
+
 def TSF_shuffle_shufflethe():   #TSF_doc:[stack]スタックをシャッフル。1スタック積み下ろし。
     TSF_Forth_shufflethe(TSF_Forth_popthat())
     return None
@@ -199,6 +214,24 @@ def TSF_shuffle_pokerndthat():   #TSF_doc:[poke]積込先スタックに上書�
     TSF_the=TSF_Forth_stackthat()
     TSF_count=random.randint(1,TSF_Forth_stacklen(TSF_the))-1
     TSF_Forth_pokethe(TSF_the,TSF_count,TSF_Forth_popthat())
+    return None
+
+def TSF_shuffle_pokecyclethe():   #TSF_doc:[poke,stack,counter]積込先スタックに上書き。3スタック積み下ろし。
+    TSF_count=TSF_Forth_popintthe(TSF_Forth_stackthat())
+    TSF_the=TSF_Forth_popthat()
+    TSF_Forth_pokecyclethe(TSF_the,TSF_count,TSF_Forth_popthat())
+    return None
+
+def TSF_shuffle_pokecyclethis():   #TSF_doc:[stack,counter]実行中スタックに上書き。2スタック積み下ろし。
+    TSF_count=TSF_Forth_popintthe(TSF_Forth_stackthat())
+    TSF_the=TSF_Forth_stackthis()
+    TSF_Forth_pokecyclethe(TSF_the,TSF_count,TSF_Forth_popthat())
+    return None
+
+def TSF_shuffle_pokecyclethat():   #TSF_doc:[stack,counter]積込先スタックに上書き。2スタック積み下ろし。
+    TSF_count=TSF_Forth_popintthe(TSF_Forth_stackthat())
+    TSF_the=TSF_Forth_stackthat()
+    TSF_Forth_pokecyclethe(TSF_the,TSF_count,TSF_Forth_popthat())
     return None
 
 def TSF_shuffle_delthe():   #TSF_doc:[stack]スタックを削除。
