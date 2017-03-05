@@ -12,7 +12,13 @@ def TSF_shuffle_Initwords(TSF_words):    #TSF_doc:スタック並び替え関連
     TSF_words["#TSF_swapBAthat"]=TSF_shuffle_swapBAthat; TSF_words["#スタックBA交換"]=TSF_shuffle_swapBAthat
     TSF_words["#TSF_swapCAthat"]=TSF_shuffle_swapCAthat; TSF_words["#スタックCA交換"]=TSF_shuffle_swapCAthat
     TSF_words["#TSF_swapCBthat"]=TSF_shuffle_swapCBthat; TSF_words["#スタックCB交換"]=TSF_shuffle_swapCBthat
-    TSF_words["#TSF_Nreverse"]=TSF_shuffle_reverse; TSF_words["#スタックN個逆順"]=TSF_shuffle_reverse
+    TSF_words["#TSF_reverseN"]=TSF_shuffle_reverseN; TSF_words["#スタックN個逆順"]=TSF_shuffle_reverseN
+#    TSF_words["#TSF_Npushthe"]=TSF_shuffle_pushthe; TSF_words["#スタックN個をスタックに積む"]=TSF_shuffle_pushthe
+#    TSF_words["#TSF_Npushthis"]=TSF_shuffle_pushthis; TSF_words["#スタックN個を実行中スタックに積む"]=TSF_shuffle_pushthis
+#        "#TSF_Njoin":TSF_Forth_join,  "N個連結":TSF_Forth_join,
+#        "#TSF_Nbetween":TSF_Forth_joinC,  "挟んでN個連結":TSF_Forth_joinC,
+#        "#TSF_split":TSF_Forth_split,  "文字で分割":TSF_Forth_split,
+#        "#TSF_chars":TSF_Forth_chars,  "一文字ずつに分離":TSF_Forth_chars,
     TSF_words["#TSF_lenthe"]=TSF_shuffle_lenthe; TSF_words["#スタック個数"]=TSF_shuffle_lenthe
     TSF_words["#TSF_lenthis"]=TSF_shuffle_lenthis; TSF_words["#実行中スタック個数"]=TSF_shuffle_lenthis
     TSF_words["#TSF_lenthat"]=TSF_shuffle_lenthat; TSF_words["#積込先スタック個数"]=TSF_shuffle_lenthat
@@ -51,14 +57,10 @@ def TSF_shuffle_Initwords(TSF_words):    #TSF_doc:スタック並び替え関連
     TSF_words["#TSF_pushthis"]=TSF_shuffle_pushthis; TSF_words["#実行中スタックを積む"]=TSF_shuffle_pushthis
     TSF_words["#TSF_pushthat"]=TSF_shuffle_pushthat; TSF_words["#積込先スタックを積む"]=TSF_shuffle_pushthat
     TSF_words["#TSF_pushthey"]=TSF_shuffle_pushthey; TSF_words["#スタック名一覧を積む"]=TSF_shuffle_pushthey
+#    TSF_words["#TSF_reversethe"]=TSF_shuffle_pushthe; TSF_words["#スタックを逆順"]=TSF_shuffle_pushthe
+#    TSF_words["#TSF_reversethis"]=TSF_shuffle_pushthis; TSF_words["#実行中スタックを逆順"]=TSF_shuffle_pushthis
+#    TSF_words["#TSF_reversethat"]=TSF_shuffle_pushthat; TSF_words["#積込先スタックを逆順"]=TSF_shuffle_pushthat
     return TSF_words
-#        "#TSF_popthe":TSF_Forth_popthe,  "スタックから拾う":TSF_Forth_popthe,
-#        "#TSF_popthis":TSF_Forth_popthis,  "実行中スタックから拾う":TSF_Forth_popthis,
-#        "#TSF_popthat":TSF_Forth_popthat,  "積込先スタックから除く":TSF_Forth_popthat,
-#        "#TSF_join":TSF_Forth_join,  "個分連結":TSF_Forth_join,
-#        "#TSF_joinC":TSF_Forth_joinC,  "で回数分挟んで連結":TSF_Forth_joinC,
-#        "#TSF_split":TSF_Forth_split,  "の文字で分離":TSF_Forth_split,
-#        "#TSF_chars":TSF_Forth_chars,  "一文字ずつに分離":TSF_Forth_chars,
 #        "#TSF_replacethe":TSF_Forth_replacethe,  "スタックをテキストとみなして置換する":TSF_Forth_replacethe,
 #        "#TSF_resubthe":TSF_Forth_resubthe,  "スタックをテキストとみなして正規表現で置換する":TSF_Forth_resubthe,
 #        "#TSF_replacethat":TSF_Forth_replacethat,  "一行を置換する":TSF_Forth_replacethat,
@@ -86,7 +88,7 @@ def TSF_shuffle_swapCBthat():   #TSF_doc:[stackC,stackB,stackA]スタックBと�
     TSF_Forth_pushthat(TSF_tsvC)
     TSF_Forth_pushthat(TSF_tsvA)
 
-def TSF_shuffle_reverse():   #TSF_doc:[stackD,stackC,stackB,stackA,count]スタックを逆順にする。
+def TSF_shuffle_reverseN():   #TSF_doc:[stackD,stackC,stackB,stackA,count]スタックを逆順にする。
     TSF_countlen=TSF_Forth_pintthat()
     TSF_reverse=[""]*TSF_countlen
     for TSF_count in range(TSF_countlen):
@@ -116,13 +118,15 @@ def TSF_shuffle_peekthe():   #TSF_doc:[stack,counter]スタックから読み込
     return None
 
 def TSF_shuffle_peekthis():   #TSF_doc:[counter]実行中スタックから読み込む。1スタック積み下ろして、1スタック積み上げ。
-    TSF_count=TSF_Forth_pintthis()
-    TSF_Forth_pushthat(TSF_Forth_peekthis(TSF_count))
+    TSF_count=TSF_Forth_pintthat()
+    TSF_Forth_pushthat(TSF_Forth_peekthe(TSF_Forth_stackthis(),TSF_count))
+#    TSF_Forth_pushthat(TSF_Forth_peekthis(TSF_count))
     return None
 
 def TSF_shuffle_peekthat():   #TSF_doc:[counter]積込先スタックから読み込む。1スタック積み下ろして、1スタック積み上げ。
     TSF_count=TSF_Forth_pintthat()
-    TSF_Forth_pushthat(TSF_Forth_peekthat(TSF_count))
+    TSF_Forth_pushthat(TSF_Forth_peekthe(TSF_Forth_stackthat(),TSF_count))
+#    TSF_Forth_pushthat(TSF_Forth_peekthat(TSF_count))
     return None
 
 def TSF_shuffle_peekrndthe():   #TSF_doc:[stack]スタックから読み込む。1スタック積み下ろして、1スタック積み上げ。
@@ -132,13 +136,15 @@ def TSF_shuffle_peekrndthe():   #TSF_doc:[stack]スタックから読み込む�
     return None
 
 def TSF_shuffle_peekrndthis():   #TSF_doc:[]実行中スタックから読み込む。1スタック積み上げ。
-    TSF_count=random.randint(1,TSF_Forth_stacklenthis())-1
-    TSF_Forth_pushthat(TSF_Forth_peekthis(TSF_count))
+    TSF_the=TSF_Forth_stackthis()
+    TSF_count=random.randint(1,TSF_Forth_stacklen(TSF_the))-1
+    TSF_Forth_pushthat(TSF_Forth_peekthe(TSF_the,TSF_count))
     return None
 
 def TSF_shuffle_peekrndthat():   #TSF_doc:[]積込先スタックから読み込む。1スタック積み上げ。
-    TSF_count=random.randint(1,TSF_Forth_stacklenthat())-1
-    TSF_Forth_pushthat(TSF_Forth_peekthat(TSF_count))
+    TSF_the=TSF_Forth_stackthat()
+    TSF_count=random.randint(1,TSF_Forth_stacklen(TSF_the))-1
+    TSF_Forth_pushthat(TSF_Forth_peekthe(TSF_the,TSF_count))
     return None
 
 def TSF_shuffle_shufflethe():   #TSF_doc:[stack]スタックをシャッフル。1スタック積み下ろし。
@@ -154,11 +160,13 @@ def TSF_shuffle_carbonthe():   #TSF_doc:[stack]スタックの一番上のスタ
     return None
 
 def TSF_shuffle_carbonthis():   #TSF_doc:[]実行中スタックの一番上のスタックを複製する。0スタック積み下ろし。
-    TSF_Forth_pushthat(TSF_Forth_peekthis(-1))
+#    TSF_Forth_pushthat(TSF_Forth_peekthis(-1))
+    TSF_Forth_pushthat(TSF_Forth_peekthe(TSF_Forth_stackthis(),-1))
     return None
 
 def TSF_shuffle_carbonthat():   #TSF_doc:[]積込先スタックの一番上のスタックを複製する。0スタック積み下ろし。
-    TSF_Forth_pushthat(TSF_Forth_peekthat(-1))
+#    TSF_Forth_pushthat(TSF_Forth_peekthat(-1))
+    TSF_Forth_pushthat(TSF_Forth_peekthe(TSF_Forth_stackthat(),-1))
     return None
 
 def TSF_shuffle_pokethe():   #TSF_doc:[poke,stack,counter]積込先スタックに上書き。3スタック積み下ろし。

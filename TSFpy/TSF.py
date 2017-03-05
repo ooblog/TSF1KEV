@@ -132,7 +132,7 @@ def TSF_command_calender(TSF_argvs):    #TSF_doc:TSFの日時関連テスト。
     TSF_Forth_run()
 
 def TSF_command_help():    #TSF_doc:TSFコマンド一覧。
-    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","help:","#TSF_pushthe","help:","#TSF_lenthe","#TSF_Nreverse","help:","#TSF_lenthe","#TSF_echoes","0","#TSF_fin."]))
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","help:","#TSF_pushthe","help:","#TSF_lenthe","#TSF_reverseN","help:","#TSF_lenthe","#TSF_echoes","0","#TSF_fin."]))
     TSF_Forth_setTSF("help:",
         'usage: ./TSF.py [command|file.tsf] [argv] ...\n'
         'commands:\n'

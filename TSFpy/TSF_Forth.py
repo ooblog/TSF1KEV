@@ -348,13 +348,13 @@ def TSF_Forth_peekthe(TSF_the,TSF_count):    #TSF_doc:スタックの読込(TSFA
 #    print("TSF_Forth_peekthe",TSF_peekdata,TSF_count)
     return TSF_peekdata
 
-def TSF_Forth_peekthis(TSF_count):    #TSF_doc:実行中スタックの読込(TSFAPI)。
-    TSF_peekdata=TSF_Forth_peekthe(TSF_stackthis,TSF_count)
-    return TSF_peekdata
+#def TSF_Forth_peekthis(TSF_count):    #TSF_doc:実行中スタックの読込(TSFAPI)。
+#    TSF_peekdata=TSF_Forth_peekthe(TSF_stackthis,TSF_count)
+#    return TSF_peekdata
 
-def TSF_Forth_peekthat(TSF_count):    #TSF_doc:積込先スタックの読込(TSFAPI)。
-    TSF_peekdata=TSF_Forth_peekthe(TSF_stackthat,TSF_count)
-    return TSF_peekdata
+#def TSF_Forth_peekthat(TSF_count):    #TSF_doc:積込先スタックの読込(TSFAPI)。
+#    TSF_peekdata=TSF_Forth_peekthe(TSF_stackthat,TSF_count)
+#    return TSF_peekdata
 
 def TSF_Forth_shufflethe(TSF_the):    #TSF_doc:スタックのシャッフル(TSFAPI)。
     if TSF_the in TSF_stacks:
