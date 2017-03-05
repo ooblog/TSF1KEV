@@ -65,13 +65,9 @@ def TSF_Forth_this():    #TSF_doc:thatスタックの変更。1スタック積�
     return TSF_Forth_popthat()
 
 def TSF_Forth_echoes():    #TSF_doc:[…valueB,valueA,count]スタック内容をstdout表示する。count自身とcount分スタック積み下ろし。
-#    TSF_loop=TSF_Forth_pintthat()
-#    TSF_countlen=TSF_Forth_pintthat()
-    TSF_countlen=TSF_Forth_pintthe(TSF_stackthat)
+    TSF_countlen=TSF_Forth_popintthe(TSF_stackthat)
     for TSF_count in range(TSF_countlen):
         TSF_io_printlog(TSF_Forth_popthat())
-#    for TSF_echocount in range(TSF_loop):
-#        TSF_io_printlog(TSF_Forth_popthat())
     return None
 
 def TSF_Forth_view(TSF_the,TSF_view_io=True,TSF_view_log=""):    #TSF_doc:スタックの内容をテキスト表示(TSFAPI)。
@@ -119,7 +115,7 @@ def TSF_Forth_stylethe():    #TSF_doc:[style,stack]スタックの表示スタ�
     return None
 
 def TSF_Forth_stylethis():    #TSF_doc:[stack]実行中スタックの表示スタイルを指定する。1スタック積み下ろし。
-    TSF_Forth_style(TSF_stackthis,TSF_Forth_popthis())
+    TSF_Forth_style(TSF_stackthis,TSF_Forth_popthat())
     return None
 
 def TSF_Forth_stylethat():    #TSF_doc:[stack]積込先スタックの表示スタイルを指定する。1スタック積み下ろし。
@@ -292,7 +288,7 @@ def TSF_Forth_popthis():    #TSF_doc:thisからスタックから積み下ろす
     TSF_popdata=TSF_Forth_popthe(TSF_stackthis)
     return TSF_popdata
 
-def TSF_Forth_pintthe(TSF_that):    #TSF_doc:スタックから数値として積み下ろす(TSFAPI)。
+def TSF_Forth_popintthe(TSF_that):    #TSF_doc:スタックから数値として積み下ろす(TSFAPI)。
     TSF_calcQ=TSF_Forth_popthat()
     if '|' in TSF_calcQ:
         TSF_calcN,TSF_calcD=TSF_calcQ.replace('m','-').replace('p','').split('|')
@@ -302,14 +298,6 @@ def TSF_Forth_pintthe(TSF_that):    #TSF_doc:スタックから数値として�
         TSF_calcN=TSF_calcQ.replace('m','-').replace('p','')
         TSF_popdata=TSF_io_intstr0x(TSF_calcN)
     return TSF_popdata
-
-#def TSF_Forth_pintthis():    #TSF_doc:実行中スタックから数値として積み下ろす(TSFAPI)。
-#    TSF_popdata=TSF_Forth_pintthe(TSF_stackthis)
-#    return TSF_popdata
-
-#def TSF_Forth_pintthat():    #TSF_doc:積込先スタックから数値として積み下ろす(TSFAPI)。
-#    TSF_popdata=TSF_Forth_pintthe(TSF_stackthat)
-#    return TSF_popdata
 
 def TSF_Forth_pushthe(TSF_that,TSF_pushdata):    #TSF_doc:スタックに積み上げる(TSFAPI)。
     global TSF_stacks

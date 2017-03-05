@@ -21,13 +21,11 @@ def TSF_time_calender():   #TSF_doc:[timeformat]スタック内容を日時に�
     return None
 
 def TSF_time_diffminute():   #TSF_doc:[diffminute]時差を設定する。現在時刻も更新。1スタック積み下ろして、1スタック積み上げ。
-#    TSF_time_setdaytime(TSF_diffminute=TSF_Forth_pintthat())
-    TSF_time_setdaytime(TSF_diffminute=TSF_Forth_pintthe(TSF_Forth_stackthat()))
+    TSF_time_setdaytime(TSF_diffminute=TSF_Forth_popintthe(TSF_Forth_stackthat()))
     return None
 
 def TSF_time_overhour():   #TSF_doc:[overhour]徹夜時間を設定する。現在時刻も更新。1スタック積み下ろして、1スタック積み上げ。
-#    TSF_time_setdaytime(TSF_overhour=TSF_Forth_pintthat())
-    TSF_time_setdaytime(TSF_overhour=TSF_Forth_pintthe(TSF_Forth_stackthat()))
+    TSF_time_setdaytime(TSF_overhour=TSF_Forth_popintthe(TSF_Forth_stackthat()))
     return None
 
 def TSF_time_nowset():   #TSF_doc:[]設定を変えずに現在時刻のみを取得する。0スタック積み下ろし。
