@@ -177,12 +177,16 @@ def TSF_shuffle_pokethe():   #TSF_doc:[poke,stack,counter]積込先スタック�
 
 def TSF_shuffle_pokethis():   #TSF_doc:[stack,counter]実行中スタックに上書き。2スタック積み下ろし。
     TSF_count=TSF_Forth_pintthat()
-    TSF_Forth_pokethis(TSF_count,TSF_Forth_popthat())
+    TSF_the=TSF_Forth_stackthis()
+    TSF_Forth_pokethe(TSF_the,TSF_count,TSF_Forth_popthat())
+#    TSF_Forth_pokethis(TSF_count,TSF_Forth_popthat())
     return None
 
 def TSF_shuffle_pokethat():   #TSF_doc:[stack,counter]積込先スタックに上書き。2スタック積み下ろし。
     TSF_count=TSF_Forth_pintthat()
-    TSF_Forth_pokethat(TSF_count,TSF_Forth_popthat())
+    TSF_the=TSF_Forth_stackthat()
+    TSF_Forth_pokethe(TSF_the,TSF_count,TSF_Forth_popthat())
+#    TSF_Forth_pokethat(TSF_count,TSF_Forth_popthat())
     return None
 
 def TSF_shuffle_pokerndthe():   #TSF_doc:[poke,stack]積込先スタックに上書き。2スタック積み下ろし。
@@ -193,12 +197,16 @@ def TSF_shuffle_pokerndthe():   #TSF_doc:[poke,stack]積込先スタックに上
 
 def TSF_shuffle_pokerndthis():   #TSF_doc:[poke]実行中スタックに上書き。1スタック積み下ろし。
     TSF_count=random.randint(1,TSF_Forth_stacklenthis())-1
-    TSF_Forth_pokethis(TSF_count,TSF_Forth_popthat())
+    TSF_the=TSF_Forth_stackthis()
+    TSF_Forth_pokethe(TSF_the,TSF_count,TSF_Forth_popthat())
+#    TSF_Forth_pokethis(TSF_count,TSF_Forth_popthat())
     return None
 
 def TSF_shuffle_pokerndthat():   #TSF_doc:[poke]積込先スタックに上書き。1スタック積み下ろし。
     TSF_count=random.randint(1,TSF_Forth_stacklenthat())-1
-    TSF_Forth_pokethat(TSF_count,TSF_Forth_popthat())
+    TSF_the=TSF_Forth_stackthat()
+    TSF_Forth_pokethe(TSF_the,TSF_count,TSF_Forth_popthat())
+#    TSF_Forth_pokethat(TSF_count,TSF_Forth_popthat())
     return None
 
 def TSF_shuffle_delthe():   #TSF_doc:[stack]スタックを削除。

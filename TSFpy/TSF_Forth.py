@@ -373,13 +373,13 @@ def TSF_Forth_pokethe(TSF_the,TSF_count,TSF_poke):    #TSF_doc:スタックへ�
         TSF_pokeerr=2
     return TSF_pokeerr
 
-def TSF_Forth_pokethis(TSF_count,TSF_poke):    #TSF_doc:実行中スタックの読込(TSFAPI)。
-    TSF_pokeerr=TSF_Forth_peekthe(TSF_stackthis,TSF_count,TSF_poke)
-    return TSF_pokeerr
+#def TSF_Forth_pokethis(TSF_count,TSF_poke):    #TSF_doc:実行中スタックの読込(TSFAPI)。
+#    TSF_pokeerr=TSF_Forth_peekthe(TSF_stackthis,TSF_count,TSF_poke)
+#    return TSF_pokeerr
 
-def TSF_Forth_pokethat(TSF_count,TSF_poke):    #TSF_doc:積込先スタックの読込(TSFAPI)。
-    TSF_pokeerr=TSF_Forth_peekthe(TSF_stackthat,TSF_count,TSF_poke)
-    return TSF_pokeerr
+#def TSF_Forth_pokethat(TSF_count,TSF_poke):    #TSF_doc:積込先スタックの読込(TSFAPI)。
+#    TSF_pokeerr=TSF_Forth_peekthe(TSF_stackthat,TSF_count,TSF_poke)
+#    return TSF_pokeerr
 
 def TSF_Forth_delthe(TSF_the):   #TSF_doc:スタックを削除(TSFAPI)。
     if TSF_the in TSF_stacks:
