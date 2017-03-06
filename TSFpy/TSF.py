@@ -10,7 +10,15 @@ from TSF_calc import *
 from TSF_time import *
 
 
-def TSF_command_about():    #TSF_doc:TSFの概要とサンプルプログラム。
+def TSF_sample_run(TSF_sample_sepalete=None):    #TSF_doc:TSFサンプルプログラム実行。
+    TSF_Forth_addargvs(TSF_Forth_stackthat(),TSF_argvs); TSF_Forth_addargvslen(TSF_argvs)
+    if TSF_sample_sepalete != None:
+        TSF_Forth_viewthey()
+        if len(TSF_sample_sepalete) > 0:
+            TSF_io_printlog(TSF_sample_sepalete)
+    TSF_Forth_run()
+
+def TSF_sample_about():    #TSF_doc:TSFの概要とサンプルプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","main1:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("main1:","\t".join(["aboutTSF:","#TSF_pushthe","aboutTSF:","#TSF_lenthe","#TSF_echoes","main2:","#TSF_this"]))
     TSF_Forth_setTSF("main2:","\t".join(["#分数電卓のテスト","1","#TSF_echoes","16","#TSF_calcPR","calcFXtest:","#TSF_this","calcDCtest:","#TSF_this","calcKNテスト:","#TSF_this","#","1","#TSF_echoes","main3:","#TSF_this"]))
@@ -62,19 +70,21 @@ def TSF_command_about():    #TSF_doc:TSFの概要とサンプルプログラム�
         "「LISP」系ワードポーランド電卓の概要(暫定案)。\n"
         "RPNと大体同じだがこっちは括弧を必要。「(+ p1 p2 m3)」の様に引数の自由度が優先される(予定)。\n"
         ,TSF_style="N")
-    TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
-    TSF_Forth_viewthey()
-    print("-- TSF_command_about() --")
-    TSF_Forth_run()
+    TSF_sample_run("-- TSF_sample_about --")
+#    TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
+#    TSF_Forth_viewthey()
+#    print("-- TSF_sample_about() --")
+#    TSF_Forth_run()
 
-def TSF_command_Helloworld():    #TSF_doc:TSF_about.tsfより小さなサンプルHelloworldプログラム。
+def TSF_sample_Helloworld():    #TSF_doc:TSF_about.tsfより小さなサンプルHelloworldプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["Hello world","1","#TSF_echoes","0","#TSF_fin."]))
-    TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
-    TSF_Forth_viewthey()
-    print("-- TSF_command_Helloworld() --")
-    TSF_Forth_run()
+    TSF_sample_run("-- TSF_sample_Helloworld --")
+#    TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
+#    TSF_Forth_viewthey()
+#    print("-- TSF_sample_Helloworld() --")
+#    TSF_Forth_run()
 
-def TSF_command_FizzBuzz():    #TSF_doc:TSF_about.tsfより小さなサンプルFizzBuzzプログラム。
+def TSF_sample_FizzBuzz():    #TSF_doc:TSF_about.tsfより小さなサンプルFizzBuzzプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","FizzBuzz:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("FizzBuzz:","\t".join([ \
     "[FZcount:0]+1","#TSF_calcDC","FZcount:","0","#TSF_pokethe",
@@ -83,56 +93,61 @@ def TSF_command_FizzBuzz():    #TSF_doc:TSF_about.tsfより小さなサンプル
     ]))
     TSF_Forth_setTSF("FZcount:","\t".join(["0","Fizz","Buzz","Fizz&Buzz"]))
     TSF_Forth_setTSF("FZjump:","\t".join(["FizzBuzz:","#exit"]))
-    TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
-    TSF_Forth_viewthey()
-    print("-- TSF_command_FizzBuzz() --")
-    TSF_Forth_run()
+    TSF_sample_run("-- TSF_sample_FizzBuzz --")
+#    TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
+#    TSF_Forth_viewthey()
+#    print("-- TSF_sample_FizzBuzz() --")
+ #   TSF_Forth_run()
 
-def TSF_command_calcKN(TSF_argvs):    #TSF_doc:TSFのより小さなサンプルプログラム。
+def TSF_sample_calcKN(TSF_argvs):    #TSF_doc:TSFのより小さなサンプルプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","calcKN:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("calcKN:","\t".join([
     "1/3-m1|2","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
     "#TSF_calcKN","1","#TSF_echoes"
     ]),TSF_style="T")
-    TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
-    TSF_Forth_viewthey()
-    print("-- TSF_command_calcKN() --")
-    TSF_Forth_run()
+    TSF_sample_run("-- TSF_sample_calcKN --")
+#    TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
+#    TSF_Forth_viewthey()
+#    print("-- TSF_sample_calcKN() --")
+#    TSF_Forth_run()
 
-def TSF_command_calcDC(TSF_argvs):    #TSF_doc:TSFのより小さなサンプルプログラム。
+def TSF_sample_calcDC(TSF_argvs):    #TSF_doc:TSFのより小さなサンプルプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","calcDC:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("calcDC:","\t".join([
     "1/3-m1|2","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
     "#TSF_calcDC","1","#TSF_echoes"
     ]),TSF_style="T")
-    TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
-    TSF_Forth_viewthey()
-    print("-- TSF_command_calcDC() --")
-    TSF_Forth_run()
+    TSF_sample_run("-- TSF_sample_calcDC --")
+#    TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
+#    TSF_Forth_viewthey()
+#    print("-- TSF_sample_calcDC() --")
+#    TSF_Forth_run()
 
-def TSF_command_calcFX(TSF_argvs):    #TSF_doc:TSFの電卓(分数)テスト。
+def TSF_sample_calcFX(TSF_argvs):    #TSF_doc:TSFの電卓(分数)テスト。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","calcFX:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("calcFX:","\t".join([
     "1/3-m1|2","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
     "#TSF_calcFX","1","#TSF_echoes"
     ]),TSF_style="T")
-    TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
-    TSF_Forth_viewthey()
-    print("-- TSF_command_calcFX() --")
-    TSF_Forth_run()
+    TSF_sample_run("-- TSF_sample_calcFX --")
+#    TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
+#    TSF_Forth_viewthey()
+#    print("-- TSF_sample_calcFX() --")
+#    TSF_Forth_run()
 
-def TSF_command_calender(TSF_argvs):    #TSF_doc:TSFの日時関連テスト。
+def TSF_sample_calender(TSF_argvs):    #TSF_doc:TSFの日時関連テスト。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","calender:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("calender:","\t".join([
     "@000y@0m@0dm@wdec@0h@0n@0s","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
     "#TSF_calender","1","#TSF_echoes"
     ]),TSF_style="T")
-    TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
-    TSF_Forth_viewthey()
-    print("-- TSF_command_calender() --")
-    TSF_Forth_run()
+    TSF_sample_run("-- TSF_sample_calender --")
+#    TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
+#    TSF_Forth_viewthey()
+#    print("-- TSF_sample_calender() --")
+#    TSF_Forth_run()
 
-def TSF_command_help():    #TSF_doc:TSFコマンド一覧。
+def TSF_sample_help():    #TSF_doc:TSFコマンド一覧。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","help:","#TSF_pushthe","help:","#TSF_lenthe","#TSF_reverseN","help:","#TSF_lenthe","#TSF_echoes","0","#TSF_fin."]))
     TSF_Forth_setTSF("help:",
         'usage: ./TSF.py [command|file.tsf] [argv] ...\n'
@@ -146,10 +161,11 @@ def TSF_command_help():    #TSF_doc:TSFコマンド一覧。
         '  --calcKN      fractions calculator "1/3-m1|2"-> 6分の5 \n'
         '  --calender    "@000y@0m@0dm@wdec@0h@0n@0s"-> '+TSF_time_getdaytime()+'\n'
         ,TSF_style="N")
-    TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
-    TSF_Forth_viewthey()
-    print("-- TSF_command_help() --")
-    TSF_Forth_run()
+    TSF_sample_run("-- TSF_sample_help --")
+#    TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
+#    TSF_Forth_viewthey()
+#    print("-- TSF_sample_help() --")
+#    TSF_Forth_run()
 
 TSF_about_mergefile="TSF_about.tsf"
 TSF_mergefile=""
@@ -160,26 +176,28 @@ if len(TSF_argvs) >= 2:
 if os.path.isfile(TSF_mergefile):
     if len(TSF_Forth_loadtext(TSF_mergefile,TSF_mergefile)):
         TSF_Forth_merge(TSF_mergefile,[])
-        TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
-        TSF_Forth_run()
+        TSF_sample_run()
+#        TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
+#        TSF_Forth_pushargvs(TSF_Forth_stackthat(),TSF_argvs); TSF_Forth_pushargvslen(TSF_Forth_stackthat(),TSF_argvs)
+#        TSF_Forth_run()
 elif TSF_mergefile in ["--about"]:
-    TSF_command_about()
-elif TSF_mergefile in ["--helloworld","--Helloworld"]:
-    TSF_command_Helloworld()
-elif TSF_mergefile in ["--fizzbuzz","--FizzBuzz"]:
-    TSF_command_FizzBuzz()
+    TSF_sample_about()
+elif TSF_mergefile in ["--hello","--helloworld","--Helloworld"]:
+    TSF_sample_Helloworld()
+elif TSF_mergefile in ["--fizz","--buzz","--fizzbuzz","--FizzBuzz"]:
+    TSF_sample_FizzBuzz()
 elif TSF_mergefile in ["--calcKN"]:
-    TSF_command_calcKN(TSF_argvs)
+    TSF_sample_calcKN(TSF_argvs)
 elif TSF_mergefile in ["--calcDC"]:
-    TSF_command_calcDC(TSF_argvs)
+    TSF_sample_calcDC(TSF_argvs)
 elif TSF_mergefile in ["--calc","--calcFX"]:
-    TSF_command_calcFX(TSF_argvs)
+    TSF_sample_calcFX(TSF_argvs)
 elif TSF_mergefile in ["--time","--calender"]:
-    TSF_command_calender(TSF_argvs)
+    TSF_sample_calender(TSF_argvs)
 elif TSF_mergefile in ["--help"]:
-    TSF_command_help()
+    TSF_sample_help()
 else:
-    TSF_command_help()
+    TSF_sample_help()
 #sys.exit(0 if TSF_Forth_exitcode() == "0" or TSF_Forth_exitcode() == "0|1" else TSF_Forth_exitcode())
 
 

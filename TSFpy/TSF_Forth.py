@@ -298,18 +298,25 @@ def TSF_Forth_popintthe(TSF_that):    #TSF_doc:スタックから数値として
         TSF_popdata=TSF_io_intstr0x(TSF_calcN)
     return TSF_popdata
 
-def TSF_Forth_pushthe(TSF_that,TSF_pushdata):    #TSF_doc:スタックに積み上げる(TSFAPI)。
+def TSF_Forth_pushthe(TSF_the,TSF_pushdata):    #TSF_doc:スタックに積み上げる(TSFAPI)。
     global TSF_stacks
-    if TSF_that in TSF_stacks:
-        TSF_stacks[TSF_that].append(TSF_pushdata)
+    if TSF_the in TSF_stacks:
+        TSF_stacks[TSF_the].append(TSF_pushdata)
     else:
-        TSF_stacks[TSF_that]=[TSF_pushdata]
+        TSF_stacks[TSF_the]=[TSF_pushdata]
 
 def TSF_Forth_pushthis(TSF_pushdata):    #TSF_doc:実行中スタックに積み上げる(TSFAPI)。
    TSF_Forth_pushthe(TSF_stackthis,TSF_pushdata)
 
 def TSF_Forth_pushthat(TSF_pushdata):    #TSF_doc:積込先スタックに積み上げる(TSFAPI)。
    TSF_Forth_pushthe(TSF_stackthat,TSF_pushdata)
+
+def TSF_Forth_addargvs(TSF_the,TSF_argvs):    #TSF_doc:積込先スタックにargvsを積み上げる(TSFAPI)。
+    for TSF_argv in TSF_argvs:
+        TSF_Forth_pushthe(TSF_the,TSF_argv)
+
+def TSF_Forth_addargvslen(TSF_argvs):    #TSF_doc:積込先スタックにargvsの数を積み上げる(TSFAPI)。
+    TSF_Forth_pushthat(str(len(TSF_argvs)))
 
 def TSF_Forth_pushargvs(TSF_argvs):    #TSF_doc:積込先スタックにargvsを積み上げる(TSFAPI)。
     for TSF_argv in TSF_argvs:
