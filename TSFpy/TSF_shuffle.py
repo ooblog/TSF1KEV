@@ -83,7 +83,7 @@ def TSF_shuffle_swapCBthat():   #TSF_doc:[stackC,stackB,stackA]スタックBと�
     TSF_Forth_pushthat(TSF_tsvA)
     return None
 
-def TSF_shuffle_reverseN():   #TSF_doc:[stackD,stackC,stackB,stackA,count]スタックを逆順にする。
+def TSF_shuffle_reverseN():   #TSF_doc:[stackN…stackB,stackA,count]スタックを逆順にする。count自身とcountの回数分スタック積み下ろし。
     TSF_countlen=TSF_Forth_popintthe(TSF_Forth_stackthat())
     TSF_reverse=[""]*TSF_countlen
     for TSF_count in range(TSF_countlen):

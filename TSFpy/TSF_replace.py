@@ -18,7 +18,7 @@ def TSF_replace_Initwords(TSF_words):    #TSF_doc:スタック並び替え関連
 #        "#TSF_split":TSF_Forth_split,  "文字で分割":TSF_Forth_split,
 #        "#TSF_chars":TSF_Forth_chars,  "一文字ずつに分離":TSF_Forth_chars,
 
-def TSF_replace_TSF_joinN():   #TSF_doc:[stackB,stackA]スタックAとスタックBを交換する。
+def TSF_replace_TSF_joinN():   #TSF_doc:[stackN…stackB,stackA,count]スタックを連結する。count自身とcountの回数分スタック積み下ろし。
     TSF_countlen=TSF_Forth_popintthe(TSF_Forth_stackthat())
     TSF_joinlist=[""]*TSF_countlen
     for TSF_count in range(TSF_countlen):
@@ -26,16 +26,29 @@ def TSF_replace_TSF_joinN():   #TSF_doc:[stackB,stackA]スタックAとスタッ
     TSF_Forth_pushthat("".join(reversed(TSF_joinlist)))
     return None
 
-def TSF_replace_TSF_betweenN():   #TSF_doc:[stackB,stackA]スタックAとスタックBを交換する。
-    TSF_joinstr=TSF_Forth_stackthat()
+def TSF_replace_TSF_betweenN():   #TSF_doc:[stackN…stackB,stackA,count,joint]スタックAとスタックBを交換する。接続子とcount自身およびcountの回数分スタック積み下ろし。
+    TSF_joint=TSF_Forth_stackthat()
     TSF_countlen=TSF_Forth_popintthe(TSF_Forth_stackthat())
     TSF_joinlist=[""]*TSF_countlen
     for TSF_count in range(TSF_countlen):
         TSF_joinlist[TSF_count]=TSF_Forth_popthat()
-    TSF_Forth_pushthat(TSF_joinstr.join(reversed(TSF_joinlist)))
+    TSF_Forth_pushthat(TSF_joint.join(reversed(TSF_joinlist)))
     return None
 
 
+#def TSF_Forth_split():   #TSF_doc:[…stackB,stackA,string,spliter]文字列を分割する。stringとspliter分スタック積み下ろし、分割された文字列分スタック積み込み。
+#    TSF_tsvP=TSF_Forth_pop(TSF_thatstack_name)
+#    TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
+#    TSF_tsvK=TSF_tsvQ.split(TSF_tsvP)
+#    for TSF_tsvA in TSF_tsvK:
+#        TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
+#    return None
+
+#def TSF_Forth_chars():   #TSF_doc:[…stackB,stackA,string]文字列を一文字ずつに分割する。stringスタック積み下ろし、分割された文字分スタック積み込み。
+#    TSF_tsvQ=TSF_Forth_pop(TSF_thatstack_name)
+#    for TSF_tsvA in TSF_tsvQ:
+#        TSF_Forth_push(TSF_thatstack_name,TSF_tsvA)
+#    return None
 
 
 

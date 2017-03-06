@@ -12,8 +12,7 @@ from TSF_time import *
 
 def TSF_command_about():    #TSF_doc:TSFの概要とサンプルプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","main1:","#TSF_this","0","#TSF_fin."]))
-    TSF_Forth_setTSF("main1:","\t".join(["aboutTSF:","#TSF_pushthe","aboutTSF:","#TSF_lenthe","#TSF_echoes"]))
-#    TSF_Forth_setTSF("main1:","\t".join(["aboutTSF:","#TSF_pushthe","aboutTSF:","#TSF_lenthe","#TSF_echoes","main2:","#TSF_this"]))
+    TSF_Forth_setTSF("main1:","\t".join(["aboutTSF:","#TSF_pushthe","aboutTSF:","#TSF_lenthe","#TSF_echoes","main2:","#TSF_this"]))
     TSF_Forth_setTSF("main2:","\t".join(["#分数電卓のテスト","1","#TSF_echoes","16","#TSF_calcPR","calcFXtest:","#TSF_this","calcDCtest:","#TSF_this","calcKNテスト:","#TSF_this","#","1","#TSF_echoes","main3:","#TSF_this"]))
     TSF_Forth_setTSF("main3:","\t".join(["aboutCalc:","#TSF_pushthe","aboutCalc:","#TSF_lenthe","#TSF_echoes","main4:","#TSF_this"]))
     TSF_Forth_setTSF("main4:","\t".join(["aboutRPN+LISP:","#TSF_pushthe","aboutRPN+LISP:","#TSF_lenthe","#TSF_echoes"]))
@@ -29,12 +28,12 @@ def TSF_command_about():    #TSF_doc:TSFの概要とサンプルプログラム�
         "存在しないthisスタックの呼び出し(存在するスタックのオーバーフロー含む)は呼び出し元に戻って続きから再開。\n"
         "ループは再帰で組む。深い階層で祖先を「#TSF_this」すると子孫コールスタックはまとめて破棄される。\n"
         "分岐は配列で組む。電卓の比較演算子の結果と「#TSF_peekthe」を組み合わせて飛び先スタック名を変更。「fizzbuzz.tsf」も参考。\n"
-        "文字列連結は「#TSF_brackets」「#TSF_join」「#TSF_joinC」。文字列分解は「#TSF_split」「#TSF_chars」。\n"
+        "文字列連結は「#TSF_brackets」「#TSF_joinN」「#TSF_betweenN」、文字列分解は「#TSF_split」「#TSF_chars」など。\n"
         "「#TSF_brackets」などの文字列連結と「#TSF_calcDC」などの電卓を組み合わせれば逆ポーランド記法への数式変換は強いられないはず。\n"
         ,TSF_style="N")
-    TSF_Forth_setTSF("calcFXtest:","\t".join(["「1 3 m1|2」を数式「[2]/[1]-[0]」で連結→","1","3","m1|2","[2]/[1]-[0]","#TSF_calcFX","2","#TSF_join","1","#TSF_echoes"]))
+    TSF_Forth_setTSF("calcFXtest:","\t".join(["「1 3 m1|2」を数式「[2]/[1]-[0]」で連結→","1","3","m1|2","[2]/[1]-[0]","#TSF_calcFX","2","#TSF_joinN","1","#TSF_echoes"]))
     TSF_Forth_setTSF("calcDCtest:","\t".join(["「1 / 3 - m1|2」を数式に連結(ついでに小数デモ)→","1","/","3","-","m1|2","5","#TSF_joinN","#TSF_calcDC","2","#TSF_joinN","1","#TSF_echoes"]))
-    TSF_Forth_setTSF("calcKNテスト:","\t".join(["「一割る三引く(マイナス二分の一)」(ついでに単位付き計算デモ)は","一割る三引く(マイナス二分の一)","#単位計算","2","#N個連結","1","#N行表示"]))
+    TSF_Forth_setTSF("calcKNテスト:","\t".join(["「一割る三引く(マイナス二分の一)」(ついでに単位付き計算デモ)→","一割る三引く(マイナス二分の一)","#単位計算","2","#N個連結","1","#N行表示"]))
     TSF_Forth_setTSF("aboutCalc:",
         "「calc」系ワード分数電卓の概要(暫定案)。\n"
         "「#TSF_calcFX」は分数表記。「#TSF_calcDC」は小数表記。「#TSF_calcKN」億以上の単位を漢字表記。全部基本的には分数計算。\n"
@@ -164,7 +163,7 @@ if os.path.isfile(TSF_mergefile):
         TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
         TSF_Forth_run()
 elif TSF_mergefile in ["--about"]:
-    TSF_command_about(False)
+    TSF_command_about()
 elif TSF_mergefile in ["--helloworld","--Helloworld"]:
     TSF_command_Helloworld()
 elif TSF_mergefile in ["--fizzbuzz","--FizzBuzz"]:

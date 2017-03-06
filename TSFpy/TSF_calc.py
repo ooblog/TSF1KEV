@@ -40,7 +40,7 @@ def TSF_calc_calcbrackets(TSF_tsvBL,TSF_tsvBR):   #TSF_doc:括弧でスタック
             break
     return TSF_tsvA
 
-def TSF_calc_brackets():   #TSF_doc:[…stackB,stackA,calc,brackets]これ自体は計算はせず、任意の括弧に囲まれたスタック番号をスタック内容に置換。bracketsとcalc自身とcalc内の該当括弧分スタック積み下ろし。
+def TSF_calc_brackets():   #TSF_doc:[stackN…stackB,stackA,count,calc,brackets]これ自体は計算はせず、任意の括弧に囲まれたスタック番号をスタック内容に置換。bracketsとcalc自身とcalc内の該当括弧分スタック積み下ろし。
     TSF_tsvB=TSF_Forth_popthat()
     if len(TSF_tsvB) < 2: TSF_tsvB="[]"
     TSF_tsvBL,TSF_tsvBR=TSF_tsvB[0],TSF_tsvB[-1]
@@ -72,11 +72,11 @@ def TSF_calc_calcKNQQ():   #TSF_doc:[calc]分数電卓して結果を漢数字�
     return None
 
 def TSF_calc_calcPR():   #TSF_doc:[prec]有効桁数を変更する。桁数が変わると同じ式でも値が変わるので暗記(九九)も初期化する。
-    TSF_calc_precision(TSF_Forth_popdecimalize(TSF_thatstack_name))
+    TSF_calc_precision(TSF_Forth_popintthe(TSF_Forth_stackthat()))
     return None
 
 def TSF_calc_calcRO():   #TSF_doc:[round]端数処理を変更する。端数が変わると同じ式でも値が変わるので暗記(九九)も初期化する。
-    TSF_calc_rounding(TSF_Forth_popdecimalize(TSF_thatstack_name))
+    TSF_calc_rounding(TSF_Forth_popintthe(TSF_Forth_stackthat()))
     return None
 
 

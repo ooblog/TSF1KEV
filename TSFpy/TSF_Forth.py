@@ -292,7 +292,6 @@ def TSF_Forth_popintthe(TSF_that):    #TSF_doc:スタックから数値として
     TSF_calcQ=TSF_Forth_popthat()
     if '|' in TSF_calcQ:
         TSF_calcN,TSF_calcD=TSF_calcQ.replace('m','-').replace('p','').split('|')
-        print("TSF_calcN,TSF_calcD=",TSF_calcQ,TSF_calcN,TSF_calcD)
         TSF_popdata=TSF_io_intstr0x(TSF_calcN)//TSF_io_intstr0x(TSF_calcD)
     else:
         TSF_calcN=TSF_calcQ.replace('m','-').replace('p','')
