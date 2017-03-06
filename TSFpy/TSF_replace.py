@@ -5,6 +5,8 @@ import sys
 import datetime
 import os
 import re
+import difflib
+import unicodedata
 from TSF_Forth import *
 
 def TSF_replace_Initwords(TSF_words):    #TSF_doc:スタック並び替え関連のワードを追加する(TSFAPI)。
@@ -17,6 +19,8 @@ def TSF_replace_Initwords(TSF_words):    #TSF_doc:スタック並び替え関連
 #        "#TSF_resubthat":TSF_Forth_resubthat,  "一行を正規表現で置換する":TSF_Forth_resubthat,
 #        "#TSF_split":TSF_Forth_split,  "文字で分割":TSF_Forth_split,
 #        "#TSF_chars":TSF_Forth_chars,  "一文字ずつに分離":TSF_Forth_chars,
+#        "#TSF_strequal":TSF_Forth_chars,  "文字列一致":TSF_Forth_chars,
+#        "#TSF_strmatcher":TSF_Forth_chars,  "文字列のそれっぽさ":TSF_Forth_chars,
 
 def TSF_replace_TSF_joinN():   #TSF_doc:[stackN…stackB,stackA,count]スタックを連結する。count自身とcountの回数分スタック積み下ろし。
     TSF_countlen=TSF_Forth_popintthe(TSF_Forth_stackthat())

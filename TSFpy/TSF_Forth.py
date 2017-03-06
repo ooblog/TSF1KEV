@@ -334,6 +334,10 @@ def TSF_Forth_peekcyclethe(TSF_the,TSF_count):    #TSF_doc:スタックの読込
         TSF_peekdata=TSF_stacks[TSF_the][TSF_countmod]
     return TSF_peekdata
 
+def TSF_Forth_reversethe(TSF_the):    #TSF_doc:スタックのシャッフル(TSFAPI)。
+    if TSF_the in TSF_stacks:
+        TSF_stacks[TSF_the]=list(reversed(TSF_stacks[TSF_the]))
+
 def TSF_Forth_shufflethe(TSF_the):    #TSF_doc:スタックのシャッフル(TSFAPI)。
     if TSF_the in TSF_stacks:
         random.shuffle(TSF_stacks[TSF_the])
