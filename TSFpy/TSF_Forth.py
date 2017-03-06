@@ -202,7 +202,8 @@ def TSF_Forth_init(TSF_argvs=[],TSF_addcalls=[]):    #TSF_doc:TSF_stacks,TSF_sty
     global TSF_stacks,TSF_styles,TSF_callptrs,TSF_words,TSF_Initcalls,TSF_stackthat,TSF_stackthis,TSF_stackcount
     TSF_stacks,TSF_styles,TSF_callptrs,TSF_words=OrderedDict(),OrderedDict(),OrderedDict(),OrderedDict()
     TSF_stackthis,TSF_stackthat,TSF_stackcount=TSF_Forth_1ststack(),TSF_Forth_1ststack(),0
-    TSF_stacks[TSF_stackthis]=["UTF-8","#TSF_encoding","0","#TSF_fin."]; TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
+#    TSF_stacks[TSF_stackthis]=["UTF-8","#TSF_encoding","0","#TSF_fin."]; TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
+    TSF_stacks[TSF_stackthis]=["UTF-8","#TSF_encoding","0","#TSF_fin."]; TSF_Forth_addargvs(TSF_stackthat,TSF_argvs); TSF_Forth_addargvslen(TSF_argvs)
     TSF_Initcalls=[TSF_Forth_Initwords]+TSF_addcalls
     for TSF_Initcall in TSF_Initcalls:
         TSF_words=TSF_Initcall(TSF_words)
@@ -318,12 +319,12 @@ def TSF_Forth_addargvs(TSF_the,TSF_argvs):    #TSF_doc:積込先スタックにa
 def TSF_Forth_addargvslen(TSF_argvs):    #TSF_doc:積込先スタックにargvsの数を積み上げる(TSFAPI)。
     TSF_Forth_pushthat(str(len(TSF_argvs)))
 
-def TSF_Forth_pushargvs(TSF_argvs):    #TSF_doc:積込先スタックにargvsを積み上げる(TSFAPI)。
-    for TSF_argv in TSF_argvs:
-        TSF_Forth_pushthat(TSF_argv)
+#def TSF_Forth_pushargvs(TSF_argvs):    #TSF_doc:積込先スタックにargvsを積み上げる(TSFAPI)。
+#    for TSF_argv in TSF_argvs:
+#        TSF_Forth_pushthat(TSF_argv)
 
-def TSF_Forth_pushargvslen(TSF_argvs):    #TSF_doc:積込先スタックにargvsの数を積み上げる(TSFAPI)。
-    TSF_Forth_pushthat(str(len(TSF_argvs)))
+#def TSF_Forth_pushargvslen(TSF_argvs):    #TSF_doc:積込先スタックにargvsの数を積み上げる(TSFAPI)。
+#    TSF_Forth_pushthat(str(len(TSF_argvs)))
 
 def TSF_Forth_peekthe(TSF_the,TSF_count):    #TSF_doc:スタックの読込(TSFAPI)。
     TSF_peekdata=""

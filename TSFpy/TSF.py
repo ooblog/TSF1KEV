@@ -18,7 +18,7 @@ def TSF_sample_run(TSF_sample_sepalete=None):    #TSF_doc:TSFサンプルプロ�
             TSF_io_printlog(TSF_sample_sepalete)
     TSF_Forth_run()
 
-def TSF_sample_about():    #TSF_doc:TSFの概要とサンプルプログラム。
+def TSF_sample_about():    #TSF_doc:TSFの概要サンプルプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","main1:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("main1:","\t".join(["aboutTSF:","#TSF_pushthe","aboutTSF:","#TSF_lenthe","#TSF_echoes","main2:","#TSF_this"]))
     TSF_Forth_setTSF("main2:","\t".join(["#分数電卓のテスト","1","#TSF_echoes","16","#TSF_calcPR","calcFXtest:","#TSF_this","calcDCtest:","#TSF_this","calcKNテスト:","#TSF_this","#","1","#TSF_echoes","main3:","#TSF_this"]))
@@ -71,20 +71,12 @@ def TSF_sample_about():    #TSF_doc:TSFの概要とサンプルプログラム�
         "RPNと大体同じだがこっちは括弧を必要。「(+ p1 p2 m3)」の様に引数の自由度が優先される(予定)。\n"
         ,TSF_style="N")
     TSF_sample_run("-- TSF_sample_about --")
-#    TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
-#    TSF_Forth_viewthey()
-#    print("-- TSF_sample_about() --")
-#    TSF_Forth_run()
 
-def TSF_sample_Helloworld():    #TSF_doc:TSF_about.tsfより小さなサンプルHelloworldプログラム。
+def TSF_sample_Helloworld():    #TSF_doc:Helloworldサンプルプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["Hello world","1","#TSF_echoes","0","#TSF_fin."]))
     TSF_sample_run("-- TSF_sample_Helloworld --")
-#    TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
-#    TSF_Forth_viewthey()
-#    print("-- TSF_sample_Helloworld() --")
-#    TSF_Forth_run()
 
-def TSF_sample_FizzBuzz():    #TSF_doc:TSF_about.tsfより小さなサンプルFizzBuzzプログラム。
+def TSF_sample_FizzBuzz():    #TSF_doc:TSF_about.FizzBuzzサンプルプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","FizzBuzz:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("FizzBuzz:","\t".join([ \
     "[FZcount:0]+1","#TSF_calcDC","FZcount:","0","#TSF_pokethe",
@@ -94,60 +86,40 @@ def TSF_sample_FizzBuzz():    #TSF_doc:TSF_about.tsfより小さなサンプルF
     TSF_Forth_setTSF("FZcount:","\t".join(["0","Fizz","Buzz","Fizz&Buzz"]))
     TSF_Forth_setTSF("FZjump:","\t".join(["FizzBuzz:","#exit"]))
     TSF_sample_run("-- TSF_sample_FizzBuzz --")
-#    TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
-#    TSF_Forth_viewthey()
-#    print("-- TSF_sample_FizzBuzz() --")
- #   TSF_Forth_run()
 
-def TSF_sample_calcKN(TSF_argvs):    #TSF_doc:TSFのより小さなサンプルプログラム。
+def TSF_sample_calcKN(TSF_argvs):    #TSF_doc:単位表示電卓サンプルプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","calcKN:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("calcKN:","\t".join([
     "1/3-m1|2","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
     "#TSF_calcKN","1","#TSF_echoes"
     ]),TSF_style="T")
     TSF_sample_run("-- TSF_sample_calcKN --")
-#    TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
-#    TSF_Forth_viewthey()
-#    print("-- TSF_sample_calcKN() --")
-#    TSF_Forth_run()
 
-def TSF_sample_calcDC(TSF_argvs):    #TSF_doc:TSFのより小さなサンプルプログラム。
+def TSF_sample_calcDC(TSF_argvs):    #TSF_doc:小数表示電卓サンプルプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","calcDC:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("calcDC:","\t".join([
     "1/3-m1|2","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
     "#TSF_calcDC","1","#TSF_echoes"
     ]),TSF_style="T")
     TSF_sample_run("-- TSF_sample_calcDC --")
-#    TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
-#    TSF_Forth_viewthey()
-#    print("-- TSF_sample_calcDC() --")
-#    TSF_Forth_run()
 
-def TSF_sample_calcFX(TSF_argvs):    #TSF_doc:TSFの電卓(分数)テスト。
+def TSF_sample_calcFX(TSF_argvs):    #TSF_doc:分数表示電卓サンプルプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","calcFX:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("calcFX:","\t".join([
     "1/3-m1|2","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
     "#TSF_calcFX","1","#TSF_echoes"
     ]),TSF_style="T")
     TSF_sample_run("-- TSF_sample_calcFX --")
-#    TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
-#    TSF_Forth_viewthey()
-#    print("-- TSF_sample_calcFX() --")
-#    TSF_Forth_run()
 
-def TSF_sample_calender(TSF_argvs):    #TSF_doc:TSFの日時関連テスト。
+def TSF_sample_calender(TSF_argvs):    #TSF_doc:日時表示サンプルプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","calender:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("calender:","\t".join([
     "@000y@0m@0dm@wdec@0h@0n@0s","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
     "#TSF_calender","1","#TSF_echoes"
     ]),TSF_style="T")
     TSF_sample_run("-- TSF_sample_calender --")
-#    TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
-#    TSF_Forth_viewthey()
-#    print("-- TSF_sample_calender() --")
-#    TSF_Forth_run()
 
-def TSF_sample_help():    #TSF_doc:TSFコマンド一覧。
+def TSF_sample_help():    #TSF_doc:TSFコマンド一覧表示サンプルプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","help:","#TSF_pushthe","help:","#TSF_lenthe","#TSF_reverseN","help:","#TSF_lenthe","#TSF_echoes","0","#TSF_fin."]))
     TSF_Forth_setTSF("help:",
         'usage: ./TSF.py [command|file.tsf] [argv] ...\n'
@@ -162,10 +134,6 @@ def TSF_sample_help():    #TSF_doc:TSFコマンド一覧。
         '  --calender    "@000y@0m@0dm@wdec@0h@0n@0s"-> '+TSF_time_getdaytime()+'\n'
         ,TSF_style="N")
     TSF_sample_run("-- TSF_sample_help --")
-#    TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
-#    TSF_Forth_viewthey()
-#    print("-- TSF_sample_help() --")
-#    TSF_Forth_run()
 
 TSF_about_mergefile="TSF_about.tsf"
 TSF_mergefile=""
@@ -177,9 +145,6 @@ if os.path.isfile(TSF_mergefile):
     if len(TSF_Forth_loadtext(TSF_mergefile,TSF_mergefile)):
         TSF_Forth_merge(TSF_mergefile,[])
         TSF_sample_run()
-#        TSF_Forth_pushargvs(TSF_argvs); TSF_Forth_pushargvslen(TSF_argvs)
-#        TSF_Forth_pushargvs(TSF_Forth_stackthat(),TSF_argvs); TSF_Forth_pushargvslen(TSF_Forth_stackthat(),TSF_argvs)
-#        TSF_Forth_run()
 elif TSF_mergefile in ["--about"]:
     TSF_sample_about()
 elif TSF_mergefile in ["--hello","--helloworld","--Helloworld"]:
