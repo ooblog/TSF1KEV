@@ -22,11 +22,11 @@ def TSF_replace_Initwords(TSF_words):    #TSF_doc:スタック並び替え関連
     TSF_words["#TSF_matchif"]=TSF_replace_matchif; TSF_words["#文字列のそれっぽさ"]=TSF_replace_matchif
     TSF_words["#TSF_matchelse"]=TSF_replace_matchelse; TSF_words["#文字列のそれっぽさ"]=TSF_replace_matchelse
     TSF_words["#TSF_matchifelse"]=TSF_replace_matchifelse; TSF_words["#文字列のそれっぽさ"]=TSF_replace_matchifelse
+    TSF_words["#TSF_replacethe"]=TSF_replace_replacethe; TSF_words["#スタックをテキストとみなして置換"]=TSF_replace_replacethe
+    TSF_words["#TSF_replacethat"]=TSF_replace_replacethat; TSF_words["#積込先スタックをテキストとみなして置換"]=TSF_replace_replacethat
+    TSF_words["#TSF_resubthe"]=TSF_replace_resubthe; TSF_words["#スタックをテキストとみなして正規表現で置換"]=TSF_replace_resubthe
+    TSF_words["#TSF_resubthat"]=TSF_replace_resubthat; TSF_words["#積込先スタックをテキストとみなして正規表現で置換"]=TSF_replace_resubthat
     return TSF_words
-#        "#TSF_replacethe":TSF_Forth_replacethe,  "スタックをテキストとみなして置換する":TSF_Forth_replacethe,
-#        "#TSF_replacethat":TSF_Forth_replacethat,  "一行を置換する":TSF_Forth_replacethat,
-#        "#TSF_resubthe":TSF_Forth_resubthe,  "スタックをテキストとみなして正規表現で置換する":TSF_Forth_resubthe,
-#        "#TSF_resubthat":TSF_Forth_resubthat,  "一行を正規表現で置換する":TSF_Forth_resubthat,
 
 def TSF_replace_TSF_joinN():   #TSF_doc:[stackN…stackB,stackA,count]スタックを連結する。count自身とcountの回数分スタック積み下ろし。
     TSF_countlen=TSF_Forth_popintthe(TSF_Forth_stackthat())
@@ -124,6 +124,47 @@ def TSF_replace_matchifelse():   #TSF_doc:[else,then,score]類似度がグレー
     TSF_else=TSF_Forth_popthat()
     TSF_ifelse=TSF_then if TSF_matchscore >= TSF_matchgrade else TSF_else
     return TSF_ifelse
+
+def TSF_replace_replacethe():   #TSF_doc:[stack,old,new]スタックをテキストとみなして文字列置換する。3スタック積み下ろし。
+    TSF_tsvN=TSF_Forth_popthat()
+    TSF_tsvO=TSF_Forth_popthat()
+    TSF_the=TSF_Forth_popthat()
+    TSF_Forth_style(TSF_the,TSF_style="N")
+    TSF_text=TSF_txt_ESCdecode("\n".join(TSF_Forth_stackvalue(TSF_the)))
+    TSF_text=TSF_text.replace(TSF_tsvO,TSF_tsvN)
+    TSF_Forth_settext(TSF_the,TSF_text,TSF_style="N")
+    return None
+
+def TSF_replace_replacethat():   #TSF_doc:[old,new]積込先スタックをテキストとみなして文字列置換する。2スタック積み下ろし。
+    TSF_tsvN=TSF_Forth_popthat()
+    TSF_tsvO=TSF_Forth_popthat()
+    TSF_the=TSF_Forth_stackthat()
+    TSF_Forth_style(TSF_the,TSF_style="N")
+    TSF_text=TSF_txt_ESCdecode("\n".join(TSF_Forth_stackvalue(TSF_the)))
+    TSF_text=TSF_text.replace(TSF_tsvO,TSF_tsvN)
+    TSF_Forth_settext(TSF_the,TSF_text,TSF_style="N")
+    return None
+
+def TSF_replace_resubthe():   #TSF_doc:[stack,old,new]スタックをテキストとみなして文字列置換する。3スタック積み下ろし。
+    TSF_tsvN=TSF_Forth_popthat()
+    TSF_tsvO=TSF_Forth_popthat()
+    TSF_the=TSF_Forth_popthat()
+    TSF_Forth_style(TSF_the,TSF_style="N")
+    TSF_text=TSF_txt_ESCdecode("\n".join(TSF_Forth_stackvalue(TSF_the)))
+    TSF_text=re.sub(re.compile(TSF_tsvO,re.MULTILINE),TSF_tsvN,TSF_text)
+    TSF_Forth_settext(TSF_the,TSF_text,TSF_style="N")
+    return None
+
+def TSF_replace_resubthat():   #TSF_doc:[old,new]積込先スタックをテキストとみなして文字列置換する。2スタック積み下ろし。
+    TSF_tsvN=TSF_Forth_popthat()
+    TSF_tsvO=TSF_Forth_popthat()
+    TSF_the=TSF_Forth_popthat()
+    TSF_Forth_style(TSF_the,TSF_style="N")
+    TSF_text=TSF_txt_ESCdecode("\n".join(TSF_Forth_stackvalue(TSF_the)))
+    TSF_text=re.sub(re.compile(TSF_tsvO,re.MULTILINE),TSF_tsvN,TSF_text)
+    TSF_Forth_settext(TSF_the,TSF_text,TSF_style="N")
+    return None
+
 
 def TSF_replace_debug():    #TSF_doc:「TSF/TSF_shuffle.py」単体テスト風デバッグ関数。
     TSF_tsvS="いいまちがいやうろおぼえ"

@@ -259,7 +259,7 @@ def TSF_Forth_stacklen(TSF_the):    #TSF_doc:thisスタックの個数(TSFAPI)�
     return len(TSF_stacks.get(TSF_the,[]))
 
 def TSF_Forth_stackvalue(TSF_the):    #TSF_doc:スタックのデータ(TSFAPI)。
-    return TSF_stacks[TSF_the] if TSF_the in TSF_stacks else []
+    return TSF_stacks.get(TSF_the,[])
 
 def TSF_Forth_stackslen():    #TSF_doc:スタック一覧の個数(TSFAPI)。
     return len(TSF_stacks)
