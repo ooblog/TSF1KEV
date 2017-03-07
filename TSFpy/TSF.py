@@ -6,6 +6,7 @@ from TSF_io import *
 #from TSF_Forth import *
 from TSF_shuffle import *
 from TSF_replace import *
+#from TSF_match import *
 from TSF_calc import *
 from TSF_time import *
 
@@ -20,10 +21,10 @@ def TSF_sample_run(TSF_sample_sepalete=None):    #TSF_doc:TSFサンプルプロ�
 
 def TSF_sample_about():    #TSF_doc:TSFの概要サンプルプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","main1:","#TSF_this","0","#TSF_fin."]))
-    TSF_Forth_setTSF("main1:","\t".join(["aboutTSF:","#TSF_pushthe","aboutTSF:","#TSF_lenthe","#TSF_echoes","main2:","#TSF_this"]))
+    TSF_Forth_setTSF("main1:","\t".join(["aboutTSF:","#TSF_pushthe","aboutTSF:","#TSF_lenthe","#TSF_reverseN","aboutTSF:","#TSF_lenthe","#TSF_echoes","main2:","#TSF_this"]))
     TSF_Forth_setTSF("main2:","\t".join(["#分数電卓のテスト","1","#TSF_echoes","16","#TSF_calcPR","calcFXtest:","#TSF_this","calcDCtest:","#TSF_this","calcKNテスト:","#TSF_this","#","1","#TSF_echoes","main3:","#TSF_this"]))
-    TSF_Forth_setTSF("main3:","\t".join(["aboutCalc:","#TSF_pushthe","aboutCalc:","#TSF_lenthe","#TSF_echoes","main4:","#TSF_this"]))
-    TSF_Forth_setTSF("main4:","\t".join(["aboutRPN+LISP:","#TSF_pushthe","aboutRPN+LISP:","#TSF_lenthe","#TSF_echoes"]))
+    TSF_Forth_setTSF("main3:","\t".join(["aboutCalc:","#TSF_pushthe","aboutCalc:","#TSF_lenthe","#TSF_reverseN","aboutCalc:","#TSF_lenthe","#TSF_echoes","main4:","#TSF_this"]))
+    TSF_Forth_setTSF("main4:","\t".join(["aboutMatch:","#TSF_pushthe","aboutMatch:","#TSF_lenthe","#TSF_reverseN","aboutMatch:","#TSF_lenthe","#TSF_echoes"]))
     TSF_Forth_setTSF("aboutTSF:",
         "「TSF_Tab-Separated-Forth」の概要(暫定案)。\n"
         "積んだスタックをワード(関数)などで消化していくForth風インタプリタ。スタック単位はtsv文字列。\n"
@@ -36,8 +37,8 @@ def TSF_sample_about():    #TSF_doc:TSFの概要サンプルプログラム。
         "存在しないthisスタックの呼び出し(存在するスタックのオーバーフロー含む)は呼び出し元に戻って続きから再開。\n"
         "ループは再帰で組む。深い階層で祖先を「#TSF_this」すると子孫コールスタックはまとめて破棄される。\n"
         "分岐は配列で組む。電卓の比較演算子の結果と「#TSF_peekthe」を組み合わせて飛び先スタック名を変更。「fizzbuzz.tsf」も参考。\n"
-        "文字列連結は「#TSF_brackets」「#TSF_joinN」「#TSF_betweenN」、文字列分解は「#TSF_split」「#TSF_chars」など。\n"
-        "「#TSF_brackets」などの文字列連結と「#TSF_calcDC」などの電卓を組み合わせれば逆ポーランド記法への数式変換は強いられないはず。\n"
+        "分岐の別解として「#TSF_matchcasethe」準備中。条件に一致する文字列がスタックに含まれてたらその位置を返すワードにする予定。\n"
+        "「#TSF_brackets」などの文字列処理と「#TSF_calcDC」などの電卓を組み合わせれば逆ポーランド記法への数式変換は強いられないはず。\n"
         ,TSF_style="N")
     TSF_Forth_setTSF("calcFXtest:","\t".join(["「1 3 m1|2」を数式「[2]/[1]-[0]」で連結→","1","3","m1|2","[2]/[1]-[0]","#TSF_calcFX","2","#TSF_joinN","1","#TSF_echoes"]))
     TSF_Forth_setTSF("calcDCtest:","\t".join(["「1 / 3 - m1|2」を数式に連結(ついでに小数デモ)→","1","/","3","-","m1|2","5","#TSF_joinN","#TSF_calcDC","2","#TSF_joinN","1","#TSF_echoes"]))
@@ -62,13 +63,8 @@ def TSF_sample_about():    #TSF_doc:TSFの概要サンプルプログラム。
         "ゼロ比較演算子(条件演算子)は「Z」。「kZ1~0」の様な計算でkがゼロの時は真なので1、ゼロでない時は偽なので0。「n|0」の時は「n|0」。\n"
         "条件演算子は0以上を調べる系「O」「o」、0以下を調べる系「U」「u」、0か調べる系「Z」「z」、「n|0」か調べる系「N」を用意。\n"
         ,TSF_style="N")
-    TSF_Forth_setTSF("aboutRPN+LISP:",
-        "「RPN」系ワード逆ポーランド電卓の概要(暫定案)。\n"
-        "逆ポーランド記法の数式計算は強いられないとは言ったが、括弧も日本語訳も分数も排除した速度優先の電卓も別途準備(予定)。状況に合わせて使い分け(予定)。\n"
-        "「#TSF_calcFX」等に存在した演算優先順位(平方根常用対数など＞積商算公約公倍数任意底対数など＞加減算消費税など＞ゼロ比較演算子数列積和など)は存在しない。\n"
-        "分数やdecimal系を用いないので少数の制度が保証できない。\n"
-        "「LISP」系ワードポーランド電卓の概要(暫定案)。\n"
-        "RPNと大体同じだがこっちは括弧を必要。「(+ p1 p2 m3)」の様に引数の自由度が優先される(予定)。\n"
+    TSF_Forth_setTSF("aboutMatch:",
+        "「match」系ワード解説は仕様レベルで準備中…。\n"
         ,TSF_style="N")
     TSF_sample_run("-- TSF_sample_about --")
 

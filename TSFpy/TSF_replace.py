@@ -19,9 +19,11 @@ def TSF_replace_Initwords(TSF_words):    #TSF_doc:スタック並び替え関連
     TSF_words["#TSF_inS"]=TSF_replace_inS; TSF_words["#文字列に含む"]=TSF_replace_inS
     TSF_words["#TSF_searchS"]=TSF_replace_searchS; TSF_words["#正規表現に該当"]=TSF_replace_searchS
     TSF_words["#TSF_matcherS"]=TSF_replace_matcherS; TSF_words["#文字列のそれっぽさ"]=TSF_replace_matcherS
+    TSF_words["#TSF_matchgrade"]=TSF_replace_matchgrade; TSF_words["#文字列類似の合格点"]=TSF_replace_matchgrade
     TSF_words["#TSF_matchif"]=TSF_replace_matchif; TSF_words["#文字列のそれっぽさ"]=TSF_replace_matchif
     TSF_words["#TSF_matchelse"]=TSF_replace_matchelse; TSF_words["#文字列のそれっぽさ"]=TSF_replace_matchelse
     TSF_words["#TSF_matchifelse"]=TSF_replace_matchifelse; TSF_words["#文字列のそれっぽさ"]=TSF_replace_matchifelse
+    TSF_words["#TSF_matchcasethe"]=TSF_replace_matchcasethe; TSF_words["#文字列とスタックの一致箇所"]=TSF_replace_matchcasethe
     TSF_words["#TSF_replacethe"]=TSF_replace_replacethe; TSF_words["#スタックをテキストとみなして置換"]=TSF_replace_replacethe
     TSF_words["#TSF_replacethat"]=TSF_replace_replacethat; TSF_words["#積込先スタックをテキストとみなして置換"]=TSF_replace_replacethat
     TSF_words["#TSF_resubthe"]=TSF_replace_resubthe; TSF_words["#スタックをテキストとみなして正規表現で置換"]=TSF_replace_resubthe
@@ -124,6 +126,11 @@ def TSF_replace_matchifelse():   #TSF_doc:[else,then,score]類似度がグレー
     TSF_else=TSF_Forth_popthat()
     TSF_ifelse=TSF_then if TSF_matchscore >= TSF_matchgrade else TSF_else
     return TSF_ifelse
+
+def TSF_replace_matchcasethe():   #TSF_doc:[stack,matcher,func,string]スタックの文字列置換・カウント・検索などの組み合わせを1つのワードに集約予定。
+    TSF_the=TSF_Forth_popthat()
+    TSF_Forth_stackvalue(TSF_the)
+    return None
 
 def TSF_replace_replacethe():   #TSF_doc:[stack,old,new]スタックをテキストとみなして文字列置換する。3スタック積み下ろし。
     TSF_tsvN=TSF_Forth_popthat()
