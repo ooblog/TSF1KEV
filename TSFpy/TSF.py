@@ -5,8 +5,7 @@ from __future__ import division,print_function,absolute_import,unicode_literals
 from TSF_io import *
 #from TSF_Forth import *
 from TSF_shuffle import *
-from TSF_replace import *
-#from TSF_match import *
+from TSF_match import *
 from TSF_calc import *
 from TSF_time import *
 
@@ -134,7 +133,7 @@ def TSF_sample_help():    #TSF_doc:TSFコマンド一覧表示サンプルプロ
 TSF_about_mergefile="TSF_about.tsf"
 TSF_mergefile=""
 TSF_argvs=TSF_io_argvs()
-TSF_Forth_init(TSF_argvs,[TSF_shuffle_Initwords,TSF_replace_Initwords,TSF_calc_Initwords,TSF_time_Initwords])
+TSF_Forth_init(TSF_argvs,[TSF_shuffle_Initwords,TSF_match_Initwords,TSF_calc_Initwords,TSF_time_Initwords])
 if len(TSF_argvs) >= 2:
     TSF_mergefile=TSF_argvs[1]
 if os.path.isfile(TSF_mergefile):

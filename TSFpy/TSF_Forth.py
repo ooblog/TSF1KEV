@@ -17,6 +17,7 @@ def TSF_Forth_Initwords(TSF_words):    #TSF_doc:ワードを初期化する(TSFA
     TSF_words["#TSF_encoding"]=TSF_Forth_encoding; TSF_words["#文字コード"]=TSF_Forth_encoding
     TSF_words["#TSF_this"]=TSF_Forth_this; TSF_words["#スタックに入る"]=TSF_Forth_this
     TSF_words["#TSF_that"]=TSF_Forth_that; TSF_words["#スタックに積込"]=TSF_Forth_that
+    TSF_words["#TSF_input"]=TSF_Forth_input; TSF_words["#文字列入力"]=TSF_Forth_input
     TSF_words["#TSF_echoes"]=TSF_Forth_echoes; TSF_words["#N行表示"]=TSF_Forth_echoes
     TSF_words["#TSF_viewthe"]=TSF_Forth_viewthe; TSF_words["#スタックを表示"]=TSF_Forth_viewthe
     TSF_words["#TSF_viewthis"]=TSF_Forth_viewthis; TSF_words["#実行中スタックを表示"]=TSF_Forth_viewthis
@@ -63,6 +64,11 @@ def TSF_Forth_that():    #TSF_doc:thatスタックの変更。1スタック積�
 
 def TSF_Forth_this():    #TSF_doc:thatスタックの変更。1スタック積み下ろし。
     return TSF_Forth_popthat()
+
+def TSF_Forth_input():   #TSF_doc:[]文字列を入力させる。1スタック積み込み。
+    TSF_tsvA=raw_input()
+    TSF_Forth_pushthat(TSF_tsvA)
+    return None
 
 def TSF_Forth_echoes():    #TSF_doc:[…valueB,valueA,count]スタック内容をstdout表示する。count自身とcount分スタック積み下ろし。
     TSF_countlen=TSF_Forth_popintthe(TSF_stackthat)
