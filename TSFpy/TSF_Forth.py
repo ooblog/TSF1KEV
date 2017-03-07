@@ -75,7 +75,7 @@ def TSF_Forth_view(TSF_the,TSF_view_io=True,TSF_view_log=""):    #TSF_doc:スタ
         TSF_stackV=[TSF_txt_ESCdecode(TSF_stk) for TSF_stk in TSF_stacks[TSF_the]]
         TSF_style=TSF_styles.get(TSF_the,"T")
         if TSF_style == "O":
-            TSF_view_logline="{0}\t{1}\n".format(TSF_thename,"\t".join(TSF_stackV))
+            TSF_view_logline="{0}\t{1}\n".format(TSF_the,"\t".join(TSF_stackV))
         elif TSF_style == "T":
             TSF_view_logline="{0}\n\t{1}\n".format(TSF_the,"\t".join(TSF_stackV))
         else:  # TSF_style == "N":

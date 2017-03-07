@@ -132,7 +132,7 @@ def TSF_replace_replacethe():   #TSF_doc:[stack,old,new]スタックをテキス
     TSF_Forth_style(TSF_the,TSF_style="N")
     TSF_text=TSF_txt_ESCdecode("\n".join(TSF_Forth_stackvalue(TSF_the)))
     TSF_text=TSF_text.replace(TSF_tsvO,TSF_tsvN)
-    TSF_Forth_settext(TSF_the,TSF_text,TSF_style="N")
+    TSF_Forth_setTSF(TSF_the,TSF_text,TSF_style="N")
     return None
 
 def TSF_replace_replacethat():   #TSF_doc:[old,new]積込先スタックをテキストとみなして文字列置換する。2スタック積み下ろし。
@@ -142,7 +142,7 @@ def TSF_replace_replacethat():   #TSF_doc:[old,new]積込先スタックをテ�
     TSF_Forth_style(TSF_the,TSF_style="N")
     TSF_text=TSF_txt_ESCdecode("\n".join(TSF_Forth_stackvalue(TSF_the)))
     TSF_text=TSF_text.replace(TSF_tsvO,TSF_tsvN)
-    TSF_Forth_settext(TSF_the,TSF_text,TSF_style="N")
+    TSF_Forth_setTSF(TSF_the,TSF_text,TSF_style="N")
     return None
 
 def TSF_replace_resubthe():   #TSF_doc:[stack,old,new]スタックをテキストとみなして文字列置換する。3スタック積み下ろし。
@@ -152,7 +152,7 @@ def TSF_replace_resubthe():   #TSF_doc:[stack,old,new]スタックをテキス�
     TSF_Forth_style(TSF_the,TSF_style="N")
     TSF_text=TSF_txt_ESCdecode("\n".join(TSF_Forth_stackvalue(TSF_the)))
     TSF_text=re.sub(re.compile(TSF_tsvO,re.MULTILINE),TSF_tsvN,TSF_text)
-    TSF_Forth_settext(TSF_the,TSF_text,TSF_style="N")
+    TSF_Forth_setTSF(TSF_the,TSF_text,TSF_style="N")
     return None
 
 def TSF_replace_resubthat():   #TSF_doc:[old,new]積込先スタックをテキストとみなして文字列置換する。2スタック積み下ろし。
@@ -162,7 +162,7 @@ def TSF_replace_resubthat():   #TSF_doc:[old,new]積込先スタックをテキ�
     TSF_Forth_style(TSF_the,TSF_style="N")
     TSF_text=TSF_txt_ESCdecode("\n".join(TSF_Forth_stackvalue(TSF_the)))
     TSF_text=re.sub(re.compile(TSF_tsvO,re.MULTILINE),TSF_tsvN,TSF_text)
-    TSF_Forth_settext(TSF_the,TSF_text,TSF_style="N")
+    TSF_Forth_setTSF(TSF_the,TSF_text,TSF_style="N")
     return None
 
 
