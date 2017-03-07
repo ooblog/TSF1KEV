@@ -65,7 +65,7 @@ def TSF_io_argvs():
         TSF_argvs.append(TSF_argv.decode(TSF_io_stdout))
     return TSF_argvs
 
-def TSF_io_intstr0x(TSF_io_codestr):    #TSF_doc:テキストを数値に変換する(整数10進か16進数)。
+def TSF_io_intstr0x(TSF_io_codestr):    #TSF_doc:テキストを整数に変換する(整数10進か16進数)。
     TSF_io_codestr="{0}".format(TSF_io_codestr)
     TSF_io_codeint=0
     try:
@@ -80,6 +80,15 @@ def TSF_io_intstr0x(TSF_io_codestr):    #TSF_doc:テキストを数値に変換�
                 pass
             break
     return TSF_io_codeint
+
+def TSF_io_floatstr(TSF_io_codestr):    #TSF_doc:テキストを小数に変換する。
+    TSF_io_codestr="{0}".format(TSF_io_codestr)
+    TSF_io_codefloat=0.0
+    try:
+        TSF_io_codefloat=float(TSF_io_codestr)
+    except ValueError:
+        pass
+    return TSF_io_codefloat
 
 def TSF_txt_ESCencode(TSF_text):
     TSF_text=TSF_text.replace('&',"&amp;").replace('\t',"&tab;")

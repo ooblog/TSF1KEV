@@ -15,8 +15,13 @@ def TSF_replace_Initwords(TSF_words):    #TSF_doc:スタック並び替え関連
     TSF_words["#TSF_split"]=TSF_replace_split; TSF_words["#文字で分割"]=TSF_replace_split
     TSF_words["#TSF_chars"]=TSF_replace_chars; TSF_words["#一文字ずつに分離"]=TSF_replace_chars
     TSF_words["#TSF_input"]=TSF_replace_input; TSF_words["#文字列入力"]=TSF_replace_input
-    TSF_words["#TSF_strequal"]=TSF_replace_strequal; TSF_words["#文字列一致"]=TSF_replace_strequal
-    TSF_words["#TSF_strmatcher"]=TSF_replace_strmatcher; TSF_words["#文字列のそれっぽさ"]=TSF_replace_strmatcher
+    TSF_words["#TSF_requalS"]=TSF_replace_equalS; TSF_words["#文字列一致"]=TSF_replace_equalS
+    TSF_words["#TSF_inS"]=TSF_replace_inS; TSF_words["#文字列に含む"]=TSF_replace_inS
+    TSF_words["#TSF_searchS"]=TSF_replace_searchS; TSF_words["#正規表現に該当"]=TSF_replace_searchS
+    TSF_words["#TSF_matcherS"]=TSF_replace_matcherS; TSF_words["#文字列のそれっぽさ"]=TSF_replace_matcherS
+    TSF_words["#TSF_matchif"]=TSF_replace_matchif; TSF_words["#文字列のそれっぽさ"]=TSF_replace_matchif
+    TSF_words["#TSF_matchelse"]=TSF_replace_matchelse; TSF_words["#文字列のそれっぽさ"]=TSF_replace_matchelse
+    TSF_words["#TSF_matchifelse"]=TSF_replace_matchifelse; TSF_words["#文字列のそれっぽさ"]=TSF_replace_matchifelse
     return TSF_words
 #        "#TSF_replacethe":TSF_Forth_replacethe,  "スタックをテキストとみなして置換する":TSF_Forth_replacethe,
 #        "#TSF_replacethat":TSF_Forth_replacethat,  "一行を置換する":TSF_Forth_replacethat,
@@ -59,37 +64,72 @@ def TSF_replace_input():   #TSF_doc:[]文字列を入力させる。1スタッ�
     TSF_Forth_pushthat(TSF_tsvA)
     return None
 
-def TSF_replace_strequal():   #TSF_doc:[equal,string]文字列が一致すれば1、不一致なら0を残す。2スタック積み下ろし、1スタック積み込み。
+def TSF_replace_equalS():   #TSF_doc:[equal,string]文字列が一致すれば1、不一致なら0を残す。2スタック積み下ろし、1スタック積み込み。
     TSF_tsvS=TSF_Forth_popthat()
     TSF_tsvE=TSF_Forth_popthat()
     TSF_tsvA="1" if TSF_tsvS == TSF_tsvE else "0"
     TSF_Forth_pushthat(TSF_tsvA)
     return None
 
-def TSF_replace_strmatcher():   #TSF_doc:[matcher,string]文字列が完全一致すれば1.0、不一致なら0.0、そこそこ惜しい場合は類似度を小数値で残す。2スタック積み下ろし、1スタック積み込み。
+def TSF_replace_inS():   #TSF_doc:[in,string]文字列が含まれれば1、含まれないなら0を残す。2スタック積み下ろし、1スタック積み込み。
+    TSF_tsvS=TSF_Forth_popthat()
+    TSF_tsvE=TSF_Forth_popthat()
+    TSF_tsvA="1" if TSF_tsvS in TSF_tsvE else "0"
+    TSF_Forth_pushthat(TSF_tsvA)
+    return None
+
+def TSF_replace_searchS():   #TSF_doc:[search,string]正規表現に該当すれば1、含まれないなら0を残す。2スタック積み下ろし、1スタック積み込み。
+    TSF_tsvS=TSF_Forth_popthat()
+    TSF_tsvE=TSF_Forth_popthat()
+    TSF_research=None
+    TSF_tsvA="0"
+    try:
+        TSF_research=re.search(re.compile(TSF_tsvS),TSF_tsvE)
+    except re.error:
+        TSF_research=None
+    if LTsvDOC_research:
+        TSF_tsvA="1"
+    TSF_Forth_pushthat(TSF_tsvA)
+    return None
+
+def TSF_replace_matcherS():   #TSF_doc:[matcher,string]文字列が完全一致すれば1.0、不一致なら0.0、そこそこ惜しい場合は類似度を小数値で残す。2スタック積み下ろし、1スタック積み込み。
     TSF_tsvS=TSF_Forth_popthat(); TSF_tsvS=unicodedata.normalize('NFKC',TSF_tsvS)
     TSF_tsvE=TSF_Forth_popthat(); TSF_tsvE=unicodedata.normalize('NFKC',TSF_tsvE)
     TSF_tsvA=str(difflib.SequenceMatcher(None,TSF_tsvS,TSF_tsvE).ratio())
     TSF_Forth_pushthat(TSF_tsvA)
     return None
 
-TSF_matchgrade=0.9
+TSF_matchgrade=5/6
 def TSF_replace_matchgrade():   #TSF_doc:[grade]文字列一致とみなすグレード値を変更。1スタック積み下ろし。
+    global TSF_matchgrade
     TSF_tsvG=TSF_Forth_popthat()
     TSF_matchgrade=float(TSF_tsvG)
     return None
 
-def TSF_replace_matchif():   #TSF_doc:[then,score]文字列が一致すれば1、不一致なら0を残す。2スタック積み下ろし、1スタック積み込み。
-    return None
+def TSF_replace_matchif():   #TSF_doc:[then,score]類似度がグレード値を満たせばthenスタックを実行。2スタック積み下ろし。
+    TSF_matchscore=TSF_io_floatstr(TSF_Forth_popthat())
+    TSF_then=TSF_Forth_popthat()
+    TSF_then=TSF_then if TSF_matchscore >= TSF_matchgrade else None
+    return TSF_then
 
-def TSF_replace_matchifelse():   #TSF_doc:[else,then,score]文字列が一致すれば1、不一致なら0を残す。2スタック積み下ろし、1スタック積み込み。
-    return None
+def TSF_replace_matchelse():   #TSF_doc:[else,score]類似度がグレード値を満たせなかった場合にelseスタックを実行。2スタック積み下ろし。
+    TSF_matchscore=TSF_io_floatstr(TSF_Forth_popthat())
+    TSF_else=TSF_Forth_popthat()
+    TSF_else=TSF_else if TSF_matchscore < TSF_matchgrade else None
+    return TSF_else
+
+def TSF_replace_matchifelse():   #TSF_doc:[else,then,score]類似度がグレード値を満たせばthenスタック、満たせなかった場合にelseスタックを実行。3スタック積み下ろし、1スタック積み込み。
+    TSF_matchscore=TSF_io_floatstr(TSF_Forth_popthat())
+    TSF_then=TSF_Forth_popthat()
+    TSF_else=TSF_Forth_popthat()
+    TSF_ifelse=TSF_then if TSF_matchscore >= TSF_matchgrade else TSF_else
+    return TSF_ifelse
 
 def TSF_replace_debug():    #TSF_doc:「TSF/TSF_shuffle.py」単体テスト風デバッグ関数。
-    TSF_tsvS="いいまちがい"
-    TSF_tsvE="いいまつがい"
+    TSF_tsvS="いいまちがいやうろおぼえ"
+    TSF_tsvE="いいまつがいやうるおぼえ"
     TSF_tsvA=str(difflib.SequenceMatcher(None,TSF_tsvS,TSF_tsvE).ratio())
-    TSF_io_printlog("{0}:{1}={2}".format(TSF_tsvS,TSF_tsvE,TSF_tsvA))
+    TSF_io_printlog("{0}:{1}={2}/{3}".format(TSF_tsvS,TSF_tsvE,TSF_tsvA,str(TSF_matchgrade)))
 
 if __name__=="__main__":
     from collections import OrderedDict
