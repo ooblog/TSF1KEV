@@ -40,7 +40,7 @@ TSF_exitcode="0"
 def TSF_Forth_exitcode(TSF_fincode=None):
     global TSF_exitcode
     if TSF_fincode != None:
-        TSF_exitcode=0 if TSF_exitcode in ["0","0|1","0.0"] else TSF_fincode
+        TSF_exitcode=TSF_fincode
     return TSF_exitcode
 
 def TSF_Forth_fin():    #TSF_doc:[errmsg]TSF終了時のオプションを指定する。1スタック積み下ろし。
