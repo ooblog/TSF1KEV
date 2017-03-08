@@ -14,19 +14,20 @@ def TSF_match_Initwords(TSF_words):    #TSF_doc:スタック並び替え関連�
     TSF_words["#TSF_betweenN"]=TSF_match_TSF_betweenN; TSF_words["#挟んでN個連結"]=TSF_match_TSF_betweenN
     TSF_words["#TSF_split"]=TSF_match_split; TSF_words["#文字で分割"]=TSF_match_split
     TSF_words["#TSF_chars"]=TSF_match_chars; TSF_words["#一文字ずつに分離"]=TSF_match_chars
-    TSF_words["#TSF_requalS"]=TSF_match_equalS; TSF_words["#文字列一致"]=TSF_match_equalS
-    TSF_words["#TSF_inS"]=TSF_match_inS; TSF_words["#文字列に含む"]=TSF_match_inS
-    TSF_words["#TSF_searchS"]=TSF_match_searchS; TSF_words["#正規表現に該当"]=TSF_match_searchS
-    TSF_words["#TSF_matcherS"]=TSF_match_matcherS; TSF_words["#文字列のそれっぽさ"]=TSF_match_matcherS
     TSF_words["#TSF_matchgrade"]=TSF_match_matchgrade; TSF_words["#文字列類似の合格点"]=TSF_match_matchgrade
-    TSF_words["#TSF_matchif"]=TSF_match_matchif; TSF_words["#文字列のそれっぽさ"]=TSF_match_matchif
-    TSF_words["#TSF_matchelse"]=TSF_match_matchelse; TSF_words["#文字列のそれっぽさ"]=TSF_match_matchelse
-    TSF_words["#TSF_matchifelse"]=TSF_match_matchifelse; TSF_words["#文字列のそれっぽさ"]=TSF_match_matchifelse
-    TSF_words["#TSF_matchcasethe"]=TSF_match_matchcasethe; TSF_words["#文字列とスタックの一致箇所"]=TSF_match_matchcasethe
-    TSF_words["#TSF_matchthe"]=TSF_match_replacethe; TSF_words["#スタックをテキストとみなして置換"]=TSF_match_replacethe
-    TSF_words["#TSF_matchthat"]=TSF_match_replacethat; TSF_words["#積込先スタックをテキストとみなして置換"]=TSF_match_replacethat
-    TSF_words["#TSF_resubthe"]=TSF_match_resubthe; TSF_words["#スタックをテキストとみなして正規表現で置換"]=TSF_match_resubthe
-    TSF_words["#TSF_resubthat"]=TSF_match_resubthat; TSF_words["#積込先スタックをテキストとみなして正規表現で置換"]=TSF_match_resubthat
+    TSF_words["#TSF_matchcasethe"]=TSF_match_matchcasethe; TSF_words["#スタックの類似箇所"]=TSF_match_matchcasethe
+    TSF_words["#TSF_replacetextthe"]=TSF_match_replacetextthe; TSF_words["#スタックをテキストとみなして置換"]=TSF_match_replacetextthe
+#    TSF_words["#TSF_requalS"]=TSF_match_equalS; TSF_words["#文字列一致"]=TSF_match_equalS
+#    TSF_words["#TSF_inS"]=TSF_match_inS; TSF_words["#文字列に含む"]=TSF_match_inS
+#    TSF_words["#TSF_searchS"]=TSF_match_searchS; TSF_words["#正規表現に該当"]=TSF_match_searchS
+#    TSF_words["#TSF_matcherS"]=TSF_match_matcherS; TSF_words["#文字列のそれっぽさ"]=TSF_match_matcherS
+#    TSF_words["#TSF_matchif"]=TSF_match_matchif; TSF_words["#文字列のそれっぽさ"]=TSF_match_matchif
+#    TSF_words["#TSF_matchelse"]=TSF_match_matchelse; TSF_words["#文字列のそれっぽさ"]=TSF_match_matchelse
+#    TSF_words["#TSF_matchifelse"]=TSF_match_matchifelse; TSF_words["#文字列のそれっぽさ"]=TSF_match_matchifelse
+#    TSF_words["#TSF_matchthe"]=TSF_match_replacethe; TSF_words["#スタックをテキストとみなして置換"]=TSF_match_replacethe
+#    TSF_words["#TSF_matchthat"]=TSF_match_replacethat; TSF_words["#積込先スタックをテキストとみなして置換"]=TSF_match_replacethat
+#    TSF_words["#TSF_resubthe"]=TSF_match_resubthe; TSF_words["#スタックをテキストとみなして正規表現で置換"]=TSF_match_resubthe
+#    TSF_words["#TSF_resubthat"]=TSF_match_resubthat; TSF_words["#積込先スタックをテキストとみなして正規表現で置換"]=TSF_match_resubthat
     return TSF_words
 
 def TSF_match_TSF_joinN():   #TSF_doc:[stackN…stackB,stackA,count]スタックを連結する。count自身とcountの回数分スタック積み下ろし。
@@ -59,6 +60,55 @@ def TSF_match_chars():   #TSF_doc:[string]文字列を一文字ずつに分割�
     for TSF_tsvA in TSF_tsvQ:
         TSF_Forth_pushthat(TSF_tsvA)
     return None
+
+TSF_matchgrade=5/6
+def TSF_match_matchgrade():   #TSF_doc:[grade]文字列一致とみなすグレード値を変更。1スタック積み下ろし。
+    global TSF_matchgrade
+    TSF_tsvG=TSF_Forth_popthat()
+    TSF_matchgrade=float(TSF_tsvG)
+    return None
+
+def TSF_match_research(TSF_matcher,TSF_string):   #TSF_doc:正規表現で文字列比較
+    TSF_research=None
+    try:
+        TSF_research=re.search(re.compile(TSF_matcher),TSF_string)
+    except re.error:
+        TSF_research=None
+    return 1 if TSF_research != None else 0
+
+TSF_match_case=OrderedDict([
+    ('equal',(lambda TSF_matcher,TSF_string:1 if matcher==string else 0 )),
+    ('in',(lambda TSF_matcher,TSF_string:1 if matcher in string else 0 )),
+    ('research',(lambda TSF_matcher,TSF_string:TSF_match_research(TSF_matcher,TSF_string) )),
+    ('matcher',(lambda TSF_matcher,TSF_string:1 if difflib.SequenceMatcher(None,unicodedata.normalize('NFKC',TSF_matcher),unicodedata.normalize('NFKC',TSF_string)).ratio() >= TSF_matchgrade else 0 )),
+])
+def TSF_match_matchcasethe():   #TSF_doc:[stack,matcher,func,string]スタックの文字列検索などの組み合わせを1つのワードに集約予定。
+    TSF_count=0
+    TSF_tsvS=TSF_Forth_popthat()
+    TSF_tsvF=TSF_Forth_popthat()
+    TSF_tsvM=TSF_Forth_popthat()
+    TSF_the=TSF_Forth_popthat()
+    TSF_matchcases=TSF_Forth_stackvalue(TSF_the)
+#func:"first","rest","count"
+    for TSF_matchcase in TSF_matchcases:
+        if TSF_match_case[TSF_tsvF](TSF_matcher,TSF_string):
+            TSF_count+=1
+    TSF_Forth_pushthat(str(TSF_count))
+    return None
+
+TSF_match_text=OrderedDict([
+    ('replace',(lambda TSF_text,TSF_matcher,TSF_string:TSF_text.replace(TSF_matcher,TSF_string) )),
+    ('resub',(lambda TSF_text,TSF_matcher,TSF_string:re.sub(re.compile(TSF_matcher,re.MULTILINE),TSF_string,TSF_text) )),
+])
+def TSF_match_replacetextthe():   #TSF_doc:[stack,matcher,func,string]スタックの文字列置換の組み合わせを1つのワードに集約予定。
+    TSF_tsvS=TSF_Forth_popthat()
+    TSF_tsvF=TSF_Forth_popthat()
+    TSF_tsvM=TSF_Forth_popthat()
+    TSF_the=TSF_Forth_popthat()
+    TSF_text=TSF_txt_ESCdecode("\n".join(TSF_Forth_stackvalue(TSF_the)))
+    TSF_text=TSF_match_text[TSF_tsvF](TSF_text,TSF_matcher,TSF_string)
+    TSF_Forth_setTSF(TSF_the,TSF_text,TSF_style="N")
+
 
 def TSF_match_equalS():   #TSF_doc:[equal,string]文字列が一致すれば1、不一致なら0を残す。2スタック積み下ろし、1スタック積み込み。
     TSF_tsvS=TSF_Forth_popthat()
@@ -95,13 +145,6 @@ def TSF_match_matcherS():   #TSF_doc:[matcher,string]文字列が完全一致す
     TSF_Forth_pushthat(TSF_tsvA)
     return None
 
-TSF_matchgrade=5/6
-def TSF_match_matchgrade():   #TSF_doc:[grade]文字列一致とみなすグレード値を変更。1スタック積み下ろし。
-    global TSF_matchgrade
-    TSF_tsvG=TSF_Forth_popthat()
-    TSF_matchgrade=float(TSF_tsvG)
-    return None
-
 def TSF_match_matchif():   #TSF_doc:[then,score]類似度がグレード値を満たせばthenスタックを実行。2スタック積み下ろし。
     TSF_matchscore=TSF_io_floatstr(TSF_Forth_popthat())
     TSF_then=TSF_Forth_popthat()
@@ -120,11 +163,6 @@ def TSF_match_matchifelse():   #TSF_doc:[else,then,score]類似度がグレー�
     TSF_else=TSF_Forth_popthat()
     TSF_ifelse=TSF_then if TSF_matchscore >= TSF_matchgrade else TSF_else
     return TSF_ifelse
-
-def TSF_match_matchcasethe():   #TSF_doc:[stack,matcher,func,string]スタックの文字列置換・カウント・検索などの組み合わせを1つのワードに集約予定。
-    TSF_the=TSF_Forth_popthat()
-    TSF_Forth_stackvalue(TSF_the)
-    return None
 
 def TSF_match_replacethe():   #TSF_doc:[stack,old,new]スタックをテキストとみなして文字列置換する。3スタック積み下ろし。
     TSF_tsvN=TSF_Forth_popthat()
