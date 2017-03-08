@@ -1,0 +1,32 @@
+TSF_Tab-Separated-Forth:
+	UTF-8	:TSF_encoding	0	:TSF_fin.
+TSF_argvs:
+	TSF_time.py
+TSF_py:
+	Python2.7.6	linux2	UTF-8
+TSF_time.test@c@a1:
+	@c,@a⇔0,0.206577456623
+TSF_time.TSF/LTSV:
+	@000y@0m@0dm@wdec@0h@0n@0s⇔20170309R050233
+	@000Y@0M@0Dm@Wdec@0H@0N@0S⇔20170308W290233
+TSF_time.ISO8601_JST:
+	@000y-@0m-@0dmT@0h:@0n:@0s@JST⇔2017-03-09T05:02:33+09:00
+	@000Y-@0M-@0DmT@0H:@0N:@0S@JST⇔2017-03-08T29:02:33+09:00
+TSF_time.test@0ls:
+	@000y-@0m-@0dmT@0h:@0n:@0s.@00ls⇔2017-03-09T05:02:33.681
+	@000Y-@0M-@0DmT@0H:@0N:@0S.@00Ls⇔2017-03-08T29:02:33.681
+TSF_time.test@c@a2:
+	@c,@a⇔7,0.206577456623
+TSF_time.test@c@a1:
+	@c,@a⇔0,0.747819597724
+TSF_time.TSF/LTSV:
+	@000y@0m@0dm@wdec@0h@0n@0s⇔20170309R050233
+	@000Y@0M@0Dm@Wdec@0H@0N@0S⇔20170308W290233
+TSF_time.ISO8601_JST:
+	@000y-@0m-@0dmT@0h:@0n:@0s@JST⇔2017-03-09T05:02:33+09:00
+	@000Y-@0M-@0DmT@0H:@0N:@0S@JST⇔2017-03-08T29:02:33+09:00
+TSF_time.test@0ls:
+	@000y-@0m-@0dmT@0h:@0n:@0s.@00ls⇔2017-03-09T05:02:33.682
+	@000Y-@0M-@0DmT@0H:@0N:@0S.@00Ls⇔2017-03-08T29:02:33.682
+TSF_time.test@c@a2:
+	@c,@a⇔7,0.747819597724

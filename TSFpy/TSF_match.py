@@ -69,30 +69,37 @@ def TSF_match_matchgrade():   #TSF_doc:[grade]文字列一致とみなすグレ�
     return None
 
 def TSF_match_research(TSF_matcher,TSF_string):   #TSF_doc:正規表現で文字列比較
-    TSF_research=None
     try:
         TSF_research=re.search(re.compile(TSF_matcher),TSF_string)
     except re.error:
         TSF_research=None
-    return 1 if TSF_research != None else 0
+    return 1 if TSF_research else 0
 
 TSF_match_case=OrderedDict([
-    ('equal',(lambda TSF_matcher,TSF_string:1 if matcher==string else 0 )),
-    ('in',(lambda TSF_matcher,TSF_string:1 if matcher in string else 0 )),
-    ('research',(lambda TSF_matcher,TSF_string:TSF_match_research(TSF_matcher,TSF_string) )),
-    ('matcher',(lambda TSF_matcher,TSF_string:1 if difflib.SequenceMatcher(None,unicodedata.normalize('NFKC',TSF_matcher),unicodedata.normalize('NFKC',TSF_string)).ratio() >= TSF_matchgrade else 0 )),
+    ('equal',(lambda TSF_matcher,TSF_string:1 if matcher == string else 0)),
+    ('in',(lambda TSF_matcher,TSF_string:1 if matcher in string else 0)),
+    ('research',(lambda TSF_matcher,TSF_string:TSF_match_research(TSF_matcher,TSF_string))),
+    ('matcher',(lambda TSF_matcher,TSF_string:1 if difflib.SequenceMatcher(None,unicodedata.normalize('NFKC',TSF_matcher),unicodedata.normalize('NFKC',TSF_string)).ratio() >= TSF_matchgrade else 0)),
 ])
 def TSF_match_matchcasethe():   #TSF_doc:[stack,matcher,func,string]スタックの文字列検索などの組み合わせを1つのワードに集約予定。
-    TSF_count=0
     TSF_tsvS=TSF_Forth_popthat()
     TSF_tsvF=TSF_Forth_popthat()
+    if '-' in TSF_tsvF:
+        TSF_matchF,TSF_matchC=TSF_tsvF.split('-')[0],TSF_tsvF.split('-')[-1]
+    else:
+        TSF_matchF,TSF_matchC=TSF_tsvF,"first"
     TSF_tsvM=TSF_Forth_popthat()
     TSF_the=TSF_Forth_popthat()
     TSF_matchcases=TSF_Forth_stackvalue(TSF_the)
-#func:"first","rest","count"
-    for TSF_matchcase in TSF_matchcases:
-        if TSF_match_case[TSF_tsvF](TSF_matcher,TSF_string):
-            TSF_count+=1
+    if TSF_matchC == "first":
+        TSF_count=-1
+        for TSF_matchcount,TSF_matchcase in enumerate(TSF_matchcases):
+            if TSF_match_case.get(TSF_tsvF,TSF_match_case[TSF_matchF])(TSF_text,TSF_matcher,TSF_string):
+                TSF_count=TSF_matchcount; break
+    else:  #TSF_matchC == "count":
+        TSF_count=0
+        for TSF_matchcase in TSF_matchcases:
+            TSF_count+=TSF_match_case.get(TSF_tsvF,TSF_match_case[TSF_matchF])(TSF_text,TSF_matcher,TSF_string)
     TSF_Forth_pushthat(str(TSF_count))
     return None
 
@@ -106,7 +113,7 @@ def TSF_match_replacetextthe():   #TSF_doc:[stack,matcher,func,string]スタッ�
     TSF_tsvM=TSF_Forth_popthat()
     TSF_the=TSF_Forth_popthat()
     TSF_text=TSF_txt_ESCdecode("\n".join(TSF_Forth_stackvalue(TSF_the)))
-    TSF_text=TSF_match_text[TSF_tsvF](TSF_text,TSF_matcher,TSF_string)
+    TSF_text=TSF_match_text.get(TSF_tsvF,TSF_match_text['replace'])(TSF_text,TSF_matcher,TSF_string)
     TSF_Forth_setTSF(TSF_the,TSF_text,TSF_style="N")
 
 
