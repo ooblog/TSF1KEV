@@ -14,16 +14,12 @@ def TSF_match_Initwords(TSF_words):    #TSF_doc:スタック並び替え関連�
     TSF_words["#TSF_betweenN"]=TSF_match_TSF_betweenN; TSF_words["#挟んでN個連結"]=TSF_match_TSF_betweenN
     TSF_words["#TSF_split"]=TSF_match_split; TSF_words["#文字で分割"]=TSF_match_split
     TSF_words["#TSF_chars"]=TSF_match_chars; TSF_words["#一文字ずつに分離"]=TSF_match_chars
+    TSF_words["#TSF_charslen"]=TSF_match_charslen; TSF_words["#文字数取得"]=TSF_match_charslen
     TSF_words["#TSF_replacestacks"]=TSF_match_replacestacks; TSF_words["#スタックを文字列群で置換"]=TSF_match_replacestacks
     TSF_words["#TSF_resubstacks"]=TSF_match_resubstacks; TSF_words["#スタックを正規表現群で置換"]=TSF_match_resubstacks
     TSF_words["#TSF_matchgrade"]=TSF_match_matchgrade; TSF_words["#文字列類似の合格点"]=TSF_match_matchgrade
     TSF_words["#TSF_countstacks"]=TSF_match_countstacks; TSF_words["#スタックの該当箇所を数える"]=TSF_match_countstacks
     TSF_words["#TSF_casestacks"]=TSF_match_casestacks; TSF_words["#スタックの該当箇所のエイリアス"]=TSF_match_casestacks
-#    TSF_words["#TSF_matchcasethe"]=TSF_match_matchcasethe; TSF_words["#スタックの類似箇所"]=TSF_match_matchcasethe
-#    TSF_words["#TSF_requalS"]=TSF_match_equalS; TSF_words["#文字列一致"]=TSF_match_equalS
-#    TSF_words["#TSF_inS"]=TSF_match_inS; TSF_words["#文字列に含む"]=TSF_match_inS
-#    TSF_words["#TSF_searchS"]=TSF_match_searchS; TSF_words["#正規表現に該当"]=TSF_match_searchS
-#    TSF_words["#TSF_matcherS"]=TSF_match_matcherS; TSF_words["#文字列のそれっぽさ"]=TSF_match_matcherS
     return TSF_words
 
 def TSF_match_TSF_joinN():   #TSF_doc:[stackN…stackB,stackA,count]スタックを連結する。count自身とcountの回数分スタック積み下ろし。
@@ -43,18 +39,25 @@ def TSF_match_TSF_betweenN():   #TSF_doc:[stackN…stackB,stackA,count,joint]ス
     TSF_Forth_pushthat(TSF_joint.join(reversed(TSF_joinlist)))
     return None
 
-def TSF_match_split():   #TSF_doc:[string,spliter]文字列を分割する。2スタック積み下ろし、分割された文字列分スタック積み込み。
+def TSF_match_split():   #TSF_doc:[string,spliter]文字列を分割する。2スタック積み下ろし、分割された文字列+分割数1スタック積み込み。
     TSF_tsvP=TSF_Forth_popthat()
     TSF_tsvQ=TSF_Forth_popthat()
     TSF_tsvK=TSF_tsvQ.split(TSF_tsvP)
     for TSF_tsvA in TSF_tsvK:
         TSF_Forth_pushthat(TSF_tsvA)
+    TSF_Forth_pushthat(str(len(TSF_tsvK)))
     return None
 
-def TSF_match_chars():   #TSF_doc:[string]文字列を一文字ずつに分割する。1スタック積み下ろし、分割された文字分スタック積み込み。
+def TSF_match_chars():   #TSF_doc:[string]文字列を一文字ずつに分割する。1スタック積み下ろし、分割された文字+文字列長1スタック積み込み。
     TSF_tsvQ=TSF_Forth_popthat()
     for TSF_tsvA in TSF_tsvQ:
         TSF_Forth_pushthat(TSF_tsvA)
+    TSF_Forth_pushthat(str(len(TSF_tsvQ)))
+    return None
+
+def TSF_match_charslen():   #TSF_doc:[string]文字列長を取得する。1スタック積み下ろし、1スタック積み込み。
+    TSF_tsvQ=TSF_Forth_popthat()
+    TSF_Forth_pushthat(str(len(TSF_tsvQ)))
     return None
 
 def TSF_match_replacestacks():   #TSF_doc:[stackS,stackO,stackN]SスタックをテキストとみなしてOスタックの文字列群をNスタックの文字列群に置換。
@@ -148,56 +151,6 @@ def TSF_match_matchcasethe():   #TSF_doc:[stack,matcher,func,string]スタック
             TSF_count+=TSF_match_case.get(TSF_tsvF,TSF_match_case[TSF_matchF])(TSF_text,TSF_matcher,TSF_string)
     TSF_Forth_pushthat(str(TSF_count))
     return None
-
-
-TSF_match_text=OrderedDict([
-    ('replace',(lambda TSF_text,TSF_matcher,TSF_string:TSF_text.replace(TSF_matcher,TSF_string) )),
-    ('resub',(lambda TSF_text,TSF_matcher,TSF_string:re.sub(re.compile(TSF_matcher,re.MULTILINE),TSF_string,TSF_text) )),
-])
-def TSF_match_replacetextthe():   #TSF_doc:[stack,matcher,func,string]スタックの文字列置換の組み合わせを1つのワードに集約予定。
-    TSF_tsvS=TSF_Forth_popthat()
-    TSF_tsvF=TSF_Forth_popthat()
-    TSF_tsvM=TSF_Forth_popthat()
-    TSF_the=TSF_Forth_popthat()
-    TSF_text=TSF_txt_ESCdecode("\n".join(TSF_Forth_stackvalue(TSF_the)))
-    TSF_text=TSF_match_text.get(TSF_tsvF,TSF_match_text['replace'])(TSF_text,TSF_matcher,TSF_string)
-    TSF_Forth_setTSF(TSF_the,TSF_text,TSF_style="N")
-
-def TSF_match_equalS():   #TSF_doc:[equal,string]文字列が一致すれば1、不一致なら0を残す。2スタック積み下ろし、1スタック積み込み。
-    TSF_tsvS=TSF_Forth_popthat()
-    TSF_tsvE=TSF_Forth_popthat()
-    TSF_tsvA="1" if TSF_tsvS == TSF_tsvE else "0"
-    TSF_Forth_pushthat(TSF_tsvA)
-    return None
-
-def TSF_match_inS():   #TSF_doc:[in,string]文字列が含まれれば1、含まれないなら0を残す。2スタック積み下ろし、1スタック積み込み。
-    TSF_tsvS=TSF_Forth_popthat()
-    TSF_tsvE=TSF_Forth_popthat()
-    TSF_tsvA="1" if TSF_tsvS in TSF_tsvE else "0"
-    TSF_Forth_pushthat(TSF_tsvA)
-    return None
-
-def TSF_match_searchS():   #TSF_doc:[search,string]正規表現に該当すれば1、含まれないなら0を残す。2スタック積み下ろし、1スタック積み込み。
-    TSF_tsvS=TSF_Forth_popthat()
-    TSF_tsvE=TSF_Forth_popthat()
-    TSF_research=None
-    TSF_tsvA="0"
-    try:
-        TSF_research=re.search(re.compile(TSF_tsvS),TSF_tsvE)
-    except re.error:
-        TSF_research=None
-    if LTsvDOC_research:
-        TSF_tsvA="1"
-    TSF_Forth_pushthat(TSF_tsvA)
-    return None
-
-def TSF_match_matcherS():   #TSF_doc:[matcher,string]文字列が完全一致すれば1.0、不一致なら0.0、そこそこ惜しい場合は類似度を小数値で残す。2スタック積み下ろし、1スタック積み込み。
-    TSF_tsvS=TSF_Forth_popthat(); TSF_tsvS=unicodedata.normalize('NFKC',TSF_tsvS)
-    TSF_tsvE=TSF_Forth_popthat(); TSF_tsvE=unicodedata.normalize('NFKC',TSF_tsvE)
-    TSF_tsvA=str(difflib.SequenceMatcher(None,TSF_tsvS,TSF_tsvE).ratio())
-    TSF_Forth_pushthat(TSF_tsvA)
-    return None
-
 
 
 def TSF_match_debug():    #TSF_doc:「TSF/TSF_shuffle.py」単体テスト風デバッグ関数。
