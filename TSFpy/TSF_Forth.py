@@ -23,6 +23,7 @@ def TSF_Forth_Initwords(TSF_words):    #TSF_doc:ワードを初期化する(TSFA
     TSF_words["#TSF_viewthis"]=TSF_Forth_viewthis; TSF_words["#実行中スタックを表示"]=TSF_Forth_viewthis
     TSF_words["#TSF_viewthat"]=TSF_Forth_viewthat; TSF_words["#積込先スタックを表示"]=TSF_Forth_viewthat
     TSF_words["#TSF_viewthey"]=TSF_Forth_viewthey; TSF_words["#スタック一覧を表示"]=TSF_Forth_viewthey
+    TSF_words["#TSF_viewargvs"]=TSF_Forth_viewargvs; TSF_words["#argvs(1stスタック)を表示"]=TSF_Forth_viewargvs
     TSF_words["#TSF_stylethe"]=TSF_Forth_stylethe; TSF_words["#スタックにスタイル指定"]=TSF_Forth_stylethe
     TSF_words["#TSF_stylethis"]=TSF_Forth_stylethis; TSF_words["#実行中スタックにスタイル指定"]=TSF_Forth_stylethis
     TSF_words["#TSF_stylethat"]=TSF_Forth_stylethat; TSF_words["#積込先スタックにスタイル指定"]=TSF_Forth_stylethat
@@ -107,6 +108,10 @@ def TSF_Forth_viewthat():    #TSF_doc:[]積込先スタックを表示する。0
 def TSF_Forth_viewthey():    #TSF_doc:[]スタック一覧を表示する。0スタック積み下ろし。
     for TSF_thename in TSF_stacks.keys():
         TSF_Forth_view(TSF_thename)
+    return None
+
+def TSF_Forth_viewargvs():    #TSF_doc:[]1stスタックを表示する。0スタック積み下ろし。
+    TSF_Forth_view(TSF_Forth_1ststack())
     return None
 
 def TSF_Forth_style(TSF_the,TSF_style=None):    #TSF_doc:スタックの表示スタイルを指定する(TSFAPI)。

@@ -11,11 +11,15 @@ from TSF_time import *
 
 
 def TSF_sample_run(TSF_sample_sepalete=None):    #TSF_doc:TSFサンプルプログラム実行。
-    TSF_Forth_addargvs(TSF_Forth_stackthat(),TSF_argvs); TSF_Forth_addargvslen(TSF_argvs)
     if TSF_sample_sepalete != None:
+        TSF_io_printlog("-- {0} source --".format(TSF_sample_sepalete))
         TSF_Forth_viewthey()
-        if len(TSF_sample_sepalete) > 0:
-            TSF_io_printlog(TSF_sample_sepalete)
+        TSF_Forth_addargvs(TSF_Forth_stackthat(),TSF_argvs); TSF_Forth_addargvslen(TSF_argvs)
+        TSF_io_printlog("-- {0} advgs --".format(TSF_sample_sepalete))
+        TSF_Forth_viewargvs()
+        TSF_io_printlog("-- {0} run --".format(TSF_sample_sepalete))
+    else:
+        TSF_Forth_addargvs(TSF_Forth_stackthat(),TSF_argvs); TSF_Forth_addargvslen(TSF_argvs)
     TSF_Forth_run()
 
 def TSF_sample_about():    #TSF_doc:TSFの概要サンプルプログラム。
@@ -65,19 +69,18 @@ def TSF_sample_about():    #TSF_doc:TSFの概要サンプルプログラム。
     TSF_Forth_setTSF("aboutMatch:",
         "「match」系ワード解説は仕様レベルで準備中…。\n"
         ,TSF_style="N")
-    TSF_sample_run("-- TSF_sample_about --")
+    TSF_sample_run("TSF_sample_about")
 
 def TSF_sample_Helloworld():    #TSF_doc:Helloworldサンプル(「Hello world」を表示)。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["Hello world","1","#TSF_echoes","0","#TSF_fin."]))
-    TSF_sample_run("-- TSF_sample_Helloworld --")
+    TSF_sample_run("TSF_sample_Helloworld")
 
 def TSF_sample_Quine():    #TSF_doc:Quineサンプル(自身のソースコードを表示)。
-    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","#TSF_viewthey","0","#TSF_fin."]))
-    TSF_sample_run("-- TSF_sample_Quine --")
-    pass
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","#TSF_popNthis","#TSF_viewthey","0","#TSF_fin."]))
+    TSF_sample_run("TSF_sample_Quine")
 
 def TSF_sample_99beer():    #TSF_doc:99Beerサンプル(「99 Bottles of Beer」を表示)。
-    pass
+    TSF_sample_help()
 
 def TSF_sample_FizzBuzz():    #TSF_doc:TSF_about.FizzBuzzサンプル(3の倍数の時Fizz5の倍数の時Buzzを表示)。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","FizzBuzz:","#TSF_this","0","#TSF_fin."]))
@@ -88,7 +91,7 @@ def TSF_sample_FizzBuzz():    #TSF_doc:TSF_about.FizzBuzzサンプル(3の倍数
     ]))
     TSF_Forth_setTSF("FZcount:","\t".join(["0","Fizz","Buzz","Fizz&Buzz"]))
     TSF_Forth_setTSF("FZjump:","\t".join(["FizzBuzz:","#exit"]))
-    TSF_sample_run("-- TSF_sample_FizzBuzz --")
+    TSF_sample_run("TSF_sample_FizzBuzz")
 
 def TSF_sample_calcKN(TSF_argvs):    #TSF_doc:単位表示電卓サンプルプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","calcKN:","#TSF_this","0","#TSF_fin."]))
@@ -96,7 +99,7 @@ def TSF_sample_calcKN(TSF_argvs):    #TSF_doc:単位表示電卓サンプルプ�
     "1/3-m1|2","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
     "#TSF_calcKN","1","#TSF_echoes"
     ]),TSF_style="T")
-    TSF_sample_run("-- TSF_sample_calcKN --")
+    TSF_sample_run("TSF_sample_calcKN")
 
 def TSF_sample_calcDC(TSF_argvs):    #TSF_doc:小数表示電卓サンプルプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","calcDC:","#TSF_this","0","#TSF_fin."]))
@@ -104,7 +107,7 @@ def TSF_sample_calcDC(TSF_argvs):    #TSF_doc:小数表示電卓サンプルプ�
     "1/3-m1|2","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
     "#TSF_calcDC","1","#TSF_echoes"
     ]),TSF_style="T")
-    TSF_sample_run("-- TSF_sample_calcDC --")
+    TSF_sample_run("TSF_sample_calcDC")
 
 def TSF_sample_calcFX(TSF_argvs):    #TSF_doc:分数表示電卓サンプルプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","calcFX:","#TSF_this","0","#TSF_fin."]))
@@ -112,7 +115,7 @@ def TSF_sample_calcFX(TSF_argvs):    #TSF_doc:分数表示電卓サンプルプ�
     "1/3-m1|2","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
     "#TSF_calcFX","1","#TSF_echoes"
     ]),TSF_style="T")
-    TSF_sample_run("-- TSF_sample_calcFX --")
+    TSF_sample_run("TSF_sample_calcFX")
 
 def TSF_sample_calender(TSF_argvs):    #TSF_doc:日時表示サンプルプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","calender:","#TSF_this","0","#TSF_fin."]))
@@ -120,7 +123,7 @@ def TSF_sample_calender(TSF_argvs):    #TSF_doc:日時表示サンプルプロ�
     "@000y@0m@0dm@wdec@0h@0n@0s","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
     "#TSF_calender","1","#TSF_echoes"
     ]),TSF_style="T")
-    TSF_sample_run("-- TSF_sample_calender --")
+    TSF_sample_run("TSF_sample_calender")
 
 def TSF_sample_help():    #TSF_doc:TSFコマンド一覧表示サンプルプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","replace:","#TSF_this","help:","#TSF_pushthe","help:","#TSF_lenthe","#TSF_reverseN","help:","#TSF_lenthe","#TSF_echoes","0","#TSF_fin."]))
@@ -141,7 +144,7 @@ def TSF_sample_help():    #TSF_doc:TSFコマンド一覧表示サンプルプロ
     TSF_Forth_setTSF("replace:","\t".join(["replaceN:","#TSF_carbonthe","#TSF_calender","replaceN:","0","#TSF_pokethe","help:","replaceO:","replaceN:","#TSF_replacestacks"]))
     TSF_Forth_setTSF("replaceO:","\t".join(["TSF_time_getdaytime()"]))
     TSF_Forth_setTSF("replaceN:","\t".join(["@000y@0m@0dm@wdec@0h@0n@0s"]))
-    TSF_sample_run("-- TSF_sample_help --")
+    TSF_sample_run("TSF_sample_help")
 
 TSF_mergefile=""
 TSF_argvs=TSF_io_argvs()
@@ -158,7 +161,7 @@ elif TSF_mergefile in ["--hello","--helloworld","--Helloworld"]:
     TSF_sample_Helloworld()
 elif TSF_mergefile in ["--quine","--Quine"]:
     TSF_sample_Quine()
-elif TSF_mergefile in ["--99beer","--beer","--beer99"]:
+elif TSF_mergefile in ["--99beer","--beer99","--beer","--99"]:
     TSF_sample_99beer()
 elif TSF_mergefile in ["--fizz","--buzz","--fizzbuzz","--FizzBuzz"]:
     TSF_sample_FizzBuzz()
