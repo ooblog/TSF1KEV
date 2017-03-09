@@ -67,11 +67,19 @@ def TSF_sample_about():    #TSF_doc:TSFの概要サンプルプログラム。
         ,TSF_style="N")
     TSF_sample_run("-- TSF_sample_about --")
 
-def TSF_sample_Helloworld():    #TSF_doc:Helloworldサンプルプログラム。
+def TSF_sample_Helloworld():    #TSF_doc:Helloworldサンプル(「Hello world」を表示)。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["Hello world","1","#TSF_echoes","0","#TSF_fin."]))
     TSF_sample_run("-- TSF_sample_Helloworld --")
 
-def TSF_sample_FizzBuzz():    #TSF_doc:TSF_about.FizzBuzzサンプルプログラム。
+def TSF_sample_Quine():    #TSF_doc:Quineサンプル(自身のソースコードを表示)。
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","#TSF_viewthey","0","#TSF_fin."]))
+    TSF_sample_run("-- TSF_sample_Quine --")
+    pass
+
+def TSF_sample_99beer():    #TSF_doc:99Beerサンプル(「99 Bottles of Beer」を表示)。
+    pass
+
+def TSF_sample_FizzBuzz():    #TSF_doc:TSF_about.FizzBuzzサンプル(3の倍数の時Fizz5の倍数の時Buzzを表示)。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","FizzBuzz:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("FizzBuzz:","\t".join([ \
     "[FZcount:0]+1","#TSF_calcDC","FZcount:","0","#TSF_pokethe",
@@ -114,22 +122,6 @@ def TSF_sample_calender(TSF_argvs):    #TSF_doc:日時表示サンプルプロ�
     ]),TSF_style="T")
     TSF_sample_run("-- TSF_sample_calender --")
 
-#def TSF_sample_help():    #TSF_doc:TSFコマンド一覧表示サンプルプログラム。
-#    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","help:","#TSF_pushthe","help:","#TSF_lenthe","#TSF_reverseN","help:","#TSF_lenthe","#TSF_echoes","0","#TSF_fin."]))
-#    TSF_Forth_setTSF("help:",
-#        'usage: ./TSF.py [command|file.tsf] [argv] ...\n'
-#        'commands:\n'
-#        '  --help        this commands view\n'
-#        '  --about       about TSF UTF-8 text (Japanese) view" \n'
-#        '  --helloworld  "Hello world  1  #TSF_echoes" view\n'
-#        '  --fizzbuzz    ([0]#3Z1~0)+([0]#5Z2~0) Fizz Buzz Fizz&Buzz view\n'
-#        '  --calcFX      fractions calculator "1/3-m1|2"-> p5|6 view\n'
-#        '  --calcDC      fractions calculator "1/3-m1|2"-> 0.8333... view\n'
-#        '  --calcKN      fractions calculator "1/3-m1|2"-> 6 bunno 5 view\n'
-#        '  --calender    "@000y@0m@0dm@wdec@0h@0n@0s"-> '+TSF_time_getdaytime()+'\n'
-#        ,TSF_style="N")
-#    TSF_sample_run("-- TSF_sample_help --")
-
 def TSF_sample_help():    #TSF_doc:TSFコマンド一覧表示サンプルプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","replace:","#TSF_this","help:","#TSF_pushthe","help:","#TSF_lenthe","#TSF_reverseN","help:","#TSF_lenthe","#TSF_echoes","0","#TSF_fin."]))
     TSF_Forth_setTSF("help:",
@@ -138,7 +130,7 @@ def TSF_sample_help():    #TSF_doc:TSFコマンド一覧表示サンプルプロ
         '  --help        this commands view\n'
         '  --about       about TSF UTF-8 text (Japanese) view" \n'
         '  --helloworld  "Hello world  1  #TSF_echoes" view\n'
-#        '  --quine       TSF_Forth_viewthey() Quine (self source) view\n'
+        '  --quine       TSF_Forth_viewthey() Quine (self source) view\n'
 #        '  --99beer      99 Bottles of Beer view\n'
         '  --fizzbuzz    ([0]#3Z1~0)+([0]#5Z2~0) Fizz Buzz Fizz&Buzz view\n'
         '  --calcFX      fractions calculator "1/3-m1|2"-> p5|6 view\n'
@@ -164,6 +156,10 @@ elif TSF_mergefile in ["--about"]:
     TSF_sample_about()
 elif TSF_mergefile in ["--hello","--helloworld","--Helloworld"]:
     TSF_sample_Helloworld()
+elif TSF_mergefile in ["--quine","--Quine"]:
+    TSF_sample_Quine()
+elif TSF_mergefile in ["--99beer","--beer","--beer99"]:
+    TSF_sample_99beer()
 elif TSF_mergefile in ["--fizz","--buzz","--fizzbuzz","--FizzBuzz"]:
     TSF_sample_FizzBuzz()
 elif TSF_mergefile in ["--calcKN"]:
