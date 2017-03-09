@@ -130,6 +130,22 @@ def TSF_sample_help():    #TSF_doc:TSFコマンド一覧表示サンプルプロ
         ,TSF_style="N")
     TSF_sample_run("-- TSF_sample_help --")
 
+def TSF_sample_help2():    #TSF_doc:TSFコマンド一覧表示サンプルプログラム。
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","help:","#TSF_pushthe","help:","#TSF_lenthe","#TSF_reverseN","help:","#TSF_lenthe","#TSF_echoes","0","#TSF_fin."]))
+    TSF_Forth_setTSF("help:",
+        'usage: ./TSF.py [command|file.tsf] [argv] ...\n'
+        'commands:\n'
+        '  --help        this commands view\n'
+        '  --about       about TSF UTF-8 text (Japanese) view" \n'
+        '  --helloworld  "Hello world  1  #TSF_echoes" view\n'
+        '  --fizzbuzz    ([0]#3Z1~0)+([0]#5Z2~0) Fizz Buzz Fizz&Buzz view\n'
+        '  --calcFX      fractions calculator "1/3-m1|2"-> p5|6 view\n'
+        '  --calcDC      fractions calculator "1/3-m1|2"-> 0.8333... view\n'
+        '  --calcKN      fractions calculator "1/3-m1|2"-> 6 bunno 5 view\n'
+        '  --calender    "@000y@0m@0dm@wdec@0h@0n@0s"-> %TSF_time_getdaytime%\n'
+        ,TSF_style="N")
+    TSF_sample_run("-- TSF_sample_help --")
+
 TSF_mergefile=""
 TSF_argvs=TSF_io_argvs()
 TSF_Forth_init(TSF_argvs,[TSF_shuffle_Initwords,TSF_match_Initwords,TSF_calc_Initwords,TSF_time_Initwords])
@@ -154,9 +170,9 @@ elif TSF_mergefile in ["--calc","--calcFX"]:
 elif TSF_mergefile in ["--time","--calender"]:
     TSF_sample_calender(TSF_argvs)
 elif TSF_mergefile in ["--help"]:
-    TSF_sample_help()
+    TSF_sample_help2()
 else:
-    TSF_sample_help()
+    TSF_sample_help2()
 sys.exit(0 if TSF_Forth_exitcode() in ["0","0|1","0.0"] else TSF_Forth_exitcode())
 
 
