@@ -14,13 +14,11 @@ def TSF_sample_run(TSF_sample_sepalete=None):    #TSF_doc:TSFサンプルプロ�
     if TSF_sample_sepalete != None:
         TSF_io_printlog("-- {0} source --".format(TSF_sample_sepalete))
         TSF_Forth_viewthey()
-#        TSF_Forth_addargvs(TSF_Forth_stackthat(),TSF_argvs); TSF_Forth_addargvslen(TSF_argvs)
         TSF_Forth_addfin(TSF_argvs)
         TSF_io_printlog("-- {0} advgs --".format(TSF_sample_sepalete))
         TSF_Forth_viewargvs()
         TSF_io_printlog("-- {0} run --".format(TSF_sample_sepalete))
     else:
-#        TSF_Forth_addargvs(TSF_Forth_stackthat(),TSF_argvs); TSF_Forth_addargvslen(TSF_argvs)
         TSF_Forth_addfin(TSF_argvs)
     TSF_Forth_run()
 
@@ -83,6 +81,8 @@ def TSF_sample_Quine():    #TSF_doc:Quineサンプル(自身のソースコー�
     TSF_sample_run("TSF_sample_Quine")
 
 def TSF_sample_99beer():    #TSF_doc:99Beerサンプル(「99 Bottles of Beer」を表示)。
+#    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","0","#TSF_fin."]))
+#    TSF_sample_run("TSF_sample_99beer")
     TSF_sample_help()
 
 def TSF_sample_FizzBuzz():    #TSF_doc:TSF_about.FizzBuzzサンプル(3の倍数の時Fizz5の倍数の時Buzzを表示)。

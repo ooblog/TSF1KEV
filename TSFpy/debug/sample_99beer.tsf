@@ -1,0 +1,24 @@
+TSF_Tab-Separated-Forth:
+	UTF-8	#TSF_encoding	buybottles:	#TSF_this	0	#TSF_fin.
+buybottles:
+	99	#TSF_swapBAthat	m1	#TSF_peekthat	m[0]	#TSF_calcDC	#TSF_peekthat	onthewall:	0	#TSF_pokethe	drinkbottles:	#TSF_this
+drinkbottles:
+	#TSF_viewthey	drinkedbottles:	#TSF_this
+drinkedbottles:
+	nomorebottles:	#TSF_pushthe	nomorebottles:	#TSF_lenthe	#TSF_reverseN	nomorebottles:	#TSF_lenthe	#TSF_echoes
+onthewall:
+	99
+3bottles:
+	{nownextbottles} bottles of beer on the wall, {nownextbottles} bottles of beer.
+	Take one down and pass it around,{nextbottle} bottles of beer on the wall.
+2bottles:
+	{nownextbottles} bottles of beer on the wall, {nownextbottles} bottles of beer.
+	Take one down and pass it around, 1 bottle of beer on the wall.
+1bottle:
+	{nownextbottles} bottle of beer on the wall, {nownextbottles} bottle of beer.
+	Take one down and pass it around, no more bottles of beer on the wall.
+nomorebottles:
+	No more bottles of beer on the wall, no more bottles of beer.
+	Go to the store and buy some more, {buybottles} bottles of beer on the wall.
+Lyrics of the song 99 Bottles of Beer:
+	http://99-bottles-of-beer.net/lyrics.html

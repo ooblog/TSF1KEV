@@ -2,5 +2,3 @@ TSF_Tab-Separated-Forth:
 	UTF-8	#TSF_encoding	calender:	#TSF_this	0	#TSF_fin.
 calender:
 	@000y@0m@0dm@wdec@0h@0n@0s	#TSF_swapBAthat	m1	#TSF_peekthat	m[0]	#TSF_calcDC	#TSF_peekthat	#TSF_calender	1	#TSF_echoes
--- TSF_command_calender() --
-20170304S115508

@@ -19,7 +19,11 @@ def TSF_Forth_Initwords(TSF_words):    #TSF_doc:ワードを初期化する(TSFA
     TSF_words["#TSF_that"]=TSF_Forth_that; TSF_words["#スタックに積込"]=TSF_Forth_that
     TSF_words["#TSF_input"]=TSF_Forth_input; TSF_words["#文字列入力"]=TSF_Forth_input
     TSF_words["#TSF_echoes"]=TSF_Forth_echoes; TSF_words["#N行表示"]=TSF_Forth_echoes
-    TSF_words["#TSF_viewthe"]=TSF_Forth_viewthe; TSF_words["#スタックを表示"]=TSF_Forth_viewthe
+#    TSF_words["#TSF_echoN"]=TSF_Forth_echoN"; TSF_words["#N行表示"]=TSF_Forth_echoN
+#    TSF_words["#TSF_echothe"]=TSF_Forth_echoes; TSF_words["#スタック行表示"]=TSF_Forth_echoes
+#    TSF_words["#TSF_echothis"]=TSF_Forth_echothis; TSF_words["#実行中スタック行表示"]=TSF_Forth_echothis
+#    TSF_words["#TSF_echothat"]=TSF_Forth_echothat; TSF_words["#積込先スタック行表示"]=TSF_Forth_echothat
+    TSF_words["#TSF_viewthe"]=TSF_Forth_viewthe; TSF_words["#スタック表示"]=TSF_Forth_viewthe
     TSF_words["#TSF_viewthis"]=TSF_Forth_viewthis; TSF_words["#実行中スタックを表示"]=TSF_Forth_viewthis
     TSF_words["#TSF_viewthat"]=TSF_Forth_viewthat; TSF_words["#積込先スタックを表示"]=TSF_Forth_viewthat
     TSF_words["#TSF_viewthey"]=TSF_Forth_viewthey; TSF_words["#スタック一覧を表示"]=TSF_Forth_viewthey
@@ -215,7 +219,6 @@ def TSF_Forth_init(TSF_argvs=[],TSF_addcalls=[]):    #TSF_doc:TSF_stacks,TSF_sty
     global TSF_stacks,TSF_styles,TSF_callptrs,TSF_words,TSF_Initcalls,TSF_stackthat,TSF_stackthis,TSF_stackcount
     TSF_stacks,TSF_styles,TSF_callptrs,TSF_words=OrderedDict(),OrderedDict(),OrderedDict(),OrderedDict()
     TSF_stackthis,TSF_stackthat,TSF_stackcount=TSF_Forth_1ststack(),TSF_Forth_1ststack(),0
-#    TSF_stacks[TSF_stackthis]=["UTF-8","#TSF_encoding","0","#TSF_fin."]; TSF_Forth_addargvs(TSF_stackthat,TSF_argvs); TSF_Forth_addargvslen(TSF_argvs)
     TSF_stacks[TSF_stackthis]=["UTF-8","#TSF_encoding","0","#TSF_fin."]; TSF_Forth_addfin(TSF_argvs)
     TSF_Initcalls=[TSF_Forth_Initwords]+TSF_addcalls
     for TSF_Initcall in TSF_Initcalls:
