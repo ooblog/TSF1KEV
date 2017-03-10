@@ -24,12 +24,9 @@ def TSF_sample_run(TSF_sample_sepalete=None):    #TSF_doc:TSFサンプルプロ�
 
 def TSF_sample_about():    #TSF_doc:TSFの概要サンプルプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","main1:","#TSF_this","0","#TSF_fin."]))
-#    TSF_Forth_setTSF("main1:","\t".join(["aboutTSF:","#TSF_pushthe","aboutTSF:","#TSF_lenthe","#TSF_reverseN","aboutTSF:","#TSF_lenthe","#TSF_echoN","main2:","#TSF_this"]))
     TSF_Forth_setTSF("main1:","\t".join(["aboutTSF:","#TSF_echothe","main2:","#TSF_this"]))
     TSF_Forth_setTSF("main2:","\t".join(["#分数電卓のテスト","1","#TSF_echoN","16","#TSF_calcPR","calcFXtest:","#TSF_this","calcDCtest:","#TSF_this","calcKNテスト:","#TSF_this","#","1","#TSF_echoN","main3:","#TSF_this"]))
-#    TSF_Forth_setTSF("main3:","\t".join(["aboutCalc:","#TSF_pushthe","aboutCalc:","#TSF_lenthe","#TSF_reverseN","aboutCalc:","#TSF_lenthe","#TSF_echoN","main4:","#TSF_this"]))
     TSF_Forth_setTSF("main3:","\t".join(["aboutCalc:","#TSF_echothe","main4:","#TSF_this"]))
-#    TSF_Forth_setTSF("main4:","\t".join(["aboutMatch:","#TSF_pushthe","aboutMatch:","#TSF_lenthe","#TSF_reverseN","aboutMatch:","#TSF_lenthe","#TSF_echoN"]))
     TSF_Forth_setTSF("main4:","\t".join(["aboutMatch:","#TSF_echothe"]))
     TSF_Forth_setTSF("aboutTSF:",
         "「TSF_Tab-Separated-Forth」の概要(暫定案)。\n"

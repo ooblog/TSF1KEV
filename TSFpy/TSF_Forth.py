@@ -361,11 +361,18 @@ def TSF_Forth_peekthe(TSF_the,TSF_count):    #TSF_doc:スタックの読込(TSFA
             TSF_peekdata=TSF_stacks[TSF_the][TSF_count]
     return TSF_peekdata
 
-def TSF_Forth_peekcyclethe(TSF_the,TSF_count):    #TSF_doc:スタックの読込(TSFAPI)。
+def TSF_Forth_peekcyclethe(TSF_the,TSF_count):    #TSF_doc:周択でスタックの読込(TSFAPI)。
     TSF_peekdata=""
     if TSF_the in TSF_stacks:
         TSF_countmod=TSF_count%len(TSF_stacks[TSF_the]) if TSF_count >=0 else len(TSF_stacks[TSF_the])-(abs(TSF_count)%len(TSF_stacks[TSF_the]))
-        TSF_peekdata=TSF_stacks[TSF_the][TSF_countmod]
+        TSF_peekdata=TSF_stacks[TSF_the][TSF_countmod] if len(TSF_stacks[TSF_the]) > 0 else TSF_peekdata
+    return TSF_peekdata
+
+def TSF_Forth_peeklimitthe(TSF_the,TSF_count):    #TSF_doc:囲択でスタックの読込(TSFAPI)。
+    TSF_peekdata=""
+    if TSF_the in TSF_stacks:
+        TSF_countlimit=max(min(TSF_count,len(TSF_stacks[TSF_the])),0)
+        TSF_peekdata=TSF_stacks[TSF_the][TSF_countlimit] if len(TSF_stacks[TSF_the]) > 0 else TSF_peekdata
     return TSF_peekdata
 
 def TSF_Forth_reversethe(TSF_the):    #TSF_doc:スタックのシャッフル(TSFAPI)。
@@ -389,11 +396,27 @@ def TSF_Forth_pokethe(TSF_the,TSF_count,TSF_poke):    #TSF_doc:スタックへ�
         TSF_pokeerr=2
     return TSF_pokeerr
 
-def TSF_Forth_pokecyclethe(TSF_the,TSF_count):    #TSF_doc:スタックの読込(TSFAPI)。
+def TSF_Forth_pokecyclethe(TSF_the,TSF_count):    #TSF_doc:周択でスタックの書込(TSFAPI)。
     TSF_peekdata=""
     if TSF_the in TSF_stacks:
         TSF_countmod=TSF_count%len(TSF_stacks[TSF_the]) if TSF_count >=0 else len(TSF_stacks[TSF_the])-(abs(TSF_count)%len(TSF_stacks[TSF_the]))
-        TSF_stacks[TSF_the][TSF_countmod]=TSF_poke
+        if len(TSF_stacks[TSF_the]) > 0:
+            TSF_stacks[TSF_the][TSF_countmod]=TSF_poke
+        else:
+            TSF_pokeerr=1
+    else:
+        TSF_pokeerr=2
+
+def TSF_Forth_pokelimitthe(TSF_the,TSF_count):    #TSF_doc:囲択でスタックの書込(TSFAPI)。
+    TSF_peekdata=""
+    if TSF_the in TSF_stacks:
+        TSF_countlimit=max(min(TSF_count,len(TSF_stacks[TSF_the])),0)
+        if len(TSF_stacks[TSF_the]) > 0:
+            TSF_stacks[TSF_the][TSF_countmod]=TSF_poke
+        else:
+            TSF_pokeerr=1
+    else:
+        TSF_pokeerr=2
 
 def TSF_Forth_delthe(TSF_the):   #TSF_doc:スタックを削除(TSFAPI)。
     if TSF_the in TSF_stacks:
