@@ -24,10 +24,10 @@ def TSF_sample_run(TSF_sample_sepalete=None):    #TSF_doc:TSFサンプルプロ�
 
 def TSF_sample_about():    #TSF_doc:TSFの概要サンプルプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","main1:","#TSF_this","0","#TSF_fin."]))
-    TSF_Forth_setTSF("main1:","\t".join(["aboutTSF:","#TSF_pushthe","aboutTSF:","#TSF_lenthe","#TSF_reverseN","aboutTSF:","#TSF_lenthe","#TSF_echoes","main2:","#TSF_this"]))
-    TSF_Forth_setTSF("main2:","\t".join(["#分数電卓のテスト","1","#TSF_echoes","16","#TSF_calcPR","calcFXtest:","#TSF_this","calcDCtest:","#TSF_this","calcKNテスト:","#TSF_this","#","1","#TSF_echoes","main3:","#TSF_this"]))
-    TSF_Forth_setTSF("main3:","\t".join(["aboutCalc:","#TSF_pushthe","aboutCalc:","#TSF_lenthe","#TSF_reverseN","aboutCalc:","#TSF_lenthe","#TSF_echoes","main4:","#TSF_this"]))
-    TSF_Forth_setTSF("main4:","\t".join(["aboutMatch:","#TSF_pushthe","aboutMatch:","#TSF_lenthe","#TSF_reverseN","aboutMatch:","#TSF_lenthe","#TSF_echoes"]))
+    TSF_Forth_setTSF("main1:","\t".join(["aboutTSF:","#TSF_pushthe","aboutTSF:","#TSF_lenthe","#TSF_reverseN","aboutTSF:","#TSF_lenthe","#TSF_echoN","main2:","#TSF_this"]))
+    TSF_Forth_setTSF("main2:","\t".join(["#分数電卓のテスト","1","#TSF_echoN","16","#TSF_calcPR","calcFXtest:","#TSF_this","calcDCtest:","#TSF_this","calcKNテスト:","#TSF_this","#","1","#TSF_echoN","main3:","#TSF_this"]))
+    TSF_Forth_setTSF("main3:","\t".join(["aboutCalc:","#TSF_pushthe","aboutCalc:","#TSF_lenthe","#TSF_reverseN","aboutCalc:","#TSF_lenthe","#TSF_echoN","main4:","#TSF_this"]))
+    TSF_Forth_setTSF("main4:","\t".join(["aboutMatch:","#TSF_pushthe","aboutMatch:","#TSF_lenthe","#TSF_reverseN","aboutMatch:","#TSF_lenthe","#TSF_echoN"]))
     TSF_Forth_setTSF("aboutTSF:",
         "「TSF_Tab-Separated-Forth」の概要(暫定案)。\n"
         "積んだスタックをワード(関数)などで消化していくForth風インタプリタ。スタック単位はtsv文字列。\n"
@@ -43,8 +43,8 @@ def TSF_sample_about():    #TSF_doc:TSFの概要サンプルプログラム。
         "分岐の別解として「#TSF_matchcasethe」準備中。条件に一致する文字列がスタックに含まれてたらその位置を返すワードにする予定。\n"
         "「#TSF_brackets」などの文字列処理と「#TSF_calcDC」などの電卓を組み合わせれば逆ポーランド記法への数式変換は強いられないはず。\n"
         ,TSF_style="N")
-    TSF_Forth_setTSF("calcFXtest:","\t".join(["「1 3 m1|2」を数式「[2]/[1]-[0]」で連結→","1","3","m1|2","[2]/[1]-[0]","#TSF_calcFX","2","#TSF_joinN","1","#TSF_echoes"]))
-    TSF_Forth_setTSF("calcDCtest:","\t".join(["「1 / 3 - m1|2」を数式に連結(ついでに小数デモ)→","1","/","3","-","m1|2","5","#TSF_joinN","#TSF_calcDC","2","#TSF_joinN","1","#TSF_echoes"]))
+    TSF_Forth_setTSF("calcFXtest:","\t".join(["「1 3 m1|2」を数式「[2]/[1]-[0]」で連結→","1","3","m1|2","[2]/[1]-[0]","#TSF_calcFX","2","#TSF_joinN","1","#TSF_echoN"]))
+    TSF_Forth_setTSF("calcDCtest:","\t".join(["「1 / 3 - m1|2」を数式に連結(ついでに小数デモ)→","1","/","3","-","m1|2","5","#TSF_joinN","#TSF_calcDC","2","#TSF_joinN","1","#TSF_echoN"]))
     TSF_Forth_setTSF("calcKNテスト:","\t".join(["「一割る三引く(マイナス二分の一)」(ついでに単位付き計算デモ)→","一割る三引く(マイナス二分の一)","#単位計算","2","#N個連結","1","#N行表示"]))
     TSF_Forth_setTSF("aboutCalc:",
         "「calc」系ワード分数電卓の概要(暫定案)。\n"
@@ -67,13 +67,13 @@ def TSF_sample_about():    #TSF_doc:TSFの概要サンプルプログラム。
         "条件演算子は0以上を調べる系「O」「o」、0以下を調べる系「U」「u」、0か調べる系「Z」「z」、「n|0」か調べる系「N」を用意。\n"
         ,TSF_style="N")
     TSF_Forth_setTSF("aboutMatch:",
-        "「match」系ワード解説は仕様レベルで準備中…。\n"
+        "「match」系ワード解説は準備中…。\n"
         ,TSF_style="N")
     TSF_sample_run("TSF_sample_about")
 
 def TSF_sample_Helloworld():    #TSF_doc:Helloworldサンプル(「Hello world」を表示)。
-#    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["Hello world","1","#TSF_echoes","0","#TSF_fin."]))
-    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["Hello world","1","#TSF_echoes"]))
+#    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["Hello world","1","#TSF_echoN","0","#TSF_fin."]))
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["Hello world","1","#TSF_echoN"]))
     TSF_sample_run("TSF_sample_Helloworld")
 
 def TSF_sample_Quine():    #TSF_doc:Quineサンプル(自身のソースコードを表示)。
@@ -89,7 +89,7 @@ def TSF_sample_FizzBuzz():    #TSF_doc:TSF_about.FizzBuzzサンプル(3の倍数
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","FizzBuzz:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("FizzBuzz:","\t".join([ \
     "[FZcount:0]+1","#TSF_calcDC","FZcount:","0","#TSF_pokethe",
-    "FZcount:","([FZcount:0]#3Z1~0)+([FZcount:0]#5Z2~0)","#TSF_calcDC","#TSF_peekthe","1","#TSF_echoes",
+    "FZcount:","([FZcount:0]#3Z1~0)+([FZcount:0]#5Z2~0)","#TSF_calcDC","#TSF_peekthe","1","#TSF_echoN",
     "FZjump:","[FZcount:0]-20O1~0","#TSF_calcDC","#TSF_peekthe","#TSF_this",
     ]))
     TSF_Forth_setTSF("FZcount:","\t".join(["0","Fizz","Buzz","Fizz&Buzz"]))
@@ -100,7 +100,7 @@ def TSF_sample_calcKN(TSF_argvs):    #TSF_doc:単位表示電卓サンプルプ�
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","calcKN:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("calcKN:","\t".join([
     "1/3-m1|2","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
-    "#TSF_calcKN","1","#TSF_echoes"
+    "#TSF_calcKN","1","#TSF_echoN"
     ]),TSF_style="T")
     TSF_sample_run("TSF_sample_calcKN")
 
@@ -108,7 +108,7 @@ def TSF_sample_calcDC(TSF_argvs):    #TSF_doc:小数表示電卓サンプルプ�
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","calcDC:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("calcDC:","\t".join([
     "1/3-m1|2","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
-    "#TSF_calcDC","1","#TSF_echoes"
+    "#TSF_calcDC","1","#TSF_echoN"
     ]),TSF_style="T")
     TSF_sample_run("TSF_sample_calcDC")
 
@@ -116,7 +116,7 @@ def TSF_sample_calcFX(TSF_argvs):    #TSF_doc:分数表示電卓サンプルプ�
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","calcFX:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("calcFX:","\t".join([
     "1/3-m1|2","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
-    "#TSF_calcFX","1","#TSF_echoes"
+    "#TSF_calcFX","1","#TSF_echoN"
     ]),TSF_style="T")
     TSF_sample_run("TSF_sample_calcFX")
 
@@ -124,18 +124,18 @@ def TSF_sample_calender(TSF_argvs):    #TSF_doc:日時表示サンプルプロ�
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","calender:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("calender:","\t".join([
     "@000y@0m@0dm@wdec@0h@0n@0s","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
-    "#TSF_calender","1","#TSF_echoes"
+    "#TSF_calender","1","#TSF_echoN"
     ]),TSF_style="T")
     TSF_sample_run("TSF_sample_calender")
 
 def TSF_sample_help():    #TSF_doc:TSFコマンド一覧表示サンプルプログラム。
-    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","replace:","#TSF_this","help:","#TSF_pushthe","help:","#TSF_lenthe","#TSF_reverseN","help:","#TSF_lenthe","#TSF_echoes","0","#TSF_fin."]))
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","replace:","#TSF_this","help:","#TSF_pushthe","help:","#TSF_lenthe","#TSF_reverseN","help:","#TSF_lenthe","#TSF_echoN","0","#TSF_fin."]))
     TSF_Forth_setTSF("help:",
         'usage: ./TSF.py [command|file.tsf] [argv] ...\n'
         'commands:\n'
         '  --help        this commands view\n'
         '  --about       about TSF UTF-8 text (Japanese) view" \n'
-        '  --helloworld  "Hello world  1  #TSF_echoes" view\n'
+        '  --helloworld  "Hello world  1  #TSF_echoN" view\n'
         '  --quine       TSF_Forth_viewthey() Quine (self source) view\n'
 #        '  --99beer      99 Bottles of Beer view\n'
         '  --fizzbuzz    ([0]#3Z1~0)+([0]#5Z2~0) Fizz Buzz Fizz&Buzz view\n'

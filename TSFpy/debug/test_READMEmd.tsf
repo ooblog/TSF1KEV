@@ -7,7 +7,7 @@ TSFdocs_filename:
 TSFdocs_textset:
 	#TSF_carbonthat	TSFdocs_text:	#TSF_clonethe	TSFdocs_textreplace:	#TSF_this
 TSFdocs_textreplace:
-	#TSF_carbonthat	1	#TSF_echoes	TSFdocs_text:	TSF1KEV	TEST	#TSF_replacethe	TSFdocs_filenameloop:	#TSF_this
+	#TSF_carbonthat	1	#TSF_echoN	TSFdocs_text:	TSF1KEV	TEST	#TSF_replacethe	TSFdocs_filenameloop:	#TSF_this
 TSFdocs_filenameloop:
 	TSFdocs_filecount:	[TSFdocs_filecount:0]z1~2	#TSF_calcDC	#TSF_peekthe	#TSF_this
 TSFdocs_filecount:

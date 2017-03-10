@@ -5,7 +5,7 @@ buybottles:
 drinkbottles:
 	#TSF_viewthey	drinkedbottles:	#TSF_this
 drinkedbottles:
-	nomorebottles:	#TSF_pushthe	nomorebottles:	#TSF_lenthe	#TSF_reverseN	nomorebottles:	#TSF_lenthe	#TSF_echoes
+	nomorebottles:	#TSF_pushthe	nomorebottles:	#TSF_lenthe	#TSF_reverseN	nomorebottles:	#TSF_lenthe	#TSF_echoN
 onthewall:
 	99
 3bottles:
