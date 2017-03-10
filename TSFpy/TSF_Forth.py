@@ -5,7 +5,7 @@ import random
 import copy
 from TSF_io import *
 
-def TSF_Forth_1ststack():    #TSF_doc:TSF_初期化に使う1ststack名(TSFAPI)。
+def TSF_Forth_1ststack():    #TSF_doc:TSF_初期化に使う最初のスタック名(TSFAPI)。
     return "TSF_Tab-Separated-Forth:"
 
 def TSF_Forth_version():    #TSF_doc:TSF_初期化に使うバージョン(ブランチ)名(TSFAPI)。
@@ -27,14 +27,14 @@ def TSF_Forth_Initwords(TSF_words):    #TSF_doc:ワードを初期化する(TSFA
     TSF_words["#TSF_stylethe"]=TSF_Forth_stylethe; TSF_words["#スタックにスタイル指定"]=TSF_Forth_stylethe
     TSF_words["#TSF_stylethis"]=TSF_Forth_stylethis; TSF_words["#実行中スタックにスタイル指定"]=TSF_Forth_stylethis
     TSF_words["#TSF_stylethat"]=TSF_Forth_stylethat; TSF_words["#積込先スタックにスタイル指定"]=TSF_Forth_stylethat
-    TSF_words["#TSF_readtext"]=TSF_Forth_readtext; TSF_words["#テキストファイルを読み込む"]=TSF_Forth_readtext
-    TSF_words["#TSF_mergethe"]=TSF_Forth_mergethe; TSF_words["#TSFに合成する"]=TSF_Forth_mergethe
+    TSF_words["#TSF_readtext"]=TSF_Forth_readtext; TSF_words["#テキストファイルを読込"]=TSF_Forth_readtext
+    TSF_words["#TSF_mergethe"]=TSF_Forth_mergethe; TSF_words["#TSFに合成"]=TSF_Forth_mergethe
     TSF_words["#TSF_publishthe"]=TSF_Forth_publishthe; TSF_words["#スタックをテキスト化"]=TSF_Forth_publishthe
     TSF_words["#TSF_publishthis"]=TSF_Forth_publishthis; TSF_words["#実行中スタックをテキスト化"]=TSF_Forth_publishthis
     TSF_words["#TSF_publishthat"]=TSF_Forth_publishthat; TSF_words["#積込先スタックをテキスト化"]=TSF_Forth_publishthat
     TSF_words["#TSF_remove"]=TSF_Forth_remove; TSF_words["#ファイルを削除する"]=TSF_Forth_remove
-    TSF_words["#TSF_savetext"]=TSF_Forth_savetext; TSF_words["#テキストファイルに上書きする"]=TSF_Forth_savetext
-    TSF_words["#TSF_writetext"]=TSF_Forth_writetext; TSF_words["#テキストファイルに追記きする"]=TSF_Forth_writetext
+    TSF_words["#TSF_savetext"]=TSF_Forth_savetext; TSF_words["#テキストファイルに上書"]=TSF_Forth_savetext
+    TSF_words["#TSF_writetext"]=TSF_Forth_writetext; TSF_words["#テキストファイルに追記"]=TSF_Forth_writetext
     return TSF_words
 
 TSF_exitcode="0"
@@ -150,7 +150,7 @@ def TSF_Forth_readtext():   #TSF_doc:[filename]ファイルをスタックに積
     TSF_Forth_loadtext(TSF_path,TSF_path)
     return None
 
-def TSF_Forth_merge(TSF_the,TSF_ESCstack=[]):    #TSF_doc:テキストをTSFとして読み込む(TSFAPI)。
+def TSF_Forth_merge(TSF_the,TSF_ESCstack=[],TSF_mergedel=None):    #TSF_doc:テキストをTSFとして読み込む(TSFAPI)。
     global TSF_stacks,TSF_styles
     if TSF_the in TSF_stacks:
         TSF_that=TSF_Forth_1ststack()
@@ -169,6 +169,8 @@ def TSF_Forth_merge(TSF_the,TSF_ESCstack=[]):    #TSF_doc:テキストをTSFと�
                 TSF_stacks[TSF_that].extend(TSF_stackL)
                 if TSF_styles[TSF_that] != "O":
                     TSF_styles[TSF_that]="T" if len(TSF_stackL) >= 2 else "N"
+        if TSF_mergedel:
+            del TSF_stacks[TSF_the]
 
 def TSF_Forth_mergethe():   #TSF_doc:[stack]テキストをTSFとして読み込む。1スタック積み下ろし。
     TSF_Forth_merge(TSF_Forth_popthat(),TSF_ESCstack=[TSF_Forth_1ststack()])
@@ -213,7 +215,8 @@ def TSF_Forth_init(TSF_argvs=[],TSF_addcalls=[]):    #TSF_doc:TSF_stacks,TSF_sty
     global TSF_stacks,TSF_styles,TSF_callptrs,TSF_words,TSF_Initcalls,TSF_stackthat,TSF_stackthis,TSF_stackcount
     TSF_stacks,TSF_styles,TSF_callptrs,TSF_words=OrderedDict(),OrderedDict(),OrderedDict(),OrderedDict()
     TSF_stackthis,TSF_stackthat,TSF_stackcount=TSF_Forth_1ststack(),TSF_Forth_1ststack(),0
-    TSF_stacks[TSF_stackthis]=["UTF-8","#TSF_encoding","0","#TSF_fin."]; TSF_Forth_addargvs(TSF_stackthat,TSF_argvs); TSF_Forth_addargvslen(TSF_argvs)
+#    TSF_stacks[TSF_stackthis]=["UTF-8","#TSF_encoding","0","#TSF_fin."]; TSF_Forth_addargvs(TSF_stackthat,TSF_argvs); TSF_Forth_addargvslen(TSF_argvs)
+    TSF_stacks[TSF_stackthis]=["UTF-8","#TSF_encoding","0","#TSF_fin."]; TSF_Forth_addfin(TSF_argvs)
     TSF_Initcalls=[TSF_Forth_Initwords]+TSF_addcalls
     for TSF_Initcall in TSF_Initcalls:
         TSF_words=TSF_Initcall(TSF_words)
@@ -328,6 +331,12 @@ def TSF_Forth_addargvs(TSF_the,TSF_argvs):    #TSF_doc:積込先スタックにa
 
 def TSF_Forth_addargvslen(TSF_argvs):    #TSF_doc:積込先スタックにargvsの数を積み上げる(TSFAPI)。
     TSF_Forth_pushthat(str(len(TSF_argvs)))
+
+def TSF_Forth_addfin(TSF_argvs):    #TSF_doc:「#TSF_fin.」が含まれてない場合追加してからargvsとargvslenを追加(TSFAPI)。
+    if not "#TSF_fin." in TSF_stacks[TSF_Forth_1ststack()]:
+        TSF_stacks[TSF_Forth_1ststack()].extend(["0","#TSF_fin."])
+    TSF_Forth_addargvs(TSF_Forth_1ststack(),TSF_argvs)
+    TSF_Forth_addargvslen(TSF_argvs)
 
 def TSF_Forth_peekthe(TSF_the,TSF_count):    #TSF_doc:スタックの読込(TSFAPI)。
     TSF_peekdata=""

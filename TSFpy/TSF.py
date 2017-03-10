@@ -14,12 +14,14 @@ def TSF_sample_run(TSF_sample_sepalete=None):    #TSF_doc:TSFサンプルプロ�
     if TSF_sample_sepalete != None:
         TSF_io_printlog("-- {0} source --".format(TSF_sample_sepalete))
         TSF_Forth_viewthey()
-        TSF_Forth_addargvs(TSF_Forth_stackthat(),TSF_argvs); TSF_Forth_addargvslen(TSF_argvs)
+#        TSF_Forth_addargvs(TSF_Forth_stackthat(),TSF_argvs); TSF_Forth_addargvslen(TSF_argvs)
+        TSF_Forth_addfin(TSF_argvs)
         TSF_io_printlog("-- {0} advgs --".format(TSF_sample_sepalete))
         TSF_Forth_viewargvs()
         TSF_io_printlog("-- {0} run --".format(TSF_sample_sepalete))
     else:
-        TSF_Forth_addargvs(TSF_Forth_stackthat(),TSF_argvs); TSF_Forth_addargvslen(TSF_argvs)
+#        TSF_Forth_addargvs(TSF_Forth_stackthat(),TSF_argvs); TSF_Forth_addargvslen(TSF_argvs)
+        TSF_Forth_addfin(TSF_argvs)
     TSF_Forth_run()
 
 def TSF_sample_about():    #TSF_doc:TSFの概要サンプルプログラム。
@@ -72,7 +74,8 @@ def TSF_sample_about():    #TSF_doc:TSFの概要サンプルプログラム。
     TSF_sample_run("TSF_sample_about")
 
 def TSF_sample_Helloworld():    #TSF_doc:Helloworldサンプル(「Hello world」を表示)。
-    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["Hello world","1","#TSF_echoes","0","#TSF_fin."]))
+#    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["Hello world","1","#TSF_echoes","0","#TSF_fin."]))
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["Hello world","1","#TSF_echoes"]))
     TSF_sample_run("TSF_sample_Helloworld")
 
 def TSF_sample_Quine():    #TSF_doc:Quineサンプル(自身のソースコードを表示)。
@@ -153,7 +156,7 @@ if len(TSF_argvs) >= 2:
     TSF_mergefile=TSF_argvs[1]
 if os.path.isfile(TSF_mergefile):
     if len(TSF_Forth_loadtext(TSF_mergefile,TSF_mergefile)):
-        TSF_Forth_merge(TSF_mergefile,[])
+        TSF_Forth_merge(TSF_mergefile,[],TSF_mergedel=True)
         TSF_sample_run()
 elif TSF_mergefile in ["--about"]:
     TSF_sample_about()
