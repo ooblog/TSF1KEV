@@ -5,13 +5,13 @@
     TSF_Tab-Separated-Forth:
     	UTF-8	#TSF_encoding	main1:	#TSF_this	0	#TSF_fin.	./TSF.py	--about	2
     main1:
-    	aboutTSF:	#TSF_pushthe	aboutTSF:	#TSF_lenthe	#TSF_reverseN	aboutTSF:	#TSF_lenthe	#TSF_echoes	main2:	#TSF_this
+    	aboutTSF:	#TSF_echothe	main2:	#TSF_this
     main2:
-    	#分数電卓のテスト	1	#TSF_echoes	16	#TSF_calcPR	calcFXtest:	#TSF_this	calcDCtest:	#TSF_this	calcKNテスト:	#TSF_this	#	1	#TSF_echoes	main3:	#TSF_this
+    	#分数電卓のテスト	1	#TSF_echoN	16	#TSF_calcPR	calcFXtest:	#TSF_this	calcDCtest:	#TSF_this	calcKNテスト:	#TSF_this	#	1	#TSF_echoN	main3:	#TSF_this
     main3:
-    	aboutCalc:	#TSF_pushthe	aboutCalc:	#TSF_lenthe	#TSF_reverseN	aboutCalc:	#TSF_lenthe	#TSF_echoes	main4:	#TSF_this
+    	aboutCalc:	#TSF_echothe	main4:	#TSF_this
     main4:
-    	aboutMatch:	#TSF_pushthe	aboutMatch:	#TSF_lenthe	#TSF_reverseN	aboutMatch:	#TSF_lenthe	#TSF_echoes
+    	aboutMatch:	#TSF_echothe
     aboutTSF:
     	「TSF_Tab-Separated-Forth」の概要(暫定案)。
     	積んだスタックをワード(関数)などで消化していくForth風インタプリタ。スタック単位はtsv文字列。
@@ -27,9 +27,9 @@
     	分岐の別解として「#TSF_matchcasethe」準備中。条件に一致する文字列がスタックに含まれてたらその位置を返すワードにする予定。
     	「#TSF_brackets」などの文字列処理と「#TSF_calcDC」などの電卓を組み合わせれば逆ポーランド記法への数式変換は強いられないはず。
     calcFXtest:
-    	「1 3 m1|2」を数式「[2]/[1]-[0]」で連結→	1	3	m1|2	[2]/[1]-[0]	#TSF_calcFX	2	#TSF_joinN	1	#TSF_echoes
+    	「1 3 m1|2」を数式「[2]/[1]-[0]」で連結→	1	3	m1|2	[2]/[1]-[0]	#TSF_calcFX	2	#TSF_joinN	1	#TSF_echoN
     calcDCtest:
-    	「1 / 3 - m1|2」を数式に連結(ついでに小数デモ)→	1	/	3	-	m1|2	5	#TSF_joinN	#TSF_calcDC	2	#TSF_joinN	1	#TSF_echoes
+    	「1 / 3 - m1|2」を数式に連結(ついでに小数デモ)→	1	/	3	-	m1|2	5	#TSF_joinN	#TSF_calcDC	2	#TSF_joinN	1	#TSF_echoN
     calcKNテスト:
     	「一割る三引く(マイナス二分の一)」(ついでに単位付き計算デモ)→	一割る三引く(マイナス二分の一)	#単位計算	2	#N個連結	1	#N行表示
     aboutCalc:

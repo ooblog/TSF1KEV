@@ -18,11 +18,10 @@ def TSF_Forth_Initwords(TSF_words):    #TSF_doc:ワードを初期化する(TSFA
     TSF_words["#TSF_this"]=TSF_Forth_this; TSF_words["#スタックに入る"]=TSF_Forth_this
     TSF_words["#TSF_that"]=TSF_Forth_that; TSF_words["#スタックに積込"]=TSF_Forth_that
     TSF_words["#TSF_input"]=TSF_Forth_input; TSF_words["#文字列入力"]=TSF_Forth_input
-#    TSF_words["#TSF_echoes"]=TSF_Forth_echoes; TSF_words["#N行表示"]=TSF_Forth_echoes
     TSF_words["#TSF_echoN"]=TSF_Forth_echoN; TSF_words["#N行表示"]=TSF_Forth_echoN
-#    TSF_words["#TSF_echothe"]=TSF_Forth_echoes; TSF_words["#スタック行表示"]=TSF_Forth_echoes
-#    TSF_words["#TSF_echothis"]=TSF_Forth_echothis; TSF_words["#実行中スタック行表示"]=TSF_Forth_echothis
-#    TSF_words["#TSF_echothat"]=TSF_Forth_echothat; TSF_words["#積込先スタック行表示"]=TSF_Forth_echothat
+    TSF_words["#TSF_echothe"]=TSF_Forth_echothe; TSF_words["#スタック行表示"]=TSF_Forth_echothe
+    TSF_words["#TSF_echothis"]=TSF_Forth_echothis; TSF_words["#実行中スタック行表示"]=TSF_Forth_echothis
+    TSF_words["#TSF_echothat"]=TSF_Forth_echothat; TSF_words["#積込先スタック行表示"]=TSF_Forth_echothat
     TSF_words["#TSF_viewthe"]=TSF_Forth_viewthe; TSF_words["#スタック表示"]=TSF_Forth_viewthe
     TSF_words["#TSF_viewthis"]=TSF_Forth_viewthis; TSF_words["#実行中スタックを表示"]=TSF_Forth_viewthis
     TSF_words["#TSF_viewthat"]=TSF_Forth_viewthat; TSF_words["#積込先スタックを表示"]=TSF_Forth_viewthat
@@ -75,22 +74,23 @@ def TSF_Forth_input():   #TSF_doc:[]文字列を入力させる。1スタック�
     TSF_Forth_pushthat(TSF_tsvA)
     return None
 
-#def TSF_Forth_echoes():    #TSF_doc:[…valueB,valueA,count]スタック内容をstdout表示する。count自身とcount分スタック積み下ろし。
-#    TSF_countlen=TSF_Forth_popintthe(TSF_stackthat)
-#    for TSF_count in range(TSF_countlen):
-#        TSF_io_printlog(TSF_Forth_popthat())
-#    return None
-
 def TSF_Forth_echoN():    #TSF_doc:[…valueB,valueA,count]N個のスタックをstdout表示する。count自身とcount分スタック積み下ろし。
     TSF_countlen=TSF_Forth_popintthe(TSF_stackthat)
     for TSF_count in range(TSF_countlen):
         TSF_io_printlog(TSF_Forth_popthat())
     return None
 
-#    TSF_words["#TSF_echoN"]=TSF_Forth_echoN"; TSF_words["#N行表示"]=TSF_Forth_echoN
-#    TSF_words["#TSF_echothe"]=TSF_Forth_echoes; TSF_words["#スタック行表示"]=TSF_Forth_echoes
-#    TSF_words["#TSF_echothis"]=TSF_Forth_echothis; TSF_words["#実行中スタック行表示"]=TSF_Forth_echothis
-#    TSF_words["#TSF_echothat"]=TSF_Forth_echothat; TSF_words["#積込先スタック行表示"]=TSF_Forth_echothat
+def TSF_Forth_echothe():    #TSF_doc:[stack]
+    TSF_io_printlog("\n".join(TSF_stacks[TSF_Forth_popthat()]))
+    return None
+
+def TSF_Forth_echothis():    #TSF_doc:[]
+    TSF_io_printlog("\n".join(TSF_stacks[TSF_stackthis]))
+    return None
+
+def TSF_Forth_echothat():    #TSF_doc:[]
+    TSF_io_printlog("\n".join(TSF_stacks[TSF_stackthat]))
+    return None
 
 def TSF_Forth_view(TSF_the,TSF_view_io=True,TSF_view_log=""):    #TSF_doc:スタックの内容をテキスト表示(TSFAPI)。
     if TSF_the in TSF_stacks:
