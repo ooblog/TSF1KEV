@@ -410,9 +410,9 @@ def TSF_Forth_pokecyclethe(TSF_the,TSF_count):    #TSF_doc:周択でスタック
 def TSF_Forth_pokelimitthe(TSF_the,TSF_count):    #TSF_doc:囲択でスタックの書込(TSFAPI)。
     TSF_peekdata=""
     if TSF_the in TSF_stacks:
-        TSF_countlimit=max(min(TSF_count,len(TSF_stacks[TSF_the])),0)
+        TSF_countlimit=max(min(TSF_count,len(TSF_stacks[TSF_the])-1),0)
         if len(TSF_stacks[TSF_the]) > 0:
-            TSF_stacks[TSF_the][TSF_countmod]=TSF_poke
+            TSF_stacks[TSF_the][TSF_countlimit]=TSF_poke
         else:
             TSF_pokeerr=1
     else:

@@ -169,7 +169,7 @@ def TSF_shuffle_peeklimitthe():   #TSF_doc:[stack,counter]スタックから読�
     return None
 
 def TSF_shuffle_peeklimitthis():   #TSF_doc:[stack,counter]実行中スタックから読み込む(囲択)。2スタック積み下ろして、1スタック積み上げ。
-    TSF_count=TSF_Forth_popintthe(TSF_Forth_stackthis())
+    TSF_count=TSF_Forth_popintthe(TSF_Forth_stackthat())
     TSF_Forth_pushthat(TSF_Forth_peeklimitthe(TSF_Forth_stackthis(),TSF_count))
     return None
 

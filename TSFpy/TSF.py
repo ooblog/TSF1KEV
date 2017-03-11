@@ -81,9 +81,31 @@ def TSF_sample_Quine():    #TSF_doc:Quineサンプル(自身のソースコー�
     TSF_sample_run("TSF_sample_Quine")
 
 def TSF_sample_99beer():    #TSF_doc:99Beerサンプル(「99 Bottles of Beer」を表示)。
-#    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","0","#TSF_fin."]))
-#    TSF_sample_run("TSF_sample_99beer")
-    TSF_sample_help()
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","N-BottlesofBeer:","#TSF_this","","0","#TSF_fin."]))
+    TSF_Forth_setTSF("N-BottlesofBeer:","\t".join(["99","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
+                           "#TSF_carbonthat","buybottles:","0","#TSF_pokethe",
+                           "#TSF_carbonthat","onthewall:","1","#TSF_pokethe",
+                           "onthewall:","#TSF_that","drinkbottles:","#TSF_this"]))
+    TSF_Forth_setTSF("drinkbottles:","\t".join(["#TSF_swapCBthat","2","#TSF_popNthat","#TSF_carbonthat","[0]-1","#TSF_calcDC","buybottles:",
+                           "#TSF_carbonthe","countbottles:","#TSF_this"]))
+    TSF_Forth_setTSF("countbottles:","\t".join(["bottlesreplace:","bottlescall:","onthewall:","0","#TSF_peekthe","#TSF_peeklimitthe","#TSF_clonethe",
+                           "bottlesreplace:","onthewallstr:","onthewall:","#TSF_replacestacks",
+                           "bottlesreplace:","#TSF_echothe","lopbottles:","#TSF_this"]))
+    TSF_Forth_setTSF("lopbottles:","\t".join(["Beerjump:","[onthewall:1]O0~1","#TSF_calcDC","#TSF_peekthe","#TSF_this"]))
+    TSF_Forth_setTSF("buybottles:","\t".join(["99"]))
+    TSF_Forth_setTSF("onthewallstr:","\t".join(["{drink}","{drinked}","{buybottles}"]))
+    TSF_Forth_setTSF("onthewall:","\t".join(["98","99","99"]))
+    TSF_Forth_setTSF("Beerjump:","\t".join(["drinkbottles:","#exit"]))
+    TSF_Forth_setTSF("bottlescall:","\t".join(["nomorebottles:","1bottle:","2bottles:","3ormorebottles:"]))
+    TSF_Forth_setTSF("3ormorebottles:","\t".join(["{drink} bottles of beer on the wall, {drink} bottles of beer.\n"
+        "Take one down and pass it around, {drinked} bottles of beer on the wall."]),TSF_style="N")
+    TSF_Forth_setTSF("2bottles:","\t".join(["{drink} bottles of beer on the wall, {drink} bottles of beer.\n"
+        "Take one down and pass it around, 1 bottle of beer on the wall."]),TSF_style="N")
+    TSF_Forth_setTSF("1bottle:","\t".join(["{drink} bottle of beer on the wall, {drink} bottle of beer.\n"
+        "Take one down and pass it around, no more bottles of beer on the wall."]),TSF_style="N")
+    TSF_Forth_setTSF("nomorebottles:","\t".join(["No more bottles of beer on the wall, no more bottles of beer.\n"
+        "Go to the store and buy some more, {buybottles} bottles of beer on the wall."]),TSF_style="N")
+    TSF_sample_run("TSF_sample_99beer")
 
 def TSF_sample_FizzBuzz():    #TSF_doc:TSF_about.FizzBuzzサンプル(3の倍数の時Fizz5の倍数の時Buzzを表示)。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","FizzBuzz:","#TSF_this","0","#TSF_fin."]))
@@ -138,7 +160,7 @@ def TSF_sample_help():    #TSF_doc:TSFコマンド一覧表示サンプルプロ
         '  --about       about TSF UTF-8 text (Japanese) view" \n'
         '  --helloworld  "Hello world  1  #TSF_echoN" view\n'
         '  --quine       TSF_Forth_viewthey() Quine (self source) view\n'
-#        '  --99beer      99 Bottles of Beer view\n'
+        '  --99beer      99 Bottles of Beer view\n'
         '  --fizzbuzz    ([0]#3Z1~0)+([0]#5Z2~0) Fizz Buzz Fizz&Buzz view\n'
         '  --calcFX      fractions calculator "1/3-m1|2"-> p5|6 view\n'
         '  --calcDC      fractions calculator "1/3-m1|2"-> 0.8333... view\n'

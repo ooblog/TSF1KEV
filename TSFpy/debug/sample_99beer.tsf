@@ -1,24 +1,11 @@
 TSF_Tab-Separated-Forth:
-#	UTF-8	#TSF_encoding	N-BottlesofBeer:	#TSF_this	#TSF_viewthey	0	#TSF_fin.
 	UTF-8	#TSF_encoding	N-BottlesofBeer:	#TSF_this		0	#TSF_fin.
 N-BottlesofBeer:
-	99	#TSF_swapBAthat	m1	#TSF_peekthat	m[0]	#TSF_calcDC	#TSF_peekthat
-	#TSF_carbonthat	buybottles:	0	#TSF_pokethe
-	#TSF_carbonthat	onthewall:	1	#TSF_pokethe
-	onthewall:	#TSF_that	drinkbottles:	#TSF_this
+	99	#TSF_swapBAthat	m1	#TSF_peekthat	m[0]	#TSF_calcDC	#TSF_peekthat	#TSF_carbonthat	buybottles:	0	#TSF_pokethe	#TSF_carbonthat	onthewall:	1	#TSF_pokethe	onthewall:	#TSF_that	drinkbottles:	#TSF_this
 drinkbottles:
 	#TSF_swapCBthat	2	#TSF_popNthat	#TSF_carbonthat	[0]-1	#TSF_calcDC	buybottles:	#TSF_carbonthe	countbottles:	#TSF_this
 countbottles:
-#	bottlesreplace:	nomorebottles:	#TSF_clonethe
-#	bottlesreplace:	1bottle:	#TSF_clonethe
-#	bottlesreplace:	2bottles:	#TSF_clonethe
-#	bottlesreplace:	3ormorebottles:	#TSF_clonethe
-#	bottlesreplace:	bottlesjump:	0	#TSF_peekthe	#TSF_clonethe
-#	bottlesreplace:	bottlesjump:	onthewall:	1	#TSF_peekthe	#TSF_peekcyclethe	#TSF_clonethe
-#	bottlesreplace:	bottlesjump:	0	#TSF_peekcyclethe	#TSF_clonethe
-	bottlesreplace:	bottlesjump:	onthewall:	0	#TSF_peekthe	#TSF_peeklimitthe	#TSF_clonethe
-	bottlesreplace:	onthewallstr:	onthewall:	#TSF_replacestacks
-	bottlesreplace:	#TSF_echothe	lopbottles:	#TSF_this
+	bottlesreplace:	bottlescall:	onthewall:	0	#TSF_peekthe	#TSF_peeklimitthe	#TSF_clonethe	bottlesreplace:	onthewallstr:	onthewall:	#TSF_replacestacks	bottlesreplace:	#TSF_echothe	lopbottles:	#TSF_this
 lopbottles:
 	Beerjump:	[onthewall:1]O0~1	#TSF_calcDC	#TSF_peekthe	#TSF_this
 buybottles:
@@ -29,11 +16,11 @@ onthewall:
 	98	99	99
 Beerjump:
 	drinkbottles:	#exit
-bottlesjump:
+bottlescall:
 	nomorebottles:	1bottle:	2bottles:	3ormorebottles:
 3ormorebottles:
 	{drink} bottles of beer on the wall, {drink} bottles of beer.
-	Take one down and pass it around,{drinked} bottles of beer on the wall.
+	Take one down and pass it around, {drinked} bottles of beer on the wall.
 2bottles:
 	{drink} bottles of beer on the wall, {drink} bottles of beer.
 	Take one down and pass it around, 1 bottle of beer on the wall.
@@ -43,5 +30,6 @@ bottlesjump:
 nomorebottles:
 	No more bottles of beer on the wall, no more bottles of beer.
 	Go to the store and buy some more, {buybottles} bottles of beer on the wall.
-Lyrics of the song 99 Bottles of Beer:
-	http://99-bottles-of-beer.net/lyrics.html
+-- TSF_sample_99beer advgs --
+TSF_Tab-Separated-Forth:
+	UTF-8	#TSF_encoding	N-BottlesofBeer:	#TSF_this		0	#TSF_fin.	./TSF.py	--99beer	2
