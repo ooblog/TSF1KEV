@@ -3,22 +3,26 @@ TSF_Tab-Separated-Forth:
 N-BottlesofBeer:
 	99	#TSF_swapBAthat	m1	#TSF_peekthat	m[0]	#TSF_calcDC	#TSF_peekthat
 	#TSF_carbonthat	buybottles:	0	#TSF_pokethe
-	#TSF_carbonthat	onthewall:	0	#TSF_pokethe
+	#TSF_carbonthat	onthewall:	1	#TSF_pokethe
 	onthewall:	#TSF_that	drinkbottles:	#TSF_this
 drinkbottles:
-	2	#TSF_popNthat	#TSF_carbonthat	[0]-1	#TSF_calcDC	buybottles:	#TSF_carbonthe	countbottles:	#TSF_this
+	#TSF_swapCBthat	2	#TSF_popNthat	#TSF_carbonthat	[0]-1	#TSF_calcDC	buybottles:	#TSF_carbonthe	countbottles:	#TSF_this
 countbottles:
 	bottlesreplace:	nomorebottles:	#TSF_clonethe
 	bottlesreplace:	onthewallstr:	onthewall:	#TSF_replacestacks
-	bottlesreplace:	#TSF_echothe
+	bottlesreplace:	#TSF_echothe	lopbottles:	#TSF_this
+lopbottles:
+	Beerjump:	[onthewall:1]O0~1	#TSF_calcDC	#TSF_peekthe	#TSF_this
 buybottles:
 	99
 onthewallstr:
 	{drink}	{drinked}	{buybottles}
 onthewall:
-	99	98	99
+	98	99	99
 Beerjump:
 	drinkbottles:	#exit
+bottlesjump:
+	nomorebottles:	1bottle:	2bottles:	3ormorebottles:
 3ormorebottles:
 	{drink} bottles of beer on the wall, {drink} bottles of beer.
 	Take one down and pass it around,{drinked} bottles of beer on the wall.
