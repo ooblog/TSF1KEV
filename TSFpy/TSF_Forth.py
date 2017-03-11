@@ -424,12 +424,10 @@ def TSF_Forth_delthe(TSF_the):   #TSF_doc:スタックを削除(TSFAPI)。
     return None if TSF_stackthis != TSF_the else ""
 
 def TSF_Forth_clonethe(TSF_clone,TSF_the):   #TSF_doc:スタックを複製する(TSFAPI)
-    if TSF_clone in TSF_stacks:
-        TSF_stacks[TSF_clone]=list(tuple(TSF_stacks[TSF_the] if TSF_the in TSF_stacks else []))
+    TSF_stacks[TSF_clone]=list(tuple(TSF_stacks[TSF_the] if TSF_the in TSF_stacks else []))
 
 def TSF_Forth_clonethey(TSF_clone):   #TSF_doc:(TSFAPI)
-    if TSF_clone in TSF_stacks:
-        TSF_stacks[TSF_clone]=list(tuple(TSF_stacks.keys()))
+    TSF_stacks[TSF_clone]=list(tuple(TSF_stacks.keys()))
 
 
 def TSF_Forth_debug(TSF_argvs):    #TSF_doc:「TSF/TSF_Forth.py」単体テスト風デバッグ関数。

@@ -53,6 +53,7 @@ def TSF_shuffle_Initwords(TSF_words):    #TSF_doc:スタック並び替え関連
     TSF_words["#TSF_clonethey"]=TSF_shuffle_clonethey; TSF_words["#スタック名一覧の複製"]=TSF_shuffle_clonethey
     TSF_words["#TSF_pushthe"]=TSF_shuffle_pushthe; TSF_words["#スタックを積む"]=TSF_shuffle_pushthe
     TSF_words["#TSF_pushthis"]=TSF_shuffle_pushthis; TSF_words["#実行中スタックを積む"]=TSF_shuffle_pushthis
+    TSF_words["#TSF_pushthat"]=TSF_shuffle_pushthat; TSF_words["#積込先スタックを積む"]=TSF_shuffle_pushthat
     TSF_words["#TSF_pushthey"]=TSF_shuffle_pushthey; TSF_words["#スタック名一覧を積む"]=TSF_shuffle_pushthey
     TSF_words["#TSF_addNthe"]=TSF_shuffle_addNthe; TSF_words["#N個スタックを別のスタックに追加"]=TSF_shuffle_addNthe
     TSF_words["#TSF_addNthis"]=TSF_shuffle_addNthis; TSF_words["#N個スタックを実行中スタックに追加"]=TSF_shuffle_addNthis
@@ -293,13 +294,15 @@ def TSF_shuffle_clonethey():   #TSF_doc:[stackC]スタック名一覧をスタ�
     return None
 
 def TSF_shuffle_pushthe():   #TSF_doc:[stack]指定したスタックを積込先スタックに積み上げ。1スタック積み下ろしてからスタック積み上げ。
-    TSF_the=TSF_Forth_popthat()
-    TSF_Forth_addargvs(TSF_Forth_stackthat(),TSF_Forth_stackvalue(TSF_the))
+    TSF_Forth_addargvs(TSF_Forth_stackthat(),TSF_Forth_stackvalue(TSF_Forth_popthat()))
     return None
 
 def TSF_shuffle_pushthis():   #TSF_doc:[]実行中スタックを丸ごと積込先スタックに積み上げ。
-    TSF_the=TSF_Forth_stackthis()
-    TSF_Forth_addargvs(TSF_Forth_stackthat(),TSF_Forth_stackvalue(TSF_the))
+    TSF_Forth_addargvs(TSF_Forth_stackthat(),TSF_Forth_stackvalue(TSF_Forth_stackthis()))
+    return None
+
+def TSF_shuffle_pushthat():   #TSF_doc:[]積込先スタックを丸ごと積込先スタックに積み上げ。
+    TSF_Forth_addargvs(TSF_Forth_stackthat(),tuple(TSF_Forth_stackvalue(TSF_Forth_stackthat())))
     return None
 
 def TSF_shuffle_pushthey():   #TSF_doc:[]スタック名一覧を丸ごと積込先スタックに積み上げ。
