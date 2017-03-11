@@ -79,8 +79,8 @@ TSF_ampmenu=("AM",  "PM", "AN")
 
 TSF_earlier_diffminute,TSF_earlier_overhour=0,24
 TSF_earlier_now,TSF_meridian_now,TSF_allnight_now=None,None,None
-TSF_meridian_Year,TSF_meridian_Yearlower,TSF_meridian_YearZodiac,TSF_meridian_YearDays,TSF_meridian_YearIso,TSF_meridian_WeekNumberYearIso,TSF_meridian_WeekDayIso=None,None,None,None,None,None,None
-TSF_allnight_Year,TSF_allnight_Yearlower,TSF_allnight_YearZodiac,TSF_allnight_YearDays,TSF_allnight_YearIso,TSF_allnight_WeekNumberYearIso,TSF_allnight_WeekDayIso,TSF_allnight_carryYear=None,None,None,None,None,None,None,None
+TSF_meridian_Year,TSF_meridian_Yearlower,TSF_meridian_YearZodiac,TSF_meridian_Yeardays,TSF_meridian_YearIso,TSF_meridian_WeekNumberYearIso,TSF_meridian_WeekDayIso=None,None,None,None,None,None,None
+TSF_allnight_Year,TSF_allnight_Yearlower,TSF_allnight_YearZodiac,TSF_allnight_Yeardays,TSF_allnight_YearIso,TSF_allnight_WeekNumberYearIso,TSF_allnight_WeekDayIso,TSF_allnight_carryYear=None,None,None,None,None,None,None,None
 TSF_meridian_Month,TSF_meridian_Monthdays=None,None
 TSF_allnight_Month,TSF_allnight_Monthdays,TSF_allnight_carryMonth=None,None,None
 TSF_meridian_Daymonth,TSF_meridian_Dayyear,TSF_meridian_Weekday,TSF_meridian_Weeknumber,TSF_meridian_yearWeeksiso=None,None,None,None,None
@@ -96,11 +96,11 @@ def TSF_time_setdaytime(TSF_diffminute=0,TSF_overhour=30):    #TSF_doc:時刻の
     TSF_earlier_overhour=min(max(TSF_overhour,24),48) if TSF_overhour != None else TSF_earlier_overhour
     global TSF_earlier_now,TSF_meridian_now,TSF_allnight_now
     TSF_earlier_now,TSF_meridian_now,TSF_allnight_now=datetime.datetime.now(),None,None
-    global TSF_meridian_Year,TSF_meridian_Yearlower,TSF_meridian_YearZodiac,TSF_meridian_YearDays,TSF_meridian_YearIso,TSF_meridian_WeekNumberYearIso,TSF_meridian_WeekDayIso
+    global TSF_meridian_Year,TSF_meridian_Yearlower,TSF_meridian_YearZodiac,TSF_meridian_Yeardays,TSF_meridian_YearIso,TSF_meridian_WeekNumberYearIso,TSF_meridian_WeekDayIso
     if TSF_meridian_Year != TSF_earlier_now.year:
-        TSF_meridian_Year,TSF_meridian_Yearlower,TSF_meridian_YearZodiac,TSF_meridian_YearDays,TSF_meridian_YearIso,TSF_meridian_WeekNumberYearIso,TSF_meridian_WeekDayIso=None,None,None,None,None,None,None
-        global TSF_allnight_Year,TSF_allnight_Yearlower,TSF_allnight_YearZodiac,TSF_allnight_YearDays,TSF_allnight_YearIso,TSF_allnight_WeekNumberYearIso,TSF_allnight_WeekDayIso,TSF_allnight_carryYear
-        TSF_allnight_Year,TSF_allnight_Yearlower,TSF_allnight_YearZodiac,TSF_allnight_YearDays,TSF_allnight_YearIso,TSF_allnight_WeekNumberYearIso,TSF_allnight_WeekDayIso,TSF_allnight_carryYear=None,None,None,None,None,None,None,None
+        TSF_meridian_Year,TSF_meridian_Yearlower,TSF_meridian_YearZodiac,TSF_meridian_Yeardays,TSF_meridian_YearIso,TSF_meridian_WeekNumberYearIso,TSF_meridian_WeekDayIso=None,None,None,None,None,None,None
+        global TSF_allnight_Year,TSF_allnight_Yearlower,TSF_allnight_YearZodiac,TSF_allnight_Yeardays,TSF_allnight_YearIso,TSF_allnight_WeekNumberYearIso,TSF_allnight_WeekDayIso,TSF_allnight_carryYear
+        TSF_allnight_Year,TSF_allnight_Yearlower,TSF_allnight_YearZodiac,TSF_allnight_Yeardays,TSF_allnight_YearIso,TSF_allnight_WeekNumberYearIso,TSF_allnight_WeekDayIso,TSF_allnight_carryYear=None,None,None,None,None,None,None,None
     global TSF_meridian_Month,TSF_meridian_Monthdays
     if TSF_meridian_Month != TSF_earlier_now.month:
         TSF_meridian_Month,TSF_meridian_Monthdays=None,None
@@ -171,6 +171,8 @@ def TSF_time_allnight_carryMonth():    #TSF_doc:徹夜時刻年の位下がり�
 #    TSF_allnight_carryMonth=TSF_allnight_carryMonth if TSF_allnight_carryMonth != None else -1 if TSF_time_meridian_Month()+TSF_time_allnight_carryDay() < 1 else 0
     TSF_allnight_carryMonth=TSF_allnight_carryMonth if TSF_allnight_carryMonth != None else -1 if TSF_time_meridian_Month()+TSF_time_allnight_carryDay() < 1 else 0
     return TSF_allnight_carryMonth
+def TSF_time_meridian_Monthdays():    #TSF_doc:現在時刻日2桁/28~31の遅延処理。
+    return TSF_meridian_Monthdays
 
 def TSF_time_meridian_Weekday():    #TSF_doc:現在時刻日2桁の遅延処理。
     global TSF_meridian_Weekday
@@ -182,11 +184,11 @@ def TSF_time_allnight_Weekday():    #TSF_doc:現在時刻日2桁の遅延処理�
     TSF_allnight_Weekday=TSF_allnight_Weekday if TSF_allnight_Weekday != None else (TSF_time_meridian_Weekday()+7+TSF_time_allnight_carryHour())%7
     return TSF_allnight_Weekday
 
-def TSF_time_meridian_Daymonth():    #TSF_doc:現在時刻日2桁の遅延処理。
+def TSF_time_meridian_Daymonth():    #TSF_doc:現在時刻日2桁/約30の遅延処理。
     global TSF_meridian_Daymonth
     TSF_meridian_Daymonth=TSF_meridian_Daymonth if TSF_meridian_Daymonth != None else TSF_time_meridian_now().day
     return TSF_meridian_Daymonth
-def TSF_time_allnight_Daymonth():    #TSF_doc:徹夜時刻日2桁の遅延処理。
+def TSF_time_allnight_Daymonth():    #TSF_doc:徹夜時刻日2桁/約30の遅延処理。
     global TSF_allnight_Daymonth
     TSF_allnight_Daymonth=TSF_allnight_Daymonth if TSF_allnight_Daymonth != None else TSF_time_meridian_Daymonth()+TSF_time_allnight_carryHour()
     return TSF_allnight_Daymonth
@@ -195,6 +197,15 @@ def TSF_time_allnight_carryDay():    #TSF_doc:徹夜時刻年の位下がり処�
 #    TSF_allnight_carryDay=TSF_allnight_carryDay if TSF_allnight_carryDay != None else -1 if TSF_time_meridian_Daymonth()+TSF_time_allnight_carryHour() < 1 else 0
     TSF_allnight_carryDay=TSF_allnight_carryDay if TSF_allnight_carryDay != None else -1 if TSF_time_meridian_Daymonth()+TSF_time_allnight_carryHour() < 1 else 0
     return TSF_allnight_carryDay
+
+def TSF_time_meridian_Dayyear():    #TSF_doc:現在時刻日3桁/約365の遅延処理。
+    global TSF_meridian_Dayyear
+    TSF_meridian_Dayyear=TSF_meridian_Dayyear if TSF_meridian_Dayyear != None else datetime.date(TSF_time_meridian_Year(),TSF_time_meridian_Month(),TSF_time_meridian_Daymonth()).toordinal()-datetime.date(TSF_time_meridian_Year(),1,1).toordinal()+1
+    return TSF_meridian_Dayyear
+def TSF_time_allnight_Dayyear():    #TSF_doc:現在時刻日3桁/約365の遅延処理。
+    global TSF_allnight_Dayyear
+    TSF_allnight_Dayyear=TSF_allnight_Dayyear if TSF_allnight_Dayyear != None else TSF_time_meridian_Dayyear()-TSF_time_allnight_carryHour()
+    return TSF_allnight_Dayyear
 
 def TSF_time_meridian_Hour():    #TSF_doc:現在時刻時2桁の遅延処理。
     global TSF_meridian_Hour
@@ -231,49 +242,80 @@ def TSF_time_getdaytime(TSF_timeformat="@000y@0m@0dm@wdec@0h@0n@0s",TSF_diffminu
         TSF_tf=TSF_tf if not "@0y" in TSF_tf else TSF_tf.replace("@0y","{0:0>2}".format(TSF_time_meridian_Yearlower()))
         TSF_tf=TSF_tf if not "@_y" in TSF_tf else TSF_tf.replace("@_y","{0: >2}".format(TSF_time_meridian_Yearlower()))
         TSF_tf=TSF_tf if not "@2y" in TSF_tf else TSF_tf.replace("@2y","{0:2}".format(TSF_time_meridian_Yearlower()))
-        TSF_tf=TSF_tf if not "@y" in TSF_tf else TSF_tf.replace("@Y","{0}".format(TSF_time_meridian_Year()))
+        TSF_tf=TSF_tf if not "@y" in TSF_tf else TSF_tf.replace("@Y",str(TSF_time_meridian_Year()))
         TSF_tf=TSF_tf if not "@000Y" in TSF_tf else TSF_tf.replace("@000Y" ,"{0:0>4}".format(TSF_time_allnight_Year()))
         TSF_tf=TSF_tf if not "@___Y" in TSF_tf else TSF_tf.replace("@___Y" ,"{0: >4}".format(TSF_time_allnight_Year()))
         TSF_tf=TSF_tf if not "@4Y" in TSF_tf else TSF_tf.replace("@4Y","{0:4}".format(TSF_time_allnight_Year()))
         TSF_tf=TSF_tf if not "@0Y" in TSF_tf else TSF_tf.replace("@0Y","{0:0>2}".format(TSF_time_allnight_Yearlower))
         TSF_tf=TSF_tf if not "@_Y" in TSF_tf else TSF_tf.replace("@_Y","{0: >2}".format(TSF_time_allnight_Yearlower))
         TSF_tf=TSF_tf if not "@2Y" in TSF_tf else TSF_tf.replace("@2Y","{0:2}".format(TSF_time_allnight_Yearlower))
-        TSF_tf=TSF_tf if not "@Y" in TSF_tf else TSF_tf.replace("@Y","{0}".format(TSF_time_allnight_Year()))
+        TSF_tf=TSF_tf if not "@Y" in TSF_tf else TSF_tf.replace("@Y",str(TSF_time_allnight_Year()))
 
+        TSF_tf=TSF_tf if not "@meh" in TSF_tf else TSF_tf.replace("@meh",TSF_monthenh[TSF_time_meridian_Month()])
+        TSF_tf=TSF_tf if not "@_meh" in TSF_tf else TSF_tf.replace("@_meh","{0: >9}".format(TSF_monthenh[TSF_time_meridian_Month()]))
+        TSF_tf=TSF_tf if not "@mjiz" in TSF_tf else TSF_tf.replace("@mjiz",TSF_monthjpiz[TSF_time_meridian_Month()])
+        TSF_tf=TSF_tf if not "@_mjiz" in TSF_tf else TSF_tf.replace("@_mjiz",TSF_monthjpiz[TSF_time_meridian_Month()])
+        TSF_tf=TSF_tf if not "@mj" in TSF_tf else TSF_tf.replace("@mj",TSF_monthjp[TSF_time_meridian_Month()])
+        TSF_tf=TSF_tf if not "@_mj" in TSF_tf else TSF_tf.replace("@_mj",TSF_monthjp[TSF_time_meridian_Month()])
         TSF_tf=TSF_tf if not "@0m" in TSF_tf else TSF_tf.replace("@0m","{0:0>2}".format(TSF_time_meridian_Month()))
         TSF_tf=TSF_tf if not "@_m" in TSF_tf else TSF_tf.replace("@_m","{0: >2}".format(TSF_time_meridian_Month()))
-        TSF_tf=TSF_tf if not "@m" in TSF_tf else TSF_tf.replace("@m","{0:2}".format(TSF_time_meridian_Month()))
+        TSF_tf=TSF_tf if not "@m" in TSF_tf else TSF_tf.replace("@m",str(TSF_time_meridian_Month()))
+        TSF_tf=TSF_tf if not "@Meh" in TSF_tf else TSF_tf.replace("@Meh",TSF_monthenh[TSF_time_allnight_Month()])
+        TSF_tf=TSF_tf if not "@_Meh" in TSF_tf else TSF_tf.replace("@_Meh","{0: >9}".format(TSF_monthenh[TSF_time_allnight_Month()]))
+        TSF_tf=TSF_tf if not "@Mjiz" in TSF_tf else TSF_tf.replace("@Mjiz",TSF_monthjpiz[TSF_time_allnight_Month()])
+        TSF_tf=TSF_tf if not "@_Mjiz" in TSF_tf else TSF_tf.replace("@_Mjiz",TSF_monthjpiz[TSF_time_allnight_Month()])
+        TSF_tf=TSF_tf if not "@Mj" in TSF_tf else TSF_tf.replace("@Mj",TSF_monthjp[TSF_time_allnight_Month()])
+        TSF_tf=TSF_tf if not "@_Mj" in TSF_tf else TSF_tf.replace("@_Mj",TSF_monthjp[TSF_time_allnight_Month()])
         TSF_tf=TSF_tf if not "@0M" in TSF_tf else TSF_tf.replace("@0M","{0:0>2}".format(TSF_time_allnight_Month()))
         TSF_tf=TSF_tf if not "@_M" in TSF_tf else TSF_tf.replace("@_M","{0: >2}".format(TSF_time_allnight_Month()))
-        TSF_tf=TSF_tf if not "@M" in TSF_tf else TSF_tf.replace("@M","{0:2}".format(TSF_time_allnight_Month()))
+        TSF_tf=TSF_tf if not "@M" in TSF_tf else TSF_tf.replace("@M",str(TSF_time_allnight_Month()))
 
-        TSF_tf=TSF_tf if not "@wdec" in TSF_tf else TSF_tf.replace("@wdec","{0:1}".format(TSF_weekdayenc[TSF_time_meridian_Weekday()]))
-        TSF_tf=TSF_tf if not "@wd" in TSF_tf else TSF_tf.replace("@wd","{0:1}".format(TSF_time_meridian_Weekday()))
-        TSF_tf=TSF_tf if not "@Wdec" in TSF_tf else TSF_tf.replace("@Wdec","{0:1}".format(TSF_weekdayenc[TSF_time_allnight_Weekday()]))
-        TSF_tf=TSF_tf if not "@Wd" in TSF_tf else TSF_tf.replace("@Wd","{0:1}".format(TSF_time_allnight_Weekday()))
+        TSF_tf=TSF_tf if not "@wdj" in TSF_tf else TSF_tf.replace("@wdj",TSF_weekdayjp[TSF_time_meridian_Weekday()])
+        TSF_tf=TSF_tf if not "@wdec" in TSF_tf else TSF_tf.replace("@wdec",TSF_weekdayenc[TSF_time_meridian_Weekday()])
+        TSF_tf=TSF_tf if not "@wdes" in TSF_tf else TSF_tf.replace("@wdes",TSF_weekdayens[TSF_time_meridian_Weekday()])
+        TSF_tf=TSF_tf if not "@wdel" in TSF_tf else TSF_tf.replace("@wdel",TSF_weekdayenl[TSF_time_meridian_Weekday()])
+        TSF_tf=TSF_tf if not "@_wdel" in TSF_tf else TSF_tf.replace("@_wdel","{0: >9}".format(TSF_weekdayenl[TSF_time_meridian_Weekday()]))
+        TSF_tf=TSF_tf if not "@wdeh" in TSF_tf else TSF_tf.replace("@wdeh",TSF_weekdayenh[TSF_time_meridian_Weekday()])
+        TSF_tf=TSF_tf if not "@_wdeh" in TSF_tf else TSF_tf.replace("@_wdeh","{0: >9}".format(TSF_weekdayenh[TSF_time_meridian_Weekday()]))
+        TSF_tf=TSF_tf if not "@wd" in TSF_tf else TSF_tf.replace("@wd",str(TSF_time_meridian_Weekday()))
+        TSF_tf=TSF_tf if not "@Wdj" in TSF_tf else TSF_tf.replace("@Wdj",TSF_weekdayjp[TSF_time_allnight_Weekday()])
+        TSF_tf=TSF_tf if not "@Wdec" in TSF_tf else TSF_tf.replace("@Wdec",TSF_weekdayenc[TSF_time_allnight_Weekday()])
+        TSF_tf=TSF_tf if not "@Wdes" in TSF_tf else TSF_tf.replace("@Wdes",TSF_weekdayens[TSF_time_allnight_Weekday()])
+        TSF_tf=TSF_tf if not "@Wdel" in TSF_tf else TSF_tf.replace("@Wdel",TSF_weekdayenl[TSF_time_allnight_Weekday()])
+        TSF_tf=TSF_tf if not "@_Wdel" in TSF_tf else TSF_tf.replace("@_Wdel","{0: >9}".format(TSF_weekdayenl[TSF_time_allnight_Weekday()]))
+        TSF_tf=TSF_tf if not "@Wdeh" in TSF_tf else TSF_tf.replace("@Wdeh",TSF_weekdayenh[TSF_time_allnight_Weekday()])
+        TSF_tf=TSF_tf if not "@_Wdeh" in TSF_tf else TSF_tf.replace("@_Wdeh","{0: >9}".format(TSF_weekdayenh[TSF_time_allnight_Weekday()]))
+        TSF_tf=TSF_tf if not "@Wd" in TSF_tf else TSF_tf.replace("@Wd",str(TSF_time_allnight_Weekday()))
 
         TSF_tf=TSF_tf if not "@0dm" in TSF_tf else TSF_tf.replace("@0dm","{0:0>2}".format(TSF_time_meridian_Daymonth()))
-        TSF_tf=TSF_tf if not "@_dm" in TSF_tf else TSF_tf.replace("@_dm","{0: >2}".format(TSF_time_meridian_Month()))
-        TSF_tf=TSF_tf if not "@dm" in TSF_tf else TSF_tf.replace("@dm","{0:2}".format(TSF_time_meridian_Month()))
+        TSF_tf=TSF_tf if not "@_dm" in TSF_tf else TSF_tf.replace("@_dm","{0: >2}".format(TSF_time_meridian_Daymonth()))
+        TSF_tf=TSF_tf if not "@dm" in TSF_tf else TSF_tf.replace("@dm",str(TSF_time_meridian_Daymonth()))
         TSF_tf=TSF_tf if not "@0Dm" in TSF_tf else TSF_tf.replace("@0Dm","{0:0>2}".format(TSF_time_allnight_Daymonth()))
         TSF_tf=TSF_tf if not "@_Dm" in TSF_tf else TSF_tf.replace("@_Dm","{0: >2}".format(TSF_time_allnight_Daymonth()))
-        TSF_tf=TSF_tf if not "@Dm" in TSF_tf else TSF_tf.replace("@Dm","{0:2}".format(TSF_time_allnight_Daymonth()))
+        TSF_tf=TSF_tf if not "@Dm" in TSF_tf else TSF_tf.replace("@Dm",str(TSF_time_allnight_Daymonth()))
+
+        TSF_tf=TSF_tf if not "@00dy" in TSF_tf else TSF_tf.replace("@00dy","{0:0>3}".format(TSF_time_meridian_Dayyear()))
+        TSF_tf=TSF_tf if not "@__dy" in TSF_tf else TSF_tf.replace("@__dy","{0: >3}".format(TSF_time_meridian_Dayyear()))
+        TSF_tf=TSF_tf if not "@dy" in TSF_tf else TSF_tf.replace("@dy",str(TSF_time_meridian_Dayyear()))
+        TSF_tf=TSF_tf if not "@00Dy" in TSF_tf else TSF_tf.replace("@00Dy","{0:0>3}".format(TSF_time_allnight_Dayyear()))
+        TSF_tf=TSF_tf if not "@__Dy" in TSF_tf else TSF_tf.replace("@__Dy","{0: >3}".format(TSF_time_allnight_Dayyear()))
+        TSF_tf=TSF_tf if not "@Dy" in TSF_tf else TSF_tf.replace("@Dy",str(TSF_time_allnight_Dayyear()))
 
         TSF_tf=TSF_tf if not "@0h" in TSF_tf else TSF_tf.replace("@0h","{0:0>2}".format(TSF_time_meridian_Hour()))
         TSF_tf=TSF_tf if not "@_h" in TSF_tf else TSF_tf.replace("@_h","{0: >2}".format(TSF_time_meridian_Hour()))
-        TSF_tf=TSF_tf if not "@h" in TSF_tf else TSF_tf.replace("@h","{0:2}".format(TSF_time_meridian_Hour()))
+        TSF_tf=TSF_tf if not "@h" in TSF_tf else TSF_tf.replace("@h",str(TSF_time_meridian_Hour()))
         TSF_tf=TSF_tf if not "@0H" in TSF_tf else TSF_tf.replace("@0H","{0:0>2}".format(TSF_time_allnight_Hour()))
         TSF_tf=TSF_tf if not "@_H" in TSF_tf else TSF_tf.replace("@_H","{0: >2}".format(TSF_time_allnight_Hour()))
-        TSF_tf=TSF_tf if not "@H" in TSF_tf else TSF_tf.replace("@H","{0:2}".format(TSF_time_allnight_Hour()))
+        TSF_tf=TSF_tf if not "@H" in TSF_tf else TSF_tf.replace("@H",str(TSF_time_allnight_Hour()))
 
         TSF_tf=TSF_tf if not "@apj" in TSF_tf else TSF_tf.replace("@apj",TSF_ampmjp[TSF_time_meridian_AP()])
         TSF_tf=TSF_tf if not "@apel" in TSF_tf else TSF_tf.replace("@apel",TSF_ampmenl[TSF_time_meridian_AP()])
         TSF_tf=TSF_tf if not "@apeu" in TSF_tf else TSF_tf.replace("@apeu",TSF_ampmenu[TSF_time_meridian_AP()])
-        TSF_tf=TSF_tf if not "@ap" in TSF_tf else TSF_tf.replace("@ap","{0}".format(TSF_time_meridian_AP()))
+        TSF_tf=TSF_tf if not "@ap" in TSF_tf else TSF_tf.replace("@ap",str(TSF_time_meridian_AP()))
         TSF_tf=TSF_tf if not "@Apoj" in TSF_tf else TSF_tf.replace("@Apoj",TSF_ampmjp[TSF_time_allnight_APO()])
         TSF_tf=TSF_tf if not "@Apel" in TSF_tf else TSF_tf.replace("@Apel",TSF_ampmenl[TSF_time_allnight_APO()])
         TSF_tf=TSF_tf if not "@Apeu" in TSF_tf else TSF_tf.replace("@Apeu",TSF_ampmenu[TSF_time_allnight_APO()])
-        TSF_tf=TSF_tf if not "@Apo" in TSF_tf else TSF_tf.replace("@Apo","{0}".format(TSF_time_allnight_APO()))
+        TSF_tf=TSF_tf if not "@Apo" in TSF_tf else TSF_tf.replace("@Apo",str(TSF_time_allnight_APO()))
 
         TSF_tf=TSF_tf if not "@0n" in TSF_tf else TSF_tf.replace("@0n","{0:0>2}".format(TSF_meridian_miNute))
         TSF_tf=TSF_tf if not "@_n" in TSF_tf else TSF_tf.replace("@_n","{0: >2}".format(TSF_meridian_miNute))
@@ -284,24 +326,24 @@ def TSF_time_getdaytime(TSF_timeformat="@000y@0m@0dm@wdec@0h@0n@0s",TSF_diffminu
 
         TSF_tf=TSF_tf if not "@0s" in TSF_tf else TSF_tf.replace("@0s","{0:0>2}".format(TSF_meridian_Second))
         TSF_tf=TSF_tf if not "@_s" in TSF_tf else TSF_tf.replace("@_s","{0: >2}".format(TSF_meridian_Second))
-        TSF_tf=TSF_tf if not "@s" in TSF_tf else TSF_tf.replace("@s","{0:2}".format(TSF_meridian_Second))
+        TSF_tf=TSF_tf if not "@s" in TSF_tf else TSF_tf.replace("@s",str(TSF_meridian_Second))
         TSF_tf=TSF_tf if not "@0S" in TSF_tf else TSF_tf.replace("@0S","{0:0>2}".format(TSF_meridian_Second))
         TSF_tf=TSF_tf if not "@_S" in TSF_tf else TSF_tf.replace("@_S","{0: >2}".format(TSF_meridian_Second))
-        TSF_tf=TSF_tf if not "@S" in TSF_tf else TSF_tf.replace("@S","{0:2}".format(TSF_meridian_Second))
+        TSF_tf=TSF_tf if not "@S" in TSF_tf else TSF_tf.replace("@S",str(TSF_meridian_Second))
 
         TSF_tf=TSF_tf if not "@00ls" in TSF_tf else TSF_tf.replace("@00ls","{0:0>3}".format(TSF_meridian_miLlisecond))
         TSF_tf=TSF_tf if not "@__ls" in TSF_tf else TSF_tf.replace("@__ls","{0: >3}".format(TSF_meridian_miLlisecond))
-        TSF_tf=TSF_tf if not "@ls" in TSF_tf else TSF_tf.replace("@ls","{0:3}".format(TSF_meridian_miLlisecond))
+        TSF_tf=TSF_tf if not "@ls" in TSF_tf else TSF_tf.replace("@ls",str(TSF_meridian_miLlisecond))
         TSF_tf=TSF_tf if not "@00Ls" in TSF_tf else TSF_tf.replace("@00Ls","{0:0>3}".format(TSF_meridian_miLlisecond))
         TSF_tf=TSF_tf if not "@__Ls" in TSF_tf else TSF_tf.replace("@__Ls","{0: >3}".format(TSF_meridian_miLlisecond))
-        TSF_tf=TSF_tf if not "@Ls" in TSF_tf else TSF_tf.replace("@Ls","{0:3}".format(TSF_meridian_miLlisecond))
+        TSF_tf=TSF_tf if not "@Ls" in TSF_tf else TSF_tf.replace("@Ls",str(TSF_meridian_miLlisecond))
 
         TSF_tf=TSF_tf if not "@00000rs" in TSF_tf else TSF_tf.replace("@00000rs","{0:0>6}".format(TSF_meridian_micRosecond))
         TSF_tf=TSF_tf if not "@_____rs" in TSF_tf else TSF_tf.replace("@_____rs","{0: >6}".format(TSF_meridian_micRosecond))
-        TSF_tf=TSF_tf if not "@rs" in TSF_tf else TSF_tf.replace("@rs","{0:6}".format(TSF_meridian_micRosecond))
+        TSF_tf=TSF_tf if not "@rs" in TSF_tf else TSF_tf.replace("@rs",str(TSF_meridian_micRosecond))
         TSF_tf=TSF_tf if not "@00000Rs" in TSF_tf else TSF_tf.replace("@00000Rs","{0:0>6}".format(TSF_meridian_micRosecond))
         TSF_tf=TSF_tf if not "@_____Rs" in TSF_tf else TSF_tf.replace("@_____Rs","{0: >6}".format(TSF_meridian_micRosecond))
-        TSF_tf=TSF_tf if not "@Rs" in TSF_tf else TSF_tf.replace("@Rs","{0:6}".format(TSF_meridian_micRosecond))
+        TSF_tf=TSF_tf if not "@Rs" in TSF_tf else TSF_tf.replace("@Rs",str(TSF_meridian_micRosecond))
 
         TSF_tf=TSF_tf if not "@JST" in TSF_tf else TSF_tf.replace("@JST","+09:00")
         TSF_tf=TSF_tf if not "@T" in TSF_tf else TSF_tf.replace("@T","\t")
@@ -317,8 +359,8 @@ def TSF_time_getdaytime(TSF_timeformat="@000y@0m@0dm@wdec@0h@0n@0s",TSF_diffminu
         TSF_tf=TSF_tf if not "@__c" in TSF_tf else TSF_tf.replace("@__c","{0: >3}".format(TSF_time_Counter))
         TSF_tf=TSF_tf if not "@0c" in TSF_tf else TSF_tf.replace("@0c","{0:0>2}".format(TSF_time_Counter))
         TSF_tf=TSF_tf if not "@_c" in TSF_tf else TSF_tf.replace("@_c","{0: >2}".format(TSF_time_Counter))
-        TSF_tf=TSF_tf if not "@c" in TSF_tf else TSF_tf.replace("@c","{0}".format(TSF_time_Counter))
-        TSF_tf=TSF_tf if not "@o" in TSF_tf else TSF_tf.replace("@o","{0}".format(TSF_time_randOm))
+        TSF_tf=TSF_tf if not "@c" in TSF_tf else TSF_tf.replace("@c",str(TSF_time_Counter))
+        TSF_tf=TSF_tf if not "@o" in TSF_tf else TSF_tf.replace("@o",str(TSF_time_randOm))
         TSF_tfList[TSF_tfcount]=TSF_tf
 
     TSF_time_Counter+=1
@@ -337,7 +379,7 @@ def TSF_time_debug():    #TSF_doc:「TSF/TSF_time.py」単体テスト風デバ�
         ("TSF_time.test@c@o1:",["@c,@o"]),
         ("TSF_time.TSF/LTSV:",["@000y@0m@0dm@wdec@0h@0n@0s","@000Y@0M@0Dm@Wdec@0H@0N@0S"]),
         ("TSF_time.ISO8601_JST:",["@000y-@0m-@0dmT@0h:@0n:@0s@JST","@000Y-@0M-@0DmT@0H:@0N:@0S@JST"]),
-        ("TSF_time.test@0ls:",["@000y-@0m-@0dmT@0h[@apj]:@0n:@0s.@00ls","@000Y-@0M-@0DmT@0H[@Apoj]:@0N:@0S.@00Ls"]),
+        ("TSF_time.test@0ls:",["@000y-@0m[@mj]-@0dm[@wdj]@0h[@apj]:@0n:@0s.@00ls","@000Y-@0M[@Mj]-@0Dm[@Wdj]@0H[@Apoj]:@0N:@0S.@00Ls"]),
         ("TSF_time.test@c@o2:",["@c,@o"]),
     ])
     for repeat in range(2):
