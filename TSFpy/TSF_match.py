@@ -63,10 +63,13 @@ def TSF_match_charslen():   #TSF_doc:[string]文字列長を取得する。1ス�
 def TSF_match_replacestacks():   #TSF_doc:[stackS,stackO,stackN]SスタックをテキストとみなしてOスタックの文字列群をNスタックの文字列群に置換。
     TSF_tsvN=TSF_Forth_popthat(); TSF_strsN=TSF_Forth_stackvalue(TSF_tsvN)
     TSF_tsvO=TSF_Forth_popthat(); TSF_strsO=TSF_Forth_stackvalue(TSF_tsvO)
-    if len(TSF_strsN) < len(TSF_strsO):
-        TSF_strsN.extend([""]*(len(TSF_strsO)-len(TSF_strsN)))
+#    print("TSF_tsvO",TSF_tsvO,TSF_tsvO)
+#    print("TSF_strsN",TSF_tsvN,TSF_strsN)
+    TSF_strsN.extend([""]*(max(len(TSF_strsO)-len(TSF_strsN),0)))
     TSF_tsvS=TSF_Forth_popthat()
     TSF_text=TSF_txt_ESCdecode("\n".join(TSF_Forth_stackvalue(TSF_tsvS)))
+#    print("TSF_tsvO",TSF_tsvO)
+#    print("TSF_strsN",TSF_strsN)
     for TSF_peek,TSF_strO in enumerate(TSF_strsO):
         TSF_text=TSF_text.replace(TSF_strO,TSF_strsN[TSF_peek])
     TSF_Forth_setTSF(TSF_tsvS,TSF_text,TSF_style="N")

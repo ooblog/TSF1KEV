@@ -149,33 +149,33 @@ def TSF_shuffle_peekrndthat():   #TSF_doc:[]積込先スタックから読み込
     return None
 
 def TSF_shuffle_peekcyclethe():   #TSF_doc:[stack,counter]スタックから読み込む(周択)。2スタック積み下ろして、1スタック積み上げ。
-    TSF_count=TSF_Forth_popintthe(TSF_Forth_popthat())
-    TSF_Forth_pushthat(TSF_Forth_peekcyclethe(TSF_Forth_popthat(),TSF_count))
-    return None
-
-def TSF_shuffle_peekcyclethis():   #TSF_doc:[counter]実行中スタックから読み込む(周択)。1スタック積み下ろして、1スタック積み上げ。
-    TSF_count=TSF_Forth_popintthe(TSF_Forth_stackthis())
-    TSF_Forth_pushthat(TSF_Forth_peekcyclethe(TSF_Forth_popthat(),TSF_count))
-    return None
-
-def TSF_shuffle_peekcyclethat():   #TSF_doc:[counter]積込先スタックから読み込む(周択)。1スタック積み下ろして、1スタック積み上げ。
     TSF_count=TSF_Forth_popintthe(TSF_Forth_stackthat())
     TSF_Forth_pushthat(TSF_Forth_peekcyclethe(TSF_Forth_popthat(),TSF_count))
     return None
 
+def TSF_shuffle_peekcyclethis():   #TSF_doc:[counter]実行中スタックから読み込む(周択)。1スタック積み下ろして、1スタック積み上げ。
+    TSF_count=TSF_Forth_popintthe(TSF_Forth_stackthat())
+    TSF_Forth_pushthat(TSF_Forth_peekcyclethe(TSF_Forth_stackthis(),TSF_count))
+    return None
+
+def TSF_shuffle_peekcyclethat():   #TSF_doc:[counter]積込先スタックから読み込む(周択)。1スタック積み下ろして、1スタック積み上げ。
+    TSF_count=TSF_Forth_popintthe(TSF_Forth_stackthat())
+    TSF_Forth_pushthat(TSF_Forth_peekcyclethe(TSF_Forth_stackthat(),TSF_count))
+    return None
+
 def TSF_shuffle_peeklimitthe():   #TSF_doc:[stack,counter]スタックから読み込む(囲択)。2スタック積み下ろして、1スタック積み上げ。
-    TSF_count=TSF_Forth_popintthe(TSF_Forth_popthat())
+    TSF_count=TSF_Forth_popintthe(TSF_Forth_stackthat())
     TSF_Forth_pushthat(TSF_Forth_peeklimitthe(TSF_Forth_popthat(),TSF_count))
     return None
 
 def TSF_shuffle_peeklimitthis():   #TSF_doc:[stack,counter]実行中スタックから読み込む(囲択)。2スタック積み下ろして、1スタック積み上げ。
     TSF_count=TSF_Forth_popintthe(TSF_Forth_stackthis())
-    TSF_Forth_pushthat(TSF_Forth_peeklimitthe(TSF_Forth_popthat(),TSF_count))
+    TSF_Forth_pushthat(TSF_Forth_peeklimitthe(TSF_Forth_stackthis(),TSF_count))
     return None
 
 def TSF_shuffle_peeklimitthat():   #TSF_doc:[stack,counter]積込先スタックから読み込む(囲択)。2スタック積み下ろして、1スタック積み上げ。
     TSF_count=TSF_Forth_popintthe(TSF_Forth_stackthat())
-    TSF_Forth_pushthat(TSF_Forth_peeklimitthe(TSF_Forth_popthat(),TSF_count))
+    TSF_Forth_pushthat(TSF_Forth_peeklimitthe(TSF_Forth_stackthat(),TSF_count))
     return None
 
 def TSF_shuffle_carbonthe():   #TSF_doc:[stack]スタックの一番上のスタックを複製する。0スタック積み下ろし。

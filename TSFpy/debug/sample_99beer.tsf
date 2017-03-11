@@ -1,5 +1,6 @@
 TSF_Tab-Separated-Forth:
-	UTF-8	#TSF_encoding	N-BottlesofBeer:	#TSF_this	#TSF_viewthey	0	#TSF_fin.
+#	UTF-8	#TSF_encoding	N-BottlesofBeer:	#TSF_this	#TSF_viewthey	0	#TSF_fin.
+	UTF-8	#TSF_encoding	N-BottlesofBeer:	#TSF_this		0	#TSF_fin.
 N-BottlesofBeer:
 	99	#TSF_swapBAthat	m1	#TSF_peekthat	m[0]	#TSF_calcDC	#TSF_peekthat
 	#TSF_carbonthat	buybottles:	0	#TSF_pokethe
@@ -8,7 +9,14 @@ N-BottlesofBeer:
 drinkbottles:
 	#TSF_swapCBthat	2	#TSF_popNthat	#TSF_carbonthat	[0]-1	#TSF_calcDC	buybottles:	#TSF_carbonthe	countbottles:	#TSF_this
 countbottles:
-	bottlesreplace:	nomorebottles:	#TSF_clonethe
+#	bottlesreplace:	nomorebottles:	#TSF_clonethe
+#	bottlesreplace:	1bottle:	#TSF_clonethe
+#	bottlesreplace:	2bottles:	#TSF_clonethe
+#	bottlesreplace:	3ormorebottles:	#TSF_clonethe
+#	bottlesreplace:	bottlesjump:	0	#TSF_peekthe	#TSF_clonethe
+#	bottlesreplace:	bottlesjump:	onthewall:	1	#TSF_peekthe	#TSF_peekcyclethe	#TSF_clonethe
+#	bottlesreplace:	bottlesjump:	0	#TSF_peekcyclethe	#TSF_clonethe
+	bottlesreplace:	bottlesjump:	onthewall:	0	#TSF_peekthe	#TSF_peeklimitthe	#TSF_clonethe
 	bottlesreplace:	onthewallstr:	onthewall:	#TSF_replacestacks
 	bottlesreplace:	#TSF_echothe	lopbottles:	#TSF_this
 lopbottles:

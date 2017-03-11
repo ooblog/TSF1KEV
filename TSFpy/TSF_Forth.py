@@ -371,7 +371,7 @@ def TSF_Forth_peekcyclethe(TSF_the,TSF_count):    #TSF_doc:周択でスタック
 def TSF_Forth_peeklimitthe(TSF_the,TSF_count):    #TSF_doc:囲択でスタックの読込(TSFAPI)。
     TSF_peekdata=""
     if TSF_the in TSF_stacks:
-        TSF_countlimit=max(min(TSF_count,len(TSF_stacks[TSF_the])),0)
+        TSF_countlimit=max(min(TSF_count,len(TSF_stacks[TSF_the])-1),0)
         TSF_peekdata=TSF_stacks[TSF_the][TSF_countlimit] if len(TSF_stacks[TSF_the]) > 0 else TSF_peekdata
     return TSF_peekdata
 
