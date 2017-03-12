@@ -120,7 +120,7 @@ TSF_calc_E="27182818284590452353602874713526624977572470936999595749669676277240
 
 def TSF_calc_precision(TSF_prec):    #TSF_doc:電卓の有効桁数を変更する。初期値は72桁(千無量大数)。円周率とネイピア数も4桁控えて再計算する。
     global TSF_calc_precisionMAX,TSF_calc_precisionPI,TSF_calcQQmemory
-    TSF_calc_precisionMAX=min(max(TSF_prec,5),100); TSF_calc_precisionPI=TSF_calc_precisionMAX-4
+    TSF_calc_precisionMAX=min(max(TSF_prec,5),1000); TSF_calc_precisionPI=TSF_calc_precisionMAX-4
     decimal.getcontext().prec=TSF_calc_precisionMAX*2
     TSF_PI_A,TSF_PI_B,TSF_PI_T,TSF_PI_C=decimal.Decimal(1),decimal.Decimal(1)/decimal.Decimal(2).sqrt(),decimal.Decimal(1)/decimal.Decimal(4),decimal.Decimal(1)
     for TSF_PI_X in range(int(math.ceil(math.log(TSF_calc_precisionPI,2)))):
@@ -231,12 +231,23 @@ TSF_calc_NOZUs=OrderedDict([
 ])
 
 def TSF_calc_function_limit(TSF_LimFirst,TSF_LimRest):    #TSF_doc:和集合積集合のrange作成。
-    TSF_LimStart,TSF_LimGoal=decimal.Decimal(TSF_calc_decimalizeDC(TSF_calc_addition(TSF_LimFirst))).to_integral_value(),decimal.Decimal(TSF_calc_decimalizeDC(TSF_calc_addition(TSF_LimRest))).to_integral_value()
-    if TSF_LimStart <= TSF_LimGoal:
-        TSF_limstep=1; TSF_LimGoal+=1
-    else:
-        TSF_limstep=-1; TSF_LimGoal-=1
-    return range(TSF_LimStart,TSF_LimGoal,TSF_limstep)
+#    TSF_LimStart,TSF_LimGoal=decimal.Decimal(TSF_calc_decimalizeDC(TSF_calc_addition(TSF_LimFirst))).to_integral_value(),decimal.Decimal(TSF_calc_decimalizeDC(TSF_calc_addition(TSF_LimRest))).to_integral_value()
+#    if TSF_LimStart <= TSF_LimGoal:
+#        TSF_limstep=1; TSF_LimGoal+=1
+#    else:
+#        TSF_limstep=-1; TSF_LimGoal-=1
+#    return range(TSF_LimStart,TSF_LimGoal,TSF_limstep)
+    try:
+        TSF_LimStart,TSF_LimGoal=decimal.Decimal(TSF_calc_decimalizeDC(TSF_calc_addition(TSF_LimFirst))).to_integral_value(),decimal.Decimal(TSF_calc_decimalizeDC(TSF_calc_addition(TSF_LimRest))).to_integral_value()
+        if TSF_LimStart <= TSF_LimGoal:
+            TSF_limstep=1; TSF_LimGoal+=1
+        else:
+            TSF_limstep=-1; TSF_LimGoal-=1
+        return range(TSF_LimStart,TSF_LimGoal,TSF_limstep)
+    except decimal.InvalidOperation:
+        TSF_LimStart,TSF_LimGoal,TSF_limstep=None,None,None
+        return range(0)
+
 def TSF_calc_function(TSF_calcQ):    #TSF_doc:分数電卓の和集合積集合およびゼロ比較演算子系。
     TSF_calcOfind=-1; TSF_calc_NOZUin=""
     for TSF_calc_NOZU in TSF_calc_NOZUs.keys():
