@@ -83,14 +83,14 @@ def TSF_sample_Quine():    #TSF_doc:Quineサンプル(自身のソースコー�
 def TSF_sample_99beer():    #TSF_doc:99Beerサンプル(「99 Bottles of Beer」を表示)。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","N-BottlesofBeer:","#TSF_this","","0","#TSF_fin."]))
     TSF_Forth_setTSF("N-BottlesofBeer:","\t".join(["99","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
-                           "#TSF_carbonthat","buybottles:","0","#TSF_pokethe",
-                           "#TSF_carbonthat","onthewall:","1","#TSF_pokethe",
-                           "onthewall:","#TSF_that","drinkbottles:","#TSF_this"]))
+        "#TSF_carbonthat","buybottles:","0","#TSF_pokethe",
+        "#TSF_carbonthat","onthewall:","1","#TSF_pokethe",
+        "onthewall:","#TSF_that","drinkbottles:","#TSF_this"]))
     TSF_Forth_setTSF("drinkbottles:","\t".join(["#TSF_swapCBthat","2","#TSF_popNthat","#TSF_carbonthat","[0]-1","#TSF_calcDC","buybottles:",
-                           "#TSF_carbonthe","countbottles:","#TSF_this"]))
+        "#TSF_carbonthe","countbottles:","#TSF_this"]))
     TSF_Forth_setTSF("countbottles:","\t".join(["bottlesreplace:","bottlescall:","onthewall:","0","#TSF_peekthe","#TSF_peeklimitthe","#TSF_clonethe",
-                           "bottlesreplace:","onthewallstr:","onthewall:","#TSF_replacestacks",
-                           "bottlesreplace:","#TSF_echothe","lopbottles:","#TSF_this"]))
+        "bottlesreplace:","onthewallstr:","onthewall:","#TSF_replacestacks",
+        "bottlesreplace:","#TSF_echothe","lopbottles:","#TSF_this"]))
     TSF_Forth_setTSF("lopbottles:","\t".join(["Beerjump:","[onthewall:1]O0~1","#TSF_calcDC","#TSF_peekthe","#TSF_this"]))
     TSF_Forth_setTSF("buybottles:","\t".join(["99"]))
     TSF_Forth_setTSF("onthewallstr:","\t".join(["{drink}","{drinked}","{buybottles}"]))
@@ -108,45 +108,47 @@ def TSF_sample_99beer():    #TSF_doc:99Beerサンプル(「99 Bottles of Beer」
     TSF_sample_run("TSF_sample_99beer")
 
 def TSF_sample_FizzBuzz():    #TSF_doc:TSF_about.FizzBuzzサンプル(3の倍数の時Fizz5の倍数の時Buzzを表示)。
-    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","FizzBuzz:","#TSF_this","0","#TSF_fin."]))
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","N-FizzBuzz:","#TSF_this","0","#TSF_fin."]))
+    TSF_Forth_setTSF("N-FizzBuzz:","\t".join(["FZcount:","4","#TSF_peekthe","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
+        "FZcount:","4","#TSF_pokethe","FizzBuzz:","#TSF_this"]))
     TSF_Forth_setTSF("FizzBuzz:","\t".join([ \
-    "[FZcount:0]+1","#TSF_calcDC","FZcount:","0","#TSF_pokethe",
-    "FZcount:","([FZcount:0]#3Z1~0)+([FZcount:0]#5Z2~0)","#TSF_calcDC","#TSF_peekthe","1","#TSF_echoN",
-    "FZjump:","[FZcount:0]-20O1~0","#TSF_calcDC","#TSF_peekthe","#TSF_this",
+        "[FZcount:0]+1","#TSF_calcDC","FZcount:","0","#TSF_pokethe",
+        "FZcount:","([FZcount:0]#3Z1~0)+([FZcount:0]#5Z2~0)","#TSF_calcDC","#TSF_peekthe","1","#TSF_echoN",
+        "FZjump:","[FZcount:0]-[FZcount:4]O1~0","#TSF_calcDC","#TSF_peekthe","#TSF_this",
     ]))
-    TSF_Forth_setTSF("FZcount:","\t".join(["0","Fizz","Buzz","Fizz&Buzz"]))
+    TSF_Forth_setTSF("FZcount:","\t".join(["0","Fizz","Buzz","Fizz&Buzz","20"]))
     TSF_Forth_setTSF("FZjump:","\t".join(["FizzBuzz:","#exit"]))
     TSF_sample_run("TSF_sample_FizzBuzz")
 
 def TSF_sample_calcKN(TSF_argvs):    #TSF_doc:単位表示電卓サンプルプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","calcKN:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("calcKN:","\t".join([
-    "1/3-m1|2","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
-    "#TSF_calcKN","1","#TSF_echoN"
+        "1/3-m1|2","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
+        "#TSF_calcKN","1","#TSF_echoN"
     ]),TSF_style="T")
     TSF_sample_run("TSF_sample_calcKN")
 
 def TSF_sample_calcDC(TSF_argvs):    #TSF_doc:小数表示電卓サンプルプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","calcDC:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("calcDC:","\t".join([
-    "1/3-m1|2","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
-    "#TSF_calcDC","1","#TSF_echoN"
+        "1/3-m1|2","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
+        "#TSF_calcDC","1","#TSF_echoN"
     ]),TSF_style="T")
     TSF_sample_run("TSF_sample_calcDC")
 
 def TSF_sample_calcFX(TSF_argvs):    #TSF_doc:分数表示電卓サンプルプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","calcFX:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("calcFX:","\t".join([
-    "1/3-m1|2","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
-    "#TSF_calcFX","1","#TSF_echoN"
+        "1/3-m1|2","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
+        "#TSF_calcFX","1","#TSF_echoN"
     ]),TSF_style="T")
     TSF_sample_run("TSF_sample_calcFX")
 
 def TSF_sample_calender(TSF_argvs):    #TSF_doc:日時表示サンプルプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","calender:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("calender:","\t".join([
-    "@000y@0m@0dm@wdec@0h@0n@0s","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
-    "#TSF_calender","1","#TSF_echoN"
+        "@000y@0m@0dm@wdec@0h@0n@0s","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
+        "#TSF_calender","1","#TSF_echoN"
     ]),TSF_style="T")
     TSF_sample_run("TSF_sample_calender")
 
@@ -162,6 +164,9 @@ def TSF_sample_help():    #TSF_doc:TSFコマンド一覧表示サンプルプロ
         '  --quine       TSF_Forth_viewthey() Quine (self source) view\n'
         '  --99beer      99 Bottles of Beer view\n'
         '  --fizzbuzz    ([0]#3Z1~0)+([0]#5Z2~0) Fizz Buzz Fizz&Buzz view\n'
+#        zundoko VeronCho
+#        Fibonacci
+#        prime
         '  --calcFX      fractions calculator "1/3-m1|2"-> p5|6 view\n'
         '  --calcDC      fractions calculator "1/3-m1|2"-> 0.8333... view\n'
         '  --calcKN      fractions calculator "1/3-m1|2"-> 6 bunno 5 view\n'
