@@ -120,6 +120,17 @@ def TSF_sample_FizzBuzz():    #TSF_doc:TSF_about.FizzBuzzサンプル(3の倍数
     TSF_Forth_setTSF("FZjump:","\t".join(["FizzBuzz:","#exit"]))
     TSF_sample_run("TSF_sample_FizzBuzz")
 
+def TSF_sample_Fibonacci(TSF_argvs):    #TSF_doc:TSF_about.フィボナッチ数列サンプル(「(4<<n*(3+n))//((4<<2*n)-(2<<n)-1)&((2<<n)-1)」を表示)。
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","200","#TSF_calcPR","N-Fibonacci:","#TSF_this","0","#TSF_fin."]))
+    TSF_Forth_setTSF("N-Fibonacci:","\t".join(["Fibcount:","1","#TSF_peekthe","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
+        "Fibcount:","1","#TSF_pokethe","Fibonacci:","#TSF_this"]))
+    TSF_Forth_setTSF("Fibonacci:","\t".join(["Fibcount:","0","#TSF_peekthe","[0]Z1~[0]","#TSF_calcDC","((2&(([0]+3)*[0]+2)^)/((2&(2*[0]+2)^)-(2&([0]+1)^)-1)\\1)#(2&([0]+1)^)",
+        "#TSF_calcDC","1","#TSF_echoN","[Fibcount:0]+1","#TSF_calcDC","Fibcount:","0","#TSF_pokethe",
+        "Fibjump:","[Fibcount:0]-[Fibcount:1]+1O1~0","#TSF_calcDC","#TSF_peekthe","#TSF_this"]))
+    TSF_Forth_setTSF("Fibcount:","\t".join(["-1","20"]))
+    TSF_Forth_setTSF("Fibjump:","\t".join(["Fibonacci:","#exit"]))
+    TSF_sample_run("TSF_sample_Fibonacci")
+
 def TSF_sample_calcKN(TSF_argvs):    #TSF_doc:単位表示電卓サンプルプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","calcKN:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("calcKN:","\t".join([
@@ -165,7 +176,7 @@ def TSF_sample_help():    #TSF_doc:TSFコマンド一覧表示サンプルプロ
         '  --99beer      99 Bottles of Beer view\n'
         '  --fizzbuzz    ([0]#3Z1~0)+([0]#5Z2~0) Fizz Buzz Fizz&Buzz view\n'
 #        zundoko VeronCho
-#        Fibonacci
+        '  --fibonacci   Fibonacci number 0,1,1,2,3,5,8,13,21,55... view\n'
 #        prime
         '  --calcFX      fractions calculator "1/3-m1|2"-> p5|6 view\n'
         '  --calcDC      fractions calculator "1/3-m1|2"-> 0.8333... view\n'
@@ -196,6 +207,8 @@ elif TSF_mergefile in ["--99beer","--beer99","--beer","--99"]:
     TSF_sample_99beer()
 elif TSF_mergefile in ["--fizz","--buzz","--fizzbuzz","--FizzBuzz"]:
     TSF_sample_FizzBuzz()
+elif TSF_mergefile in ["--fib","--fibonacci","--Fibonacci"]:
+    TSF_sample_Fibonacci(TSF_argvs)
 elif TSF_mergefile in ["--calcKN"]:
     TSF_sample_calcKN(TSF_argvs)
 elif TSF_mergefile in ["--calcDC"]:
