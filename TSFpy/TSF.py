@@ -164,7 +164,6 @@ def TSF_sample_calender(TSF_argvs):    #TSF_doc:日時表示サンプルプロ�
     TSF_sample_run("TSF_sample_calender")
 
 def TSF_sample_help():    #TSF_doc:TSFコマンド一覧表示サンプルプログラム。
-#    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","replace:","#TSF_this","help:","#TSF_pushthe","help:","#TSF_lenthe","#TSF_reverseN","help:","#TSF_lenthe","#TSF_echoN","0","#TSF_fin."]))
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","replace:","#TSF_this","help:","#TSF_echothe","0","#TSF_fin."]))
     TSF_Forth_setTSF("help:",
         'usage: ./TSF.py [command|file.tsf] [argv] ...\n'
