@@ -144,6 +144,24 @@ def TSF_sample_Fibonacci(TSF_argvs):    #TSF_doc:TSF_about.フィボナッチ数
     TSF_Forth_setTSF("Fibjump:","\t".join(["Fibonacci:","#exit"]))
     TSF_sample_run("TSF_sample_Fibonacci")
 
+def TSF_sample_Prime(TSF_argvs):    #TSF_doc:TSF_about.素数列挙サンプル(約数が1とその数自身な数値を表示)。
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","200","#TSF_calcPR","N-prime:","#TSF_this","0","#TSF_fin."]))
+    TSF_Forth_setTSF("N-prime:","\t".join(["Pcount:","0","#TSF_peekthe","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
+        "Pcount:","0","#TSF_pokethe","primeskip:","#TSF_this"]))
+    TSF_Forth_setTSF("primeskip:","\t".join(["Pstep:","[Pcount:1]","#TSF_calcDC","#TSF_peekcyclethe","Pcount:","#TSF_carbonthe","[0]+[1]","#TSF_calcDC","Pcount:","2","#TSF_pokethe",
+        "[Pcount:1]+1","#TSF_calcDC","Pcount:","1","#TSF_pokethe","primewhile:","#TSF_this"]))
+    TSF_Forth_setTSF("primewhile:","\t".join(["Pwhilejump:","[Pcount:0]-[Pcount:2]O0~1","#TSF_calcDC","#TSF_peekthe","#TSF_this"]))
+    TSF_Forth_setTSF("Pwhilejump:","\t".join(["primeezchk:","primeecho:"]))
+    TSF_Forth_setTSF("primeezchk:","\t".join(["Pchkjump:","Pcount:","#TSF_carbonthe","2&([0]-1)^#[0]-1Z0~1","#TSF_calcDC","#TSF_peekthe","#TSF_this"]))
+    TSF_Forth_setTSF("Pchkjump:","\t".join(["primeadd:","primestep:"]))
+    TSF_Forth_setTSF("primeadd:","\t".join(["Ppool:","Pcount:","#TSF_carbonthe","1","#TSF_addNthe","primestep:","#TSF_this"]))
+    TSF_Forth_setTSF("primestep:","\t".join(["Pcount:","#TSF_carbonthe","1","primeskip:","#TSF_this"]))
+    TSF_Forth_setTSF("primeecho:","\t".join(["[Pcount:0]-1U3~(6-[Pcount:0])/2","#TSF_calcDC","Ppool:","#TSF_popNthe","Ppool:","#TSF_echothe"]))
+    TSF_Forth_setTSF("Pcount:","\t".join(["100","0","1"]))
+    TSF_Forth_setTSF("Ppool:","\t".join(["2","3","5"]))
+    TSF_Forth_setTSF("Pstep:","\t".join(["6","4","2","4","2","4","6","2"]))
+    TSF_sample_run("TSF_sample_Prime")
+
 def TSF_sample_calcKN(TSF_argvs):    #TSF_doc:単位表示電卓サンプルプログラム。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","calcKN:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("calcKN:","\t".join([
@@ -187,9 +205,9 @@ def TSF_sample_help():    #TSF_doc:TSFコマンド一覧表示サンプルプロ
         '  --quine       TSF_Forth_viewthey() Quine (self source) view\n'
         '  --99beer      99 Bottles of Beer view\n'
         '  --fizzbuzz    ([0]#3Z1~0)+([0]#5Z2~0) Fizz Buzz Fizz&Buzz view\n'
-        '  --zundoko    Zun Zun Zun Zun Doko VeronCho view\n'
+        '  --zundoko     Zun Zun Zun Zun Doko VeronCho view\n'
         '  --fibonacci   Fibonacci number 0,1,1,2,3,5,8,13,21,55... view\n'
-#        prime
+#        '  --prime       prime numbers 2,3,5,7,11,13,17,19,23,29... view\n'
         '  --calcFX      fractions calculator "1/3-m1|2"-> p5|6 view\n'
         '  --calcDC      fractions calculator "1/3-m1|2"-> 0.8333... view\n'
         '  --calcKN      fractions calculator "1/3-m1|2"-> 6 bunno 5 view\n'
@@ -223,6 +241,8 @@ elif TSF_mergefile in ["--zun","--doko","--veroncho","--zundoko","--ZunDoko","--
     TSF_sample_ZunDoko()
 elif TSF_mergefile in ["--fib","--fibonacci","--Fibonacci"]:
     TSF_sample_Fibonacci(TSF_argvs)
+elif TSF_mergefile in ["--prime","--Prime"]:
+    TSF_sample_Prime(TSF_argvs)
 elif TSF_mergefile in ["--calcKN"]:
     TSF_sample_calcKN(TSF_argvs)
 elif TSF_mergefile in ["--calcDC"]:
