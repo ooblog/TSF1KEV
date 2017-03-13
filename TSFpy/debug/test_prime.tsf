@@ -5,13 +5,16 @@ N-prime:
 primeskip:
 	Pstep:	[Pcount:1]	#TSF_calcDC	#TSF_peekcyclethe	Pcount:	#TSF_carbonthe	[0]+[1]	#TSF_calcDC	Pcount:	2	#TSF_pokethe	[Pcount:1]+1	#TSF_calcDC	Pcount:	1	#TSF_pokethe	primewhile:	#TSF_this
 primewhile:
-	#TSF_echoN	Pjump:	[Pcount:0]-[Pcount:2]o0~1	#TSF_calcDC	#TSF_peekthe	#TSF_this
+	Pjump:	[Pcount:0]-[Pcount:2]O0~1	#TSF_calcDC	#TSF_peekthe	#TSF_this
 prime:
-	Pcount:	#TSF_carbonthe	1	primeskip:	#TSF_this
+	Ppool:	Pcount:	#TSF_carbonthe	1	#TSF_addNthe	Pcount:	#TSF_carbonthe	1	primeskip:	#TSF_this
+primeecho:
+	[Pcount:0]-1U3~(6-[Pcount:0])/2	#TSF_calcDC	Ppool:	#TSF_popNthe
+	Ppool:	#TSF_echothe
 Pcount:
 	100	0	1
 Pjump:
-	prime:	#exit
+	prime:	primeecho:
 Ppool:
 	2	3	5
 Pstep:

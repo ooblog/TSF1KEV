@@ -309,38 +309,38 @@ def TSF_shuffle_pushthey():   #TSF_doc:[]スタック名一覧を丸ごと積込
     TSF_Forth_addargvs(TSF_Forth_stackthat(),list(TSF_Forth_stackskeys()))
     return None
 
-def TSF_shuffle_addNthe():   #TSF_doc:[stack,count]スタックを別のスタックに積み上げ。count自身とcountの回数分スタック積み下ろし。
+def TSF_shuffle_addNthe():   #TSF_doc:[stack,…valueB,valueA,count]スタックを別のスタックに積み上げ。count自身とcountの回数分と指定スタック名分、スタック積み下ろし。
     TSF_countlen=TSF_Forth_popintthe(TSF_Forth_stackthat()); TSF_addN=[""]*TSF_countlen
-    for TSF_count in range(TSF_countlen):
+    for TSF_count in range(max(TSF_countlen,0)):
         TSF_addN[TSF_count]=TSF_Forth_popthat()
     TSF_the=TSF_Forth_popthat()
     TSF_Forth_addargvs(TSF_the,reversed(TSF_addN))
     return None
 
-def TSF_shuffle_addNthis():   #TSF_doc:[count]スタックを実行中スタックに積み上げ。count自身とcountの回数分スタック積み下ろし。
+def TSF_shuffle_addNthis():   #TSF_doc:[…valueB,valueA,count]スタックを実行中スタックに積み上げ。count自身とcountの回数分スタック積み下ろし。
     TSF_countlen=TSF_Forth_popintthe(TSF_Forth_stackthat()); TSF_addN=[""]*TSF_countlen
-    for TSF_count in range(TSF_countlen):
+    for TSF_count in range(max(TSF_countlen,0)):
         TSF_addN[TSF_count]=TSF_Forth_popthat()
     TSF_the=TSF_Forth_stackthis()
     TSF_Forth_addargvs(TSF_the,reversed(TSF_addN))
     return None
 
-def TSF_shuffle_popNthe():   #TSF_doc:[count]count自身とcountの回数分スタック積み下ろし。
+def TSF_shuffle_popNthe():   #TSF_doc:[count,stack]count自身とcountの回数分スタック積み下ろし。
     TSF_the=TSF_Forth_popthat()
     TSF_countlen=TSF_Forth_popintthe(TSF_the)
-    for TSF_count in range(TSF_countlen):
+    for TSF_count in range(max(TSF_countlen,0)):
         TSF_Forth_popthe(TSF_the)
     return None
 
 def TSF_shuffle_popNthis():   #TSF_doc:[count]実行中スタックのcount自身とcountの回数分スタック積み下ろし。
     TSF_countlen=TSF_Forth_popintthe(TSF_Forth_stackthis())
-    for TSF_count in range(TSF_countlen):
+    for TSF_count in range(max(TSF_countlen,0)):
         TSF_Forth_popthis()
     return None
 
 def TSF_shuffle_popNthat():   #TSF_doc:[count]積込先スタックのcount自身とcountの回数分スタック積み下ろし。
     TSF_countlen=TSF_Forth_popintthe(TSF_Forth_stackthat())
-    for TSF_count in range(TSF_countlen):
+    for TSF_count in range(max(TSF_countlen,0)):
         TSF_Forth_popthat()
     return None
 
