@@ -17,6 +17,7 @@ def TSF_match_Initwords(TSF_words):    #TSF_doc:スタック並び替え関連�
     TSF_words["#TSF_charslen"]=TSF_match_charslen; TSF_words["#文字数取得"]=TSF_match_charslen
     TSF_words["#TSF_replacestacks"]=TSF_match_replacestacks; TSF_words["#スタックを文字列群で置換"]=TSF_match_replacestacks
     TSF_words["#TSF_resubstacks"]=TSF_match_resubstacks; TSF_words["#スタックを正規表現群で置換"]=TSF_match_resubstacks
+    TSF_words["#TSF_matcher"]=TSF_match_matcher; TSF_words["#文字列類似度"]=TSF_match_matcher
     TSF_words["#TSF_matchgrade"]=TSF_match_matchgrade; TSF_words["#文字列類似の合格点"]=TSF_match_matchgrade
     TSF_words["#TSF_countstacks"]=TSF_match_countstacks; TSF_words["#スタックの該当箇所を数える"]=TSF_match_countstacks
     TSF_words["#TSF_casestacks"]=TSF_match_casestacks; TSF_words["#スタックの該当箇所のエイリアス"]=TSF_match_casestacks
@@ -83,6 +84,12 @@ def TSF_match_resubstacks():   #TSF_doc:[stackS,stackO,stackN]Sスタックを�
     TSF_Forth_setTSF(TSF_tsvS,TSF_text,TSF_style="N")
     return None
 
+def TSF_match_matcher():   #TSF_doc:[matcher,string]文字列一致とみなすグレード値を変更。2スタック積み下ろし、1スタック積み上げ。
+    TSF_tsvM=TSF_Forth_popthat()
+    TSF_tsvS=TSF_Forth_popthat()
+    TSF_tsvD=difflib.SequenceMatcher(None,TSF_tsvM,TSF_tsvS).ratio()
+    TSF_Forth_pushthat(str(TSF_tsvD))
+
 TSF_matchgrade=5/6
 def TSF_match_matchgrade():   #TSF_doc:[grade]文字列一致とみなすグレード値を変更。1スタック積み下ろし。
     global TSF_matchgrade
@@ -102,7 +109,6 @@ TSF_match_case=OrderedDict([
     ('research',(lambda TSF_matcher,TSF_string:TSF_match_research(TSF_matcher,TSF_string))),
     ('matcher',(lambda TSF_matcher,TSF_string:1 if difflib.SequenceMatcher(None,unicodedata.normalize('NFKC',TSF_matcher),unicodedata.normalize('NFKC',TSF_string)).ratio() >= TSF_matchgrade else 0)),
 ])
-
 def TSF_match_countstacks():   #TSF_doc:[matcher,algo,stackO]Oスタックに該当するmatcherの数を数える。algoは文字列の比較方法。
     TSF_tsvO=TSF_Forth_popthat(); TSF_strsO=TSF_Forth_stackvalue(TSF_tsvO)
     TSF_algo=TSF_Forth_popthat()

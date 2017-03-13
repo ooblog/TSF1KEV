@@ -9,9 +9,9 @@ from TSF_Forth import *
 
 def TSF_time_Initwords(TSF_words):    #TSF_doc:日時関連のワードを追加する(TSFAPI)。
     TSF_words["#TSF_calender"]=TSF_time_calender; TSF_words["#日時に置換する"]=TSF_time_calender
-    TSF_words["#TSF_diffminute"]=TSF_time_diffminute; TSF_words["#日時に置換する"]=TSF_time_diffminute
-    TSF_words["#TSF_overhour"]=TSF_time_overhour; TSF_words["#日時に置換する"]=TSF_time_overhour
-    TSF_words["#TSF_nowset"]=TSF_time_nowset; TSF_words["#日時に置換する"]=TSF_time_nowset
+    TSF_words["#TSF_diffminute"]=TSF_time_diffminute; TSF_words["#時差設定"]=TSF_time_diffminute
+    TSF_words["#TSF_overhour"]=TSF_time_overhour; TSF_words["#徹夜時間設定"]=TSF_time_overhour
+    TSF_words["#TSF_nowset"]=TSF_time_nowset; TSF_words["#現在時刻更新"]=TSF_time_nowset
     return TSF_words
 
 def TSF_time_calender():   #TSF_doc:[timeformat]スタック内容を日時に置換する。1スタック積み下ろして、1スタック積み上げ。
@@ -88,6 +88,7 @@ TSF_allnight_Daymonth,TSF_allnight_Dayyear,TSF_allnight_Weekday,TSF_allnight_Wee
 TSF_meridian_Hour,TSF_meridian_HourAP=None,None
 TSF_allnight_Hour,TSF_allnight_HourAPO,TSF_allnight_carryHour=None,None,None
 TSF_meridian_miNute,TSF_meridian_Second,TSF_meridian_miLlisecond,TSF_meridian_micRosecond=None,None,None,None
+TSF_meridian_Beat=None
 TSF_time_Counter,TSF_time_randOm=0,random.random()
 
 def TSF_time_setdaytime(TSF_diffminute=0,TSF_overhour=30):    #TSF_doc:時刻の初期化。実際の年月日等の取得は遅延処理で行う。
@@ -119,6 +120,8 @@ def TSF_time_setdaytime(TSF_diffminute=0,TSF_overhour=30):    #TSF_doc:時刻の
     global TSF_meridian_miNute,TSF_meridian_Second,TSF_meridian_miLlisecond,TSF_meridian_micRosecond
     TSF_meridian_miNute,TSF_meridian_Second,TSF_meridian_micRosecond=TSF_earlier_now.minute,TSF_earlier_now.second,TSF_earlier_now.microsecond
     TSF_meridian_miLlisecond=TSF_meridian_micRosecond//1000
+    global TSF_meridian_Beat
+    TSF_meridian_Beat=None
     global TSF_time_Counter,TSF_time_randOm
     random.seed(TSF_earlier_now); TSF_time_Counter,TSF_time_randOm=0,random.random()
 
@@ -228,6 +231,11 @@ def TSF_time_allnight_APO():    #TSF_doc:徹夜時刻午前午後徹夜の遅延
     global TSF_allnight_HourAPO
     TSF_allnight_HourAPO=TSF_allnight_HourAPO if TSF_allnight_HourAPO != None else min(TSF_time_allnight_Hour()//12,2)
     return TSF_allnight_HourAPO
+
+def TSF_time_meridian_Beat():    #TSF_doc:現在時刻ビートの遅延処理。
+    global TSF_meridian_Beat
+    TSF_meridian_Beat=TSF_meridian_Beat if TSF_meridian_Beat != None else (TSF_time_meridian_Hour()*3600+TSF_meridian_miNute*60+TSF_meridian_Second)*1000/86400
+    return TSF_meridian_Beat
 
 def TSF_time_getdaytime(TSF_timeformat="@000y@0m@0dm@wdec@0h@0n@0s",TSF_diffminute=None,TSF_overhour=None):    #TSF_doc:「TSF/TSF_time.py」単体テスト風デバッグ関数。
     global TSF_time_Counter
@@ -345,6 +353,13 @@ def TSF_time_getdaytime(TSF_timeformat="@000y@0m@0dm@wdec@0h@0n@0s",TSF_diffminu
         TSF_tf=TSF_tf if not "@_____Rs" in TSF_tf else TSF_tf.replace("@_____Rs","{0: >6}".format(TSF_meridian_micRosecond))
         TSF_tf=TSF_tf if not "@Rs" in TSF_tf else TSF_tf.replace("@Rs",str(TSF_meridian_micRosecond))
 
+        TSF_tf=TSF_tf if not "@__bt" in TSF_tf else TSF_tf.replace("@__bt","{0: >3}".format(int(TSF_time_meridian_Beat())))
+        TSF_tf=TSF_tf if not "@00bt" in TSF_tf else TSF_tf.replace("@00bt","{0:0>3}".format(int(TSF_time_meridian_Beat())))
+        TSF_tf=TSF_tf if not "@000.bt" in TSF_tf else TSF_tf.replace("@000.bt","{0:03.1f}".format(TSF_time_meridian_Beat()))
+        TSF_tf=TSF_tf if not "@000.0bt" in TSF_tf else TSF_tf.replace("@000.0bt","{0:03.2f}".format(TSF_time_meridian_Beat()))
+        TSF_tf=TSF_tf if not "@000.00bt" in TSF_tf else TSF_tf.replace("@000.00bt","{0:03.3f}".format(TSF_time_meridian_Beat()))
+        TSF_tf=TSF_tf if not "@bt" in TSF_tf else TSF_tf.replace("@bt",str(TSF_time_meridian_Beat()))
+
         TSF_tf=TSF_tf if not "@JST" in TSF_tf else TSF_tf.replace("@JST","+09:00")
         TSF_tf=TSF_tf if not "@T" in TSF_tf else TSF_tf.replace("@T","\t")
         TSF_tf=TSF_tf if not "@E" in TSF_tf else TSF_tf.replace("@E","\n")
@@ -380,6 +395,7 @@ def TSF_time_debug():    #TSF_doc:「TSF/TSF_time.py」単体テスト風デバ�
         ("TSF_time.TSF/LTSV:",["@000y@0m@0dm@wdec@0h@0n@0s","@000Y@0M@0Dm@Wdec@0H@0N@0S"]),
         ("TSF_time.ISO8601_JST:",["@000y-@0m-@0dmT@0h:@0n:@0s@JST","@000Y-@0M-@0DmT@0H:@0N:@0S@JST"]),
         ("TSF_time.test@0ls:",["@000y-@0m[@mj]-@0dm[@wdj]@0h[@apj]:@0n:@0s.@00ls","@000Y-@0M[@Mj]-@0Dm[@Wdj]@0H[@Apoj]:@0N:@0S.@00Ls"]),
+        ("TSF_time.test@Beat:",["@000y-@0m[@mj]-@0dm[@wdj]@@@00bt","@000y-@0m[@mj]-@0dm[@wdj]@@@000.00bt"]),
         ("TSF_time.test@c@o2:",["@c,@o"]),
     ])
     for repeat in range(2):
