@@ -442,11 +442,15 @@ def TSF_Forth_debug(TSF_argvs):    #TSF_doc:「TSF/TSF_Forth.py」単体テス�
         ("TSF_Initcalls:",TSF_Initcalls),
         ("TSF_words:",TSF_words),
     ])
-    for TSF_QlistK,TSF_QlistV in TSF_timeQlist.items():
-        TSF_debug_log=TSF_io_printlog(TSF_QlistK,TSF_log=TSF_debug_log)
-        for LTsv_timeQ in TSF_QlistV:
-            TSF_debug_log=TSF_io_printlog("\t{0}⇔{1}".format(LTsv_timeQ,TSF_QlistV),TSF_debug_log)
-    TSF_Forth_run()
+#    for TSF_QlistK,TSF_QlistV in TSF_timeQlist.items():
+#        TSF_debug_log=TSF_io_printlog(TSF_QlistK,TSF_log=TSF_debug_log)
+#        for LTsv_timeQ in TSF_QlistV:
+#            TSF_debug_log=TSF_io_printlog("\t{0}⇔{1}".format(LTsv_timeQ,TSF_QlistV),TSF_debug_log)
+#    TSF_Forth_run()
+#    for TSF_QlistK,TSF_QlistV in TSF_timeQlist.items():
+#        TSF_debug_log=TSF_io_printlog(TSF_QlistK,TSF_log=TSF_debug_log)
+#        for TSF_timeK,LTsv_timeQ in TSF_QlistV.items():
+#            TSF_debug_log=TSF_io_printlog("\t{0}⇔{1}".format(TSF_timeK,LTsv_timeQ),TSF_debug_log)
     return TSF_debug_log
 
 if __name__=="__main__":

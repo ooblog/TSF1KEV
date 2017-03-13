@@ -120,6 +120,20 @@ def TSF_sample_FizzBuzz():    #TSF_doc:TSF_about.FizzBuzzサンプル(3の倍数
     TSF_Forth_setTSF("FZjump:","\t".join(["FizzBuzz:","#exit"]))
     TSF_sample_run("TSF_sample_FizzBuzz")
 
+def TSF_sample_ZunDoko():    #TSF_doc:TSF_about.ズンドコサンプル(ZunZunZunZunDokoの時VeronChoを表示)。
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","N-ZunDoko:","#TSF_this","0","#TSF_fin."]))
+    TSF_Forth_setTSF("N-ZunDoko:","\t".join(["Zcount:","0","#TSF_peekthe","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
+        "Zcount:","0","#TSF_pokethe","Zreset:","#TSF_this"]))
+    TSF_Forth_setTSF("Zreset:","\t".join(["0","Zcount:","1","#TSF_pokethe","ZDdice:","#TSF_this"]))
+    TSF_Forth_setTSF("ZDdice:","\t".join(["ZDjump:","#TSF_shufflethe","ZDjump:","#TSF_carbonthe","#TSF_this"]))
+    TSF_Forth_setTSF("ZDjump:","\t".join(["Zun:","Doko:"]))
+    TSF_Forth_setTSF("Zun:","\t".join(["Zun","1","#TSF_echoN","[Zcount:1]+1","#TSF_calcDC","Zcount:","1","#TSF_pokethe","ZDdice:","#TSF_this"]))
+    TSF_Forth_setTSF("Doko:","\t".join(["Doko","1","#TSF_echoN","VCjump:","[Zcount:0]-[Zcount:1]Z1~0","#TSF_calcDC","#TSF_peekthe","#TSF_this"]))
+    TSF_Forth_setTSF("VCjump:","\t".join(["Zreset:","VeronCho:"]))
+    TSF_Forth_setTSF("VeronCho:","\t".join(["VeronCho","1","#TSF_echoN"]))
+    TSF_Forth_setTSF("Zcount:","\t".join(["4","0"]))
+    TSF_sample_run("TSF_sample_ZunDoko")
+
 def TSF_sample_Fibonacci(TSF_argvs):    #TSF_doc:TSF_about.フィボナッチ数列サンプル(「(4<<n*(3+n))//((4<<2*n)-(2<<n)-1)&((2<<n)-1)」を表示)。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","200","#TSF_calcPR","N-Fibonacci:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("N-Fibonacci:","\t".join(["Fibcount:","1","#TSF_peekthe","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
@@ -174,7 +188,7 @@ def TSF_sample_help():    #TSF_doc:TSFコマンド一覧表示サンプルプロ
         '  --quine       TSF_Forth_viewthey() Quine (self source) view\n'
         '  --99beer      99 Bottles of Beer view\n'
         '  --fizzbuzz    ([0]#3Z1~0)+([0]#5Z2~0) Fizz Buzz Fizz&Buzz view\n'
-#        zundoko VeronCho
+        '  --zundoko    Zun Zun Zun Zun Doko VeronCho view\n'
         '  --fibonacci   Fibonacci number 0,1,1,2,3,5,8,13,21,55... view\n'
 #        prime
         '  --calcFX      fractions calculator "1/3-m1|2"-> p5|6 view\n'
@@ -206,6 +220,8 @@ elif TSF_mergefile in ["--99beer","--beer99","--beer","--99"]:
     TSF_sample_99beer()
 elif TSF_mergefile in ["--fizz","--buzz","--fizzbuzz","--FizzBuzz"]:
     TSF_sample_FizzBuzz()
+elif TSF_mergefile in ["--zun","--doko","--veroncho","--zundoko","--ZunDoko","--ZunDokoVeronCho"]:
+    TSF_sample_ZunDoko()
 elif TSF_mergefile in ["--fib","--fibonacci","--Fibonacci"]:
     TSF_sample_Fibonacci(TSF_argvs)
 elif TSF_mergefile in ["--calcKN"]:

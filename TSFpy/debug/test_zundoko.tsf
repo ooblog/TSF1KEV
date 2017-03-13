@@ -15,6 +15,6 @@ Doko:
 VCjump:
 	Zreset:	VeronCho:
 VeronCho:
-	VeronCho:	1	#TSF_echoN
+	VeronCho	1	#TSF_echoN
 Zcount:
 	4	0
