@@ -231,12 +231,6 @@ TSF_calc_NOZUs=OrderedDict([
 ])
 
 def TSF_calc_function_limit(TSF_LimFirst,TSF_LimRest):    #TSF_doc:和集合積集合のrange作成。
-#    TSF_LimStart,TSF_LimGoal=decimal.Decimal(TSF_calc_decimalizeDC(TSF_calc_addition(TSF_LimFirst))).to_integral_value(),decimal.Decimal(TSF_calc_decimalizeDC(TSF_calc_addition(TSF_LimRest))).to_integral_value()
-#    if TSF_LimStart <= TSF_LimGoal:
-#        TSF_limstep=1; TSF_LimGoal+=1
-#    else:
-#        TSF_limstep=-1; TSF_LimGoal-=1
-#    return range(TSF_LimStart,TSF_LimGoal,TSF_limstep)
     try:
         TSF_LimStart,TSF_LimGoal=decimal.Decimal(TSF_calc_decimalizeDC(TSF_calc_addition(TSF_LimFirst))).to_integral_value(),decimal.Decimal(TSF_calc_decimalizeDC(TSF_calc_addition(TSF_LimRest))).to_integral_value()
         if TSF_LimStart <= TSF_LimGoal:
