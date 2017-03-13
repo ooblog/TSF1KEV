@@ -1,8 +1,18 @@
 TSF_Tab-Separated-Forth:
 	UTF-8	#TSF_encoding	N-prime:	#TSF_this	0	#TSF_fin.
 N-prime:
-	Pcount:	0	#TSF_peekthe	#TSF_swapBAthat	m1	#TSF_peekthat	m[0]	#TSF_calcDC	#TSF_peekthat	Pcount:	0	#TSF_pokethe	prime:	#TSF_this
+	Pcount:	0	#TSF_peekthe	#TSF_swapBAthat	m1	#TSF_peekthat	m[0]	#TSF_calcDC	#TSF_peekthat	Pcount:	0	#TSF_pokethe	primeskip:	#TSF_this
+primeskip:
+	Pcount:	#TSF_carbonthe	Pstep:	Pcount:	#TSF_carbonthe	[0]-1	#TSF_calcDC	#TSF_peekcyclethe	[0]+[1]	#TSF_calcDC	Pcount:	1	#TSF_pokethe	primewhile:	#TSF_this
+primewhile:
+	#TSF_echoN	Pjump:	[Pcount:0]-[Pcount:1]o0~1	#TSF_calcDC	#TSF_peekthe	#TSF_this
 prime:
-	
+	Pcount:	#TSF_carbonthe	1	primeskip:	#TSF_this
 Pcount:
-	100
+	100	1
+Pjump:
+	prime:	#exit
+Ppool:
+	2	3	5
+Pstep:
+	6	4	2	4	2	4	6	2
