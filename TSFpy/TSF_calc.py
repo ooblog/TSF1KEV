@@ -77,13 +77,13 @@ def TSF_calc_calcRO():   #TSF_doc:[round]端数処理を変更する。端数が
     return None
 
 
-TSF_calc_opewide="f1234567890.pm!|$ELRSsCcTtyYen+-*/\\#%(MPZzOoUuN~k)&GglAa^><" \
+TSF_calc_opewide="f1234567890.pm!|$ELRSsCcTtyYen+-*/\\#%(MPFZzOoUuN~k)&GglAa^><" \
                 "銭十百千万億兆京垓𥝱穣溝澗正載極恒阿那思量" \
                 "１２３４５６７８９０｜．" "絶負分点円圓" "一二三四五六七八九〇" "壱弐参肆伍陸漆捌玖零" \
                 "＋－×÷／＼＃％" "加減乗除比税" "足引掛割" "和差積商" "陌阡萬仙秭" \
                 "（）()｛｝{}［］[]「」｢｣『』Σ但※列Π囲～〜値とを約倍" \
                 "乗常進対√根π周θｅ底∞無桁"
-TSF_calc_opehalf="f1234567890.pm!|$ELRSsCcTtyYen+-*/\\#%(MPZzOoUuN~k)&GglAa^><" \
+TSF_calc_opehalf="f1234567890.pm!|$ELRSsCcTtyYen+-*/\\#%(MPFZzOoUuN~k)&GglAa^><" \
                 "銭十百千万億兆京垓𥝱穣溝澗正載極恒阿那思量" \
                 "1234567890|." "!m$..." "1234567890" "1234567890" \
                 "+-*//\\#%" "+-*/%%" "+-*/" "+-*/" "百千万銭𥝱" \
@@ -217,6 +217,17 @@ def TSF_calc_referential(TSF_calcQ,TSF_calcQQ=None):    #TSF_doc:分数電卓の
         TSF_calcA=TSF_calcQ.replace(TSF_calcQ,TSF_calcQQmemory.get(TSF_calcQ,TSF_calc_function(TSF_calcQ)))
     return TSF_calcA
 
+def TSF_calc_Fermatmodulo(TSF_calcSeq,TSF_pow,TSF_modulo):    #冪乗モジュロ。素数のフェルマーテストなどで使用。
+    try:
+        TSF_calcA="0"
+        TSF_calcSeq=decimal.Decimal(TSF_calc_decimalizeDC(TSF_calc_addition(TSF_calcSeq))).to_integral_value()
+        TSF_pow=decimal.Decimal(TSF_calc_decimalizeDC(TSF_calc_addition(TSF_pow))).to_integral_value()
+        TSF_modulo=decimal.Decimal(TSF_calc_decimalizeDC(TSF_calc_addition(TSF_modulo))).to_integral_value()
+        TSF_calcA=str(decimal.getcontext().power(TSF_calcSeq,TSF_pow,TSF_modulo))
+    except decimal.InvalidOperation:
+        TSF_calcA="n|0"
+    return TSF_calcA
+
 TSF_calc_NOZUs=OrderedDict([
     ('N',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:TSF_LimFirst if TSF_calc_addition(TSF_calcSeq.replace('k',"0")) == "n|0" else TSF_LimRest)),
     ('Z',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:TSF_LimFirst if decimal.Decimal(TSF_calc_decimalizeDC(TSF_calc_addition(TSF_calcSeq.replace('k',"0"))).replace("n|0","NaN")) == 0 else TSF_LimRest)),
@@ -227,6 +238,7 @@ TSF_calc_NOZUs=OrderedDict([
     ('u',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:TSF_LimFirst if decimal.Decimal(TSF_calc_decimalizeDC(TSF_calc_addition(TSF_calcSeq.replace('k',"0"))).replace("n|0","+Infinity")) < 0 else TSF_LimRest)),
     ('M',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:"+".join([TSF_calc_addition(TSF_calcSeq.replace('k',str(TSF_LimK))) for TSF_LimK in TSF_calc_function_limit(TSF_LimFirst,TSF_LimRest)]))),
     ('P',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:"*".join([TSF_calc_addition(TSF_calcSeq.replace('k',str(TSF_LimK))) for TSF_LimK in TSF_calc_function_limit(TSF_LimFirst,TSF_LimRest)]))),
+    ('F',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:TSF_calc_Fermatmodulo(TSF_calcSeq,TSF_LimFirst,TSF_LimRest) )),
     ('$',(lambda TSF_calcSeq,TSF_LimFirst,TSF_LimRest:"/".join([str(TSF_calc_addition(TSF_LimFirst.replace('k',"0"))),str(TSF_calc_addition(TSF_calcSeq.replace('k',"0")))]))),
 ])
 
@@ -249,7 +261,7 @@ def TSF_calc_function(TSF_calcQ):    #TSF_doc:分数電卓の和集合積集合�
             TSF_calc_NOZUin+=TSF_calc_NOZU
             TSF_calcOfind=TSF_calcQ.find(TSF_calc_NOZUin)
     if TSF_calcOfind >= 0:
-        TSF_calcQ=TSF_calcQ[:TSF_calcOfind]+'\t'+TSF_calcQ[TSF_calcOfind+1:]
+        TSF_calcQ='\t'.join([TSF_calcQ[:TSF_calcOfind],TSF_calcQ[TSF_calcOfind+1:]])
         for TSF_calc_NOZU in TSF_calc_NOZUin:
             TSF_calcQ=TSF_calcQ.replace(TSF_calc_NOZU,'')
         TSF_calcSeq,TSF_calcLim=TSF_calcQ.split('\t')
@@ -545,7 +557,7 @@ def TSF_calc_debug():    #TSF_doc:「TSF/TSF_calc.py」単体テスト風デバ�
         ("TSF_calc三角関数sincostan:",["sin(θ*0|360)","S(θ*30|360)","S(θ*60|360)","S(θ*90|360)","cos(θ*0|360)","C(θ*30|360)","C(θ*60|360)","C(θ*90|360)","tan(θ*0|360)","T(θ*30|360)","T(θ*60|360)","T(θ*90|360)"]),
         ("TSF_calc和数列積数列:",["kM7","kM5~10","kM10~0","kP7","kP5~10","kP10~0","kP10~2","kM100","kP1~10","2P16"]),
         ("TSF_calc公約数公倍数:",["12&16G","12と16の公約数","12と16の最大公約数","12&16g","12と16の公倍数","12と16の最小公倍数"]),
-        ("TSF_calcマイナス除算(PDCA):",["p5#p4","m5#p4","p5#m4","m5#m4"]),
+        ("TSF_calc冪乗モジュロ(素数フェルマーテスト):",["2F(0-1)~0","2F(60-1)~60","2F(561-1)~561","2F(1105-1)~1105","2F(1729-1)~1729","2F(2465-1)~2465","2F(2821-1)~2821","2F(6601-1)~6601","2F(8911-1)~8911"]),
     ])
     for TSF_QlistK,TSF_QlistV in iter(LTsv_calcQlist.items()):
         TSF_debug_log=TSF_io_printlog(TSF_QlistK,TSF_log=TSF_debug_log)

@@ -1,5 +1,5 @@
 TSF_Tab-Separated-Forth:
-	UTF-8	#TSF_encoding	200	#TSF_calcPR	N-prime:	#TSF_this	0	#TSF_fin.
+	UTF-8	#TSF_encoding	N-prime:	#TSF_this	0	#TSF_fin.
 N-prime:
 	Pcount:	0	#TSF_peekthe	#TSF_swapBAthat	m1	#TSF_peekthat	m[0]	#TSF_calcDC	#TSF_peekthat	Pcount:	0	#TSF_pokethe	primeskip:	#TSF_this
 primeskip:
@@ -9,7 +9,7 @@ primewhile:
 Pwhilejump:
 	primeezchk:	primeecho:
 primeezchk:
-	Pchkjump:	Pcount:	#TSF_carbonthe	2&([0]-1)^#[0]-1Z0~1	#TSF_calcDC	#TSF_peekthe	#TSF_this
+	Pchkjump:	Pcount:	#TSF_carbonthe	(2F([0]-1)~[0])-1Z0~1	#TSF_calcDC	#TSF_peekthe	#TSF_this
 Pchkjump:
 	primeadd:	primestep:
 primeadd:
