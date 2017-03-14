@@ -9,7 +9,7 @@ primewhile:
 Pwhilejump:
 	primeezchk:	primeecho:
 primeezchk:
-	Pchkjump:	Pcount:	#TSF_carbonthe	(2F([0]-1)~[0])-1Z0~1	#TSF_calcDC	#TSF_peekthe	#TSF_this
+	Pchkjump:	Pcount:	#TSF_carbonthe	(2F[0]~[0])-2Z0~1	#TSF_calcDC	#TSF_peekthe	#TSF_this
 Pchkjump:
 	primeadd:	primestep:
 primeadd:

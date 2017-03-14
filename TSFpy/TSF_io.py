@@ -12,6 +12,7 @@ import base64
 import datetime
 import math
 from collections import OrderedDict
+from collections import deque
 
 
 TSF_io_name2codepoint,TSF_io_urlliburlretrieve=None,None

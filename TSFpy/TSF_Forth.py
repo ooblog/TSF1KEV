@@ -177,7 +177,8 @@ def TSF_Forth_merge(TSF_the,TSF_ESCstack=[],TSF_mergedel=None):    #TSF_doc:テ�
                 TSF_stackL=TSF_stackV.lstrip('\t').split('\t')
                 if not TSF_stackL[0] in TSF_ESCstack:
                     TSF_that=TSF_stackL[0]
-                    TSF_stacks[TSF_that]=[]
+#                    TSF_stacks[TSF_that]=[]
+                    TSF_stacks[TSF_that]=deque([])
                     TSF_styles[TSF_that]="O" if len(TSF_stackL) >= 2 else ""
             if not TSF_that in TSF_ESCstack:
                 TSF_stackL=TSF_stackV.split('\t')[1:]
@@ -284,10 +285,10 @@ def TSF_Forth_stackthat(TSF_that=None):    #TSF_doc:thatスタックの変更(TS
     return TSF_stackthat
 
 def TSF_Forth_stacklen(TSF_the):    #TSF_doc:thisスタックの個数(TSFAPI)。
-    return len(TSF_stacks.get(TSF_the,[]))
+    return len(TSF_stacks.get(TSF_the,deque([])))
 
 def TSF_Forth_stackvalue(TSF_the):    #TSF_doc:スタックのデータ(TSFAPI)。
-    return TSF_stacks.get(TSF_the,[])
+    return TSF_stacks.get(TSF_the,deque([]))
 
 def TSF_Forth_stackslen():    #TSF_doc:スタック一覧の個数(TSFAPI)。
     return len(TSF_stacks)
@@ -331,7 +332,8 @@ def TSF_Forth_pushthe(TSF_the,TSF_pushdata):    #TSF_doc:スタックに積み�
     if TSF_the in TSF_stacks:
         TSF_stacks[TSF_the].append(TSF_pushdata)
     else:
-        TSF_stacks[TSF_the]=[TSF_pushdata]
+#        TSF_stacks[TSF_the]=[TSF_pushdata]
+        TSF_stacks[TSF_the]=deque([TSF_pushdata])
 
 def TSF_Forth_pushthis(TSF_pushdata):    #TSF_doc:実行中スタックに積み上げる(TSFAPI)。
    TSF_Forth_pushthe(TSF_stackthis,TSF_pushdata)
@@ -377,11 +379,13 @@ def TSF_Forth_peeklimitthe(TSF_the,TSF_count):    #TSF_doc:囲択でスタック
 
 def TSF_Forth_reversethe(TSF_the):    #TSF_doc:スタックのシャッフル(TSFAPI)。
     if TSF_the in TSF_stacks:
-        TSF_stacks[TSF_the]=list(reversed(TSF_stacks[TSF_the]))
+#        TSF_stacks[TSF_the]=list(reversed(TSF_stacks[TSF_the]))
+        TSF_stacks[TSF_the]=deque(reversed(TSF_stacks[TSF_the]))
 
 def TSF_Forth_shufflethe(TSF_the):    #TSF_doc:スタックのシャッフル(TSFAPI)。
     if TSF_the in TSF_stacks:
         random.shuffle(TSF_stacks[TSF_the])
+        TSF_stacks[TSF_the]=deque(TSF_stacks[TSF_the])
 
 def TSF_Forth_pokethe(TSF_the,TSF_count,TSF_poke):    #TSF_doc:スタックへの書込(TSFAPI)。
     TSF_pokeerr=0
@@ -424,10 +428,12 @@ def TSF_Forth_delthe(TSF_the):   #TSF_doc:スタックを削除(TSFAPI)。
     return None if TSF_stackthis != TSF_the else ""
 
 def TSF_Forth_clonethe(TSF_clone,TSF_the):   #TSF_doc:スタックを複製する(TSFAPI)
-    TSF_stacks[TSF_clone]=list(tuple(TSF_stacks[TSF_the] if TSF_the in TSF_stacks else []))
+#    TSF_stacks[TSF_clone]=list(tuple(TSF_stacks[TSF_the] if TSF_the in TSF_stacks else []))
+    TSF_stacks[TSF_clone]=deque(TSF_stacks[TSF_the] if TSF_the in TSF_stacks else [])
 
 def TSF_Forth_clonethey(TSF_clone):   #TSF_doc:(TSFAPI)
-    TSF_stacks[TSF_clone]=list(tuple(TSF_stacks.keys()))
+#    TSF_stacks[TSF_clone]=list(tuple(TSF_stacks.keys()))
+    TSF_stacks[TSF_clone]=deque(TSF_stacks.keys())
 
 
 def TSF_Forth_debug(TSF_argvs):    #TSF_doc:「TSF/TSF_Forth.py」単体テスト風デバッグ関数。
