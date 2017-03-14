@@ -1,3 +1,6 @@
-TSF_py:
+TSF_Tab-Separated-Forth:
+	UTF-8	#TSF_encoding	0	#TSF_fin.	./TSF_Forth.py	1
+TSF_Forth.py:
 	Python2.7.6	linux2	UTF-8
-	TSF_Forth.py
+TSF_words:
+	#TSF_fin.	#TSFを終了。	#TSF_over	#スタックを終了	#TSF_encoding	#文字コード	#TSF_this	#スタックに入る	#TSF_that	#スタックに積込	#TSF_input	#文字列入力	#TSF_echoN	#N行表示	#TSF_echothe	#スタック行表示	#TSF_echothis	#実行中スタック行表示	#TSF_echothat	#積込先スタック行表示	#TSF_viewthe	#スタック表示	#TSF_viewthis	#実行中スタックを表示	#TSF_viewthat	#積込先スタックを表示	#TSF_viewthey	#スタック一覧を表示	#TSF_viewargvs	#argvs(1stスタック)を表示	#TSF_stylethe	#スタックにスタイル指定	#TSF_stylethis	#実行中スタックにスタイル指定	#TSF_stylethat	#積込先スタックにスタイル指定	#TSF_readtext	#テキストファイルを読込	#TSF_mergethe	#TSFに合成	#TSF_publishthe	#スタックをテキスト化	#TSF_publishthis	#実行中スタックをテキスト化	#TSF_publishthat	#積込先スタックをテキスト化	#TSF_remove	#ファイルを削除する	#TSF_savetext	#テキストファイルに上書	#TSF_writetext	#テキストファイルに追記

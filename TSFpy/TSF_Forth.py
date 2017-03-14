@@ -479,25 +479,11 @@ def TSF_Forth_clonethey(TSF_clone):   #TSF_doc:(TSFAPI)
 
 def TSF_Forth_debug(TSF_argvs):    #TSF_doc:「TSF/TSF_Forth.py」単体テスト風デバッグ関数。
     TSF_debug_log=""
-    TSF_Forth_init(TSF_argvs,[])
-    TSF_Forth_viewthey()
-    TSF_debug_log=TSF_io_printlog("TSF_py:",TSF_log=TSF_debug_log)
-    TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout])),TSF_log=TSF_debug_log)
-    TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(TSF_argvs)),TSF_log=TSF_debug_log)
-    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","about:","#TSF_this","0","#TSF_fin."]))
-    TSF_timeQlist=OrderedDict([
-        ("TSF_Initcalls:",TSF_Initcalls),
-        ("TSF_words:",TSF_words),
-    ])
-#    for TSF_QlistK,TSF_QlistV in TSF_timeQlist.items():
-#        TSF_debug_log=TSF_io_printlog(TSF_QlistK,TSF_log=TSF_debug_log)
-#        for LTsv_timeQ in TSF_QlistV:
-#            TSF_debug_log=TSF_io_printlog("\t{0}⇔{1}".format(LTsv_timeQ,TSF_QlistV),TSF_debug_log)
-#    TSF_Forth_run()
-#    for TSF_QlistK,TSF_QlistV in TSF_timeQlist.items():
-#        TSF_debug_log=TSF_io_printlog(TSF_QlistK,TSF_log=TSF_debug_log)
-#        for TSF_timeK,LTsv_timeQ in TSF_QlistV.items():
-#            TSF_debug_log=TSF_io_printlog("\t{0}⇔{1}".format(TSF_timeK,LTsv_timeQ),TSF_debug_log)
+    TSF_Forth_init(TSF_argvs,[TSF_Forth_Initwords])
+    TSF_Forth_setTSF("TSF_Forth.py:","\t".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout]))
+    TSF_Forth_setTSF("TSF_words:","\t".join(TSF_words.keys()))
+    for TSF_thename in TSF_Forth_stackskeys():
+        TSF_debug_log=TSF_Forth_view(TSF_thename,True,TSF_debug_log)
     return TSF_debug_log
 
 if __name__=="__main__":
