@@ -2,7 +2,6 @@
 # -*- coding: UTF-8 -*-
 from __future__ import division,print_function,absolute_import,unicode_literals
 import random
-import copy
 from TSF_io import *
 
 def TSF_Forth_1ststack():    #TSF_doc:TSF_初期化に使う最初のスタック名(TSFAPI)。
@@ -221,6 +220,48 @@ def TSF_Forth_writetext():   #TSF_doc:[filename,stack]スタック内容をテ�
     TSF_the=TSF_Forth_popthat()
     TSF_text=TSF_txt_ESCdecode("\n".join(TSF_stacks[TSF_the])) if TSF_the in TSF_stacks else ""
     TSF_io_writetext(TSF_Forth_popthat(),TSF_text=TSF_text)
+    return None
+
+def TSF_Forth_samplingpy(TSF_the,TSF_view_io=True,TSF_view_log=""):    #TSF_doc:スタックの内容をPython化(TSFAPI)。
+    if TSF_the in TSF_stacks:
+        TSF_stackV=[TSF_txt_ESCdecode(TSF_stk).replace('\\','\\\\').replace('"','\\"').replace('\t','\\t').replace('\n','\\n') for TSF_stk in TSF_stacks[TSF_the]]
+        TSF_style=TSF_styles.get(TSF_the,"T")
+        if TSF_style == "O":
+            TSF_view_logline='TSF_Forth_setTSF("{0}",    "\\t".join(["{1}"]),TSF_style="O")\n'.format(TSF_the,'","'.join(TSF_stackV))
+        elif TSF_style == "T":
+            TSF_view_logline='TSF_Forth_setTSF("{0}",\n    "\\t".join(["{1}"]),\n    TSF_style="T")\n'.format(TSF_the,'","'.join(TSF_stackV))
+        else:  # TSF_style == "N":
+            TSF_view_logline='TSF_Forth_setTSF("{0}",\n    "\\t".join(["{1}"]),\n    TSF_style="N")\n'.format(TSF_the,'",\n"'.join(TSF_stackV))
+        if TSF_view_io == True:
+            TSF_view_log=TSF_io_printlog(TSF_view_logline,TSF_log=TSF_view_log)
+        else:
+            TSF_view_log+=TSF_view_logline
+    return TSF_view_log
+
+def TSF_Forth_writesamplepy(TSF_tsfpath=None,TSF_pyhonpath=None):   #TSF_doc:[filename,stack]スタック全体をpythonとみなしてpyファイルに追記する。2スタック積み下ろし。
+    TSF_text=""
+    if os.path.isfile(TSF_tsfpath):
+        if len(TSF_Forth_loadtext(TSF_tsfpath,TSF_tsfpath)):
+            TSF_Forth_merge(TSF_tsfpath,[],TSF_mergedel=True)
+            TSF_text+="#! /usr/bin/env python\n"
+            TSF_text+="# -*- coding: UTF-8 -*-\n"
+            TSF_text+="from __future__ import division,print_function,absolute_import,unicode_literals\n\n"
+            TSF_text+="import sys\nimport os\nos.chdir(sys.path[0])\nsys.path.append('{0}')\n".format(sys.path[0])
+            TSF_text+="from TSF_io import *\n"
+            TSF_text+="#from TSF_Forth import *\n"
+            for TSF_import in ["TSF_shuffle","TSF_match","TSF_calc","TSF_time"]:
+                TSF_text+="from {0} import *\n".format(TSF_import)
+            TSF_text+="\n"
+            TSF_text+="TSF_Forth_init(TSF_io_argvs(),[TSF_shuffle_Initwords,TSF_match_Initwords,TSF_calc_Initwords,TSF_time_Initwords])\n\n"
+            for TSF_thename in TSF_stacks.keys():
+                TSF_text=TSF_Forth_samplingpy(TSF_thename,False,TSF_text)
+            TSF_text+="\nTSF_Forth_addfin(TSF_io_argvs())\nTSF_Forth_run()\n"
+    if TSF_pyhonpath != None:
+        print("TSF_pyhonpath",TSF_pyhonpath)
+        TSF_io_savetext(TSF_pyhonpath,TSF_text=TSF_text)
+    else:
+        for TSF_textline in TSF_text.split('\n'):
+            TSF_io_printlog(TSF_textline)
     return None
 
 

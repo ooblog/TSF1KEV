@@ -2,6 +2,10 @@
 # -*- coding: UTF-8 -*-
 from __future__ import division,print_function,absolute_import,unicode_literals
 
+import sys
+import os
+os.chdir(sys.path[0])
+sys.path.append('.')
 from TSF_io import *
 #from TSF_Forth import *
 from TSF_shuffle import *
@@ -201,26 +205,27 @@ def TSF_sample_help():    #TSF_doc:TSFコマンド一覧表示サンプルプロ
         'commands:\n'
         '  --help        this commands view\n'
         '  --about       about TSF UTF-8 text (Japanese) view" \n'
-        '  --helloworld  "Hello world  1  #TSF_echoN" view\n'
-        '  --quine       TSF_Forth_viewthey() Quine (self source) view\n'
-        '  --99beer      99 Bottles of Beer view\n'
-        '  --fizzbuzz    ([0]#3Z1~0)+([0]#5Z2~0) Fizz Buzz Fizz&Buzz view\n'
-        '  --zundoko     Zun Zun Zun Zun Doko VeronCho view\n'
-        '  --fibonacci   Fibonacci number 0,1,1,2,3,5,8,13,21,55... view\n'
-#        '  --prime       prime numbers 2,3,5,7,11,13,17,19,23,29... view\n'
-        '  --calcFX      fractions calculator "1/3-m1|2"-> p5|6 view\n'
-        '  --calcDC      fractions calculator "1/3-m1|2"-> 0.8333... view\n'
-        '  --calcKN      fractions calculator "1/3-m1|2"-> 6 bunno 5 view\n'
-        '  --calender    "@000y@0m@0dm@wdec@0h@0n@0s"-> TSF_time_getdaytime()\n'
+        '  --python      TSF.tsf to Python.py view or save" \n'
+        '  --helloworld  "Hello world  1  #TSF_echoN" sample\n'
+        '  --quine       TSF_Forth_viewthey() Quine (self source) sample\n'
+        '  --99beer      99 Bottles of Beer sample\n'
+        '  --fizzbuzz    ([0]#3Z1~0)+([0]#5Z2~0) Fizz Buzz Fizz&Buzz sample\n'
+        '  --zundoko     Zun Zun Zun Zun Doko VeronCho sample\n'
+        '  --fibonacci   Fibonacci number 0,1,1,2,3,5,8,13,21,55... sample\n'
+        '  --prime       prime numbers 2,3,5,7,11,13,17,19,23,29... sample\n'
+        '  --calcFX      fractions calculator "1/3-m1|2"-> p5|6 sample\n'
+        '  --calcDC      fractions calculator "1/3-m1|2"-> 0.8333... sample\n'
+        '  --calcKN      fractions calculator "1/3-m1|2"-> 6 bunno 5 sample\n'
+        '  --calender    "@000y@0m@0dm@wdec@0h@0n@0s"-> TSF_time_getdaytime() sample\n'
         ,TSF_style="N")
     TSF_Forth_setTSF("replace:","\t".join(["replaceN:","#TSF_carbonthe","#TSF_calender","replaceN:","0","#TSF_pokethe","help:","replaceO:","replaceN:","#TSF_replacestacks"]))
     TSF_Forth_setTSF("replaceO:","\t".join(["TSF_time_getdaytime()"]))
     TSF_Forth_setTSF("replaceN:","\t".join(["@000y@0m@0dm@wdec@0h@0n@0s"]))
     TSF_sample_run("TSF_sample_help")
 
-TSF_mergefile=""
 TSF_argvs=TSF_io_argvs()
 TSF_Forth_init(TSF_argvs,[TSF_shuffle_Initwords,TSF_match_Initwords,TSF_calc_Initwords,TSF_time_Initwords])
+TSF_mergefile=''
 if len(TSF_argvs) >= 2:
     TSF_mergefile=TSF_argvs[1]
 if os.path.isfile(TSF_mergefile):
@@ -229,6 +234,11 @@ if os.path.isfile(TSF_mergefile):
         TSF_sample_run()
 elif TSF_mergefile in ["--about"]:
     TSF_sample_about()
+elif TSF_mergefile in ["--py","--python","--Python"]:
+    if len(TSF_argvs) >= 4:
+        TSF_Forth_writesamplepy(TSF_argvs[2],TSF_argvs[3])
+    elif len(TSF_argvs) >= 3:
+        TSF_Forth_writesamplepy(TSF_argvs[2])
 elif TSF_mergefile in ["--hello","--helloworld","--Helloworld"]:
     TSF_sample_Helloworld()
 elif TSF_mergefile in ["--quine","--Quine"]:
