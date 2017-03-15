@@ -20,7 +20,8 @@ def TSF_match_Initwords(TSF_words):    #TSF_doc:スタック並び替え関連�
     TSF_words["#TSF_matcher"]=TSF_match_matcher; TSF_words["#文字列類似度"]=TSF_match_matcher
     TSF_words["#TSF_matchgrade"]=TSF_match_matchgrade; TSF_words["#文字列類似の合格点"]=TSF_match_matchgrade
     TSF_words["#TSF_countstacks"]=TSF_match_countstacks; TSF_words["#スタックの該当箇所を数える"]=TSF_match_countstacks
-    TSF_words["#TSF_casestacks"]=TSF_match_casestacks; TSF_words["#スタックの該当箇所のエイリアス"]=TSF_match_casestacks
+    TSF_words["#TSF_casestacks"]=TSF_match_casestacks; TSF_words["#スタックの該当箇所で置換"]=TSF_match_casestacks
+    TSF_words["#TSF_tagstack"]=TSF_match_tagstack; TSF_words["#タグ名スタックの該当箇所で置換"]=TSF_match_tagstack
     return TSF_words
 
 def TSF_match_TSF_joinN():   #TSF_doc:[stackN…stackB,stackA,count]スタックを連結する。count自身とcountの回数分スタック積み下ろし。
@@ -132,6 +133,26 @@ def TSF_match_casestacks():   #TSF_doc:[matcher,algo,stackO,stackN]Oスタック
             break
     TSF_Forth_pushthat(str(TSF_case))
     return None
+
+def TSF_match_tagstack():   #TSF_doc:[textstack,tags,count]tagsスタック名で置換、さらに置換内容はcountで選べる。
+    TSF_count=TSF_Forth_popintthe(TSF_Forth_stackthat())
+    TSF_tsvT=TSF_Forth_popthat(); TSF_strsT=TSF_Forth_stackvalue(TSF_tsvT)
+    TSF_tsvS=TSF_Forth_popthat()
+#    for TSF_peek,TSF_strT in enumerate(TSF_strsT):
+#        TSF_text=TSF_text.replace(TSF_strT,TSF_strsN[TSF_peek])
+    TSF_text=TSF_txt_ESCdecode("\n".join(TSF_Forth_stackvalue(TSF_tsvS)))
+    TSF_Forth_setTSF(TSF_tsvS,TSF_text,TSF_style="N")
+    return None
+#def TSF_match_replacestacks():   #TSF_doc:[stackS,stackO,stackN]SスタックをテキストとみなしてOスタックの文字列群をNスタックの文字列群に置換。
+#    TSF_tsvN=TSF_Forth_popthat(); TSF_strsN=TSF_Forth_stackvalue(TSF_tsvN)
+#    TSF_tsvO=TSF_Forth_popthat(); TSF_strsO=TSF_Forth_stackvalue(TSF_tsvO)
+#    TSF_strsN.extend([""]*(max(len(TSF_strsO)-len(TSF_strsN),0)))
+#    TSF_tsvS=TSF_Forth_popthat()
+#    TSF_text=TSF_txt_ESCdecode("\n".join(TSF_Forth_stackvalue(TSF_tsvS)))
+#    for TSF_peek,TSF_strO in enumerate(TSF_strsO):
+#        TSF_text=TSF_text.replace(TSF_strO,TSF_strsN[TSF_peek])
+#    TSF_Forth_setTSF(TSF_tsvS,TSF_text,TSF_style="N")
+#    return None
 
 def TSF_match_debug():    #TSF_doc:「TSF/TSF_shuffle.py」単体テスト風デバッグ関数。
     TSF_debug_log=""

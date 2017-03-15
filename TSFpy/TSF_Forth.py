@@ -176,7 +176,6 @@ def TSF_Forth_merge(TSF_the,TSF_ESCstack=[],TSF_mergedel=None):    #TSF_doc:テ�
                 TSF_stackL=TSF_stackV.lstrip('\t').split('\t')
                 if not TSF_stackL[0] in TSF_ESCstack:
                     TSF_that=TSF_stackL[0]
-#                    TSF_stacks[TSF_that]=[]
                     TSF_stacks[TSF_that]=deque([])
                     TSF_styles[TSF_that]="O" if len(TSF_stackL) >= 2 else ""
             if not TSF_that in TSF_ESCstack:
@@ -362,7 +361,8 @@ def TSF_Forth_popintthe(TSF_that):    #TSF_doc:スタックから数値として
     TSF_calcQ=TSF_Forth_popthat()
     if '|' in TSF_calcQ:
         TSF_calcN,TSF_calcD=TSF_calcQ.replace('m','-').replace('p','').split('|')
-        TSF_popdata=TSF_io_intstr0x(TSF_calcN)//TSF_io_intstr0x(TSF_calcD)
+        TSF_calcN,TSF_calcD=TSF_io_intstr0x(TSF_calcN),TSF_io_intstr0x(TSF_calcD)
+        TSF_popdata=TSF_calcN//TSF_calcD if TSF_calcD != 0 else 0 
     else:
         TSF_calcN=TSF_calcQ.replace('m','-').replace('p','')
         TSF_popdata=TSF_io_intstr0x(TSF_calcN)
@@ -373,7 +373,6 @@ def TSF_Forth_pushthe(TSF_the,TSF_pushdata):    #TSF_doc:スタックに積み�
     if TSF_the in TSF_stacks:
         TSF_stacks[TSF_the].append(TSF_pushdata)
     else:
-#        TSF_stacks[TSF_the]=[TSF_pushdata]
         TSF_stacks[TSF_the]=deque([TSF_pushdata])
 
 def TSF_Forth_pushthis(TSF_pushdata):    #TSF_doc:実行中スタックに積み上げる(TSFAPI)。
@@ -420,7 +419,6 @@ def TSF_Forth_peeklimitthe(TSF_the,TSF_count):    #TSF_doc:囲択でスタック
 
 def TSF_Forth_reversethe(TSF_the):    #TSF_doc:スタックのシャッフル(TSFAPI)。
     if TSF_the in TSF_stacks:
-#        TSF_stacks[TSF_the]=list(reversed(TSF_stacks[TSF_the]))
         TSF_stacks[TSF_the]=deque(reversed(TSF_stacks[TSF_the]))
 
 def TSF_Forth_shufflethe(TSF_the):    #TSF_doc:スタックのシャッフル(TSFAPI)。
@@ -469,11 +467,9 @@ def TSF_Forth_delthe(TSF_the):   #TSF_doc:スタックを削除(TSFAPI)。
     return None if TSF_stackthis != TSF_the else ""
 
 def TSF_Forth_clonethe(TSF_clone,TSF_the):   #TSF_doc:スタックを複製する(TSFAPI)
-#    TSF_stacks[TSF_clone]=list(tuple(TSF_stacks[TSF_the] if TSF_the in TSF_stacks else []))
     TSF_stacks[TSF_clone]=deque(TSF_stacks[TSF_the] if TSF_the in TSF_stacks else [])
 
 def TSF_Forth_clonethey(TSF_clone):   #TSF_doc:(TSFAPI)
-#    TSF_stacks[TSF_clone]=list(tuple(TSF_stacks.keys()))
     TSF_stacks[TSF_clone]=deque(TSF_stacks.keys())
 
 

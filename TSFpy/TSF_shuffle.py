@@ -306,7 +306,6 @@ def TSF_shuffle_pushthat():   #TSF_doc:[]積込先スタックを丸ごと積込
     return None
 
 def TSF_shuffle_pushthey():   #TSF_doc:[]スタック名一覧を丸ごと積込先スタックに積み上げ。
-#    TSF_Forth_addargvs(TSF_Forth_stackthat(),list(TSF_Forth_stackskeys()))
     TSF_Forth_addargvs(TSF_Forth_stackthat(),deque(TSF_Forth_stackskeys()))
     return None
 
