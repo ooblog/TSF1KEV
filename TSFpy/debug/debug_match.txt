@@ -1,0 +1,10 @@
+TSF_Tab-Separated-Forth:
+	UTF-8	#TSF_encoding	0.8	#TSF_matchgrade	TSF_matchtest:	#TSF_this	0	#TSF_fin.	TSF_match.py	1
+TSF_match.py:
+	Python2.7.6	linux2	UTF-8
+TSF_matchtest:
+	TSF_matchBF:	#TSF_that	いいまちがいやうろおぼえ	いいまつがいやうるおぼえ	TSF_matchAF:	#TSF_that	いいまちがいやうろおぼえ	いいまつがいやうるおぼえ	#TSF_matcher
+TSF_matchBF:
+	いいまちがいやうろおぼえ	いいまつがいやうるおぼえ
+TSF_matchAF:
+	0.833333333333

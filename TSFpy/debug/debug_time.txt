@@ -1,38 +1,41 @@
 TSF_Tab-Separated-Forth:
-	UTF-8	:TSF_encoding	0	:TSF_fin.
-TSF_argvs:
-	TSF_time.py
-TSF_py:
+	UTF-8	#TSF_encoding	0	#TSF_diffminute	30	#TSF_overhour	TSF_timetest:	#TSF_this	0	#TSF_fin.	TSF_time.py	1
+TSF_time.py:
 	Python2.7.6	linux2	UTF-8
+TSF_timetest:
+	TSF_time漢数字:	#TSF_that	@000y年@0m月@0dm日(@wdj曜)@0h時@0n分@0s秒	#TSF_calender
+TSF_time漢数字:
+	2017年03月15日(水曜)11時23分47秒
+#--- OrderedDict ---
 TSF_time.test@c@o1:
-	@c,@o⇔0,0.885936856387
+	@c,@o⇔0,0.822458640804
 TSF_time.TSF/LTSV:
-	@000y@0m@0dm@wdec@0h@0n@0s⇔20170313M140430
-	@000Y@0M@0Dm@Wdec@0H@0N@0S⇔20170312U380430
+	@000y@0m@0dm@wdec@0h@0n@0s⇔20170315W112347
+	@000Y@0M@0Dm@Wdec@0H@0N@0S⇔20170314T352347
 TSF_time.ISO8601_JST:
-	@000y-@0m-@0dmT@0h:@0n:@0s@JST⇔2017-03-13T14:04:30+09:00
-	@000Y-@0M-@0DmT@0H:@0N:@0S@JST⇔2017-03-12T38:04:30+09:00
+	@000y-@0m-@0dmT@0h:@0n:@0s@JST⇔2017-03-15T11:23:47+09:00
+	@000Y-@0M-@0DmT@0H:@0N:@0S@JST⇔2017-03-14T35:23:47+09:00
 TSF_time.test@0ls:
-	@000y-@0m[@mj]-@0dm[@wdj]@0h[@apj]:@0n:@0s.@00ls⇔2017-03[弥生]-13[月]14[午後]:04:30.518
-	@000Y-@0M[@Mj]-@0Dm[@Wdj]@0H[@Apoj]:@0N:@0S.@00Ls⇔2017-03[弥生]-12[日]38[徹夜]:04:30.518
+	@000y-@0m[@mj]-@0dm[@wdj]@0h[@apj]:@0n:@0s.@00ls⇔2017-03[弥生]-15[水]11[午前]:23:47.696
+	@000Y-@0M[@Mj]-@0Dm[@Wdj]@0H[@Apoj]:@0N:@0S.@00Ls⇔2017-03[弥生]-14[火]35[徹夜]:23:47.696
 TSF_time.test@Beat:
-	@000y-@0m[@mj]-@0dm[@wdj]@@@00bt⇔2017-03[弥生]-13[月]@586
-	@000y-@0m[@mj]-@0dm[@wdj]@@@000.00bt⇔2017-03[弥生]-13[月]@586.458
+	@000y-@0m[@mj]-@0dm[@wdj]@@@00bt⇔2017-03[弥生]-15[水]@474
+	@000y-@0m[@mj]-@0dm[@wdj]@@@000.00bt⇔2017-03[弥生]-15[水]@474.850
 TSF_time.test@c@o2:
-	@c,@o⇔9,0.885936856387
+	@c,@o⇔9,0.822458640804
 TSF_time.test@c@o1:
-	@c,@o⇔0,0.47106377322
+	@c,@o⇔0,0.830600880886
 TSF_time.TSF/LTSV:
-	@000y@0m@0dm@wdec@0h@0n@0s⇔20170313M140430
-	@000Y@0M@0Dm@Wdec@0H@0N@0S⇔20170312U380430
+	@000y@0m@0dm@wdec@0h@0n@0s⇔20170315W112347
+	@000Y@0M@0Dm@Wdec@0H@0N@0S⇔20170314T352347
 TSF_time.ISO8601_JST:
-	@000y-@0m-@0dmT@0h:@0n:@0s@JST⇔2017-03-13T14:04:30+09:00
-	@000Y-@0M-@0DmT@0H:@0N:@0S@JST⇔2017-03-12T38:04:30+09:00
+	@000y-@0m-@0dmT@0h:@0n:@0s@JST⇔2017-03-15T11:23:47+09:00
+	@000Y-@0M-@0DmT@0H:@0N:@0S@JST⇔2017-03-14T35:23:47+09:00
 TSF_time.test@0ls:
-	@000y-@0m[@mj]-@0dm[@wdj]@0h[@apj]:@0n:@0s.@00ls⇔2017-03[弥生]-13[月]14[午後]:04:30.519
-	@000Y-@0M[@Mj]-@0Dm[@Wdj]@0H[@Apoj]:@0N:@0S.@00Ls⇔2017-03[弥生]-12[日]38[徹夜]:04:30.519
+	@000y-@0m[@mj]-@0dm[@wdj]@0h[@apj]:@0n:@0s.@00ls⇔2017-03[弥生]-15[水]11[午前]:23:47.706
+	@000Y-@0M[@Mj]-@0Dm[@Wdj]@0H[@Apoj]:@0N:@0S.@00Ls⇔2017-03[弥生]-14[火]35[徹夜]:23:47.706
 TSF_time.test@Beat:
-	@000y-@0m[@mj]-@0dm[@wdj]@@@00bt⇔2017-03[弥生]-13[月]@586
-	@000y-@0m[@mj]-@0dm[@wdj]@@@000.00bt⇔2017-03[弥生]-13[月]@586.458
+	@000y-@0m[@mj]-@0dm[@wdj]@@@00bt⇔2017-03[弥生]-15[水]@474
+	@000y-@0m[@mj]-@0dm[@wdj]@@@000.00bt⇔2017-03[弥生]-15[水]@474.850
 TSF_time.test@c@o2:
-	@c,@o⇔9,0.47106377322
+	@c,@o⇔9,0.830600880886

@@ -364,19 +364,25 @@ def TSF_shuffle_shufflethat():   #TSF_doc:[]積込先スタックをシャッフ
 
 def TSF_shuffle_debug():    #TSF_doc:「TSF/TSF_shuffle.py」単体テスト風デバッグ関数。
     TSF_debug_log=""
-    TSF_shuffletet=random.sample(range(100),10)
-    TSF_debug_log=TSF_io_printlog("TSF_shuffletet:"+"{0}".format(TSF_shuffletet),TSF_log=TSF_debug_log)
-    TSF_shuffletet=random.random()
-    TSF_debug_log=TSF_io_printlog("TSF_shuffletet:"+"{0}".format(TSF_shuffletet),TSF_log=TSF_debug_log)
+    TSF_Forth_init(TSF_argvs,[TSF_shuffle_Initwords])
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","TSF_shuffletest:","#TSF_this","0","#TSF_fin."]))
+    TSF_Forth_setTSF("TSF_shuffle.py:","\t".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout]))
+    TSF_Forth_setTSF("TSF_shuffletest:","\t".join(["TSF_shuffleAF:","TSF_shuffleBF:","#TSF_clonethe","TSF_shuffleAF:","#TSF_shufflethe"]))
+    TSF_Forth_setTSF("TSF_shuffleBF:","\t".join(["P","D","C","A"]))
+    TSF_Forth_addfin(TSF_argvs)
+    TSF_Forth_run()
+    for TSF_thename in TSF_Forth_stackskeys():
+        TSF_debug_log=TSF_Forth_view(TSF_thename,True,TSF_debug_log)
+    return TSF_debug_log
 
 if __name__=="__main__":
     from collections import OrderedDict
     print("")
     TSF_argvs=TSF_io_argvs()
     print("--- {0} ---".format(TSF_argvs[0]))
-    TSF_debug_savefilename="debug/TSF_shuffle_debug.txt"
+    TSF_debug_savefilename="debug/debug_shuffle.txt"
     TSF_debug_log=TSF_shuffle_debug()
-#    TSF_io_savetext(TSF_debug_savefilename,TSF_debug_log)
+    TSF_io_savetext(TSF_debug_savefilename,TSF_debug_log)
     print("")
     try:
         print("--- {0} ---\n{1}".format(TSF_debug_savefilename,TSF_debug_log))

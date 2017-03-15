@@ -536,13 +536,15 @@ def TSF_calc_decimalizeKNcomma(TSF_calcQ):    #TSF_doc:整数を4桁で区切っ
 
 def TSF_calc_debug():    #TSF_doc:「TSF/TSF_calc.py」単体テスト風デバッグ関数。
     TSF_debug_log=""
-    TSF_debug_log=TSF_io_printlog("TSF_Tab-Separated-Forth:",TSF_log=TSF_debug_log)
-    TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["UTF-8",":TSF_encoding","0",":TSF_fin."])),TSF_log=TSF_debug_log)
-    TSF_debug_log=TSF_io_printlog("TSF_argvs:",TSF_log=TSF_debug_log)
-    TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(TSF_argvs)),TSF_log=TSF_debug_log)
-    TSF_debug_log=TSF_io_printlog("TSF_py:",TSF_log=TSF_debug_log)
-    TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout])),TSF_log=TSF_debug_log)
-    TSF_calc_precision(10)
+    TSF_Forth_init(TSF_argvs,[TSF_calc_Initwords])
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","10","#TSF_calcPR","TSF_calctest:","#TSF_this","0","#TSF_fin."]))
+    TSF_Forth_setTSF("TSF_calc.py:","\t".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout]))
+    TSF_Forth_setTSF("TSF_calctest:","\t".join(["TSF_calc漢数字:","#TSF_that","一割る三引く(マイナス二分の一)","#TSF_calcFX"]))
+    TSF_Forth_addfin(TSF_argvs)
+    TSF_Forth_run()
+    for TSF_thename in TSF_Forth_stackskeys():
+        TSF_debug_log=TSF_Forth_view(TSF_thename,True,TSF_debug_log)
+    TSF_debug_log=TSF_io_printlog("#--- OrderedDict ---",TSF_debug_log)
     LTsv_calcQlist=OrderedDict([
         ("TSF_calc漢数字:",["一割る三引く(マイナス二分の一)","2分の1を5乗","(2分の1)を5乗","2分の(1を5乗)","(100分の1)を5乗","(8万分の1)を5乗","(478万分の1)を5乗","億","二百万円","十億百二十円","十億と飛んで百二十円","百二十円","3.14","円周率","ネイピア数","∞","√２","√m2","２の平方根","256を二進対数","２を16乗","無量大数"]),
         ("TSF_calc小数分数パーセント:",["0.5|3.5","0.5/3.5","1|2/7|2","2|3|5|7","0/100","100/0","10000+%8", "10000-5%","7\\3","3.14\\1","9#6","3|2#1|3","-6","m6","-m6","-6!","m6!","-m6!"]),
@@ -560,10 +562,9 @@ def TSF_calc_debug():    #TSF_doc:「TSF/TSF_calc.py」単体テスト風デバ�
         ("TSF_calc冪乗モジュロ(素数フェルマーテスト):",["2F0~0","3F0~0","2F7~7","3F7~7","2F60~60","3F60~60","2F341~341","3F341~341","2F561~561","3F561~561"]),
     ])
     for TSF_QlistK,TSF_QlistV in iter(LTsv_calcQlist.items()):
-        TSF_debug_log=TSF_io_printlog(TSF_QlistK,TSF_log=TSF_debug_log)
+        TSF_debug_log=TSF_io_printlog("#{0}".format(TSF_QlistK),TSF_log=TSF_debug_log)
         for LTsv_calcQ in TSF_QlistV:
-            TSF_debug_log=TSF_io_printlog("\t{0}⇔{1};{2};{3}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ,True),TSF_calc_decimalizeDC(TSF_calc(LTsv_calcQ,True)),TSF_calc_decimalizeKN(TSF_calc(LTsv_calcQ,True))),TSF_debug_log)
-#    print(TSF_calcQQmemory)
+            TSF_debug_log=TSF_io_printlog("#\t{0}⇔{1};{2};{3}".format(LTsv_calcQ,TSF_calc(LTsv_calcQ,True),TSF_calc_decimalizeDC(TSF_calc(LTsv_calcQ,True)),TSF_calc_decimalizeKN(TSF_calc(LTsv_calcQ,True))),TSF_debug_log)
     return TSF_debug_log
 
 if __name__=="__main__":

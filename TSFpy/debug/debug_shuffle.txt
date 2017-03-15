@@ -1,0 +1,10 @@
+TSF_Tab-Separated-Forth:
+	UTF-8	#TSF_encoding	TSF_shuffletest:	#TSF_this	0	#TSF_fin.	TSF_shuffle.py	1
+TSF_shuffle.py:
+	Python2.7.6	linux2	UTF-8
+TSF_shuffletest:
+	TSF_shuffleAF:	TSF_shuffleBF:	#TSF_clonethe	TSF_shuffleAF:	#TSF_shufflethe
+TSF_shuffleBF:
+	P	D	C	A
+TSF_shuffleAF:
+	A	C	D	P

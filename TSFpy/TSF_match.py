@@ -133,45 +133,26 @@ def TSF_match_casestacks():   #TSF_doc:[matcher,algo,stackO,stackN]Oスタック
     TSF_Forth_pushthat(str(TSF_case))
     return None
 
-
-
-def TSF_match_matchcasethe():   #TSF_doc:[stack,matcher,func,string]スタックの文字列検索などの組み合わせを1つのワードに集約予定。
-    TSF_tsvS=TSF_Forth_popthat()
-    TSF_tsvF=TSF_Forth_popthat()
-    if '-' in TSF_tsvF:
-        TSF_matchF,TSF_matchC=TSF_tsvF.split('-')[0],TSF_tsvF.split('-')[-1]
-    else:
-        TSF_matchF,TSF_matchC=TSF_tsvF,"first"
-    TSF_tsvM=TSF_Forth_popthat()
-    TSF_the=TSF_Forth_popthat()
-    TSF_matchcases=TSF_Forth_stackvalue(TSF_the)
-    if TSF_matchC == "first":
-        TSF_count=-1
-        for TSF_matchcount,TSF_matchcase in enumerate(TSF_matchcases):
-            if TSF_match_case.get(TSF_tsvF,TSF_match_case[TSF_matchF])(TSF_text,TSF_matcher,TSF_string):
-                TSF_count=TSF_matchcount; break
-    else:  #TSF_matchC == "count":
-        TSF_count=0
-        for TSF_matchcase in TSF_matchcases:
-            TSF_count+=TSF_match_case.get(TSF_tsvF,TSF_match_case[TSF_matchF])(TSF_text,TSF_matcher,TSF_string)
-    TSF_Forth_pushthat(str(TSF_count))
-    return None
-
-
 def TSF_match_debug():    #TSF_doc:「TSF/TSF_shuffle.py」単体テスト風デバッグ関数。
-    TSF_tsvS="いいまちがいやうろおぼえ"
-    TSF_tsvE="いいまつがいやうるおぼえ"
-    TSF_tsvA=str(difflib.SequenceMatcher(None,TSF_tsvS,TSF_tsvE).ratio())
-    TSF_io_printlog("{0}:{1}={2}/{3}".format(TSF_tsvS,TSF_tsvE,TSF_tsvA,str(TSF_matchgrade)))
+    TSF_debug_log=""
+    TSF_Forth_init(TSF_argvs,[TSF_match_Initwords])
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","0.8","#TSF_matchgrade","TSF_matchtest:","#TSF_this","0","#TSF_fin."]))
+    TSF_Forth_setTSF("TSF_match.py:","\t".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout]))
+    TSF_Forth_setTSF("TSF_matchtest:","\t".join(["TSF_matchBF:","#TSF_that","いいまちがいやうろおぼえ","いいまつがいやうるおぼえ","TSF_matchAF:","#TSF_that","いいまちがいやうろおぼえ","いいまつがいやうるおぼえ","#TSF_matcher"]))
+    TSF_Forth_addfin(TSF_argvs)
+    TSF_Forth_run()
+    for TSF_thename in TSF_Forth_stackskeys():
+        TSF_debug_log=TSF_Forth_view(TSF_thename,True,TSF_debug_log)
+    return TSF_debug_log
 
 if __name__=="__main__":
     from collections import OrderedDict
     print("")
     TSF_argvs=TSF_io_argvs()
     print("--- {0} ---".format(TSF_argvs[0]))
-    TSF_debug_savefilename="debug/TSF_match_debug.txt"
+    TSF_debug_savefilename="debug/debug_match.txt"
     TSF_debug_log=TSF_match_debug()
-#    TSF_io_savetext(TSF_debug_savefilename,TSF_debug_log)
+    TSF_io_savetext(TSF_debug_savefilename,TSF_debug_log)
     print("")
     try:
         print("--- {0} ---\n{1}".format(TSF_debug_savefilename,TSF_debug_log))

@@ -384,12 +384,15 @@ def TSF_time_getdaytime(TSF_timeformat="@000y@0m@0dm@wdec@0h@0n@0s",TSF_diffminu
 
 def TSF_time_debug():    #TSF_doc:「TSF/TSF_time.py」単体テスト風デバッグ関数。
     TSF_debug_log=""
-    TSF_debug_log=TSF_io_printlog("TSF_Tab-Separated-Forth:",TSF_log=TSF_debug_log)
-    TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["UTF-8",":TSF_encoding","0",":TSF_fin."])),TSF_log=TSF_debug_log)
-    TSF_debug_log=TSF_io_printlog("TSF_argvs:",TSF_log=TSF_debug_log)
-    TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(TSF_argvs)),TSF_log=TSF_debug_log)
-    TSF_debug_log=TSF_io_printlog("TSF_py:",TSF_log=TSF_debug_log)
-    TSF_debug_log=TSF_io_printlog("\t{0}".format("\t".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout])),TSF_log=TSF_debug_log)
+    TSF_Forth_init(TSF_argvs,[TSF_time_Initwords])
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","0","#TSF_diffminute","30","#TSF_overhour","TSF_timetest:","#TSF_this","0","#TSF_fin."]))
+    TSF_Forth_setTSF("TSF_time.py:","\t".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout]))
+    TSF_Forth_setTSF("TSF_timetest:","\t".join(["TSF_time漢数字:","#TSF_that","@000y年@0m月@0dm日(@wdj曜)@0h時@0n分@0s秒","#TSF_calender"]))
+    TSF_Forth_addfin(TSF_argvs)
+    TSF_Forth_run()
+    for TSF_thename in TSF_Forth_stackskeys():
+        TSF_debug_log=TSF_Forth_view(TSF_thename,True,TSF_debug_log)
+    TSF_debug_log=TSF_io_printlog("#--- OrderedDict ---",TSF_debug_log)
     LTsv_timeQlist=OrderedDict([
         ("TSF_time.test@c@o1:",["@c,@o"]),
         ("TSF_time.TSF/LTSV:",["@000y@0m@0dm@wdec@0h@0n@0s","@000Y@0M@0Dm@Wdec@0H@0N@0S"]),
