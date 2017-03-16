@@ -480,7 +480,6 @@ def TSF_Forth_clonethey(TSF_clone):   #TSF_doc:(TSFAPI)
     TSF_stacks[TSF_clone]=deque(TSF_stacks.keys())
 
 def TSF_Forth_cloneargvs(TSF_clone):   #TSF_doc:(TSFAPI)
-    print("TSF_Forth_cloneargvs",TSF_stackargvs)
     TSF_stacks[TSF_clone]=deque(TSF_stackargvs)
 
 

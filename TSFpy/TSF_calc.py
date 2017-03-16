@@ -380,7 +380,6 @@ def TSF_calc_multiplication(TSF_calcQ):    #TSF_doc:分数電卓の掛け算割�
                         TSF_calcA="|".join([str(TSF_calcLN),str(TSF_calcLD)])
             if TSF_calcA == "":
                 try:
-#                    print("TSF_calcLN/TSF_calcLD ==",TSF_calcLN,TSF_calcLD,TSF_calcRN,TSF_calcRD)
                     TSF_calcLND=str(fractions.Fraction(decimal.getcontext().ln(TSF_calcLN/TSF_calcLD)/decimal.getcontext().ln(decimal.Decimal(TSF_calcRN)/decimal.Decimal(TSF_calcRD))))
                     if '/' in TSF_calcLND:
                         TSF_calcLN,TSF_calcLD=TSF_calcLND.split('/'); TSF_calcLN,TSF_calcLD=decimal.Decimal(TSF_calcLN),decimal.Decimal(TSF_calcLD)
