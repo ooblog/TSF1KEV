@@ -1,5 +1,5 @@
 TSF_Tab-Separated-Forth:
-	UTF-8	#TSF_encoding	N-FizzBuzz:	#TSF_this	0	#TSF_fin.
+	UTF-8	#TSF_encoding	N-FizzBuzz:	#TSF_this	#TSF_viewthey	0	#TSF_fin.
 N-FizzBuzz:
 	TSF_argvs:	#TSF_cloneargvs	TSF_argvs:	#TSF_lenthe	[0]Z[FZcount:4]~[TSF_argvs:0]	#TSF_calcDC	FZcount:	4	#TSF_pokethe	FizzBuzz:	#TSF_this
 FizzBuzz:
