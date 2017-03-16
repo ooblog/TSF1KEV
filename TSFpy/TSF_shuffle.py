@@ -51,6 +51,7 @@ def TSF_shuffle_Initwords(TSF_words):    #TSF_doc:スタック並び替え関連
     TSF_words["#TSF_clonethis"]=TSF_shuffle_clonethis; TSF_words["#実行中スタックの複製"]=TSF_shuffle_clonethis
     TSF_words["#TSF_clonethat"]=TSF_shuffle_clonethat; TSF_words["#積込先スタックの複製"]=TSF_shuffle_clonethat
     TSF_words["#TSF_clonethey"]=TSF_shuffle_clonethey; TSF_words["#スタック名一覧の複製"]=TSF_shuffle_clonethey
+    TSF_words["#TSF_cloneargvs"]=TSF_shuffle_cloneargvs; TSF_words["#コマンドライン引数の複製"]=TSF_shuffle_cloneargvs
     TSF_words["#TSF_pushthe"]=TSF_shuffle_pushthe; TSF_words["#スタックを積む"]=TSF_shuffle_pushthe
     TSF_words["#TSF_pushthis"]=TSF_shuffle_pushthis; TSF_words["#実行中スタックを積む"]=TSF_shuffle_pushthis
     TSF_words["#TSF_pushthat"]=TSF_shuffle_pushthat; TSF_words["#積込先スタックを積む"]=TSF_shuffle_pushthat
@@ -293,6 +294,10 @@ def TSF_shuffle_clonethey():   #TSF_doc:[stackC]スタック名一覧をスタ�
     TSF_Forth_clonethey(TSF_Forth_popthat())
     return None
 
+def TSF_shuffle_cloneargvs():   #TSF_doc:[stackC]コマンドライン引数を複製する。自身の実行ファイル名は除外。1スタック積み下ろし。
+    TSF_Forth_cloneargvs(TSF_Forth_popthat())
+    return None
+
 def TSF_shuffle_pushthe():   #TSF_doc:[stack]指定したスタックを積込先スタックに積み上げ。1スタック積み下ろしてからスタック積み上げ。
     TSF_Forth_addargvs(TSF_Forth_stackthat(),TSF_Forth_stackvalue(TSF_Forth_popthat()))
     return None
@@ -361,14 +366,15 @@ def TSF_shuffle_shufflethat():   #TSF_doc:[]積込先スタックをシャッフ
     return None
 
 
-def TSF_shuffle_debug():    #TSF_doc:「TSF/TSF_shuffle.py」単体テスト風デバッグ関数。
+def TSF_shuffle_debug(TSF_argvs):    #TSF_doc:「TSF/TSF_shuffle.py」単体テスト風デバッグ関数。
     TSF_debug_log=""
     TSF_Forth_init(TSF_argvs,[TSF_shuffle_Initwords])
-    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","TSF_shuffletest:","#TSF_this","0","#TSF_fin."]))
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","TSF_argvs:","#TSF_cloneargvs","TSF_shuffletest:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("TSF_shuffle.py:","\t".join(["Python{0.major}.{0.minor}.{0.micro}".format(sys.version_info),sys.platform,TSF_io_stdout]))
     TSF_Forth_setTSF("TSF_shuffletest:","\t".join(["TSF_shuffleAF:","TSF_shuffleBF:","#TSF_clonethe","TSF_shuffleAF:","#TSF_shufflethe"]))
     TSF_Forth_setTSF("TSF_shuffleBF:","\t".join(["P","D","C","A"]))
     TSF_Forth_addfin(TSF_argvs)
+    TSF_Forth_argvsleftcut(TSF_argvs,1)
     TSF_Forth_run()
     for TSF_thename in TSF_Forth_stackskeys():
         TSF_debug_log=TSF_Forth_view(TSF_thename,True,TSF_debug_log)
@@ -380,7 +386,7 @@ if __name__=="__main__":
     TSF_argvs=TSF_io_argvs()
     print("--- {0} ---".format(TSF_argvs[0]))
     TSF_debug_savefilename="debug/debug_shuffle.txt"
-    TSF_debug_log=TSF_shuffle_debug()
+    TSF_debug_log=TSF_shuffle_debug(TSF_argvs)
     TSF_io_savetext(TSF_debug_savefilename,TSF_debug_log)
     print("")
     try:

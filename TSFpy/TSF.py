@@ -24,6 +24,7 @@ def TSF_sample_run(TSF_sample_sepalete=None):    #TSF_doc:TSFサンプルプロ�
         TSF_io_printlog("-- {0} run --".format(TSF_sample_sepalete))
     else:
         TSF_Forth_addfin(TSF_argvs)
+    TSF_Forth_argvsleftcut(TSF_argvs,2)
     TSF_Forth_run()
 
 def TSF_sample_about():    #TSF_doc:TSFの概要サンプルプログラム。

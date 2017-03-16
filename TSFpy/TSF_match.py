@@ -154,7 +154,7 @@ def TSF_match_tagstack():   #TSF_doc:[textstack,tags,count]tagsスタック名�
 #    TSF_Forth_setTSF(TSF_tsvS,TSF_text,TSF_style="N")
 #    return None
 
-def TSF_match_debug():    #TSF_doc:「TSF/TSF_shuffle.py」単体テスト風デバッグ関数。
+def TSF_match_debug(TSF_argvs):    #TSF_doc:「TSF/TSF_shuffle.py」単体テスト風デバッグ関数。
     TSF_debug_log=""
     TSF_Forth_init(TSF_argvs,[TSF_match_Initwords])
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","0.8","#TSF_matchgrade","TSF_matchtest:","#TSF_this","0","#TSF_fin."]))
@@ -172,7 +172,7 @@ if __name__=="__main__":
     TSF_argvs=TSF_io_argvs()
     print("--- {0} ---".format(TSF_argvs[0]))
     TSF_debug_savefilename="debug/debug_match.txt"
-    TSF_debug_log=TSF_match_debug()
+    TSF_debug_log=TSF_match_debug(TSF_argvs)
     TSF_io_savetext(TSF_debug_savefilename,TSF_debug_log)
     print("")
     try:

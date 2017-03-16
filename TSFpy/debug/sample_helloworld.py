@@ -20,4 +20,5 @@ TSF_Forth_setTSF("TSF_Tab-Separated-Forth:",
     TSF_style="T")
 
 TSF_Forth_addfin(TSF_io_argvs())
+TSF_Forth_argvsleftcut(TSF_io_argvs(),1)
 TSF_Forth_run()

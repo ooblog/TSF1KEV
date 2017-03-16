@@ -1,5 +1,7 @@
 TSF_Tab-Separated-Forth:
-	UTF-8	#TSF_encoding	TSFdocs_that:	#TSF_that	TSFdocs_setup:	#TSF_this	#TSF_viewthey	0	#TSF_fin.
+	UTF-8	#TSF_encoding	TSFdocs_that:	#TSF_that	TSFdocs_merge:	#TSF_this	#TSF_viewthey	0	#TSF_fin.
+TSFdocs_merge:
+	TSFdocs_setup:	#TSF_this
 TSFdocs_setup:
 	TSFdocs_files:	#TSF_lenthe	TSFdocs_filecount:	2	#TSF_pokethe	TSFdocs_filename:	#TSF_this
 TSFdocs_filename:
@@ -17,8 +19,14 @@ TSFdocs_filenameloop:
 	TSFdocs_filecount:	[TSFdocs_filecount:2]z0~1	#TSF_calcDC	#TSF_peekthe	#TSF_this
 TSFdocs_filecount:
 	TSFdocs_filename:	#exit	-
+TSFdocs_files:
+	debug/test_TSFdoc_None.txt
+TSFdocs_basetext:
+	None.txt
+TSFdocs_tags:
+	
 
-# -- config --
+# -- merge --
 TSFdocs_files:
 	debug/test_TSFdoc_README.md	debug/test_TSFdoc_README.html
 TSFdocs_basetext:

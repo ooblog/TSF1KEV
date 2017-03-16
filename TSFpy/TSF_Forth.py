@@ -254,9 +254,8 @@ def TSF_Forth_writesamplepy(TSF_tsfpath=None,TSF_pyhonpath=None):   #TSF_doc:[fi
             TSF_text+="TSF_Forth_init(TSF_io_argvs(),[TSF_shuffle_Initwords,TSF_match_Initwords,TSF_calc_Initwords,TSF_time_Initwords])\n\n"
             for TSF_thename in TSF_stacks.keys():
                 TSF_text=TSF_Forth_samplingpy(TSF_thename,False,TSF_text)
-            TSF_text+="\nTSF_Forth_addfin(TSF_io_argvs())\nTSF_Forth_run()\n"
+            TSF_text+="\nTSF_Forth_addfin(TSF_io_argvs())\nTSF_Forth_argvsleftcut(TSF_io_argvs(),1)\nTSF_Forth_run()\n"
     if TSF_pyhonpath != None:
-        print("TSF_pyhonpath",TSF_pyhonpath)
         TSF_io_savetext(TSF_pyhonpath,TSF_text=TSF_text)
     else:
         for TSF_textline in TSF_text.split('\n'):
@@ -268,13 +267,21 @@ TSF_Initcalls=[]
 TSF_stacks,TSF_styles,TSF_callptrs,TSF_words=OrderedDict(),OrderedDict(),OrderedDict(),OrderedDict()
 TSF_stackthis,TSF_stackthat,TSF_stackcount=TSF_Forth_1ststack(),TSF_Forth_1ststack(),0
 def TSF_Forth_init(TSF_argvs=[],TSF_addcalls=[]):    #TSF_doc:TSF_stacks,TSF_styles,TSF_callptrs,TSF_wordsなどをまとめて初期化する(TSFAPI)。
-    global TSF_stacks,TSF_styles,TSF_callptrs,TSF_words,TSF_Initcalls,TSF_stackthat,TSF_stackthis,TSF_stackcount
+    global TSF_stacks,TSF_styles,TSF_callptrs,TSF_words,TSF_Initcalls,TSF_stackthat,TSF_stackthis,TSF_stackcount,TSF_stackargvs
     TSF_stacks,TSF_styles,TSF_callptrs,TSF_words=OrderedDict(),OrderedDict(),OrderedDict(),OrderedDict()
     TSF_stackthis,TSF_stackthat,TSF_stackcount=TSF_Forth_1ststack(),TSF_Forth_1ststack(),0
     TSF_stacks[TSF_stackthis]=["UTF-8","#TSF_encoding","0","#TSF_fin."]; TSF_Forth_addfin(TSF_argvs)
+    TSF_stackargvs=deque(TSF_argvs); TSF_stackargvs.popleft()
     TSF_Initcalls=[TSF_Forth_Initwords]+TSF_addcalls
     for TSF_Initcall in TSF_Initcalls:
         TSF_words=TSF_Initcall(TSF_words)
+
+TSF_stackargvs=deque([])
+def TSF_Forth_argvsleftcut(TSF_argvs=[],TSF_argvsleftlen=0):    #TSF_doc:argvから実行ファイル名をカットする。TSFインタプリタ実行時とPython化で異なるコマンドラインの引数を吸収する(TSFAPI)。
+    global TSF_stackargvs
+    TSF_stackargvs=deque(TSF_argvs)
+    for leftcut in range(TSF_argvsleftlen):
+        if len(TSF_stackargvs): TSF_stackargvs.popleft()
 
 def TSF_Forth_run():    #TSF_doc:TSF_stacks,TSF_styles,TSF_callptrs,TSF_wordsなどをまとめて初期化する(TSFAPI)。
     global TSF_stacks,TSF_styles,TSF_callptrs,TSF_words,TSF_Initcalls,TSF_stackthat,TSF_stackthis,TSF_stackcount
@@ -471,6 +478,10 @@ def TSF_Forth_clonethe(TSF_clone,TSF_the):   #TSF_doc:スタックを複製す�
 
 def TSF_Forth_clonethey(TSF_clone):   #TSF_doc:(TSFAPI)
     TSF_stacks[TSF_clone]=deque(TSF_stacks.keys())
+
+def TSF_Forth_cloneargvs(TSF_clone):   #TSF_doc:(TSFAPI)
+    print("TSF_Forth_cloneargvs",TSF_stackargvs)
+    TSF_stacks[TSF_clone]=deque(TSF_stackargvs)
 
 
 def TSF_Forth_debug(TSF_argvs):    #TSF_doc:「TSF/TSF_Forth.py」単体テスト風デバッグ関数。

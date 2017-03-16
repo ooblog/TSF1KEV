@@ -1,6 +1,8 @@
 TSF_Tab-Separated-Forth:
 	UTF-8	#TSF_encoding	N-FizzBuzz:	#TSF_this	0	#TSF_fin.
 N-FizzBuzz:
+#	TSF_argvs:	#TSF_cloneargvs	#TSF_viewthey
+#	FZcount:	4	#TSF_peekthe	#TSF_swapBAthat	m1	#TSF_peekthat	m[0]	#TSF_calcDC	#TSF_peekthat	FZcount:	4	#TSF_pokethe	FizzBuzz:	#TSF_this
 	FZcount:	4	#TSF_peekthe	#TSF_swapBAthat	m1	#TSF_peekthat	m[0]	#TSF_calcDC	#TSF_peekthat	FZcount:	4	#TSF_pokethe	FizzBuzz:	#TSF_this
 FizzBuzz:
 	[FZcount:0]+1	#TSF_calcDC	FZcount:	0	#TSF_pokethe	FZcount:	([FZcount:0]#3Z1~0)+([FZcount:0]#5Z2~0)	#TSF_calcDC	#TSF_peekthe	1	#TSF_echoN	FZjump:	[FZcount:0]-[FZcount:4]O1~0	#TSF_calcDC	#TSF_peekthe	#TSF_this
