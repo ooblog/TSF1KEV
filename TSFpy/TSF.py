@@ -226,11 +226,14 @@ def TSF_sample_calcFX(TSF_argvs):    #TSF_doc:分数表示電卓サンプルプ�
     TSF_sample_run("TSF_sample_calcFX")
 
 def TSF_sample_calender(TSF_argvs):    #TSF_doc:日時表示サンプルプログラム。
-    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","calender:","#TSF_this","0","#TSF_fin."]))
-    TSF_Forth_setTSF("calender:","\t".join([
-        "@000y@0m@0dm@wdec@0h@0n@0s","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
-        "#TSF_calender","1","#TSF_echoN"
-    ]),TSF_style="T")
+    TSF_Forth_setTSF("TSF_Tab-Separated-Forth:",
+        "\t".join(["UTF-8","#TSF_encoding","calender:","#TSF_this","0","#TSF_fin."]))
+    TSF_Forth_setTSF("calender:",
+        "\t".join(["testorargvs:","TSF_argvs:","#TSF_cloneargvs","TSF_argvs:","#TSF_lenthe","[0]Z1~0","#TSF_calcDC","#TSF_peekthe","#TSF_carbonthe","#TSF_calender","1","#TSF_echoN"]))
+    TSF_Forth_setTSF("calendertest:",
+        "\t".join(["@000y@0m@0dm@wdec@0h@0n@0s"]))
+    TSF_Forth_setTSF("testorargvs:",
+        "\t".join(["TSF_argvs:","calendertest:"]))
     TSF_sample_run("TSF_sample_calender")
 
 def TSF_sample_help():    #TSF_doc:TSFコマンド一覧表示サンプルプログラム。
