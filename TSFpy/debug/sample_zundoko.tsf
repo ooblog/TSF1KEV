@@ -1,7 +1,7 @@
 TSF_Tab-Separated-Forth:
 	UTF-8	#TSF_encoding	N-ZunDoko:	#TSF_this	0	#TSF_fin.
 N-ZunDoko:
-	Zcount:	0	#TSF_peekthe	#TSF_swapBAthat	m1	#TSF_peekthat	m[0]	#TSF_calcDC	#TSF_peekthat	Zcount:	0	#TSF_pokethe	Zreset:	#TSF_this
+	TSF_argvs:	#TSF_cloneargvs	TSF_argvs:	#TSF_lenthe	[0]Z[Zcount:0]~[TSF_argvs:0]	#TSF_calcDC	Zcount:	0	#TSF_pokethe	Zreset:	#TSF_this
 Zreset:
 	0	Zcount:	1	#TSF_pokethe	ZDdice:	#TSF_this
 ZDdice:

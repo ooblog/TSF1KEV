@@ -76,16 +76,17 @@ def TSF_sample_about():    #TSF_doc:TSFの概要サンプルプログラム。
     TSF_sample_run("TSF_sample_about")
 
 def TSF_sample_Helloworld():    #TSF_doc:Helloworldサンプル(「Hello world」を表示)。
-#    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["Hello world","1","#TSF_echoN","0","#TSF_fin."]))
-    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["Hello world","1","#TSF_echoN"]))
+    TSF_Forth_setTSF("TSF_Tab-Separated-Forth:",
+        "\t".join(["Hello world","1","#TSF_echoN"]),
+        TSF_style="T")
     TSF_sample_run("TSF_sample_Helloworld")
 
-def TSF_sample_Quine():    #TSF_doc:Quineサンプル(自身のソースコードを表示)。
+def TSF_sample_Quine():    #TSF_doc:Quineサンプル(自身のTSFソースコードを表示)。
     TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","#TSF_popNthis","#TSF_viewthey","0","#TSF_fin."]))
     TSF_sample_run("TSF_sample_Quine")
 
 def TSF_sample_99beer():    #TSF_doc:99Beerサンプル(「99 Bottles of Beer」を表示)。
-    TSF_Forth_setTSF("TSF_Tab-Separated-Forth:",
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),
         "\t".join(["UTF-8","#TSF_encoding","N-BottlesofBeer:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("N-BottlesofBeer:",
         "\t".join(["TSF_argvs:","#TSF_cloneargvs","TSF_argvs:","#TSF_lenthe","[0]Z[onthewallint:0]~[TSF_argvs:0]","#TSF_calcDC","onthewallint:","0","#TSF_pokethe","onthewallint:","#TSF_that","#TSF_carbonthat","#TSF_carbonthat","drinkbottles:","#TSF_this"]))
@@ -100,7 +101,7 @@ def TSF_sample_99beer():    #TSF_doc:99Beerサンプル(「99 Bottles of Beer」
     TSF_Forth_setTSF("onthewallstr:",
         "\t".join(["{buybottles}","{drink}","{drinked}"]))
     TSF_Forth_setTSF("onthewallint:",
-        "\t".join(["99"]))
+        "\t".join(["99"]),TSF_style="T")
     TSF_Forth_setTSF("bottlescall:",
         "\t".join(["nomorebottles:","1bottle:","2bottles:","3ormorebottles:"]))
     TSF_Forth_setTSF("3ormorebottles:",
@@ -131,17 +132,26 @@ def TSF_sample_FizzBuzz():    #TSF_doc:TSF_about.FizzBuzzサンプル(3の倍数
     TSF_sample_run("TSF_sample_FizzBuzz")
 
 def TSF_sample_ZunDoko():    #TSF_doc:TSF_about.ズンドコサンプル(ZunZunZunZunDokoの時VeronChoを表示)。
-    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","N-ZunDoko:","#TSF_this","0","#TSF_fin."]))
-    TSF_Forth_setTSF("N-ZunDoko:","\t".join(["Zcount:","0","#TSF_peekthe","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
-        "Zcount:","0","#TSF_pokethe","Zreset:","#TSF_this"]))
-    TSF_Forth_setTSF("Zreset:","\t".join(["0","Zcount:","1","#TSF_pokethe","ZDdice:","#TSF_this"]))
-    TSF_Forth_setTSF("ZDdice:","\t".join(["ZDjump:","#TSF_shufflethe","ZDjump:","#TSF_carbonthe","#TSF_this"]))
-    TSF_Forth_setTSF("ZDjump:","\t".join(["Zun:","Doko:"]))
-    TSF_Forth_setTSF("Zun:","\t".join(["Zun","1","#TSF_echoN","[Zcount:1]+1","#TSF_calcDC","Zcount:","1","#TSF_pokethe","ZDdice:","#TSF_this"]))
-    TSF_Forth_setTSF("Doko:","\t".join(["Doko","1","#TSF_echoN","VCjump:","[Zcount:0]-[Zcount:1]Z1~0","#TSF_calcDC","#TSF_peekthe","#TSF_this"]))
-    TSF_Forth_setTSF("VCjump:","\t".join(["Zreset:","VeronCho:"]))
-    TSF_Forth_setTSF("VeronCho:","\t".join(["VeronCho","1","#TSF_echoN"]))
-    TSF_Forth_setTSF("Zcount:","\t".join(["4","0"]))
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),
+        "\t".join(["UTF-8","#TSF_encoding","N-ZunDoko:","#TSF_this","0","#TSF_fin."]))
+    TSF_Forth_setTSF("N-ZunDoko:",
+        "\t".join(["TSF_argvs:","#TSF_cloneargvs","TSF_argvs:","#TSF_lenthe","[0]Z[Zcount:0]~[TSF_argvs:0]","#TSF_calcDC","Zcount:","0","#TSF_pokethe","Zreset:","#TSF_this"]))
+    TSF_Forth_setTSF("Zreset:",
+        "\t".join(["0","Zcount:","1","#TSF_pokethe","ZDdice:","#TSF_this"]))
+    TSF_Forth_setTSF("ZDdice:",
+        "\t".join(["ZDjump:","#TSF_shufflethe","ZDjump:","#TSF_carbonthe","#TSF_this"]))
+    TSF_Forth_setTSF("ZDjump:",
+        "\t".join(["Zun:","Doko:"]))
+    TSF_Forth_setTSF("Zun:",
+        "\t".join(["Zun","1","#TSF_echoN","[Zcount:1]+1","#TSF_calcDC","Zcount:","1","#TSF_pokethe","ZDdice:","#TSF_this"]))
+    TSF_Forth_setTSF("Doko:",
+        "\t".join(["Doko","1","#TSF_echoN","VCjump:","[Zcount:0]-[Zcount:1]Z1~0","#TSF_calcDC","#TSF_peekthe","#TSF_this"]))
+    TSF_Forth_setTSF("VCjump:",
+        "\t".join(["Zreset:","VeronCho:"]))
+    TSF_Forth_setTSF("VeronCho:",
+        "\t".join(["VeronCho","1","#TSF_echoN"]))
+    TSF_Forth_setTSF("Zcount:",
+        "\t".join(["4","0"]))
     TSF_sample_run("TSF_sample_ZunDoko")
 
 def TSF_sample_Fibonacci(TSF_argvs):    #TSF_doc:TSF_about.フィボナッチ数列サンプル(「(4<<n*(3+n))//((4<<2*n)-(2<<n)-1)&((2<<n)-1)」を表示)。
