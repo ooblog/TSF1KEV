@@ -1,21 +1,25 @@
 TSF_Tab-Separated-Forth:
 	UTF-8	#TSF_encoding	N-prime:	#TSF_this	0	#TSF_fin.
 N-prime:
-	Pcount:	0	#TSF_peekthe	#TSF_swapBAthat	m1	#TSF_peekthat	m[0]	#TSF_calcDC	#TSF_peekthat	Pcount:	0	#TSF_pokethe	primeskip:	#TSF_this
+	TSF_argvs:	#TSF_cloneargvs	TSF_argvs:	#TSF_lenthe	[0]Z[Pcount:0]~[TSF_argvs:0]	#TSF_calcDC	Pcount:	0	#TSF_pokethe	primeskip:	#TSF_this
 primeskip:
 	Pstep:	[Pcount:1]	#TSF_calcDC	#TSF_peekcyclethe	Pcount:	#TSF_carbonthe	[0]+[1]	#TSF_calcDC	Pcount:	2	#TSF_pokethe	[Pcount:1]+1	#TSF_calcDC	Pcount:	1	#TSF_pokethe	primewhile:	#TSF_this
 primewhile:
 	Pwhilejump:	[Pcount:0]-[Pcount:2]O0~1	#TSF_calcDC	#TSF_peekthe	#TSF_this
 Pwhilejump:
-	primeezchk:	primeecho:
-primeezchk:
-	Pchkjump:	Pcount:	#TSF_carbonthe	(2F[0]~[0])-2Z0~1	#TSF_calcDC	#TSF_peekthe	#TSF_this
-Pchkjump:
-	primeadd:	primestep:
+	prime2chk:	primeecho:
+prime2chk:
+	P2chkjump:	Pcount:	#TSF_carbonthe	2F[0]~[0])-2Z0~1	#TSF_calcDC	#TSF_peekthe	#TSF_this
+P2chkjump:
+	primeMchk:	primeskip:
+primeMchk:
+#	PNchkjump:	Pcount:	#TSF_carbonthe	(1+2F[0]~[0])-3z1~0	#TSF_calcDC	#TSF_peekthe	#TSF_this
+#	PMchkjump:	#TSF_lenthe	[Pcount:2]#kP2,3,5,7	#TSF_calcDC	#TSF_peeklimitthe	#TSF_this
+	primeadd:	#TSF_this
+PMchkjump:
+	primeadd:	primeskip:
 primeadd:
-	Ppool:	Pcount:	#TSF_carbonthe	1	#TSF_addNthe	primestep:	#TSF_this
-primestep:
-	Pcount:	#TSF_carbonthe	1	primeskip:	#TSF_this
+	Ppool:	Pcount:	#TSF_carbonthe	1	#TSF_addNthe	primeskip:	#TSF_this
 primeecho:
 	[Pcount:0]-1U3~(6-[Pcount:0])/2	#TSF_calcDC	Ppool:	#TSF_popNthe	Ppool:	#TSF_echothe
 Pcount:

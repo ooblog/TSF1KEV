@@ -264,11 +264,12 @@ def TSF_calc_function(TSF_calcQ):    #TSF_doc:分数電卓の和集合積集合�
         TSF_calcQ='\t'.join([TSF_calcQ[:TSF_calcOfind],TSF_calcQ[TSF_calcOfind+1:]])
         for TSF_calc_NOZU in TSF_calc_NOZUin:
             TSF_calcQ=TSF_calcQ.replace(TSF_calc_NOZU,'')
+        TSF_calc_NOZU=TSF_calc_NOZUin[-1]
         TSF_calcSeq,TSF_calcLim=TSF_calcQ.split('\t')
         if not '~' in TSF_calcLim:
-            if TSF_calc_NOZUin in "MP":
+            if TSF_calc_NOZU in "MP":
                 TSF_calcLim="~".join(["1",TSF_calcLim])
-            elif TSF_calc_NOZUin in "$":
+            elif TSF_calc_NOZU in "$":
                 TSF_calcLim=TSF_calcLim
             else:
                 TSF_calcLim="~".join([TSF_calcLim,"0"])
@@ -276,13 +277,13 @@ def TSF_calc_function(TSF_calcQ):    #TSF_doc:分数電卓の和集合積集合�
             TSF_LimFirst,TSF_LimRest=TSF_calcLim.split('~')[0],TSF_calcLim.split('~')[-1]
         else:
             TSF_LimFirst,TSF_LimRest=TSF_calcLim,TSF_calcLim
-        TSF_calcQ=TSF_calc_NOZUs[TSF_calc_NOZUin[-1]](TSF_calcSeq,TSF_LimFirst,TSF_LimRest)
+        TSF_calcQ=TSF_calc_NOZUs[TSF_calc_NOZU](TSF_calcSeq,TSF_LimFirst,TSF_LimRest)
     TSF_calcA=TSF_calc_addition(TSF_calcQ)
     return TSF_calcA
     
 def TSF_calc_addition(TSF_calcQ):    #TSF_doc:分数電卓の足し算引き算・消費税計算等。
     TSF_calcLN,TSF_calcLD=decimal.Decimal(0),decimal.Decimal(1)
-    TSF_calcQ=TSF_calcQ.replace('+','\t+').replace('-','\t-')
+    TSF_calcQ=TSF_calcQ.replace('+','\t+').replace('-','\t-').replace('~','').replace(',','')
     TSF_calcQsplits=TSF_calcQ.strip('\t').split('\t')
     for TSF_calcQmulti in TSF_calcQsplits:
         TSF_calcO=TSF_calcQmulti[0] if len(TSF_calcQmulti)>0 else '+'

@@ -155,7 +155,7 @@ def TSF_sample_ZunDoko():    #TSF_doc:TSF_about.ズンドコサンプル(ZunZunZ
     TSF_sample_run("TSF_sample_ZunDoko")
 
 def TSF_sample_Fibonacci(TSF_argvs):    #TSF_doc:TSF_about.フィボナッチ数列サンプル(「(4<<n*(3+n))//((4<<2*n)-(2<<n)-1)&((2<<n)-1)」を表示)。
-    TSF_Forth_setTSF("TSF_Tab-Separated-Forth:",
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),
         "\t".join(["UTF-8","#TSF_encoding","200","#TSF_calcPR","N-Fibonacci:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("N-Fibonacci:",
         "\t".join(["TSF_argvs:","#TSF_cloneargvs","TSF_argvs:","#TSF_lenthe","[0]Z[Fibcount:0]~[TSF_argvs:0]","#TSF_calcDC","Fibcount:","0","#TSF_pokethe","Fibonacci:","#TSF_this"]))
@@ -168,21 +168,34 @@ def TSF_sample_Fibonacci(TSF_argvs):    #TSF_doc:TSF_about.フィボナッチ数
     TSF_sample_run("TSF_sample_Fibonacci")
 
 def TSF_sample_Prime(TSF_argvs):    #TSF_doc:TSF_about.素数列挙サンプル(約数が1とその数自身な数値を表示)。
-    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","N-prime:","#TSF_this","0","#TSF_fin."]))
-    TSF_Forth_setTSF("N-prime:","\t".join(["Pcount:","0","#TSF_peekthe","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
-        "Pcount:","0","#TSF_pokethe","primeskip:","#TSF_this"]))
-    TSF_Forth_setTSF("primeskip:","\t".join(["Pstep:","[Pcount:1]","#TSF_calcDC","#TSF_peekcyclethe","Pcount:","#TSF_carbonthe","[0]+[1]","#TSF_calcDC","Pcount:","2","#TSF_pokethe",
-        "[Pcount:1]+1","#TSF_calcDC","Pcount:","1","#TSF_pokethe","primewhile:","#TSF_this"]))
-    TSF_Forth_setTSF("primewhile:","\t".join(["Pwhilejump:","[Pcount:0]-[Pcount:2]O0~1","#TSF_calcDC","#TSF_peekthe","#TSF_this"]))
-    TSF_Forth_setTSF("Pwhilejump:","\t".join(["primeezchk:","primeecho:"]))
-    TSF_Forth_setTSF("primeezchk:","\t".join(["Pchkjump:","Pcount:","#TSF_carbonthe","(2F([0]-1)~[0])-1Z0~1","#TSF_calcDC","#TSF_peekthe","#TSF_this"]))
-    TSF_Forth_setTSF("Pchkjump:","\t".join(["primeadd:","primestep:"]))
-    TSF_Forth_setTSF("primeadd:","\t".join(["Ppool:","Pcount:","#TSF_carbonthe","1","#TSF_addNthe","primestep:","#TSF_this"]))
-    TSF_Forth_setTSF("primestep:","\t".join(["Pcount:","#TSF_carbonthe","1","primeskip:","#TSF_this"]))
-    TSF_Forth_setTSF("primeecho:","\t".join(["[Pcount:0]-1U3~(6-[Pcount:0])/2","#TSF_calcDC","Ppool:","#TSF_popNthe","Ppool:","#TSF_echothe"]))
-    TSF_Forth_setTSF("Pcount:","\t".join(["100","0","1"]))
-    TSF_Forth_setTSF("Ppool:","\t".join(["2","3","5"]))
-    TSF_Forth_setTSF("Pstep:","\t".join(["6","4","2","4","2","4","6","2"]))
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),
+        "\t".join(["UTF-8","#TSF_encoding","N-prime:","#TSF_this","0","#TSF_fin."]))
+    TSF_Forth_setTSF("N-prime:",
+        "\t".join(["TSF_argvs:","#TSF_cloneargvs","TSF_argvs:","#TSF_lenthe","[0]Z[Pcount:0]~[TSF_argvs:0]","#TSF_calcDC","Pcount:","0","#TSF_pokethe","primeskip:","#TSF_this"]))
+    TSF_Forth_setTSF("primeskip:",
+        "\t".join(["Pstep:","[Pcount:1]","#TSF_calcDC","#TSF_peekcyclethe","Pcount:","#TSF_carbonthe","[0]+[1]","#TSF_calcDC","Pcount:","2","#TSF_pokethe","[Pcount:1]+1","#TSF_calcDC","Pcount:","1","#TSF_pokethe","primewhile:","#TSF_this"]))
+    TSF_Forth_setTSF("primewhile:",
+        "\t".join(["Pwhilejump:","[Pcount:0]-[Pcount:2]O0~1","#TSF_calcDC","#TSF_peekthe","#TSF_this"]))
+    TSF_Forth_setTSF("Pwhilejump:",
+        "\t".join(["prime2chk:","primeecho:"]))
+    TSF_Forth_setTSF("prime2chk:",
+        "\t".join(["P2chkjump:","Pcount:","#TSF_carbonthe","2F[0]~[0])-2Z0~1","#TSF_calcDC","#TSF_peekthe","#TSF_this"]))
+    TSF_Forth_setTSF("P2chkjump:",
+        "\t".join(["primeMchk:","primeskip:"]))
+    TSF_Forth_setTSF("primeMchk:",
+        "\t".join(["primeadd:","#TSF_this"]))
+    TSF_Forth_setTSF("PMchkjump:",
+        "\t".join(["primeadd:","primeskip:"]))
+    TSF_Forth_setTSF("primeadd:",
+        "\t".join(["Ppool:","Pcount:","#TSF_carbonthe","1","#TSF_addNthe","primeskip:","#TSF_this"]))
+    TSF_Forth_setTSF("primeecho:",
+        "\t".join(["[Pcount:0]-1U3~(6-[Pcount:0])/2","#TSF_calcDC","Ppool:","#TSF_popNthe","Ppool:","#TSF_echothe"]))
+    TSF_Forth_setTSF("Pcount:",
+        "\t".join(["100","0","1"]))
+    TSF_Forth_setTSF("Ppool:",
+        "\t".join(["2","3","5"]))
+    TSF_Forth_setTSF("Pstep:",
+        "\t".join(["6","4","2","4","2","4","6","2"]))
     TSF_sample_run("TSF_sample_Prime")
 
 def TSF_sample_calcKN(TSF_argvs):    #TSF_doc:単位表示電卓サンプルプログラム。
