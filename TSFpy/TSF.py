@@ -86,7 +86,7 @@ def TSF_sample_Quine():    #TSF_doc:Quineサンプル(自身のTSFソースコ�
     TSF_sample_run("TSF_sample_Quine")
 
 def TSF_sample_99beer():    #TSF_doc:99Beerサンプル(「99 Bottles of Beer」を表示)。
-    TSF_Forth_setTSF(TSF_Forth_1ststack(),
+    TSF_Forth_setTSF("TSF_Tab-Separated-Forth:",
         "\t".join(["UTF-8","#TSF_encoding","N-BottlesofBeer:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("N-BottlesofBeer:",
         "\t".join(["TSF_argvs:","#TSF_cloneargvs","TSF_argvs:","#TSF_lenthe","[0]Z[onthewallint:0]~[TSF_argvs:0]","#TSF_calcDC","onthewallint:","0","#TSF_pokethe","onthewallint:","#TSF_that","#TSF_carbonthat","#TSF_carbonthat","drinkbottles:","#TSF_this"]))
@@ -119,7 +119,7 @@ def TSF_sample_99beer():    #TSF_doc:99Beerサンプル(「99 Bottles of Beer」
     TSF_sample_run("TSF_sample_99beer")
 
 def TSF_sample_FizzBuzz():    #TSF_doc:TSF_about.FizzBuzzサンプル(3の倍数の時Fizz5の倍数の時Buzzを表示)。
-    TSF_Forth_setTSF(TSF_Forth_1ststack(),
+    TSF_Forth_setTSF("TSF_Tab-Separated-Forth:",
         "\t".join(["UTF-8","#TSF_encoding","N-FizzBuzz:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("N-FizzBuzz:",
         "\t".join(["TSF_argvs:","#TSF_cloneargvs","TSF_argvs:","#TSF_lenthe","[0]Z[FZcount:4]~[TSF_argvs:0]","#TSF_calcDC","FZcount:","4","#TSF_pokethe","FizzBuzz:","#TSF_this"]))
@@ -132,7 +132,7 @@ def TSF_sample_FizzBuzz():    #TSF_doc:TSF_about.FizzBuzzサンプル(3の倍数
     TSF_sample_run("TSF_sample_FizzBuzz")
 
 def TSF_sample_ZunDoko():    #TSF_doc:TSF_about.ズンドコサンプル(ZunZunZunZunDokoの時VeronChoを表示)。
-    TSF_Forth_setTSF(TSF_Forth_1ststack(),
+    TSF_Forth_setTSF("TSF_Tab-Separated-Forth:",
         "\t".join(["UTF-8","#TSF_encoding","N-ZunDoko:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("N-ZunDoko:",
         "\t".join(["TSF_argvs:","#TSF_cloneargvs","TSF_argvs:","#TSF_lenthe","[0]Z[Zcount:0]~[TSF_argvs:0]","#TSF_calcDC","Zcount:","0","#TSF_pokethe","Zreset:","#TSF_this"]))
@@ -155,7 +155,7 @@ def TSF_sample_ZunDoko():    #TSF_doc:TSF_about.ズンドコサンプル(ZunZunZ
     TSF_sample_run("TSF_sample_ZunDoko")
 
 def TSF_sample_Fibonacci(TSF_argvs):    #TSF_doc:TSF_about.フィボナッチ数列サンプル(「(4<<n*(3+n))//((4<<2*n)-(2<<n)-1)&((2<<n)-1)」を表示)。
-    TSF_Forth_setTSF(TSF_Forth_1ststack(),
+    TSF_Forth_setTSF("TSF_Tab-Separated-Forth:",
         "\t".join(["UTF-8","#TSF_encoding","200","#TSF_calcPR","N-Fibonacci:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("N-Fibonacci:",
         "\t".join(["TSF_argvs:","#TSF_cloneargvs","TSF_argvs:","#TSF_lenthe","[0]Z[Fibcount:0]~[TSF_argvs:0]","#TSF_calcDC","Fibcount:","0","#TSF_pokethe","Fibonacci:","#TSF_this"]))
@@ -168,7 +168,7 @@ def TSF_sample_Fibonacci(TSF_argvs):    #TSF_doc:TSF_about.フィボナッチ数
     TSF_sample_run("TSF_sample_Fibonacci")
 
 def TSF_sample_Prime(TSF_argvs):    #TSF_doc:TSF_about.素数列挙サンプル(約数が1とその数自身な数値を表示)。
-    TSF_Forth_setTSF(TSF_Forth_1ststack(),
+    TSF_Forth_setTSF("TSF_Tab-Separated-Forth:",
         "\t".join(["UTF-8","#TSF_encoding","N-prime:","#TSF_this","0","#TSF_fin."]))
     TSF_Forth_setTSF("N-prime:",
         "\t".join(["TSF_argvs:","#TSF_cloneargvs","TSF_argvs:","#TSF_lenthe","[0]Z[Pcount:0]~[TSF_argvs:0]","#TSF_calcDC","Pcount:","0","#TSF_pokethe","primeskip:","#TSF_this"]))
@@ -237,28 +237,32 @@ def TSF_sample_calender(TSF_argvs):    #TSF_doc:日時表示サンプルプロ�
     TSF_sample_run("TSF_sample_calender")
 
 def TSF_sample_help():    #TSF_doc:TSFコマンド一覧表示サンプルプログラム。
-    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","replace:","#TSF_this","help:","#TSF_echothe","0","#TSF_fin."]))
+    TSF_Forth_setTSF("TSF_Tab-Separated-Forth:",
+        "\t".join(["UTF-8","#TSF_encoding","replace:","#TSF_this","help:","#TSF_echothe","0","#TSF_fin."]))
     TSF_Forth_setTSF("help:",
-        'usage: ./TSF.py [command|file.tsf] [argv] ...\n'
-        'commands:\n'
-        '  --help        this commands view\n'
-        '  --about       about TSF UTF-8 text (Japanese) view" \n'
-        '  --python      TSF.tsf to Python.py view or save" \n'
-        '  --helloworld  "Hello world  1  #TSF_echoN" sample\n'
-        '  --quine       TSF_Forth_viewthey() Quine (self source) sample\n'
-        '  --99beer      99 Bottles of Beer sample\n'
-        '  --fizzbuzz    ([0]#3Z1~0)+([0]#5Z2~0) Fizz Buzz Fizz&Buzz sample\n'
-        '  --zundoko     Zun Zun Zun Zun Doko VeronCho sample\n'
-        '  --fibonacci   Fibonacci number 0,1,1,2,3,5,8,13,21,55... sample\n'
-        '  --prime       prime numbers 2,3,5,7,11,13,17,19,23,29... sample\n'
-        '  --calcFX      fractions calculator "1/3-m1|2"-> p5|6 sample\n'
-        '  --calcDC      fractions calculator "1/3-m1|2"-> 0.8333... sample\n'
-        '  --calcKN      fractions calculator "1/3-m1|2"-> 6 bunno 5 sample\n'
-        '  --calender    "@000y@0m@0dm@wdec@0h@0n@0s"-> TSF_time_getdaytime() sample\n'
-        ,TSF_style="N")
-    TSF_Forth_setTSF("replace:","\t".join(["replaceN:","#TSF_carbonthe","#TSF_calender","replaceN:","0","#TSF_pokethe","help:","replaceO:","replaceN:","#TSF_replacestacks"]))
-    TSF_Forth_setTSF("replaceO:","\t".join(["TSF_time_getdaytime()"]))
-    TSF_Forth_setTSF("replaceN:","\t".join(["@000y@0m@0dm@wdec@0h@0n@0s"]))
+        "\t".join(["usage: ./TSF.py [command|file.tsf] [argv] ...",
+        "commands:",
+        "  --help        this commands view",
+        "  --about       about TSF UTF-8 text (Japanese) view\" ",
+        "  --python      TSF.tsf to Python.py view or save\" ",
+        "  --helloworld  \"Hello world  1  #TSF_echoN\" sample",
+        "  --quine       TSF_Forth_viewthey() Quine (self source) sample",
+        "  --99beer      99 Bottles of Beer sample",
+        "  --fizzbuzz    ([0]#3Z1~0)+([0]#5Z2~0) Fizz Buzz Fizz&Buzz sample",
+        "  --zundoko     Zun Zun Zun Zun Doko VeronCho sample",
+        "  --fibonacci   Fibonacci number 0,1,1,2,3,5,8,13,21,55... sample",
+        "  --prime       prime numbers 2,3,5,7,11,13,17,19,23,29... sample",
+        "  --calcFX      fractions calculator \"1/3-m1|2\"-> p5|6 sample",
+        "  --calcDC      fractions calculator \"1/3-m1|2\"-> 0.8333... sample",
+        "  --calcKN      fractions calculator \"1/3-m1|2\"-> 6 bunno 5 sample",
+        "  --calender    \"@000y@0m@0dm@wdec@0h@0n@0s\"-> TSF_time_getdaytime() sample"]),
+        TSF_style="N")
+    TSF_Forth_setTSF("replace:",
+        "\t".join(["replaceN:","#TSF_carbonthe","#TSF_calender","replaceN:","0","#TSF_pokethe","help:","replaceO:","replaceN:","#TSF_replacestacks"]))
+    TSF_Forth_setTSF("replaceO:",
+        "\t".join(["TSF_time_getdaytime()"]))
+    TSF_Forth_setTSF("replaceN:",
+        "\t".join(["@000y@0m@0dm@wdec@0h@0n@0s"]))
     TSF_sample_run("TSF_sample_help")
 
 TSF_argvs=TSF_io_argvs()

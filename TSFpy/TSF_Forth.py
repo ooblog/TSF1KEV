@@ -230,7 +230,7 @@ def TSF_Forth_samplingpy(TSF_the,TSF_view_io=True,TSF_view_log=""):    #TSF_doc:
         elif TSF_style == "T":
             TSF_view_logline='TSF_Forth_setTSF("{0}",\n    "\\t".join(["{1}"]),\n    TSF_style="T")\n'.format(TSF_the,'","'.join(TSF_stackV))
         else:  # TSF_style == "N":
-            TSF_view_logline='TSF_Forth_setTSF("{0}",\n    "\\t".join(["{1}"]),\n    TSF_style="N")\n'.format(TSF_the,'",\n"'.join(TSF_stackV))
+            TSF_view_logline='TSF_Forth_setTSF("{0}",\n    "\\t".join(["{1}"]),\n    TSF_style="N")\n'.format(TSF_the,'",\n    "'.join(TSF_stackV))
         if TSF_view_io == True:
             TSF_view_log=TSF_io_printlog(TSF_view_logline,TSF_log=TSF_view_log)
         else:

@@ -5,13 +5,18 @@ help:
 	commands:
 	  --help        this commands view
 	  --about       about TSF UTF-8 text (Japanese) view" 
-	  --helloworld  "Hello world  1  #TSF_echoN" view
-	  --quine       TSF_Forth_viewthey() Quine (self source) view
-	  --fizzbuzz    ([0]#3Z1~0)+([0]#5Z2~0) Fizz Buzz Fizz&Buzz view
-	  --calcFX      fractions calculator "1/3-m1|2"-> p5|6 view
-	  --calcDC      fractions calculator "1/3-m1|2"-> 0.8333... view
-	  --calcKN      fractions calculator "1/3-m1|2"-> 6 bunno 5 view
-	  --calender    "@000y@0m@0dm@wdec@0h@0n@0s"-> TSF_time_getdaytime()
+	  --python      TSF.tsf to Python.py view or save" 
+	  --helloworld  "Hello world  1  #TSF_echoN" sample
+	  --quine       TSF_Forth_viewthey() Quine (self source) sample
+	  --99beer      99 Bottles of Beer sample
+	  --fizzbuzz    ([0]#3Z1~0)+([0]#5Z2~0) Fizz Buzz Fizz&Buzz sample
+	  --zundoko     Zun Zun Zun Zun Doko VeronCho sample
+	  --fibonacci   Fibonacci number 0,1,1,2,3,5,8,13,21,55... sample
+	  --prime       prime numbers 2,3,5,7,11,13,17,19,23,29... sample
+	  --calcFX      fractions calculator "1/3-m1|2"-> p5|6 sample
+	  --calcDC      fractions calculator "1/3-m1|2"-> 0.8333... sample
+	  --calcKN      fractions calculator "1/3-m1|2"-> 6 bunno 5 sample
+	  --calender    "@000y@0m@0dm@wdec@0h@0n@0s"-> TSF_time_getdaytime() sample
 replace:
 	replaceN:	#TSF_carbonthe	#TSF_calender	replaceN:	0	#TSF_pokethe	help:	replaceO:	replaceN:	#TSF_replacestacks
 replaceO:

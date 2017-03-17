@@ -44,22 +44,21 @@ TSF_Forth_setTSF("bottlescall:",
     TSF_style="T")
 TSF_Forth_setTSF("3ormorebottles:",
     "\t".join(["{drink} bottles of beer on the wall, {drink} bottles of beer.",
-"Take one down and pass it around, {drinked} bottles of beer on the wall."]),
+    "Take one down and pass it around, {drinked} bottles of beer on the wall."]),
     TSF_style="N")
 TSF_Forth_setTSF("2bottles:",
     "\t".join(["{drink} bottles of beer on the wall, {drink} bottles of beer.",
-"Take one down and pass it around, 1 bottle of beer on the wall."]),
+    "Take one down and pass it around, 1 bottle of beer on the wall."]),
     TSF_style="N")
 TSF_Forth_setTSF("1bottle:",
     "\t".join(["{drink} bottle of beer on the wall, {drink} bottle of beer.",
-"Take one down and pass it around, no more bottles of beer on the wall."]),
+    "Take one down and pass it around, no more bottles of beer on the wall."]),
     TSF_style="N")
 TSF_Forth_setTSF("nomorebottles:",
     "\t".join(["No more bottles of beer on the wall, no more bottles of beer.",
-"Go to the store and buy some more, {buybottles} bottles of beer on the wall."]),
+    "Go to the store and buy some more, {buybottles} bottles of beer on the wall."]),
     TSF_style="N")
 
 TSF_Forth_addfin(TSF_io_argvs())
 TSF_Forth_argvsleftcut(TSF_io_argvs(),1)
 TSF_Forth_run()
-
