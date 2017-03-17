@@ -572,7 +572,7 @@ if __name__=="__main__":
     print("")
     TSF_argvs=TSF_io_argvs()
     print("--- {0} ---".format(TSF_argvs[0]))
-    TSF_debug_savefilename="debug/debug_calc.txt"
+    TSF_debug_savefilename="debug/debug_calc.log"
     TSF_debug_log=TSF_calc_debug()
     TSF_io_savetext(TSF_debug_savefilename,TSF_debug_log)
     print("")

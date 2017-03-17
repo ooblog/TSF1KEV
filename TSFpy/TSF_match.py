@@ -10,8 +10,8 @@ import unicodedata
 from TSF_Forth import *
 
 def TSF_match_Initwords(TSF_words):    #TSF_doc:スタック並び替え関連のワードを追加する(TSFAPI)。
-    TSF_words["#TSF_joinN"]=TSF_match_TSF_joinN; TSF_words["#N個連結"]=TSF_match_TSF_joinN
-    TSF_words["#TSF_betweenN"]=TSF_match_TSF_betweenN; TSF_words["#挟んでN個連結"]=TSF_match_TSF_betweenN
+    TSF_words["#TSF_joinN"]=TSF_match_joinN; TSF_words["#N個連結"]=TSF_match_joinN
+    TSF_words["#TSF_betweenN"]=TSF_match_betweenN; TSF_words["#挟んでN個連結"]=TSF_match_betweenN
     TSF_words["#TSF_split"]=TSF_match_split; TSF_words["#文字で分割"]=TSF_match_split
     TSF_words["#TSF_chars"]=TSF_match_chars; TSF_words["#一文字ずつに分離"]=TSF_match_chars
     TSF_words["#TSF_charslen"]=TSF_match_charslen; TSF_words["#文字数取得"]=TSF_match_charslen
@@ -24,7 +24,7 @@ def TSF_match_Initwords(TSF_words):    #TSF_doc:スタック並び替え関連�
     TSF_words["#TSF_tagstack"]=TSF_match_tagstack; TSF_words["#タグ名スタックの該当箇所で置換"]=TSF_match_tagstack
     return TSF_words
 
-def TSF_match_TSF_joinN():   #TSF_doc:[stackN…stackB,stackA,count]スタックを連結する。count自身とcountの回数分スタック積み下ろし。
+def TSF_match_joinN():   #TSF_doc:[stackN…stackB,stackA,count]スタックを連結する。count自身とcountの回数分スタック積み下ろし。
     TSF_countlen=TSF_Forth_popintthe(TSF_Forth_stackthat())
     TSF_joinlist=[""]*TSF_countlen
     for TSF_count in range(TSF_countlen):
@@ -32,7 +32,7 @@ def TSF_match_TSF_joinN():   #TSF_doc:[stackN…stackB,stackA,count]スタック
     TSF_Forth_pushthat("".join(reversed(TSF_joinlist)))
     return None
 
-def TSF_match_TSF_betweenN():   #TSF_doc:[stackN…stackB,stackA,count,joint]スタックAとスタックBを交換する。接続子とcount自身およびcountの回数分スタック積み下ろし。
+def TSF_match_betweenN():   #TSF_doc:[stackN…stackB,stackA,count,joint]スタックAとスタックBを交換する。接続子とcount自身およびcountの回数分スタック積み下ろし。
     TSF_joint=TSF_Forth_stackthat()
     TSF_countlen=TSF_Forth_popintthe(TSF_Forth_stackthat())
     TSF_joinlist=[""]*TSF_countlen
@@ -105,8 +105,8 @@ def TSF_match_research(TSF_matcher,TSF_string):   #TSF_doc:正規表現で文字
         TSF_research=None
     return 1 if TSF_research else 0
 TSF_match_case=OrderedDict([
-    ('equal',(lambda TSF_matcher,TSF_string:1 if matcher == string else 0)),
-    ('in',(lambda TSF_matcher,TSF_string:1 if matcher in string else 0)),
+    ('equal',(lambda TSF_matcher,TSF_string:1 if TSF_matcher == TSF_string else 0)),
+    ('in',(lambda TSF_matcher,TSF_string:1 if TSF_matcher in TSF_string else 0)),
     ('research',(lambda TSF_matcher,TSF_string:TSF_match_research(TSF_matcher,TSF_string))),
     ('matcher',(lambda TSF_matcher,TSF_string:1 if difflib.SequenceMatcher(None,unicodedata.normalize('NFKC',TSF_matcher),unicodedata.normalize('NFKC',TSF_string)).ratio() >= TSF_matchgrade else 0)),
 ])
@@ -123,7 +123,7 @@ def TSF_match_countstacks():   #TSF_doc:[matcher,algo,stackO]Oスタックに該
 
 def TSF_match_casestacks():   #TSF_doc:[matcher,algo,stackO,stackN]Oスタックに該当するmatcherがあった場合、stackNのエイリアスを呼び出す。algoは文字列の比較方法。
     TSF_tsvN=TSF_Forth_popthat()
-    TSF_tsvO=TSF_Forth_popthat()
+    TSF_tsvO=TSF_Forth_popthat(); TSF_strsO=TSF_Forth_stackvalue(TSF_tsvO)
     TSF_algo=TSF_Forth_popthat()
     TSF_matcher=TSF_Forth_popthat()
     TSF_case=""
@@ -171,7 +171,7 @@ if __name__=="__main__":
     print("")
     TSF_argvs=TSF_io_argvs()
     print("--- {0} ---".format(TSF_argvs[0]))
-    TSF_debug_savefilename="debug/debug_match.txt"
+    TSF_debug_savefilename="debug/debug_match.log"
     TSF_debug_log=TSF_match_debug(TSF_argvs)
     TSF_io_savetext(TSF_debug_savefilename,TSF_debug_log)
     print("")

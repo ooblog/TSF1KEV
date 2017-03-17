@@ -1,2 +1,12 @@
 TSF_Tab-Separated-Forth:
-	UTF-8	#TSF_encoding	#TSF_popNthis	#TSF_viewthey	0	#TSF_fin.
+	UTF-8	#TSF_encoding	#TSF_popNthat	quine_ext:	#TSF_this	0	#TSF_fin.
+quine_ext:
+	#TSF_mainfile	#TSF_fileext	equal	quine_match:	quine_jump:	#TSF_casestacks	#TSF_this
+quine_match:
+	.tsf	.py
+quine_jump:
+	quine_tsf:	quine_python:
+quine_tsf:
+	#TSF_viewthey
+quine_python:
+	#TSF_viewpython

@@ -37,6 +37,7 @@ def TSF_Forth_Initwords(TSF_words):    #TSF_doc:ワードを初期化する(TSFA
     TSF_words["#TSF_remove"]=TSF_Forth_remove; TSF_words["#ファイルを削除する"]=TSF_Forth_remove
     TSF_words["#TSF_savetext"]=TSF_Forth_savetext; TSF_words["#テキストファイルに上書"]=TSF_Forth_savetext
     TSF_words["#TSF_writetext"]=TSF_Forth_writetext; TSF_words["#テキストファイルに追記"]=TSF_Forth_writetext
+    TSF_words["#TSF_viewpython"]=TSF_Forth_viewpython; TSF_words["#スタック一覧をpythonとして表示"]=TSF_Forth_viewpython
     return TSF_words
 
 TSF_exitcode="0"
@@ -237,29 +238,33 @@ def TSF_Forth_samplingpy(TSF_the,TSF_view_io=True,TSF_view_log=""):    #TSF_doc:
             TSF_view_log+=TSF_view_logline
     return TSF_view_log
 
-def TSF_Forth_writesamplepy(TSF_tsfpath=None,TSF_pyhonpath=None):   #TSF_doc:[filename,stack]スタック全体をpythonとみなしてpyファイルに追記する。2スタック積み下ろし。
+def TSF_Forth_writesamplepy(TSF_tsfpath=None,TSF_pyhonpath=None):   #TSF_doc:[filename,stack]スタック全体をpythonとみなして.pyに保存する(TSFAPI)。
     TSF_text=""
-    if os.path.isfile(TSF_tsfpath):
+    if os.path.isfile(TSF_tsfpath if TSF_tsfpath != None else ""):
         if len(TSF_Forth_loadtext(TSF_tsfpath,TSF_tsfpath)):
             TSF_Forth_merge(TSF_tsfpath,[],TSF_mergedel=True)
-            TSF_text+="#! /usr/bin/env python\n"
-            TSF_text+="# -*- coding: UTF-8 -*-\n"
-            TSF_text+="from __future__ import division,print_function,absolute_import,unicode_literals\n\n"
-            TSF_text+="import sys\nimport os\nos.chdir(sys.path[0])\nsys.path.append('{0}')\n".format(sys.path[0])
-            TSF_text+="from TSF_io import *\n"
-            TSF_text+="#from TSF_Forth import *\n"
-            for TSF_import in ["TSF_shuffle","TSF_match","TSF_calc","TSF_time"]:
-                TSF_text+="from {0} import *\n".format(TSF_import)
-            TSF_text+="\n"
-            TSF_text+="TSF_Forth_init(TSF_io_argvs(),[TSF_shuffle_Initwords,TSF_match_Initwords,TSF_calc_Initwords,TSF_time_Initwords])\n\n"
-            for TSF_thename in TSF_stacks.keys():
-                TSF_text=TSF_Forth_samplingpy(TSF_thename,False,TSF_text)
-            TSF_text+="\nTSF_Forth_addfin(TSF_io_argvs())\nTSF_Forth_argvsleftcut(TSF_io_argvs(),1)\nTSF_Forth_run()\n"
+    TSF_text+="#! /usr/bin/env python\n"
+    TSF_text+="# -*- coding: UTF-8 -*-\n"
+    TSF_text+="from __future__ import division,print_function,absolute_import,unicode_literals\n\n"
+    TSF_text+="import sys\nimport os\nos.chdir(sys.path[0])\nsys.path.append('{0}')\n".format(sys.path[0])
+    TSF_text+="from TSF_io import *\n"
+    TSF_text+="#from TSF_Forth import *\n"
+    TSF_importlist=["TSF_shuffle","TSF_match","TSF_uri","TSF_calc","TSF_time"]
+    for TSF_import in TSF_importlist:
+        TSF_text+="from {0} import *\n".format(TSF_import)
+    TSF_text+="\n"
+    TSF_text+="TSF_Forth_init(TSF_io_argvs(),[TSF_shuffle_Initwords,TSF_match_Initwords,TSF_uri_Initwords,TSF_calc_Initwords,TSF_time_Initwords])\n\n"
+    for TSF_thename in TSF_stacks.keys():
+        TSF_text=TSF_Forth_samplingpy(TSF_thename,False,TSF_text)
+    TSF_text+="\nTSF_Forth_addfin(TSF_io_argvs())\nTSF_Forth_argvsleftcut(TSF_io_argvs(),1)\nTSF_Forth_mainfile(TSF_io_argvs()[0])\nTSF_Forth_run()\n"
     if TSF_pyhonpath != None:
         TSF_io_savetext(TSF_pyhonpath,TSF_text=TSF_text)
     else:
         for TSF_textline in TSF_text.split('\n'):
             TSF_io_printlog(TSF_textline)
+
+def TSF_Forth_viewpython():   #TSF_doc:[filename,stack]スタック全体をpythonとみなして表示。0スタック積み下ろし。
+    TSF_Forth_writesamplepy()
     return None
 
 
@@ -277,11 +282,18 @@ def TSF_Forth_init(TSF_argvs=[],TSF_addcalls=[]):    #TSF_doc:TSF_stacks,TSF_sty
         TSF_words=TSF_Initcall(TSF_words)
 
 TSF_stackargvs=deque([])
+TSF_Forth_mainfilename=""
 def TSF_Forth_argvsleftcut(TSF_argvs=[],TSF_argvsleftlen=0):    #TSF_doc:argvから実行ファイル名をカットする。TSFインタプリタ実行時とPython化で異なるコマンドラインの引数を吸収する(TSFAPI)。
-    global TSF_stackargvs
+    global TSF_stackargvs,TSF_Forth_mainfilename
     TSF_stackargvs=deque(TSF_argvs)
     for leftcut in range(TSF_argvsleftlen):
         if len(TSF_stackargvs): TSF_stackargvs.popleft()
+
+def TSF_Forth_mainfile(TSF_Forth_mainfile=None):    #TSF_doc:実行メインファイル名を設定・取得(TSFAPI)。
+    global TSF_Forth_mainfilename
+    if TSF_Forth_mainfile != None:
+        TSF_Forth_mainfilename=TSF_Forth_mainfile
+    return TSF_Forth_mainfilename
 
 def TSF_Forth_run():    #TSF_doc:TSF_stacks,TSF_styles,TSF_callptrs,TSF_wordsなどをまとめて初期化する(TSFAPI)。
     global TSF_stacks,TSF_styles,TSF_callptrs,TSF_words,TSF_Initcalls,TSF_stackthat,TSF_stackthis,TSF_stackcount
@@ -499,7 +511,7 @@ if __name__=="__main__":
     print("")
     TSF_argvs=TSF_io_argvs()
     print("--- {0} ---".format(TSF_argvs[0]))
-    TSF_debug_savefilename="debug/debug_Forth.txt"
+    TSF_debug_savefilename="debug/debug_Forth.lg"
     TSF_debug_log=TSF_Forth_debug(TSF_argvs)
     TSF_io_savetext(TSF_debug_savefilename,TSF_debug_log)
     print("")

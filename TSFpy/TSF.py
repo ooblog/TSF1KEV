@@ -10,6 +10,7 @@ from TSF_io import *
 #from TSF_Forth import *
 from TSF_shuffle import *
 from TSF_match import *
+from TSF_uri import *
 from TSF_calc import *
 from TSF_time import *
 
@@ -89,6 +90,7 @@ def TSF_sample_Helloworld():    #TSF_doc:Helloworldサンプル(「Hello world�
     TSF_Forth_setTSF("TSF_Tab-Separated-Forth:",
         "\t".join(["Hello world","1","#TSF_echoN"]),
         TSF_style="T")
+    TSF_Forth_mainfile(".py")
     TSF_sample_run("TSF_sample_Helloworld")
 
 def TSF_sample_Quine():    #TSF_doc:Quineサンプル(自身のTSFソースコードを表示)。
@@ -276,13 +278,14 @@ def TSF_sample_help():    #TSF_doc:TSFコマンド一覧表示サンプルプロ
     TSF_sample_run("TSF_sample_help")
 
 TSF_argvs=TSF_io_argvs()
-TSF_Forth_init(TSF_argvs,[TSF_shuffle_Initwords,TSF_match_Initwords,TSF_calc_Initwords,TSF_time_Initwords])
+TSF_Forth_init(TSF_argvs,[TSF_shuffle_Initwords,TSF_match_Initwords,TSF_uri_Initwords,TSF_calc_Initwords,TSF_time_Initwords])
 TSF_mergefile=''
 if len(TSF_argvs) >= 2:
     TSF_mergefile=TSF_argvs[1]
 if os.path.isfile(TSF_mergefile):
     if len(TSF_Forth_loadtext(TSF_mergefile,TSF_mergefile)):
         TSF_Forth_merge(TSF_mergefile,[],TSF_mergedel=True)
+        TSF_Forth_mainfile(TSF_mergefile)
         TSF_sample_run()
 elif TSF_mergefile in ["--about"]:
     TSF_sample_about()
