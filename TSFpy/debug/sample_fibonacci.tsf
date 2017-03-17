@@ -1,10 +1,10 @@
 TSF_Tab-Separated-Forth:
 	UTF-8	#TSF_encoding	200	#TSF_calcPR	N-Fibonacci:	#TSF_this	0	#TSF_fin.
 N-Fibonacci:
-	Fibcount:	1	#TSF_peekthe	#TSF_swapBAthat	m1	#TSF_peekthat	m[0]	#TSF_calcDC	#TSF_peekthat	Fibcount:	1	#TSF_pokethe	Fibonacci:	#TSF_this
+	TSF_argvs:	#TSF_cloneargvs	TSF_argvs:	#TSF_lenthe	[0]Z[Fibcount:0]~[TSF_argvs:0]	#TSF_calcDC	Fibcount:	0	#TSF_pokethe	Fibonacci:	#TSF_this
 Fibonacci:
-	Fibcount:	0	#TSF_peekthe	[0]Z1~[0]	#TSF_calcDC	((2&(([0]+3)*[0]+2)^)/((2&(2*[0]+2)^)-(2&([0]+1)^)-1)\1)#(2&([0]+1)^)	#TSF_calcDC	1	#TSF_echoN	[Fibcount:0]+1	#TSF_calcDC	Fibcount:	0	#TSF_pokethe	Fibjump:	[Fibcount:0]-[Fibcount:1]+1O1~0	#TSF_calcDC	#TSF_peekthe	#TSF_this
+	[Fibcount:1]Z1~[Fibcount:1]	#TSF_calcDC	((2&(([0]+3)*[0]+2)^)/((2&(2*[0]+2)^)-(2&([0]+1)^)-1)\1)#(2&([0]+1)^)	#TSF_calcDC	1	#TSF_echoN	[Fibcount:1]+1	#TSF_calcDC	Fibcount:	1	#TSF_pokethe	Fibjump:	[Fibcount:0]-([Fibcount:1]+1)o0~1	#TSF_calcDC	#TSF_peekthe	#TSF_this
 Fibcount:
-	-1	20
+	20	-1
 Fibjump:
 	Fibonacci:	#exit

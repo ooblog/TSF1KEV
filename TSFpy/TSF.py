@@ -155,14 +155,16 @@ def TSF_sample_ZunDoko():    #TSF_doc:TSF_about.ズンドコサンプル(ZunZunZ
     TSF_sample_run("TSF_sample_ZunDoko")
 
 def TSF_sample_Fibonacci(TSF_argvs):    #TSF_doc:TSF_about.フィボナッチ数列サンプル(「(4<<n*(3+n))//((4<<2*n)-(2<<n)-1)&((2<<n)-1)」を表示)。
-    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","200","#TSF_calcPR","N-Fibonacci:","#TSF_this","0","#TSF_fin."]))
-    TSF_Forth_setTSF("N-Fibonacci:","\t".join(["Fibcount:","1","#TSF_peekthe","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
-        "Fibcount:","1","#TSF_pokethe","Fibonacci:","#TSF_this"]))
-    TSF_Forth_setTSF("Fibonacci:","\t".join(["Fibcount:","0","#TSF_peekthe","[0]Z1~[0]","#TSF_calcDC","((2&(([0]+3)*[0]+2)^)/((2&(2*[0]+2)^)-(2&([0]+1)^)-1)\\1)#(2&([0]+1)^)",
-        "#TSF_calcDC","1","#TSF_echoN","[Fibcount:0]+1","#TSF_calcDC","Fibcount:","0","#TSF_pokethe",
-        "Fibjump:","[Fibcount:0]-[Fibcount:1]+1O1~0","#TSF_calcDC","#TSF_peekthe","#TSF_this"]))
-    TSF_Forth_setTSF("Fibcount:","\t".join(["-1","20"]))
-    TSF_Forth_setTSF("Fibjump:","\t".join(["Fibonacci:","#exit"]))
+    TSF_Forth_setTSF("TSF_Tab-Separated-Forth:",
+        "\t".join(["UTF-8","#TSF_encoding","200","#TSF_calcPR","N-Fibonacci:","#TSF_this","0","#TSF_fin."]))
+    TSF_Forth_setTSF("N-Fibonacci:",
+        "\t".join(["TSF_argvs:","#TSF_cloneargvs","TSF_argvs:","#TSF_lenthe","[0]Z[Fibcount:0]~[TSF_argvs:0]","#TSF_calcDC","Fibcount:","0","#TSF_pokethe","Fibonacci:","#TSF_this"]))
+    TSF_Forth_setTSF("Fibonacci:",
+        "\t".join(["[Fibcount:1]Z1~[Fibcount:1]","#TSF_calcDC","((2&(([0]+3)*[0]+2)^)/((2&(2*[0]+2)^)-(2&([0]+1)^)-1)\\1)#(2&([0]+1)^)","#TSF_calcDC","1","#TSF_echoN","[Fibcount:1]+1","#TSF_calcDC","Fibcount:","1","#TSF_pokethe","Fibjump:","[Fibcount:0]-([Fibcount:1]+1)o0~1","#TSF_calcDC","#TSF_peekthe","#TSF_this"]))
+    TSF_Forth_setTSF("Fibcount:",
+        "\t".join(["20","-1"]))
+    TSF_Forth_setTSF("Fibjump:",
+        "\t".join(["Fibonacci:","#exit"]))
     TSF_sample_run("TSF_sample_Fibonacci")
 
 def TSF_sample_Prime(TSF_argvs):    #TSF_doc:TSF_about.素数列挙サンプル(約数が1とその数自身な数値を表示)。
