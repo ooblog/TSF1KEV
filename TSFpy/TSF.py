@@ -199,27 +199,30 @@ def TSF_sample_Prime(TSF_argvs):    #TSF_doc:TSF_about.素数列挙サンプル(
     TSF_sample_run("TSF_sample_Prime")
 
 def TSF_sample_calcKN(TSF_argvs):    #TSF_doc:単位表示電卓サンプルプログラム。
-    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","calcKN:","#TSF_this","0","#TSF_fin."]))
-    TSF_Forth_setTSF("calcKN:","\t".join([
-        "1/3-m1|2","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
-        "#TSF_calcKN","1","#TSF_echoN"
-    ]),TSF_style="T")
+    TSF_Forth_setTSF("TSF_Tab-Separated-Forth:",
+        "\t".join(["UTF-8","#TSF_encoding","calcKN:","#TSF_this","0","#TSF_fin."]))
+    TSF_Forth_setTSF("calcKN:",
+        "\t".join(["TSF_argvs:","#TSF_cloneargvs","TSF_argvs:","#TSF_lenthe","[0]Z[calcKNtest:0]~[TSF_argvs:0]","#TSF_calcKN","1","#TSF_echoN"]))
+    TSF_Forth_setTSF("calcKNtest:",
+        "\t".join(["1/3-m1|2"]))
     TSF_sample_run("TSF_sample_calcKN")
 
 def TSF_sample_calcDC(TSF_argvs):    #TSF_doc:小数表示電卓サンプルプログラム。
-    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","calcDC:","#TSF_this","0","#TSF_fin."]))
-    TSF_Forth_setTSF("calcDC:","\t".join([
-        "1/3-m1|2","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
-        "#TSF_calcDC","1","#TSF_echoN"
-    ]),TSF_style="T")
+    TSF_Forth_setTSF("TSF_Tab-Separated-Forth:",
+        "\t".join(["UTF-8","#TSF_encoding","calcDC:","#TSF_this","0","#TSF_fin."]))
+    TSF_Forth_setTSF("calcDC:",
+        "\t".join(["TSF_argvs:","#TSF_cloneargvs","TSF_argvs:","#TSF_lenthe","[0]Z[calcDCtest:0]~[TSF_argvs:0]","#TSF_calcDC","1","#TSF_echoN"]))
+    TSF_Forth_setTSF("calcDCtest:",
+        "\t".join(["1/3-m1|2"]))
     TSF_sample_run("TSF_sample_calcDC")
 
 def TSF_sample_calcFX(TSF_argvs):    #TSF_doc:分数表示電卓サンプルプログラム。
-    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","calcFX:","#TSF_this","0","#TSF_fin."]))
-    TSF_Forth_setTSF("calcFX:","\t".join([
-        "1/3-m1|2","#TSF_swapBAthat","m1","#TSF_peekthat","m[0]","#TSF_calcDC","#TSF_peekthat",
-        "#TSF_calcFX","1","#TSF_echoN"
-    ]),TSF_style="T")
+    TSF_Forth_setTSF("TSF_Tab-Separated-Forth:",
+        "\t".join(["UTF-8","#TSF_encoding","calcFX:","#TSF_this","0","#TSF_fin."]))
+    TSF_Forth_setTSF("calcFX:",
+        "\t".join(["TSF_argvs:","#TSF_cloneargvs","TSF_argvs:","#TSF_lenthe","[0]Z[calcFXtest:0]~[TSF_argvs:0]","#TSF_calcFX","1","#TSF_echoN"]))
+    TSF_Forth_setTSF("calcFXtest:",
+        "\t".join(["1/3-m1|2"]))
     TSF_sample_run("TSF_sample_calcFX")
 
 def TSF_sample_calender(TSF_argvs):    #TSF_doc:日時表示サンプルプログラム。
