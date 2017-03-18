@@ -21,7 +21,8 @@ def TSF_match_Initwords(TSF_words):    #TSF_doc:スタック並び替え関連�
     TSF_words["#TSF_matchgrade"]=TSF_match_matchgrade; TSF_words["#文字列類似の合格点"]=TSF_match_matchgrade
     TSF_words["#TSF_countstacks"]=TSF_match_countstacks; TSF_words["#スタックの該当箇所を数える"]=TSF_match_countstacks
     TSF_words["#TSF_casestacks"]=TSF_match_casestacks; TSF_words["#スタックの該当箇所で置換"]=TSF_match_casestacks
-    TSF_words["#TSF_tagstack"]=TSF_match_tagstack; TSF_words["#タグ名スタックの該当箇所で置換"]=TSF_match_tagstack
+    TSF_words["#TSF_tagcyclestack"]=TSF_match_tagcyclestack; TSF_words["#タグ名スタックの該当箇所で周択置換"]=TSF_match_tagcyclestack
+    TSF_words["#TSF_taglimitstack"]=TSF_match_taglimitstack; TSF_words["#タグ名スタックの該当箇所で囲択置換"]=TSF_match_taglimitstack
     return TSF_words
 
 def TSF_match_joinN():   #TSF_doc:[stackN…stackB,stackA,count]スタックを連結する。count自身とcountの回数分スタック積み下ろし。
@@ -134,14 +135,18 @@ def TSF_match_casestacks():   #TSF_doc:[matcher,algo,stackO,stackN]Oスタック
     TSF_Forth_pushthat(str(TSF_case))
     return None
 
-def TSF_match_tagstack():   #TSF_doc:[textstack,tags,count]tagsスタック名で置換、さらに置換内容はcountで選べる。
-    TSF_count=TSF_Forth_popintthe(TSF_Forth_stackthat())
-    TSF_tsvT=TSF_Forth_popthat(); TSF_strsT=TSF_Forth_stackvalue(TSF_tsvT)
-    TSF_tsvS=TSF_Forth_popthat()
-#    for TSF_peek,TSF_strT in enumerate(TSF_strsT):
-#        TSF_text=TSF_text.replace(TSF_strT,TSF_strsN[TSF_peek])
-    TSF_text=TSF_txt_ESCdecode("\n".join(TSF_Forth_stackvalue(TSF_tsvS)))
-    TSF_Forth_setTSF(TSF_tsvS,TSF_text,TSF_style="N")
+def TSF_match_tagcyclestack():   #TSF_doc:[stackT,tag,peek]tagsスタック名で周択置換、さらに置換内容はpeekで選べる。
+    TSF_peek=TSF_Forth_popintthe(TSF_Forth_stackthat())
+    TSF_tsvT=TSF_Forth_popthat(); TSF_tsvsT=TSF_Forth_stackvalue(TSF_tsvT)
+    TSF_tsvM=TSF_Forth_popthat(); 
+    print("*TSF_match_tagcyclestack",TSF_tsvM,TSF_tsvT,str(TSF_peek))
+    TSF_text=TSF_txt_ESCdecode("\n".join(TSF_Forth_stackvalue(TSF_tsvM)))
+#    print("*TSF_match_tagstackBF\n",TSF_text,TSF_peek)
+    for TSF_tag in TSF_tsvsT:
+        TSF_text=TSF_text.replace(TSF_tag,TSF_Forth_peekthe(TSF_tag,TSF_peek))
+        print("TSF_text=",TSF_tag,TSF_Forth_peekcyclethe(TSF_tag,TSF_peek))
+#    print("*TSF_match_tagstackAF\n",TSF_text)
+    TSF_Forth_setTSF(TSF_tsvM,TSF_text,TSF_style="N")
     return None
 #def TSF_match_replacestacks():   #TSF_doc:[stackS,stackO,stackN]SスタックをテキストとみなしてOスタックの文字列群をNスタックの文字列群に置換。
 #    TSF_tsvN=TSF_Forth_popthat(); TSF_strsN=TSF_Forth_stackvalue(TSF_tsvN)
@@ -153,6 +158,9 @@ def TSF_match_tagstack():   #TSF_doc:[textstack,tags,count]tagsスタック名�
 #        TSF_text=TSF_text.replace(TSF_strO,TSF_strsN[TSF_peek])
 #    TSF_Forth_setTSF(TSF_tsvS,TSF_text,TSF_style="N")
 #    return None
+
+def TSF_match_taglimitstack():   #TSF_doc:[stackT,tag,peek]tagsスタック名で囲択置換、さらに置換内容はpeekで選べる。
+    return None
 
 def TSF_match_debug(TSF_argvs):    #TSF_doc:「TSF/TSF_shuffle.py」単体テスト風デバッグ関数。
     TSF_debug_log=""
