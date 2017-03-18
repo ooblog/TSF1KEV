@@ -1,0 +1,6 @@
+TSF_Tab-Separated-Forth:
+	UTF-8	#TSF_encoding	TSF_fileexttest:	#TSF_this	0	#TSF_fin.	TSF_uri.py	1
+TSF_uri.py:
+	Python2.7.6	linux2	UTF-8
+TSF_fileexttest:
+	debug/sample_quine.tsf	#TSF_fileext	1	#TSF_echoN

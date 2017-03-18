@@ -17,7 +17,7 @@ from TSF_time import *
 TSF_Forth_init(TSF_io_argvs(),[TSF_shuffle_Initwords,TSF_match_Initwords,TSF_uri_Initwords,TSF_calc_Initwords,TSF_time_Initwords])
 
 TSF_Forth_setTSF("TSF_Tab-Separated-Forth:",
-    "\t".join(["UTF-8","#TSF_encoding","#TSF_popNthat","quine_ext:","#TSF_this","0","#TSF_fin."]),TSF_style="T")
+    "\t".join(["UTF-8","#TSF_encoding","/mnt/sda2/github/TSF1KEV/TSFpy","#TSF_viewpythonappend","#TSF_popNthat","quine_ext:","#TSF_this","0","#TSF_fin."]),TSF_style="T")
 TSF_Forth_setTSF("quine_ext:",
     "\t".join(["#TSF_mainfile","#TSF_fileext","equal","quine_match:","quine_jump:","#TSF_casestacks","#TSF_this"]),TSF_style="T")
 TSF_Forth_setTSF("quine_match:",

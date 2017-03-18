@@ -2,6 +2,7 @@
 # -*- coding: UTF-8 -*-
 from __future__ import division,print_function,absolute_import,unicode_literals
 import random
+import re
 from TSF_io import *
 
 def TSF_Forth_1ststack():    #TSF_doc:TSF_初期化に使う最初のスタック名(TSFAPI)。
@@ -38,6 +39,7 @@ def TSF_Forth_Initwords(TSF_words):    #TSF_doc:ワードを初期化する(TSFA
     TSF_words["#TSF_savetext"]=TSF_Forth_savetext; TSF_words["#テキストファイルに上書"]=TSF_Forth_savetext
     TSF_words["#TSF_writetext"]=TSF_Forth_writetext; TSF_words["#テキストファイルに追記"]=TSF_Forth_writetext
     TSF_words["#TSF_viewpython"]=TSF_Forth_viewpython; TSF_words["#スタック一覧をpythonとして表示"]=TSF_Forth_viewpython
+    TSF_words["#TSF_viewpythonappend"]=TSF_Forth_viewpythonappend; TSF_words["#TSFモジュールのあるフォルダパスを指定"]=TSF_Forth_viewpython
     return TSF_words
 
 TSF_exitcode="0"
@@ -238,15 +240,26 @@ def TSF_Forth_samplingpy(TSF_the,TSF_view_io=True,TSF_view_log=""):    #TSF_doc:
             TSF_view_log+=TSF_view_logline
     return TSF_view_log
 
+TSF_Forth_writesamplepy_append=sys.path[0]
 def TSF_Forth_writesamplepy(TSF_tsfpath=None,TSF_pyhonpath=None):   #TSF_doc:[filename,stack]スタック全体をpythonとみなして.pyに保存する(TSFAPI)。
+    global TSF_Forth_writesamplepy_append
     TSF_text=""
     if os.path.isfile(TSF_tsfpath if TSF_tsfpath != None else ""):
         if len(TSF_Forth_loadtext(TSF_tsfpath,TSF_tsfpath)):
             TSF_Forth_merge(TSF_tsfpath,[],TSF_mergedel=True)
+#            TSF_append=TSF_txt_ESCdecode("\t"+"\t".join(TSF_stacks[TSF_Forth_1ststack()])+"\t")
+            TSF_appendtext=TSF_txt_ESCdecode("\t{0}\t".format("\t".join(TSF_stacks[TSF_Forth_1ststack()])))
+            TSF_appendtags=re.findall(re.compile("\\t[:a-zA-Z0-9_\/\\\\]*?\\t#TSF_viewpythonappend\\t",re.MULTILINE),TSF_appendtext)
+#            print("*TSF_appendtext",TSF_appendtext)
+            if len(TSF_appendtags):
+#                print("*TSF_appendtags=",TSF_appendtags)
+                TSF_appendtag=TSF_appendtags[0]
+                TSF_Forth_writesamplepy_append=TSF_appendtag.replace("\t#TSF_viewpythonappend","").strip('\t')
+    print("*TSF_Forth_writesamplepy_append=",TSF_Forth_writesamplepy_append)
     TSF_text+="#! /usr/bin/env python\n"
     TSF_text+="# -*- coding: UTF-8 -*-\n"
     TSF_text+="from __future__ import division,print_function,absolute_import,unicode_literals\n\n"
-    TSF_text+="import sys\nimport os\nos.chdir(sys.path[0])\nsys.path.append('{0}')\n".format(sys.path[0])
+    TSF_text+="import sys\nimport os\nos.chdir(sys.path[0])\nsys.path.append('{0}')\n".format(TSF_Forth_writesamplepy_append)
     TSF_text+="from TSF_io import *\n"
     TSF_text+="#from TSF_Forth import *\n"
     TSF_importlist=["TSF_shuffle","TSF_match","TSF_uri","TSF_calc","TSF_time"]
@@ -262,6 +275,11 @@ def TSF_Forth_writesamplepy(TSF_tsfpath=None,TSF_pyhonpath=None):   #TSF_doc:[fi
     else:
         for TSF_textline in TSF_text.split('\n'):
             TSF_io_printlog(TSF_textline)
+
+def TSF_Forth_viewpythonappend():   #TSF_doc:[filename,stack]TSFモジュールのあるフォルダパスを指定する。python出力用。1スタック積み下ろし。
+    global TSF_Forth_writesamplepy_append
+    TSF_Forth_writesamplepy_append=TSF_Forth_popthat()
+    return None
 
 def TSF_Forth_viewpython():   #TSF_doc:[filename,stack]スタック全体をpythonとみなして表示。0スタック積み下ろし。
     TSF_Forth_writesamplepy()
