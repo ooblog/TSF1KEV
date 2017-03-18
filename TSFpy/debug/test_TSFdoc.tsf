@@ -1,0 +1,40 @@
+TSF_Tab-Separated-Forth:
+	UTF-8	#TSF_encoding	TSFdocs_that:	#TSF_that	TSFdocs_merge:	#TSF_this	0	#TSF_fin.
+TSFdocs_merge:
+	deforargvs:	TSF_argvs:	#TSF_cloneargvs	TSF_argvs:	#TSF_lenthe	[0]Z1~0	#TSF_calcDC	#TSF_peekthe	#TSF_carbonthe	#TSF_carbonthat	1	#TSF_echoN	#TSF_carbonthat	#TSF_readtext	#TSF_carbonthat	#TSF_mergethe	TSFdocs_setup:	#TSF_this
+deforargvs:
+	TSF_argvs:	docdef:
+docdef:
+	debug/test_TSFdoc_README.tsf
+TSFdocs_setup:
+	TSFdocs_files:	#TSF_lenthe	TSFdocs_filecount:	2	#TSF_pokethe	TSFdocs_filename:	#TSF_this
+TSFdocs_filename:
+	[TSFdocs_filecount:2]-1	#TSF_calcDC	TSFdocs_filecount:	2	#TSF_pokethe	TSFdocs_files:	[TSFdocs_filecount:2]	#TSF_calcDC	#TSF_peekthe	TSFdocs_basetextset:	#TSF_this
+TSFdocs_basetextset:
+	#TSF_carbonthat	TSFdocs_basetext:	#TSF_clonethe	#TSF_carbonthat	1	#TSF_echoN	TSFdocs_basetextreplace:	#TSF_this
+TSFdocs_basetextreplace:
+	#TSF_carbonthat	TSFdocs_tags:	TSFdocs_filecount:	2	#TSF_peekthe	#TSF_tagcyclestack	#TSF_carbonthat	#TSF_carbonthat	#TSF_savetext	TSFdocs_filenameloop:	#TSF_this
+TSFdocs_tagcount:
+	-	TSFdocs_basetextreplace:	#exit
+TSFdocs_filenameloop:
+	TSFdocs_filecount:	[TSFdocs_filecount:2]z0~1	#TSF_calcDC	#TSF_peekthe	#TSF_this
+TSFdocs_filecount:
+	TSFdocs_filename:	#exit	-
+
+# -- merge --
+#TSFdocs_files:
+#	debug/test_TSFdoc_README.md	debug/test_TSFdoc_README.html
+#TSFdocs_documents:
+#	TSF_io.py	TSF_Forth.py	TSF_shuffle.py	TSF_match.py	TSF_uri.py	TSF_calc.py	TSF_time.py
+#TSFdocs_basetext:
+#	<？TSF_MD_H1:TSF1KEV>
+#TSFdocs_tags:
+#	<？TSF_MD_H1:TSF1KEV>	<＄TSF_MD_H1:0>	<？P>	<？BR>
+#<？TSF_MD_H1:TSF1KEV>
+#	# <＄TSF_MD_H1:@c>	<h1><＄TSF_MD_H1:@c></h1>
+#<＄TSF_MD_H1:0>
+#	プログラミング言語「TSF_Tab-Separated-Forth」開発中。
+#<？P>
+#		<p>@E
+#<？BR>
+#		<br />

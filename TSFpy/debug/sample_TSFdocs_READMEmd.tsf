@@ -1,5 +1,5 @@
 TSFdocs_files:
-	debug/test_TSFdoc_README.md	debug/test_TSFdoc_README.html
+	debug/sample_TSFdocs_READMEmd.md	debug/sample_TSFdocs_READMEmd.html
 TSFdocs_basetext:
 	<？TSF_MD_H1:TSF1KEV>
 TSFdocs_tags:
