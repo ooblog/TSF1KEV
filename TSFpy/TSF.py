@@ -94,7 +94,18 @@ def TSF_sample_Helloworld():    #TSF_doc:Helloworldサンプル(「Hello world�
     TSF_sample_run("TSF_sample_Helloworld")
 
 def TSF_sample_Quine():    #TSF_doc:Quineサンプル(自身のTSFソースコードを表示)。
-    TSF_Forth_setTSF(TSF_Forth_1ststack(),"\t".join(["UTF-8","#TSF_encoding","#TSF_popNthis","#TSF_viewthey","0","#TSF_fin."]))
+    TSF_Forth_setTSF(TSF_Forth_1ststack(),
+        "\t".join(["UTF-8","#TSF_encoding",TSF_Forth_writesamplepyappend(),"#TSF_viewpythonappend","#TSF_popNthat","quine_ext:","#TSF_this","0","#TSF_fin."]),TSF_style="T")
+    TSF_Forth_setTSF("quine_ext:",
+        "\t".join(["#TSF_mainfile","#TSF_fileext","equal","quine_match:","quine_jump:","#TSF_casestacks","#TSF_this"]),TSF_style="T")
+    TSF_Forth_setTSF("quine_match:",
+        "\t".join([".tsf",".py"]),TSF_style="T")
+    TSF_Forth_setTSF("quine_jump:",
+        "\t".join(["quine_tsf:","quine_python:"]),TSF_style="T")
+    TSF_Forth_setTSF("quine_tsf:",
+        "\t".join(["#TSF_viewthey"]),TSF_style="N")
+    TSF_Forth_setTSF("quine_python:",
+        "\t".join(["#TSF_viewpython"]),TSF_style="N")
     TSF_sample_run("TSF_sample_Quine")
 
 def TSF_sample_99beer():    #TSF_doc:99Beerサンプル(「99 Bottles of Beer」を表示)。
