@@ -1,6 +1,6 @@
 TSF_Tab-Separated-Forth:
-#	UTF-8	#TSF_encoding	TSFdocs_that:	#TSF_that	TSFdocs_merge:	#TSF_this	#TSF_viewthey	0	#TSF_fin.
-	UTF-8	#TSF_encoding	TSFdocs_that:	#TSF_that	TSFdocs_merge:	#TSF_this	0	#TSF_fin.
+	UTF-8	#TSF_encoding	TSFdocs_that:	#TSF_that	TSFdocs_merge:	#TSF_this	#TSF_viewthey	0	#TSF_fin.
+#	UTF-8	#TSF_encoding	TSFdocs_that:	#TSF_that	TSFdocs_merge:	#TSF_this	0	#TSF_fin.
 TSFdocs_merge:
 	TSFdocs_setup:	#TSF_this
 TSFdocs_setup:
@@ -15,7 +15,8 @@ TSFdocs_basetextreplace:
 #	1	#TSF_echoN	TSFdocs_basetext:	TSFdocs_filenameloop:	#TSF_this
 #	#TSF_carbonthat	#TSF_carbonthat	1	#TSF_echoN	TSFdocs_basetext:	#TSF_savetext	TSFdocs_filenameloop:	#TSF_this
 #	#TSF_carbonthat	TSFdocs_basetext:	#TSF_savetext	TSFdocs_filenameloop:	#TSF_this
-	#TSF_carbonthat	TSFdocs_tags:	[TSFdocs_filecount:2]	#TSF_calcDC	#TSF_tagcyclestack	#TSF_carbonthat	TSFdocs_basetext:	#TSF_savetext	TSFdocs_filenameloop:	#TSF_this
+#	#TSF_carbonthat	TSFdocs_tags:	TSFdocs_filecount:	2	#TSF_peekthe	#TSF_tagcyclestack	#TSF_carbonthat	TSFdocs_basetext:	#TSF_savetext	TSFdocs_filenameloop:	#TSF_this
+	#TSF_carbonthat	TSFdocs_tags:	TSFdocs_filecount:	2	#TSF_peekthe	#TSF_tagcyclestack	#TSF_carbonthat	#TSF_carbonthat	#TSF_savetext	TSFdocs_filenameloop:	#TSF_this
 TSFdocs_tagcount:
 	-	TSFdocs_basetextreplace:	#exit
 TSFdocs_filenameloop:

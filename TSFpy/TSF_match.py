@@ -143,7 +143,7 @@ def TSF_match_tagcyclestack():   #TSF_doc:[stackT,tag,peek]tagsスタック名�
     TSF_text=TSF_txt_ESCdecode("\n".join(TSF_Forth_stackvalue(TSF_tsvM)))
 #    print("*TSF_match_tagstackBF\n",TSF_text,TSF_peek)
     for TSF_tag in TSF_tsvsT:
-        TSF_text=TSF_text.replace(TSF_tag,TSF_Forth_peekthe(TSF_tag,TSF_peek))
+        TSF_text=TSF_text.replace(TSF_tag,TSF_Forth_peekcyclethe(TSF_tag,TSF_peek))
         print("TSF_text=",TSF_tag,TSF_Forth_peekcyclethe(TSF_tag,TSF_peek))
 #    print("*TSF_match_tagstackAF\n",TSF_text)
     TSF_Forth_setTSF(TSF_tsvM,TSF_text,TSF_style="N")
