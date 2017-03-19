@@ -91,16 +91,16 @@ ENV/
 
 # git status
 # git push github:ooblog/TSF1KEV.git master
-# git push github:ooblog/TSF1KEV.git 20170301W224954
+# git push github:ooblog/TSF1KEV.git 20170319U104845
 # git log
 # git ls-files
 # git commit -a -m ""
 # git branch
 # git checkout master
-# git checkout 20170301W224954
-# git merge 20170301W224954
-# git branch -d 20170301W224954
-# git push github:ooblog/TSF1KEV.git :20170301W224954
+# git checkout 20170319U104845
+# git merge 20170319U104845
+# git branch -d 20170319U104845
+# git push github:ooblog/TSF1KEV.git :20170319U104845
 
 5x10x20x/
 pygame/

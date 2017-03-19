@@ -9,7 +9,7 @@ def TSF_Forth_1ststack():    #TSF_doc:TSF_初期化に使う最初のスタッ�
     return "TSF_Tab-Separated-Forth:"
 
 def TSF_Forth_version():    #TSF_doc:TSF_初期化に使うバージョン(ブランチ)名(TSFAPI)。
-    return "20170301W224954"
+    return "20170319U104845"
 
 def TSF_Forth_Initwords(TSF_words):    #TSF_doc:ワードを初期化する(TSFAPI)。
     TSF_words["#TSF_fin."]=TSF_Forth_fin; TSF_words["#TSFを終了。"]=TSF_Forth_fin
