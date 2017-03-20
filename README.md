@@ -1,7 +1,7 @@
-# プログラミング言語「TSF_Tab-Separated-Forth」開発中。
+# プログラミング言語「TSF_Tab-Separated-Forth」試作。
 
 目標は「[LTsv10kanedit](https://github.com/ooblog/LTsv10kanedit "ooblog/LTsv10kanedit: 「L:Tsv」の読み書きを中心としたモジュール群と漢字入力「kanedit」のPythonによる実装です(準備中)。")」の「[LTsv/kanedit.vim](LTsv/kanedit.vim "LTsv/kanedit.vim")」などをVim使わずに「TSF」だけで動かす事。実装はとりあえずPythonで。  
-進捗的には「TSF_doc&#40;仮&#41;」という中ボスが控えてる状態。  
+「TSF1KEV」は試作品扱いにしてより仕様を整理整頓する「[TSF2KEV](https://github.com/ooblog/TSF2KEV "ooblog/TSF2KEV: プログラミング言語「TSF_Tab-Separated-Forth」開発中。目標は「LTsv10kanedit」の「kanedit.vim」などを「TSF」だけで動かす事。実装はとりあえずPythonで。 ")」を開発中です。  
 
     TSF_Tab-Separated-Forth:
     	UTF-8	#TSF_encoding	30	#TSF_calcPR	main1:	#TSF_this	0	#TSF_fin.
@@ -68,7 +68,7 @@ TSFはまだ開発中なので、漢直をお探しの方は「[LTsv10kanedit](h
 
 ## 動作環境。
 
-「Tahrpup6.0.5,Python2.7.6,vim.gtk7.4.52&#40;vim-gtk&#41;」および「Wine1.7.18,Python3.4.4,gvim8.0.134&#40;KaoriYa&#41;」で開発になると思います。  
+「Tahrpup6.0.5,Python2.7.6,vim.gtk7.4.52&#40;vim-gtk&#41;」および「Wine1.7.18,Python3.4.4,gvim8.0.134&#40;KaoriYa&#41;」で開発してました。  
 
 
 ## ライセンス・著作権など。

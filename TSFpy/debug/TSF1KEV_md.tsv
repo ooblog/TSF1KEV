@@ -24,7 +24,7 @@ LTsvver	<＠L:TsvLTsvver>
 <？LTsv_MD_header><？LTsv_MD_H1:TSF1KEV>
 <？P>
 目標は「<？https/LTsv10>」の「<？https/kanedit.vim>」などをVim使わずに「TSF」だけで動かす事。実装はとりあえずPythonで。<？BR>
-進捗的には「TSF_doc&#40;仮&#41;」という中ボスが控えてる状態。<？BR>
+「TSF1KEV」は試作品扱いにしてより仕様を整理整頓する「<？https/TSF2KEV>」を開発中です。<？BR>
 <？/P><？CODE>
     TSF_Tab-Separated-Forth:
     	UTF-8	#TSF_encoding	30	#TSF_calcPR	main1:	#TSF_this	0	#TSF_fin.
@@ -91,7 +91,7 @@ TSFはまだ開発中なので、漢直をお探しの方は「<？https/LTsv10>
 
 <？LTsv_MD_H2:environment>
 
-<？P>「Tahrpup6.0.5,Python2.7.6,vim.gtk7.4.52&#40;vim-gtk&#41;」および「Wine1.7.18,Python3.4.4,gvim8.0.134&#40;KaoriYa&#41;」で開発になると思います。<？BR>
+<？P>「Tahrpup6.0.5,Python2.7.6,vim.gtk7.4.52&#40;vim-gtk&#41;」および「Wine1.7.18,Python3.4.4,gvim8.0.134&#40;KaoriYa&#41;」で開発してました。<？BR>
 <？/P>
 
 <？LTsv_MD_H2:LICENSE>
@@ -124,7 +124,7 @@ License: MIT<？BR>
 |<＃LTsv_HTML_footer>]
 
 [<？LTsv_MD_H1:TSF1KEV>|
-:<＄LTsv_MD_H1:0>	プログラミング言語「TSF_Tab-Separated-Forth」開発中。
+:<＄LTsv_MD_H1:0>	プログラミング言語「TSF_Tab-Separated-Forth」試作。
 .+\.html?	<h1><＄LTsv_MD_H1:@c></h1>
 .+\.md	# <＄LTsv_MD_H1:@c>
 |<？LTsv_MD_H1:TSF1KEV>]
@@ -187,13 +187,14 @@ License: MIT<？BR>
 .+\.md	[<＄txt/htmldoc-@c>](<＄href/htmldoc-@c> "<＄title/htmldoc-@c>")
 |<？https/LTsv10>]
 
-[<？https/LTsv10kanedit>|
-:<＄href/htmldoc-0>	https://github.com/ooblog/LTsv10kanedit
-:<＄title/htmldoc-0>	ooblog/LTsv10kanedit: 「L:Tsv」の読み書きを中心としたモジュール群と漢字入力「kanedit」のPythonによる実装です(準備中)。
-:<＄txt/htmldoc-0>	<＄href/htmldoc-0>
+[<？https/TSF2KEV>|
+:<＄href/htmldoc-0>	https://github.com/ooblog/TSF2KEV
+:<＄title/htmldoc-0>	ooblog/TSF2KEV: プログラミング言語「TSF_Tab-Separated-Forth」開発中。目標は「LTsv10kanedit」の「kanedit.vim」などを「TSF」だけで動かす事。実装はとりあえずPythonで。 
+:<＄txt/htmldoc-0>	TSF2KEV
 .+\.html?	<a href="<＄href/htmldoc-@c>" title="<＄title/htmldoc-@c>"><＄txt/htmldoc-@c></a>
 .+\.md	[<＄txt/htmldoc-@c>](<＄href/htmldoc-@c> "<＄title/htmldoc-@c>")
-|<？https/LTsv10kanedit>]
+|<？https/TSF2KEV>]
+
 
 [<？P>|
 .+\.html?	<p>@E
